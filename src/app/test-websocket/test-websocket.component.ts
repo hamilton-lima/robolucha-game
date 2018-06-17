@@ -13,13 +13,13 @@ export class TestWebsocketComponent implements OnInit {
   constructor(private service: TestWebsocketService) {}
 
   ngOnInit() {
-    this.service.getMessage().subscribe(message => {
+    this.service.message.subscribe(message => {
       this.received = message;
     });
   }
 
   sendTime() {
-    this.sent = new Date().toUTCString();
-    this.service.sendMessage(this.sent);
+    this.sent = new Date().getTime().toString();
+    this.service.send(this.sent);
   }
 }

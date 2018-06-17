@@ -5,7 +5,7 @@ import { Subject } from 'rxjs';
   providedIn: 'root'
 })
 export class TestWebsocketService {
-  readonly url: string = 'http://localhost:5000';
+  readonly url: string = 'ws://localhost:5000/message';
   private socket: WebSocket;
   readonly message: Subject<string> = new Subject();
 
