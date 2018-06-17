@@ -1,20 +1,25 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { Socket } from 'ngx-socket-io';
-import { map } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TestWebsocketService {
-  constructor(private socket: Socket) {}
+  readonly url: string = 'http://localhost:5000';
+  private socket: WebSocket;
+  readonly message: Subject<string> = new Subject();
 
-  sendMessage(msg: string) {
-    this.socket.emit('message', msg);
+  constructor() {
+    this.socket = new WebSocket(this.url);
+    this.socket.onopen = () => {
+      this.socket.onmessage = (event: MessageEvent) => {
+        this.message.next(event.data);
+      };
+    };
   }
 
-  getMessage(): Observable<string> {
-    // .pipe( map(data => data.msg) )
-    return this.socket.fromEvent<string>('message');
+  send(msg: string) {
+    this.socket.send(msg);
   }
+
 }
