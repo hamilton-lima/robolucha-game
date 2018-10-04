@@ -1,0 +1,10 @@
+language: minimal
+
+branches:
+  only:
+    - master
+
+script:
+  - echo "Update the server"
+  - curl -H "web-hook-token:$WEBHOOK_TOKEN" robolucha.com:8095/game
+  - curl -H "web-hook-token:$WEBHOOK_TOKEN" robolucha.com:8095/up
