@@ -5,5 +5,5 @@ branches:
     - master
 
 script:
-  - curl -H "web-hook-token:$WEBHOOK_TOKEN" robolucha.com:8095/game | jq .
-  - curl -H "web-hook-token:$WEBHOOK_TOKEN" robolucha.com:8095/up | jq .
+  - curl --max-time 900 -H "web-hook-token:$WEBHOOK_TOKEN" robolucha.com:8095/game | jq .
+  - curl --max-time 900 -H "web-hook-token:$WEBHOOK_TOKEN" robolucha.com:8095/up | jq .
