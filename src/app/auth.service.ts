@@ -29,7 +29,7 @@ export class AuthService {
   setMessage(response: LoginResult) {
     if (response.error) {
       if (!response.message) {
-        response.message = "Invalid crecentials, please try again";
+        response.message = "Invalid credentials, please try again";
       }
     }
   }

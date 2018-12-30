@@ -14,6 +14,7 @@ import { SetupComponent } from "./setup/setup.component";
 import { HomeComponent } from "./home/home.component";
 import { FormsModule } from "@angular/forms";
 import { HttpClientModule } from '@angular/common/http';
+import { ApiModule } from "./sdk/api.module";
 
 const ROUTES: Routes = [
   { path: "", redirectTo: "/home", pathMatch: "full" },
@@ -47,6 +48,7 @@ const ROUTES: Routes = [
     BrowserModule,
     FormsModule,
     HttpClientModule,
+    ApiModule,
     RouterModule.forRoot(ROUTES, { useHash: true })
   ],
   providers: [LoginActivate, AuthService],
