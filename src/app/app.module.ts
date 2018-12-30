@@ -13,8 +13,10 @@ import { AuthService } from "./auth.service";
 import { SetupComponent } from "./setup/setup.component";
 import { HomeComponent } from "./home/home.component";
 import { FormsModule } from "@angular/forms";
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from "@angular/common/http";
 import { ApiModule } from "./sdk/api.module";
+import { BASE_PATH } from "./sdk/variables";
+import { environment } from "src/environments/environment";
 
 const ROUTES: Routes = [
   { path: "", redirectTo: "/home", pathMatch: "full" },
@@ -51,7 +53,11 @@ const ROUTES: Routes = [
     ApiModule,
     RouterModule.forRoot(ROUTES, { useHash: true })
   ],
-  providers: [LoginActivate, AuthService],
+  providers: [
+    LoginActivate,
+    AuthService,
+    { provide: BASE_PATH, useValue: environment.BASE_PATH }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

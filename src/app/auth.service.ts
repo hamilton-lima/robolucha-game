@@ -1,22 +1,31 @@
 import { Injectable } from "@angular/core";
 import { Observable, of } from "rxjs";
-import { catchError, tap } from "rxjs/operators";
-import { HttpClient, HttpErrorResponse } from "@angular/common/http";
-import { environment } from "../environments/environment";
+import { catchError, tap, map } from "rxjs/operators";
+import { HttpErrorResponse } from "@angular/common/http";
+import { DefaultService, MainLoginResponse, MainLoginRequest } from "./sdk";
 
 export class LoginResult {
   message: string;
   error: boolean;
 }
 
+const AUTH_UUID_SESSION = "ROBOLUCHA_AUTH_UUID_SESSION";
+
 @Injectable({
   providedIn: "root"
 })
 export class AuthService {
-  constructor(private http: HttpClient) {}
+  constructor(private api: DefaultService) {}
 
   isLoggedIn() {
-    return true;
+    const uuid = localStorage.getItem(AUTH_UUID_SESSION);
+    console.log("Session uuid", uuid);
+
+    if (uuid) {
+      return true;
+    }
+
+    return false;
   }
 
   handleError(error: HttpErrorResponse): Observable<LoginResult> {
@@ -26,22 +35,28 @@ export class AuthService {
     });
   }
 
-  setMessage(response: LoginResult) {
+  handleResponse(response: MainLoginResponse): LoginResult {
+    let result: LoginResult = {
+      error: response.error,
+      message: ""
+    };
+
     if (response.error) {
-      if (!response.message) {
-        response.message = "Invalid credentials, please try again";
-      }
+      result.message = "Invalid credentials, please try again";
+    } else {
+      result.message = "You are now connected.";
+      console.log("saving Session uuid", response.uuid);
+      localStorage.setItem(AUTH_UUID_SESSION, response.uuid);
     }
+
+    return result;
   }
 
   login(email: string): Observable<LoginResult> {
-    const data = { email: email };
-
-    return this.http
-      .post<LoginResult>(environment.apiUrl + "/public/login", data)
-      .pipe(
-        catchError(this.handleError),
-        tap(this.setMessage)
-      );
+    let request: MainLoginRequest = { email: email };
+    return this.api.publicLoginPost(request).pipe(
+      catchError(this.handleError),
+      map(this.handleResponse)
+    );
   }
 }
