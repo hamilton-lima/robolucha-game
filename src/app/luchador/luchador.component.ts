@@ -1,8 +1,11 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ChangeDetectorRef } from "@angular/core";
 import { DefaultService } from "../sdk/api/default.service";
 import { MainLuchador } from "../sdk/model/mainLuchador";
 import { MainCode } from "../sdk/model/mainCode";
 import { ActivatedRoute } from "@angular/router";
+import { debounceTime } from "rxjs/operators";
+
+const HIDE_SUCCESS_TIMEOUT = 3000;
 
 @Component({
   selector: "app-home",
@@ -11,6 +14,9 @@ import { ActivatedRoute } from "@angular/router";
 })
 export class LuchadorComponent implements OnInit {
   luchador: MainLuchador;
+  dirty: boolean;
+  successMessage: string;
+
   codes = {
     start: <MainCode>{},
     onRepeat: <MainCode>{},
@@ -20,24 +26,26 @@ export class LuchadorComponent implements OnInit {
     onHitWall: <MainCode>{}
   };
 
-  constructor(private route: ActivatedRoute) {
+  constructor(
+    private route: ActivatedRoute, 
+    private api: DefaultService, 
+    private cdRef : ChangeDetectorRef) {
     this.luchador = {};
   }
 
   ngOnInit() {
     const data = this.route.snapshot.data;
-    this.luchador = data.luchador;
+    this.dirty = false;
 
-    console.log("luchador found", this.luchador);
-    for( var key in this.codes){
-      this.codes[key] = this.getCode(key); 
+    this.refreshEditor(data.luchador);
+  }
+
+  refreshEditor(luchador) {
+    console.log("refresh luchador", luchador);
+    this.luchador = luchador;
+    for (var key in this.codes) {
+      this.codes[key] = this.getCode(key);
     }
-    // this.codes.start = 
-    // this.codes.onRepeat = this.getCode("onRepeat");
-    // this.codes.onGotDamage = this.getCode("onGotDamage");
-    // this.onFound = this.getCode("onFound");
-    // this.onHitOther = this.getCode("onHitOther");
-    // this.onHitWall = this.getCode("onHitWall");
   }
 
   getCode(event: string): MainCode {
@@ -61,6 +69,7 @@ export class LuchadorComponent implements OnInit {
 
   updateCode(event: string, script: string) {
     console.log("updateCode", event, script);
+    this.dirty = true;
 
     let code = this.findCodeByEventName(event);
 
@@ -72,5 +81,17 @@ export class LuchadorComponent implements OnInit {
     }
 
     this.codes[event] = code;
+  }
+
+  save() {
+    const remoteCall = this.api.privateLuchadorPut(this.luchador);
+
+    remoteCall.subscribe(luchador => {
+      this.successMessage = "Luchador updated";
+      setTimeout(() => this.successMessage = null, HIDE_SUCCESS_TIMEOUT);
+
+      this.refreshEditor(luchador);
+      this.cdRef.detectChanges();    
+    });
   }
 }
