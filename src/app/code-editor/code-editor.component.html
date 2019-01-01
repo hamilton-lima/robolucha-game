@@ -1,1 +1,9 @@
-<div ace-editor class="editor" [text]="script"></div>
+<div
+  ace-editor
+  class="editor"
+  [options]="options"
+  [text]="script"
+  [mode]="'lua'"
+  [theme]="'solarized_dark'"
+  (textChanged)="onEditorChange($event)"
+></div>

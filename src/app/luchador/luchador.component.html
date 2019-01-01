@@ -5,42 +5,68 @@
   <ngb-tabset>
     <ngb-tab title="Start">
       <ng-template ngbTabContent>
-        <div><app-code-editor [script]="start.script"></app-code-editor></div>
+        <div>
+          <app-code-editor
+            [script]="codes.start.script"
+            (onChange)="updateCode('start', $event)"
+          ></app-code-editor>
+        </div>
       </ng-template>
     </ngb-tab>
     <ngb-tab title="On Repeat">
       <ng-template ngbTabContent>
         <div>
-          <app-code-editor [script]="onRepeat.script"></app-code-editor>
+          <app-code-editor
+            [script]="codes.onRepeat.script"
+            (onChange)="updateCode('onRepeat', $event)"
+          ></app-code-editor>
         </div>
       </ng-template>
     </ngb-tab>
     <ngb-tab title="On Got Damage">
       <ng-template ngbTabContent>
         <div>
-          <app-code-editor [script]="onGotDamage.script"></app-code-editor>
+          <app-code-editor
+            [script]="codes.onGotDamage.script"
+            (onChange)="updateCode('onGotDamage', $event)"
+          ></app-code-editor>
         </div>
       </ng-template>
     </ngb-tab>
 
     <ngb-tab title="On Found">
       <ng-template ngbTabContent>
-        <div><app-code-editor [script]="onFound.script"></app-code-editor></div>
+        <div>
+          <app-code-editor
+            [script]="codes.onFound.script"
+            (onChange)="updateCode('onFound', $event)"
+          ></app-code-editor>
+        </div>
       </ng-template>
     </ngb-tab>
     <ngb-tab title="On Hit Other">
       <ng-template ngbTabContent>
         <div>
-          <app-code-editor [script]="onHitOther.script"></app-code-editor>
+          <app-code-editor
+            [script]="codes.onHitOther.script"
+            (onChange)="updateCode('onHitOther', $event)"
+          ></app-code-editor>
         </div>
       </ng-template>
     </ngb-tab>
     <ngb-tab title="On Hit Wall">
       <ng-template ngbTabContent>
         <div>
-          <app-code-editor [script]="onHitWall.script"></app-code-editor>
+          <app-code-editor
+            [script]="codes.onHitWall.script"
+            (onChange)="updateCode('onHitWall', $event)"
+          ></app-code-editor>
         </div>
       </ng-template>
     </ngb-tab>
   </ngb-tabset>
+</div>
+
+<div class="row">
+  <pre>{{ luchador | json }}</pre>
 </div>
