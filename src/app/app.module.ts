@@ -15,9 +15,9 @@ import { LuchadorComponent } from "./luchador/luchador.component";
 import { FormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
 import { ApiModule } from "./sdk/api.module";
-import { BASE_PATH } from "./sdk/variables";
 import { environment } from "src/environments/environment";
 import { Configuration, ConfigurationParameters } from "./sdk/configuration";
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 const ROUTES: Routes = [
   { path: "", redirectTo: "/luchador", pathMatch: "full" },
@@ -60,12 +60,12 @@ export function apiConfigFactory (): Configuration {
     FormsModule,
     HttpClientModule,
     ApiModule.forRoot(apiConfigFactory),
-    RouterModule.forRoot(ROUTES, { useHash: true })
+    RouterModule.forRoot(ROUTES, { useHash: true }),
+    NgbModule
   ],
   providers: [
     LoginActivate,
-    AuthService,
-    // { provide: BASE_PATH, useValue: environment.BASE_PATH }
+    AuthService
   ],
   bootstrap: [AppComponent]
 })

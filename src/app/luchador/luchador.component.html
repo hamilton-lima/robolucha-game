@@ -1,3 +1,57 @@
-<div class="container">
-  <pre>{{luchador| json }}</pre>
+<div class="row">
+  <h1>{{ luchador.name }}</h1>
+</div>
+<div class="row">
+  <ngb-tabset>
+    <ngb-tab title="Start">
+      <ng-template ngbTabContent>
+        <div>
+          <pre>{{ start.script }}</pre>
+        </div>
+      </ng-template>
+    </ngb-tab>
+    <ngb-tab title="On Repeat">
+      <ng-template ngbTabContent>
+        <div>
+          <pre>{{ onRepeat.script }}</pre>
+        </div>
+      </ng-template>
+    </ngb-tab>
+    <ngb-tab title="On Got Damage">
+      <ng-template ngbTabContent>
+        <div>
+          <pre>{{ onGotDamage.script }}</pre>
+        </div>
+      </ng-template>
+    </ngb-tab>
+
+    <ngb-tab title="On Found">
+      <ng-template ngbTabContent>
+        <div>
+          <pre>{{ onFound.script }}</pre>
+        </div>
+      </ng-template>
+    </ngb-tab>
+    <ngb-tab title="On Hit Other">
+      <ng-template ngbTabContent>
+        <div>
+          <pre>{{ onHitOther.script }}</pre>
+        </div>
+      </ng-template>
+    </ngb-tab>
+    <ngb-tab title="On Hit Wall">
+      <ng-template ngbTabContent>
+        <div>
+          <pre>{{ onHitWall.script }}</pre>
+        </div>
+      </ng-template>
+    </ngb-tab>
+  </ngb-tabset>
+</div>
+
+<div class="row">
+  <div>
+    <pre>{{ luchador | json }}</pre>
+  </div>
+  <div></div>
 </div>
