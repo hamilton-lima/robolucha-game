@@ -112,15 +112,15 @@ export class DefaultService {
     }
 
     /**
-     * create Luchador for the current user
+     * find or create Luchador for the current user
      * 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public privateLuchadorPost(observe?: 'body', reportProgress?: boolean): Observable<MainLuchador>;
-    public privateLuchadorPost(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<MainLuchador>>;
-    public privateLuchadorPost(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<MainLuchador>>;
-    public privateLuchadorPost(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public privateLuchadorGet(observe?: 'body', reportProgress?: boolean): Observable<MainLuchador>;
+    public privateLuchadorGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<MainLuchador>>;
+    public privateLuchadorGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<MainLuchador>>;
+    public privateLuchadorGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -143,8 +143,7 @@ export class DefaultService {
             'application/json'
         ];
 
-        return this.httpClient.post<MainLuchador>(`${this.basePath}/private/luchador`,
-            null,
+        return this.httpClient.get<MainLuchador>(`${this.basePath}/private/luchador`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

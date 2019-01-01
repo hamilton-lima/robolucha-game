@@ -4,20 +4,17 @@ import { MainLuchador } from '../sdk/model/mainLuchador';
 
 @Component({
   selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  templateUrl: './luchador.component.html',
+  styleUrls: ['./luchador.component.css']
 })
-export class HomeComponent implements OnInit {
+export class LuchadorComponent implements OnInit {
 
   luchador: MainLuchador
-  
+
   constructor(private api: DefaultService) { }
 
   ngOnInit() {
-  }
-
-  create(){
-    this.api.privateLuchadorPost().subscribe((response: MainLuchador) => {
+    this.api.privateLuchadorGet().subscribe((response: MainLuchador) => {
       this.luchador = response;
     });
   }

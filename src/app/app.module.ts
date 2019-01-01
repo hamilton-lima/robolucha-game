@@ -11,7 +11,7 @@ import { LoginComponent } from "./login/login.component";
 import { NotFoundComponent } from "./not-found/not-found.component";
 import { AuthService } from "./auth.service";
 import { SetupComponent } from "./setup/setup.component";
-import { HomeComponent } from "./home/home.component";
+import { LuchadorComponent } from "./luchador/luchador.component";
 import { FormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
 import { ApiModule } from "./sdk/api.module";
@@ -20,8 +20,8 @@ import { environment } from "src/environments/environment";
 import { Configuration, ConfigurationParameters } from "./sdk/configuration";
 
 const ROUTES: Routes = [
-  { path: "", redirectTo: "/home", pathMatch: "full" },
-  { path: "home", component: HomeComponent, canActivate: [LoginActivate] },
+  { path: "", redirectTo: "/luchador", pathMatch: "full" },
+  { path: "luchador", component: LuchadorComponent, canActivate: [LoginActivate] },
   {
     path: "dashboard",
     component: DashBoardComponent,
@@ -53,7 +53,7 @@ export function apiConfigFactory (): Configuration {
     LoginComponent,
     NotFoundComponent,
     SetupComponent,
-    HomeComponent
+    LuchadorComponent
   ],
   imports: [
     BrowserModule,
