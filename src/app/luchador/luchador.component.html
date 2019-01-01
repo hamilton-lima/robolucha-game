@@ -5,53 +5,42 @@
   <ngb-tabset>
     <ngb-tab title="Start">
       <ng-template ngbTabContent>
-        <div>
-          <pre>{{ start.script }}</pre>
-        </div>
+        <div><app-code-editor [script]="start.script"></app-code-editor></div>
       </ng-template>
     </ngb-tab>
     <ngb-tab title="On Repeat">
       <ng-template ngbTabContent>
         <div>
-          <pre>{{ onRepeat.script }}</pre>
+          <app-code-editor [script]="onRepeat.script"></app-code-editor>
         </div>
       </ng-template>
     </ngb-tab>
     <ngb-tab title="On Got Damage">
       <ng-template ngbTabContent>
         <div>
-          <pre>{{ onGotDamage.script }}</pre>
+          <app-code-editor [script]="onGotDamage.script"></app-code-editor>
         </div>
       </ng-template>
     </ngb-tab>
 
     <ngb-tab title="On Found">
       <ng-template ngbTabContent>
-        <div>
-          <pre>{{ onFound.script }}</pre>
-        </div>
+        <div><app-code-editor [script]="onFound.script"></app-code-editor></div>
       </ng-template>
     </ngb-tab>
     <ngb-tab title="On Hit Other">
       <ng-template ngbTabContent>
         <div>
-          <pre>{{ onHitOther.script }}</pre>
+          <app-code-editor [script]="onHitOther.script"></app-code-editor>
         </div>
       </ng-template>
     </ngb-tab>
     <ngb-tab title="On Hit Wall">
       <ng-template ngbTabContent>
         <div>
-          <pre>{{ onHitWall.script }}</pre>
+          <app-code-editor [script]="onHitWall.script"></app-code-editor>
         </div>
       </ng-template>
     </ngb-tab>
   </ngb-tabset>
-</div>
-
-<div class="row">
-  <div>
-    <pre>{{ luchador | json }}</pre>
-  </div>
-  <div></div>
 </div>

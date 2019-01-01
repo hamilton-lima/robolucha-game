@@ -17,11 +17,17 @@ import { HttpClientModule } from "@angular/common/http";
 import { ApiModule } from "./sdk/api.module";
 import { environment } from "src/environments/environment";
 import { Configuration, ConfigurationParameters } from "./sdk/configuration";
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
+import { AceEditorModule } from "ng2-ace-editor";
+import { CodeEditorComponent } from './code-editor/code-editor.component';
 
 const ROUTES: Routes = [
   { path: "", redirectTo: "/luchador", pathMatch: "full" },
-  { path: "luchador", component: LuchadorComponent, canActivate: [LoginActivate] },
+  {
+    path: "luchador",
+    component: LuchadorComponent,
+    canActivate: [LoginActivate]
+  },
   {
     path: "dashboard",
     component: DashBoardComponent,
@@ -36,11 +42,11 @@ const ROUTES: Routes = [
   { path: "**", component: NotFoundComponent }
 ];
 
-export function apiConfigFactory (): Configuration {
+export function apiConfigFactory(): Configuration {
   const params: ConfigurationParameters = {
     apiKeys: {},
     basePath: environment.BASE_PATH
-  }
+  };
   return new Configuration(params);
 }
 
@@ -53,7 +59,8 @@ export function apiConfigFactory (): Configuration {
     LoginComponent,
     NotFoundComponent,
     SetupComponent,
-    LuchadorComponent
+    LuchadorComponent,
+    CodeEditorComponent
   ],
   imports: [
     BrowserModule,
@@ -61,12 +68,10 @@ export function apiConfigFactory (): Configuration {
     HttpClientModule,
     ApiModule.forRoot(apiConfigFactory),
     RouterModule.forRoot(ROUTES, { useHash: true }),
-    NgbModule
+    NgbModule,
+    AceEditorModule
   ],
-  providers: [
-    LoginActivate,
-    AuthService
-  ],
+  providers: [LoginActivate, AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

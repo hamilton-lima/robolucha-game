@@ -18,10 +18,13 @@ export class LuchadorComponent implements OnInit {
   onHitOther: MainCode;
   onHitWall: MainCode;
 
-  constructor(private api: DefaultService) {}
+  constructor(private api: DefaultService) {
+    this.luchador = {};
+  }
 
   ngOnInit() {
     this.api.privateLuchadorGet().subscribe((response: MainLuchador) => {
+      console.log("luchador found", response);
       this.luchador = response;
       this.start = this.getCode(response, "start");
       this.onRepeat = this.getCode(response, "onRepeat");
@@ -34,7 +37,6 @@ export class LuchadorComponent implements OnInit {
 
   getCode(luchador: MainLuchador, event:string): MainCode {
     let result = luchador.codes.find( (code: MainCode)=> {
-      console.log("code", code );
       if( code.event == event ){
         return true;
       }
