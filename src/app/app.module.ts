@@ -20,13 +20,15 @@ import { Configuration, ConfigurationParameters } from "./sdk/configuration";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { AceEditorModule } from "ng2-ace-editor";
 import { CodeEditorComponent } from './code-editor/code-editor.component';
+import { LuchadorResolverService } from "./luchador-resolver.service";
 
 const ROUTES: Routes = [
   { path: "", redirectTo: "/luchador", pathMatch: "full" },
   {
     path: "luchador",
     component: LuchadorComponent,
-    canActivate: [LoginActivate]
+    canActivate: [LoginActivate],
+    resolve: { luchador: LuchadorResolverService }
   },
   {
     path: "dashboard",

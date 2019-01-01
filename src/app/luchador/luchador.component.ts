@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { DefaultService } from "../sdk/api/default.service";
 import { MainLuchador } from "../sdk/model/mainLuchador";
 import { MainCode } from "../sdk/model/mainCode";
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
   selector: "app-home",
@@ -18,35 +19,35 @@ export class LuchadorComponent implements OnInit {
   onHitOther: MainCode;
   onHitWall: MainCode;
 
-  constructor(private api: DefaultService) {
+  constructor(private route: ActivatedRoute) {
     this.luchador = {};
   }
 
   ngOnInit() {
-    this.api.privateLuchadorGet().subscribe((response: MainLuchador) => {
-      console.log("luchador found", response);
-      this.luchador = response;
-      this.start = this.getCode(response, "start");
-      this.onRepeat = this.getCode(response, "onRepeat");
-      this.onGotDamage = this.getCode(response, "onGotDamage");
-      this.onFound = this.getCode(response, "onFound");
-      this.onHitOther = this.getCode(response, "onHitOther");
-      this.onHitWall = this.getCode(response, "onHitWall");
-    });
+    const data = this.route.snapshot.data;
+    this.luchador = data.luchador;
+
+    console.log("luchador found", this.luchador);
+    this.start = this.getCode("start");
+    this.onRepeat = this.getCode("onRepeat");
+    this.onGotDamage = this.getCode("onGotDamage");
+    this.onFound = this.getCode("onFound");
+    this.onHitOther = this.getCode("onHitOther");
+    this.onHitWall = this.getCode("onHitWall");
   }
 
-  getCode(luchador: MainLuchador, event:string): MainCode {
-    let result = luchador.codes.find( (code: MainCode)=> {
-      if( code.event == event ){
+  getCode(event: string): MainCode {
+    let result = this.luchador.codes.find((code: MainCode) => {
+      if (code.event == event) {
         return true;
       }
       return false;
     });
 
-    if( ! result ){
+    if (!result) {
       result = <MainCode>{};
     }
-    
+
     return result;
   }
 }
