@@ -20,6 +20,7 @@ import { Observable }                                        from 'rxjs/Observab
 
 import { MainLoginRequest } from '../model/mainLoginRequest';
 import { MainLoginResponse } from '../model/mainLoginResponse';
+import { MainLuchador } from '../model/mainLuchador';
 import { MainMatch } from '../model/mainMatch';
 import { MainUserSetting } from '../model/mainUserSetting';
 
@@ -30,7 +31,7 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class DefaultService {
 
-    protected basePath = 'https://http://localhost:8080';
+    protected basePath = 'https://localhost:8080';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
@@ -101,6 +102,49 @@ export class DefaultService {
 
         return this.httpClient.post<MainMatch>(`${this.basePath}/internal/match`,
             request,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * create Luchador for the current user
+     * 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public privateLuchadorPost(observe?: 'body', reportProgress?: boolean): Observable<MainLuchador>;
+    public privateLuchadorPost(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<MainLuchador>>;
+    public privateLuchadorPost(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<MainLuchador>>;
+    public privateLuchadorPost(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // authentication (ApiKeyAuth) required
+        if (this.configuration.apiKeys["Authorization"]) {
+            headers = headers.set('Authorization', this.configuration.apiKeys["Authorization"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        let httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set("Accept", httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json'
+        ];
+
+        return this.httpClient.post<MainLuchador>(`${this.basePath}/private/luchador`,
+            null,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

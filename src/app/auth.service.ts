@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { Observable, of } from "rxjs";
 import { catchError, tap, map } from "rxjs/operators";
 import { HttpErrorResponse } from "@angular/common/http";
-import { DefaultService, MainLoginResponse, MainLoginRequest } from "./sdk";
+import { DefaultService, MainLoginResponse, MainLoginRequest, Configuration } from "./sdk";
 
 export class LoginResult {
   message: string;
@@ -15,13 +15,14 @@ const AUTH_UUID_SESSION = "ROBOLUCHA_AUTH_UUID_SESSION";
   providedIn: "root"
 })
 export class AuthService {
-  constructor(private api: DefaultService) {}
+  constructor(private api: DefaultService, private configuration: Configuration) {}
 
   isLoggedIn() {
     const uuid = localStorage.getItem(AUTH_UUID_SESSION);
     console.log("Session uuid", uuid);
 
     if (uuid) {
+      this.configuration.apiKeys['Authorization'] = uuid;
       return true;
     }
 

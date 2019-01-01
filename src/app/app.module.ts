@@ -17,6 +17,7 @@ import { HttpClientModule } from "@angular/common/http";
 import { ApiModule } from "./sdk/api.module";
 import { BASE_PATH } from "./sdk/variables";
 import { environment } from "src/environments/environment";
+import { Configuration, ConfigurationParameters } from "./sdk/configuration";
 
 const ROUTES: Routes = [
   { path: "", redirectTo: "/home", pathMatch: "full" },
@@ -35,6 +36,14 @@ const ROUTES: Routes = [
   { path: "**", component: NotFoundComponent }
 ];
 
+export function apiConfigFactory (): Configuration {
+  const params: ConfigurationParameters = {
+    apiKeys: {},
+    basePath: environment.BASE_PATH
+  }
+  return new Configuration(params);
+}
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -50,13 +59,13 @@ const ROUTES: Routes = [
     BrowserModule,
     FormsModule,
     HttpClientModule,
-    ApiModule,
+    ApiModule.forRoot(apiConfigFactory),
     RouterModule.forRoot(ROUTES, { useHash: true })
   ],
   providers: [
     LoginActivate,
     AuthService,
-    { provide: BASE_PATH, useValue: environment.BASE_PATH }
+    // { provide: BASE_PATH, useValue: environment.BASE_PATH }
   ],
   bootstrap: [AppComponent]
 })
