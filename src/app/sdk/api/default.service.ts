@@ -18,6 +18,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs/Observable';
 
+import { MainJoinMatch } from '../model/mainJoinMatch';
 import { MainLoginRequest } from '../model/mainLoginRequest';
 import { MainLoginResponse } from '../model/mainLoginResponse';
 import { MainLuchador } from '../model/mainLuchador';
@@ -114,18 +115,16 @@ export class DefaultService {
     /**
      * join match
      * 
-     * @param matchID int valid
+     * @param request JoinMatch
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public privateJoinMatchPost(matchID?: number, observe?: 'body', reportProgress?: boolean): Observable<MainMatch>;
-    public privateJoinMatchPost(matchID?: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<MainMatch>>;
-    public privateJoinMatchPost(matchID?: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<MainMatch>>;
-    public privateJoinMatchPost(matchID?: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
-        if (matchID !== undefined) {
-            queryParameters = queryParameters.set('matchID', <any>matchID);
+    public privateJoinMatchPost(request: MainJoinMatch, observe?: 'body', reportProgress?: boolean): Observable<MainMatch>;
+    public privateJoinMatchPost(request: MainJoinMatch, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<MainMatch>>;
+    public privateJoinMatchPost(request: MainJoinMatch, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<MainMatch>>;
+    public privateJoinMatchPost(request: MainJoinMatch, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (request === null || request === undefined) {
+            throw new Error('Required parameter request was null or undefined when calling privateJoinMatchPost.');
         }
 
         let headers = this.defaultHeaders;
@@ -148,11 +147,14 @@ export class DefaultService {
         let consumes: string[] = [
             'application/json'
         ];
+        let httpContentTypeSelected:string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set("Content-Type", httpContentTypeSelected);
+        }
 
         return this.httpClient.post<MainMatch>(`${this.basePath}/private/join-match`,
-            null,
+            request,
             {
-                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
