@@ -20,22 +20,22 @@
 <div class="row">
   <div class="col-12">
     <ngb-tabset>
-      <ngb-tab title="Start">
-        <ng-template ngbTabContent>
-          <div>
-            <app-code-editor
-              [script]="codes.start.script"
-              (onChange)="updateCode('start', $event)"
-            ></app-code-editor>
-          </div>
-        </ng-template>
-      </ngb-tab>
       <ngb-tab title="On Repeat">
         <ng-template ngbTabContent>
           <div>
             <app-code-editor
               [script]="codes.onRepeat.script"
               (onChange)="updateCode('onRepeat', $event)"
+            ></app-code-editor>
+          </div>
+        </ng-template>
+      </ngb-tab>
+      <ngb-tab title="Start">
+        <ng-template ngbTabContent>
+          <div>
+            <app-code-editor
+              [script]="codes.start.script"
+              (onChange)="updateCode('start', $event)"
             ></app-code-editor>
           </div>
         </ng-template>

@@ -21,6 +21,7 @@ import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { AceEditorModule } from "ng2-ace-editor";
 import { CodeEditorComponent } from './code-editor/code-editor.component';
 import { LuchadorResolverService } from "./luchador-resolver.service";
+import { ListMatchesComponent } from './list-matches/list-matches.component';
 
 const ROUTES: Routes = [
   { path: "", redirectTo: "/luchador", pathMatch: "full" },
@@ -31,8 +32,8 @@ const ROUTES: Routes = [
     resolve: { luchador: LuchadorResolverService }
   },
   {
-    path: "dashboard",
-    component: DashBoardComponent,
+    path: "match",
+    component: ListMatchesComponent,
     canActivate: [LoginActivate]
   },
   { path: "login", component: LoginComponent },
@@ -62,7 +63,8 @@ export function apiConfigFactory(): Configuration {
     NotFoundComponent,
     SetupComponent,
     LuchadorComponent,
-    CodeEditorComponent
+    CodeEditorComponent,
+    ListMatchesComponent
   ],
   imports: [
     BrowserModule,
