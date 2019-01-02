@@ -20,8 +20,10 @@ export class ListMatchesComponent implements OnInit {
     });
   }
 
-  join(match: MainMatch){
+  join(match: MainMatch) {
     console.log("joina match", match);
-
+    this.api.privateJoinMatchPost(match.id).subscribe((match: MainMatch) => {
+      console.log("joinned match", match);
+    });
   }
 }

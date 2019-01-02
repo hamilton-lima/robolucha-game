@@ -112,6 +112,56 @@ export class DefaultService {
     }
 
     /**
+     * join match
+     * 
+     * @param matchID int valid
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public privateJoinMatchPost(matchID?: number, observe?: 'body', reportProgress?: boolean): Observable<MainMatch>;
+    public privateJoinMatchPost(matchID?: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<MainMatch>>;
+    public privateJoinMatchPost(matchID?: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<MainMatch>>;
+    public privateJoinMatchPost(matchID?: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (matchID !== undefined) {
+            queryParameters = queryParameters.set('matchID', <any>matchID);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (ApiKeyAuth) required
+        if (this.configuration.apiKeys["Authorization"]) {
+            headers = headers.set('Authorization', this.configuration.apiKeys["Authorization"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        let httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set("Accept", httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json'
+        ];
+
+        return this.httpClient.post<MainMatch>(`${this.basePath}/private/join-match`,
+            null,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * find or create Luchador for the current user
      * 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
