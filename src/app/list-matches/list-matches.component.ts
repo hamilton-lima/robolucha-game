@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { DefaultService } from "../sdk/api/default.service";
 import { MainMatch } from "../sdk/model/mainMatch";
 import { MainJoinMatch } from "../sdk/model/mainJoinMatch";
+import { SharedStateService } from "../shared-state.service";
 
 @Component({
   selector: "app-list-matches",
@@ -10,7 +11,7 @@ import { MainJoinMatch } from "../sdk/model/mainJoinMatch";
 })
 export class ListMatchesComponent implements OnInit {
   matches: Array<MainMatch>;
-  constructor(private api: DefaultService) {
+  constructor(private api: DefaultService, private shared: SharedStateService) {
     this.matches = [];
   }
 
@@ -26,6 +27,7 @@ export class ListMatchesComponent implements OnInit {
     const request: MainJoinMatch = { matchID: match.id };
     this.api.privateJoinMatchPost(request).subscribe((match: MainMatch) => {
       console.log("joinned match", match);
+      this.shared.setCurrentMatch(match);
     });
   }
 }
