@@ -15,7 +15,15 @@ const AUTH_UUID_SESSION = "ROBOLUCHA_AUTH_UUID_SESSION";
   providedIn: "root"
 })
 export class AuthService {
-  constructor(private api: DefaultService, private configuration: Configuration) {}
+  constructor(private api: DefaultService, private configuration: Configuration) {
+    const uuid = localStorage.getItem(AUTH_UUID_SESSION);
+    console.log("AuthService constructor", uuid);
+
+    if (uuid) {
+      this.configuration.apiKeys['Authorization'] = uuid;
+    }
+
+  }
 
   isLoggedIn() {
     const uuid = localStorage.getItem(AUTH_UUID_SESSION);
