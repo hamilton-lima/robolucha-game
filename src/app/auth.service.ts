@@ -11,9 +11,7 @@ export class LoginResult {
 
 const AUTH_UUID_SESSION = "ROBOLUCHA_AUTH_UUID_SESSION";
 
-@Injectable({
-  providedIn: "root"
-})
+@Injectable()
 export class AuthService {
   constructor(private api: DefaultService, private configuration: Configuration) {
     const uuid = localStorage.getItem(AUTH_UUID_SESSION);

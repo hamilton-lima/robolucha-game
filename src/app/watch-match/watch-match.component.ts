@@ -3,7 +3,8 @@ import { WatchMatchService, WatchDetails } from "./watch-match.service";
 import { MainLuchador } from "../sdk/model/models";
 import { ActivatedRoute } from "@angular/router";
 import { SharedStateService } from "../shared-state.service";
-import { Subscription } from "rxjs";
+import { Subscription, Subject } from "rxjs";
+import { MatchState, GameDefinition } from "./watch-match.model";
 
 @Component({
   selector: "app-watch-match",
@@ -11,10 +12,12 @@ import { Subscription } from "rxjs";
   styleUrls: ["./watch-match.component.css"]
 })
 export class WatchMatchComponent implements OnInit, OnDestroy {
+  readonly gameDefinition: GameDefinition;
+  readonly matchStateSubject: Subject<MatchState>;
 
   luchador: MainLuchador;
   message: string;
-  gameState: any = {luchadores: []};
+  matchState: MatchState;
   subscription: Subscription;
   onMessage: Subscription;
 
@@ -25,6 +28,15 @@ export class WatchMatchComponent implements OnInit, OnDestroy {
   ) {
     this.luchador = {};
     this.message = "N/A";
+
+    this.gameDefinition = {
+      arenaWidth: 1200,
+      arenaHeight: 600,
+      luchadorSize: 60,
+      bulletSize: 16
+    };
+
+    this.matchStateSubject = new Subject<MatchState>();
   }
 
   ngOnInit() {
@@ -35,16 +47,17 @@ export class WatchMatchComponent implements OnInit, OnDestroy {
       console.log("on ready", this.shared.getCurrentMatch());
 
       // TODO: add event to do this
-      if( this.shared.getCurrentMatch() ){
-        const details: WatchDetails =  {
+      if (this.shared.getCurrentMatch()) {
+        const details: WatchDetails = {
           luchadorID: this.luchador.id,
           matchID: this.shared.getCurrentMatch().id
-        }
-        console.log("watch details", details );
-        this.onMessage = this.service.watch(details).subscribe( (message)=>{
+        };
+        console.log("watch details", details);
+        this.onMessage = this.service.watch(details).subscribe(message => {
           this.message = message;
-          this.gameState = JSON.parse(this.message);
-        })
+          this.matchState = JSON.parse(this.message);
+          this.matchStateSubject.next(this.matchState);
+        });
       }
     });
 
@@ -52,11 +65,11 @@ export class WatchMatchComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if( this.subscription ){
+    if (this.subscription) {
       this.subscription.unsubscribe();
     }
-    
-    if( this.onMessage ){
+
+    if (this.onMessage) {
       this.onMessage.unsubscribe();
     }
 

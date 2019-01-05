@@ -23,6 +23,7 @@ import { CodeEditorComponent } from "./code-editor/code-editor.component";
 import { LuchadorResolverService } from "./luchador-resolver.service";
 import { ListMatchesComponent } from "./list-matches/list-matches.component";
 import { WatchMatchComponent } from "./watch-match/watch-match.component";
+import { ArenaComponent } from './arena/arena.component';
 
 const ROUTES: Routes = [
   { path: "", redirectTo: "/luchador", pathMatch: "full" },
@@ -72,7 +73,8 @@ export function apiConfigFactory(): Configuration {
     LuchadorComponent,
     CodeEditorComponent,
     ListMatchesComponent,
-    WatchMatchComponent
+    WatchMatchComponent,
+    ArenaComponent
   ],
   imports: [
     BrowserModule,

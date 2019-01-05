@@ -1,28 +1,37 @@
 <div class="row">
-  <h1>{{ gameState.clock }}</h1>
+  <app-arena
+    [gameDefinition]="gameDefinition"
+    [matchStateSubject]="matchStateSubject"
+  ></app-arena>
 </div>
 
-<div class="row">
-  <div class="col">
-    <div class="row">
-      <table class="table">
-        <thead>
-          <tr>
+<div *ngIf="gameState" class="container">
+  <!-- TODO: move arena back here -->
+
+  <div class="row">
+    <h1>{{ gameState.clock }}</h1>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <div class="row">
+        <table class="table">
+          <thead>
+            <tr>
               <th scope="col">id</th>
               <th scope="col">Luchador name</th>
               <th scope="col">JSON</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let luchador of gameState.luchadores">
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let luchador of gameState.luchadores">
               <td>{{ luchador.state.id }}</td>
               <td>{{ luchador.name }}</td>
               <td>{{ luchador | json }}</td>
-          </tr>
-        </tbody>
-      </table>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>
-<div class="row">
-  <p>{{ message | json }}</p></div>
