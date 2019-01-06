@@ -5,11 +5,11 @@
   ></app-arena>
 </div>
 
-<div *ngIf="gameState" class="container">
+<div *ngIf="matchState" class="container">
   <!-- TODO: move arena back here -->
 
   <div class="row">
-    <h1>{{ gameState.clock }}</h1>
+    <h1>{{ matchState.clock }}</h1>
   </div>
 
   <div class="row">
@@ -24,7 +24,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let luchador of gameState.luchadores">
+            <tr *ngFor="let luchador of matchState.luchadores">
               <td>{{ luchador.state.id }}</td>
               <td>{{ luchador.name }}</td>
               <td>{{ luchador | json }}</td>

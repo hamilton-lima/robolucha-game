@@ -141,10 +141,10 @@ export class ArenaComponent implements OnInit {
         // console.log("luchador found will update",luchador.name);
         const luchador3D = this.luchadores[luchador.state.id];
 
-        this.updateX(luchador3D, luchador);
-        this.updateZ(luchador3D, luchador);
-        this.vehicleRotation(luchador3D, luchador);
-        this.gunRotation(luchador3D, luchador);
+        this.updateX(luchador3D, currentLuchador, luchador);
+        this.updateZ(luchador3D, currentLuchador, luchador);
+        this.vehicleRotation(luchador3D, currentLuchador, luchador);
+        this.gunRotation(luchador3D, currentLuchador, luchador);
 
         // not found add to the scene
       } else {
@@ -190,23 +190,49 @@ export class ArenaComponent implements OnInit {
     // TODO: implement this
   }
 
-  updateX(luchador3D: Luchador3D, next: Luchador): any {
-    const value = this.convertPosition(next.state.x);
+  updateX(luchador3D: Luchador3D, current: Luchador, next: Luchador): any {
+    const value =
+      this.convertPosition(next.state.x) -
+      this.convertPosition(current.state.x);
     luchador3D.moveX(value);
   }
 
-  updateZ(luchador3D: Luchador3D, next: Luchador): any {
-    const value = this.convertPosition(next.state.y);
+  updateZ(luchador3D: Luchador3D, current: Luchador, next: Luchador): any {
+    const value =
+      this.convertPosition(next.state.y) -
+      this.convertPosition(current.state.y);
     luchador3D.moveZ(value);
   }
 
-  vehicleRotation(luchador3D: Luchador3D, next: Luchador): any {
-    const value = this.angle2radian(next.state.angle);
+  vehicleRotation(
+    luchador3D: Luchador3D,
+    current: Luchador,
+    next: Luchador
+  ): any {
+    let value = next.state.angle - current.state.angle;
+    value = this.fixAngle(value);
+    value = this.angle2radian(value);
     luchador3D.rotateVehicle(value);
   }
 
-  gunRotation(luchador3D: Luchador3D, next: Luchador): any {
-    const value = this.angle2radian(next.state.gunAngle);
+  gunRotation(luchador3D: Luchador3D, current: Luchador, next: Luchador): any {
+    let value = next.state.gunAngle - current.state.gunAngle;
+    value = this.fixAngle(value);
+    value = this.angle2radian(value);
     luchador3D.rotateGun(value);
+  }
+
+  // TODO: read this from luchador
+  readonly turnSpeed: number = 180;
+
+  fixAngle(value: number): number {
+    if (Math.abs(value) > this.turnSpeed) {
+      if (value > 0) {
+        value = value - 360;
+      } else {
+        value = value + 360;
+      }
+    }
+    return value;
   }
 }

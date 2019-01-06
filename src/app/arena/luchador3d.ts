@@ -1,10 +1,10 @@
 import { SharedConstants } from "./shared.constants";
 import * as BABYLON from "babylonjs";
-import { MainLuchador } from "../sdk/model/models";
+import { Luchador } from "../watch-match/watch-match.model";
 
 export class Luchador3D {
   getName(): string {
-    return "box" + this.luchador.id;
+    return "luchador" + this.luchador.state.id;
   }
 
   // speed in units per second
@@ -12,10 +12,10 @@ export class Luchador3D {
   private meshes: Array<BABYLON.AbstractMesh> = [];
   private parent: BABYLON.Mesh;
   private scene: BABYLON.Scene;
-  private luchador: MainLuchador;
+  private luchador: Luchador;
 
   constructor(
-    luchador: MainLuchador,
+    luchador: Luchador,
     scene: BABYLON.Scene,
     position: BABYLON.Vector3,
     vehicleRotationY: number,
@@ -31,7 +31,7 @@ export class Luchador3D {
     this.parent.position.y = position.y;
     this.parent.position.z = position.z;
     // TODO: add vehicle
-    this.parent.rotation.y = gunRotationY;
+    this.parent.rotation.y = vehicleRotationY;
 
     this.parent.scaling = new BABYLON.Vector3(0.01, 0.01, 0.01);
     let self = this;
@@ -56,7 +56,11 @@ export class Luchador3D {
   }
 
   moveX(value: number) {
-    this.animate("position.x", this.parent.position.x, value);
+    this.animate(
+      "position.x",
+      this.parent.position.x,
+      this.parent.position.x + value
+    );
   }
 
   // moveY(value: number) {
@@ -68,16 +72,26 @@ export class Luchador3D {
   // }
 
   moveZ(value: number) {
-    this.animate("position.z", this.parent.position.z, value);
+    this.animate(
+      "position.z",
+      this.parent.position.z,
+      this.parent.position.z + value
+    );
   }
 
   rotateVehicle(value: number) {
-    this.animate("rotation.y", this.parent.rotation.y, value);
+    this.animate(
+      "rotation.y",
+      this.parent.rotation.y,
+      this.parent.rotation.y + value
+    );
   }
 
   rotateGun(value: number) {
     // TODO: implement this
   }
+
+  private activeAnimations: Map<string, string> = new Map<string, string>();
 
   animate(
     attribute: string,
@@ -92,9 +106,18 @@ export class Luchador3D {
       return;
     }
 
+    if (this.activeAnimations.has(attribute)) {
+      // console.log("active animation in progress for ", attribute);
+      return;
+    }
+
+    this.activeAnimations.set(attribute, attribute);
+
+    const name = "animation-" + attribute;
+
     BABYLON.Vector3;
     let animationBox = new BABYLON.Animation(
-      "movex",
+      name,
       attribute,
       SharedConstants.FPS,
       BABYLON.Animation.ANIMATIONTYPE_FLOAT,
@@ -109,10 +132,22 @@ export class Luchador3D {
       { frame: lastFrame, value: target }
     ];
 
+    const animationSpeed = 1.0;
+
     animationBox.setKeys(keys);
     this.parent.animations = [];
     this.parent.animations.push(animationBox);
-    this.scene.beginAnimation(this.parent, 0, lastFrame, false);
+    this.scene.beginAnimation(
+      this.parent,
+      0,
+      lastFrame,
+      false,
+      animationSpeed,
+      () => {
+        // when animation finished remove from the active list
+        this.activeAnimations.delete(attribute);
+      }
+    );
   }
 
   fadeOut(speed: number = 2.5) {

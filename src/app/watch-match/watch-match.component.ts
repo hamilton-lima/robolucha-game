@@ -31,7 +31,7 @@ export class WatchMatchComponent implements OnInit, OnDestroy {
 
     this.gameDefinition = {
       arenaWidth: 1200,
-      arenaHeight: 600,
+      arenaHeight: 800,
       luchadorSize: 60,
       bulletSize: 16
     };
