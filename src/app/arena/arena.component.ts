@@ -8,6 +8,7 @@ import {
   MatchState,
   Luchador
 } from "../watch-match/watch-match.model";
+import { Box3D } from "./box3d";
 
 @Component({
   selector: "app-arena",
@@ -61,46 +62,56 @@ export class ArenaComponent implements OnInit {
   }
 
   createScene(): void {
+    const lightAndCameraPosition = new BABYLON.Vector3(10, 10, -15);
+
     // create a basic BJS Scene object
     this.scene = new BABYLON.Scene(this.engine);
-
-    // create a FreeCamera, and set its position to (x:0, y:5, z:-10)
-    this.camera = new BABYLON.FreeCamera(
-      "camera1",
-      new BABYLON.Vector3(0, 15, -15),
-      this.scene
-    );
-
-    // target the camera to scene origin
-    this.camera.setTarget(BABYLON.Vector3.Zero());
-
-    // attach the camera to the canvas
-    this.camera.attachControl(this.canvas.nativeElement, false);
 
     // create a basic light, aiming 0,1,0 - meaning, to the sky
     this.light = new BABYLON.HemisphericLight(
       "light1",
-      new BABYLON.Vector3(0, 1, 0),
+      lightAndCameraPosition,
       this.scene
     );
 
+    // create ground
     const groundWidth =
       this.gameDefinition.arenaWidth / this.gameDefinition.luchadorSize;
     const groundHeight =
       this.gameDefinition.arenaHeight / this.gameDefinition.luchadorSize;
 
-    // create a built-in "ground" shape
     let ground = BABYLON.MeshBuilder.CreateGround(
       "ground1",
       { width: groundWidth, height: groundHeight, subdivisions: 16 },
       this.scene
     );
 
+    ground.position.x = groundWidth / 2;
+    ground.position.z = groundHeight / 2;
+
     let material = new BABYLON.StandardMaterial("ground-material", this.scene);
-    // material.diffuseColor = BABYLON.Color3.FromHexString("#2C401B"); // BABYLON.Color3.Random();
-    material.diffuseColor = BABYLON.Color3.Random();
+    material.diffuseColor = BABYLON.Color3.FromHexString("#2C401B"); // BABYLON.Color3.Random();
     ground.material = material;
+
+    // create a FreeCamera, and set its position to (x:0, y:5, z:-10)
+    this.camera = new BABYLON.FreeCamera(
+      "camera1",
+      lightAndCameraPosition,
+      this.scene
+    );
+
+    this.camera.rotation.x = this.angle2radian(45);
+
+    // target the camera to scene origin
+    this.camera.setTarget(ground.position);
+
+    // attach the camera to the canvas
+    this.camera.attachControl(this.canvas.nativeElement, false);
+
+    // new Box3D(this.scene);
   }
+
+  createGround() {}
 
   render(): void {
     // run the render loop

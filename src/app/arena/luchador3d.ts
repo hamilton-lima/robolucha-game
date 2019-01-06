@@ -72,11 +72,11 @@ export class Luchador3D {
   }
 
   rotateVehicle(value: number) {
-    // TODO: implement this
+    this.animate("rotation.y", this.parent.rotation.y, value);
   }
 
   rotateGun(value: number) {
-    this.animate("rotation.y", this.parent.rotation.y, value);
+    // TODO: implement this
   }
 
   animate(
