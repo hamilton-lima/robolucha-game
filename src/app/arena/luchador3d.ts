@@ -36,6 +36,8 @@ export class Luchador3D {
     this.parent.scaling = new BABYLON.Vector3(0.01, 0.01, 0.01);
     let self = this;
 
+    // luchador_test02.babylon
+    // luchador.babylon
     BABYLON.SceneLoader.ImportMesh(
       "",
       "assets/",
@@ -56,11 +58,13 @@ export class Luchador3D {
   }
 
   moveX(value: number) {
-    this.animate(
-      "position.x",
-      this.parent.position.x,
-      this.parent.position.x + value
-    );
+    this.parent.position.x = this.parent.position.x + value;
+
+    // this.animate(
+    //   "position.x",
+    //   this.parent.position.x,
+    //   this.parent.position.x + value
+    // );
   }
 
   // moveY(value: number) {
@@ -72,19 +76,23 @@ export class Luchador3D {
   // }
 
   moveZ(value: number) {
-    this.animate(
-      "position.z",
-      this.parent.position.z,
-      this.parent.position.z + value
-    );
+    this.parent.position.z = this.parent.position.z + value;
+
+    // this.animate(
+    //   "position.z",
+    //   this.parent.position.z,
+    //   this.parent.position.z + value
+    // );
   }
 
   rotateVehicle(value: number) {
-    this.animate(
-      "rotation.y",
-      this.parent.rotation.y,
-      this.parent.rotation.y + value
-    );
+    this.parent.rotation.y = this.parent.rotation.y + value;
+
+    // this.animate(
+    //   "rotation.y",
+    //   this.parent.rotation.y,
+    //   this.parent.rotation.y + value
+    // );
   }
 
   rotateGun(value: number) {
