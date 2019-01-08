@@ -33,7 +33,7 @@ export class Luchador3D {
     // TODO: add vehicle
     this.parent.rotation.y = vehicleRotationY;
 
-    this.parent.scaling = new BABYLON.Vector3(0.01, 0.01, 0.01);
+    this.parent.scaling = new BABYLON.Vector3(1, 1, 1);
     let self = this;
 
     // luchador_test02.babylon
