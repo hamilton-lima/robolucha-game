@@ -57,31 +57,14 @@ export class Luchador3D {
     this.scene = scene;
   }
 
-  moveX(value: number) {
-    this.parent.position.x = this.parent.position.x + value;
+  move(x: number, z: number) {
+    this.parent.position.x = this.parent.position.x + x;
+    this.parent.position.z = this.parent.position.z + z;
 
     // this.animate(
     //   "position.x",
     //   this.parent.position.x,
     //   this.parent.position.x + value
-    // );
-  }
-
-  // moveY(value: number) {
-  //   this.animate(
-  //     "position.y",
-  //     this.parent.position.y,
-  //     this.parent.position.y + value
-  //   );
-  // }
-
-  moveZ(value: number) {
-    this.parent.position.z = this.parent.position.z + value;
-
-    // this.animate(
-    //   "position.z",
-    //   this.parent.position.z,
-    //   this.parent.position.z + value
     // );
   }
 

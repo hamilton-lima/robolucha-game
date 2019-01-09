@@ -122,13 +122,13 @@ export class ArenaComponent implements OnInit {
   }
 
   // compare currentMatchState with nextMatchState
-  updateCurrentMatchState(): any {
+  updateCurrentMatchState() {
     this.updateLuchadores();
     this.removeLuchadores();
     this.currentMatchState = this.nextMatchState;
   }
 
-  updateLuchadores(): any {
+  updateLuchadores() {
     this.nextMatchState.luchadores.forEach((luchador: Luchador) => {
       let currentLuchador = this.currentMatchState.luchadores.find(
         (search: Luchador) => {
@@ -141,8 +141,7 @@ export class ArenaComponent implements OnInit {
         // console.log("luchador found will update",luchador.name);
         const luchador3D = this.luchadores[luchador.state.id];
 
-        this.updateX(luchador3D, currentLuchador, luchador);
-        this.updateZ(luchador3D, currentLuchador, luchador);
+        this.update(luchador3D, currentLuchador, luchador);
         this.vehicleRotation(luchador3D, currentLuchador, luchador);
         this.gunRotation(luchador3D, currentLuchador, luchador);
 
@@ -190,25 +189,22 @@ export class ArenaComponent implements OnInit {
     // TODO: implement this
   }
 
-  updateX(luchador3D: Luchador3D, current: Luchador, next: Luchador): any {
-    const value =
+  update(luchador3D: Luchador3D, current: Luchador, next: Luchador) {
+    const x =
       this.convertPosition(next.state.x) -
       this.convertPosition(current.state.x);
-    luchador3D.moveX(value);
-  }
-
-  updateZ(luchador3D: Luchador3D, current: Luchador, next: Luchador): any {
-    const value =
+    const z =
       this.convertPosition(next.state.y) -
       this.convertPosition(current.state.y);
-    luchador3D.moveZ(value);
+    luchador3D.move(x,z);
   }
 
   vehicleRotation(
     luchador3D: Luchador3D,
     current: Luchador,
     next: Luchador
-  ): any {
+  ) {
+
     let value = next.state.angle - current.state.angle;
     value = this.fixAngle(value);
     value = this.angle2radian(value);
