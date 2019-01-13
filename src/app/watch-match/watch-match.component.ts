@@ -55,8 +55,16 @@ export class WatchMatchComponent implements OnInit, OnDestroy {
         console.log("watch details", details);
         this.onMessage = this.service.watch(details).subscribe(message => {
           this.message = message;
-          this.matchState = JSON.parse(this.message);
-          this.matchStateSubject.next(this.matchState);
+          const matchStateCandidate: MatchState = JSON.parse(this.message);
+
+          // TODO: replace this by the proper message type from the publisher
+          if( matchStateCandidate.clock ){
+            this.matchState = matchStateCandidate;
+            this.matchStateSubject.next(this.matchState);
+          } else { 
+            console.log("other event", this.message);
+          }
+
         });
       }
     });

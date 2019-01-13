@@ -6,9 +6,11 @@ import { Observable, interval, Subject } from "rxjs";
 import {
   GameDefinition,
   MatchState,
-  Luchador
+  Luchador,
+  Bullet
 } from "../watch-match/watch-match.model";
 import { Box3D } from "./box3d";
+import { Bullet3D } from "./bullet3d";
 
 @Component({
   selector: "app-arena",
@@ -24,7 +26,9 @@ export class ArenaComponent implements OnInit {
   private scene: BABYLON.Scene;
   private camera: BABYLON.FreeCamera;
   private light: BABYLON.Light;
+
   private luchadores: Array<Luchador3D>;
+  private bullets: Array<Bullet3D>;
 
   private currentMatchState: MatchState;
   private nextMatchState: MatchState;
@@ -49,6 +53,7 @@ export class ArenaComponent implements OnInit {
     };
 
     this.luchadores = [];
+    this.bullets = [];
   }
 
   ngOnInit() {
@@ -125,7 +130,44 @@ export class ArenaComponent implements OnInit {
   updateCurrentMatchState() {
     this.updateLuchadores();
     this.removeLuchadores();
+
+    this.updateBullets();
+    this.removeBullets();
     this.currentMatchState = this.nextMatchState;
+  }
+
+  removeBullets(): any {
+    this.currentMatchState.bullets.forEach((bullet: Bullet) => {
+      let found = this.nextMatchState.bullets.find((search: Bullet) => {
+        return search.id == bullet.id;
+      });
+
+      if (!found) {
+        // not found remove from the scene
+        const bullet3D = this.bullets[bullet.id];
+        bullet3D.dispose();
+        delete this.bullets[bullet.id];
+      }
+    });
+  }
+
+  updateBullets(): any {
+    this.nextMatchState.bullets.forEach((bullet: Bullet) => {
+      let current = this.currentMatchState.bullets.find((search: Bullet) => {
+        return search.id == bullet.id;
+      });
+
+      if (current) {
+        // found update the state
+        const bullet3D = this.bullets[bullet.id];
+        this.updateBullet(bullet3D, current, bullet);
+      } else {
+        // not found add to the scene
+        const position = this.calculateBulletPosition(bullet);
+        const newBullet = new Bullet3D(this.scene, position, bullet);
+        this.bullets[bullet.id] = newBullet;
+      }
+    });
   }
 
   updateLuchadores() {
@@ -136,18 +178,16 @@ export class ArenaComponent implements OnInit {
         }
       );
 
-      // found update the state
       if (currentLuchador) {
-        // console.log("luchador found will update",luchador.name);
+        // found update the state
         const luchador3D = this.luchadores[luchador.state.id];
 
         this.update(luchador3D, currentLuchador, luchador);
         this.vehicleRotation(luchador3D, currentLuchador, luchador);
         this.gunRotation(luchador3D, currentLuchador, luchador);
 
-        // not found add to the scene
       } else {
-        // console.log("luchador NOT found will create ",luchador.name);
+        // not found add to the scene
         const position = this.calculatePosition(luchador);
         const vehicleRotation = this.angle2radian(luchador.state.angle);
         const gunRotation = this.angle2radian(luchador.state.gunAngle);
@@ -185,8 +225,30 @@ export class ArenaComponent implements OnInit {
     return result;
   }
 
+  calculateBulletPosition(bullet: Bullet): BABYLON.Vector3 {
+    // TODO: add marker at the model to define the Y of the bullet
+    const DEFAULT_Y = 0.5;
+
+    let result: BABYLON.Vector3 = new BABYLON.Vector3();
+    result.x = this.convertPosition(bullet.x);
+    result.y = DEFAULT_Y;
+    result.z = this.convertPosition(bullet.y);
+    return result;
+  }
+
   removeLuchadores(): any {
-    // TODO: implement this
+    this.currentMatchState.luchadores.forEach((luchador: Luchador) => {
+      let found = this.nextMatchState.luchadores.find((search:Luchador) => {
+        return search.state.id == luchador.state.id;
+      });
+
+      if (!found) {
+        // not found remove from the scene
+        const luchador3D = this.luchadores[luchador.state.id];
+        luchador3D.dispose();
+        delete this.bullets[luchador.state.id];
+      }
+    });
   }
 
   update(luchador3D: Luchador3D, current: Luchador, next: Luchador) {
@@ -196,15 +258,16 @@ export class ArenaComponent implements OnInit {
     const z =
       this.convertPosition(next.state.y) -
       this.convertPosition(current.state.y);
-    luchador3D.move(x,z);
+    luchador3D.move(x, z);
   }
 
-  vehicleRotation(
-    luchador3D: Luchador3D,
-    current: Luchador,
-    next: Luchador
-  ) {
+  updateBullet(bullet3D: Bullet3D, current: Bullet, next: Bullet) {
+    const x = this.convertPosition(next.x) - this.convertPosition(current.x);
+    const z = this.convertPosition(next.y) - this.convertPosition(current.y);
+    bullet3D.move(x, z);
+  }
 
+  vehicleRotation(luchador3D: Luchador3D, current: Luchador, next: Luchador) {
     let value = next.state.angle - current.state.angle;
     value = this.fixAngle(value);
     value = this.angle2radian(value);

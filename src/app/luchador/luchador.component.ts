@@ -18,7 +18,7 @@ export class LuchadorComponent implements OnInit {
   successMessage: string;
 
   codes = {
-    start: <MainCode>{},
+    onStart: <MainCode>{},
     onRepeat: <MainCode>{},
     onGotDamage: <MainCode>{},
     onFound: <MainCode>{},

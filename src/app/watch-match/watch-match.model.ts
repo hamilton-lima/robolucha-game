@@ -37,6 +37,13 @@ export interface Luchador {
   mask: Mask;
 }
 
+export interface Bullet {
+  id: number;
+  x: number;
+  y: number;
+  amount: number;
+}
+
 export interface Score {
   id: number;
   name: string;
@@ -47,7 +54,7 @@ export interface Score {
 
 export interface MatchState {
   events: any[];
-  bullets: any[];
+  bullets: Bullet[];
   punches: any[];
   luchadores: Luchador[];
   scores: Score[];

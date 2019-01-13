@@ -9,7 +9,13 @@
   <!-- TODO: move arena back here -->
 
   <div class="row">
-    <h1>{{ matchState.clock }}</h1>
+    <h3>{{ matchState.clock }}</h3>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      bullets: {{ matchState.bullets | json }}
+    </div>
   </div>
 
   <div class="row">
@@ -27,7 +33,7 @@
             <tr *ngFor="let luchador of matchState.luchadores">
               <td>{{ luchador.state.id }}</td>
               <td>{{ luchador.name }}</td>
-              <td>{{ luchador | json }}</td>
+              <td>{{ luchador.state | json }}</td>
             </tr>
           </tbody>
         </table>
