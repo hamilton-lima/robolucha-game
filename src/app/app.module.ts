@@ -24,6 +24,7 @@ import { LuchadorResolverService } from "./luchador-resolver.service";
 import { ListMatchesComponent } from "./list-matches/list-matches.component";
 import { WatchMatchComponent } from "./watch-match/watch-match.component";
 import { ArenaComponent } from './arena/arena.component';
+import { PlaygroundComponent } from './playground/playground.component';
 
 const ROUTES: Routes = [
   { path: "", redirectTo: "/luchador", pathMatch: "full" },
@@ -36,6 +37,11 @@ const ROUTES: Routes = [
   {
     path: "match",
     component: ListMatchesComponent,
+    canActivate: [LoginActivate]
+  },
+  {
+    path: "playground",
+    component: PlaygroundComponent,
     canActivate: [LoginActivate]
   },
   {
@@ -74,7 +80,8 @@ export function apiConfigFactory(): Configuration {
     CodeEditorComponent,
     ListMatchesComponent,
     WatchMatchComponent,
-    ArenaComponent
+    ArenaComponent,
+    PlaygroundComponent
   ],
   imports: [
     BrowserModule,

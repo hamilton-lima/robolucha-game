@@ -1,0 +1,17 @@
+<div class="row"><h3>Playground</h3></div>
+
+<div class="row">
+  <div class="col-10">
+    <app-arena
+      [gameDefinition]="gameDefinition"
+      [matchStateSubject]="matchStateSubject"
+    ></app-arena>
+  </div>
+  <div class="col-4">
+    <textarea
+      class="json-data"
+      [ngModel]="data"
+      (ngModelChange)="onChange($event)"
+    ></textarea>
+  </div>
+</div>

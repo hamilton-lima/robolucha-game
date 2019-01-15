@@ -30,12 +30,12 @@
           </div>
         </ng-template>
       </ngb-tab>
-      <ngb-tab title="Start">
+      <ngb-tab title="On Start">
         <ng-template ngbTabContent>
           <div>
             <app-code-editor
               [script]="codes.onStart.script"
-              (onChange)="updateCode('start', $event)"
+              (onChange)="updateCode('onStart', $event)"
             ></app-code-editor>
           </div>
         </ng-template>

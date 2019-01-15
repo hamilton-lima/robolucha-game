@@ -80,10 +80,8 @@ export class ArenaComponent implements OnInit {
     );
 
     // create ground
-    const groundWidth =
-      this.gameDefinition.arenaWidth / this.gameDefinition.luchadorSize;
-    const groundHeight =
-      this.gameDefinition.arenaHeight / this.gameDefinition.luchadorSize;
+    const groundWidth = this.convertPosition(this.gameDefinition.arenaWidth);
+    const groundHeight = this.convertPosition(this.gameDefinition.arenaHeight);
 
     let ground = BABYLON.MeshBuilder.CreateGround(
       "ground1",
@@ -185,7 +183,6 @@ export class ArenaComponent implements OnInit {
         this.update(luchador3D, currentLuchador, luchador);
         this.vehicleRotation(luchador3D, currentLuchador, luchador);
         this.gunRotation(luchador3D, currentLuchador, luchador);
-
       } else {
         // not found add to the scene
         const position = this.calculatePosition(luchador);
@@ -203,15 +200,6 @@ export class ArenaComponent implements OnInit {
         this.luchadores[luchador.state.id] = newLuchador;
       }
     });
-  }
-
-  readonly ANGLE2RADIAN = Math.PI / 180;
-  angle2radian(angle: number): number {
-    return angle * this.ANGLE2RADIAN;
-  }
-
-  convertPosition(n: number) {
-    return n / this.gameDefinition.luchadorSize;
   }
 
   calculatePosition(luchador: Luchador): BABYLON.Vector3 {
@@ -238,7 +226,7 @@ export class ArenaComponent implements OnInit {
 
   removeLuchadores(): any {
     this.currentMatchState.luchadores.forEach((luchador: Luchador) => {
-      let found = this.nextMatchState.luchadores.find((search:Luchador) => {
+      let found = this.nextMatchState.luchadores.find((search: Luchador) => {
         return search.state.id == luchador.state.id;
       });
 
@@ -279,6 +267,15 @@ export class ArenaComponent implements OnInit {
     value = this.fixAngle(value);
     value = this.angle2radian(value);
     luchador3D.rotateGun(value);
+  }
+
+  readonly ANGLE2RADIAN = Math.PI / 180;
+  angle2radian(angle: number): number {
+    return angle * this.ANGLE2RADIAN;
+  }
+
+  convertPosition(n: number) {
+    return n / this.gameDefinition.luchadorSize;
   }
 
   // TODO: read this from luchador

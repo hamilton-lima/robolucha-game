@@ -22,7 +22,7 @@ export class LoginComponent implements OnInit {
       this.loginResult = response;
 
       if (!response.error) {
-        this.router.navigate(["/dashboard"]);
+        this.router.navigate(["/luchador"]);
       }
     });
   }
