@@ -35,6 +35,9 @@ export class ArenaComponent implements OnInit {
   private currentMatchState: MatchState;
   private nextMatchState: MatchState;
 
+  private HALF_LUCHADOR: number;
+  private HALF_BULLET: number;
+
   constructor() {
     this.currentMatchState = {
       events: [],
@@ -63,6 +66,12 @@ export class ArenaComponent implements OnInit {
     this.createScene();
     this.render();
 
+    this.HALF_LUCHADOR = this.convertPosition(
+      this.gameDefinition.luchadorSize / 2
+    );
+
+    this.HALF_BULLET = this.convertPosition(this.gameDefinition.bulletSize / 2);
+
     this.matchStateSubject.subscribe((matchState: MatchState) => {
       this.nextMatchState = matchState;
     });
@@ -82,14 +91,21 @@ export class ArenaComponent implements OnInit {
     );
 
     // create ground
-    const groundWidth = this.convertPosition(this.gameDefinition.arenaWidth);
-    const groundHeight = this.convertPosition(this.gameDefinition.arenaHeight);
+    // TODO: investigate this dimension
+    const groundWidth = this.convertPosition(
+      this.gameDefinition.arenaWidth + this.gameDefinition.luchadorSize
+    );
+    const groundHeight = this.convertPosition(
+      this.gameDefinition.arenaHeight - this.gameDefinition.luchadorSize
+    );
 
     let ground = BABYLON.MeshBuilder.CreateGround(
       "ground1",
       { width: groundWidth, height: groundHeight, subdivisions: 16 },
       this.scene
     );
+
+    console.log("ground dimensions", groundWidth, groundHeight);
 
     ground.position.x = groundWidth / 2;
     ground.position.z = groundHeight / 2;
@@ -113,7 +129,7 @@ export class ArenaComponent implements OnInit {
     // attach the camera to the canvas
     this.camera.attachControl(this.canvas.nativeElement, false);
 
-    if( this.debug ){
+    if (this.debug) {
       Helper3D.showAxis(this.scene, 5);
     }
 
@@ -208,20 +224,15 @@ export class ArenaComponent implements OnInit {
     });
   }
 
-  // used to centralize the mesh around the x,y position
-  halfLuchador() {
-    return this.convertPosition(this.gameDefinition.luchadorSize / 2);
-  }
-
   readonly LUCHADOR_DEFAULT_Y = 0.5;
 
   calculatePosition(luchador: Luchador): BABYLON.Vector3 {
     // TODO: reset this when the model gets resized to 1
 
     let result: BABYLON.Vector3 = new BABYLON.Vector3();
-    result.x = this.convertPosition(luchador.state.x) + this.halfLuchador();
+    result.x = this.convertPosition(luchador.state.x) + this.HALF_LUCHADOR;
     result.y = this.LUCHADOR_DEFAULT_Y;
-    result.z = this.convertPosition(luchador.state.y) + this.halfLuchador();
+    result.z = this.convertPosition(luchador.state.y) + this.HALF_LUCHADOR;
     return result;
   }
 
@@ -230,9 +241,9 @@ export class ArenaComponent implements OnInit {
     const DEFAULT_Y = 0.5;
 
     let result: BABYLON.Vector3 = new BABYLON.Vector3();
-    result.x = this.convertPosition(bullet.x);
+    result.x = this.convertPosition(bullet.x) + this.HALF_BULLET;
     result.y = DEFAULT_Y;
-    result.z = this.convertPosition(bullet.y);
+    result.z = this.convertPosition(bullet.y) + this.HALF_BULLET;
     return result;
   }
 
@@ -252,19 +263,15 @@ export class ArenaComponent implements OnInit {
   }
 
   update(luchador3D: Luchador3D, current: Luchador, next: Luchador) {
-    const x =
-      this.convertPosition(next.state.x) -
-      this.convertPosition(current.state.x);
-    const z =
-      this.convertPosition(next.state.y) -
-      this.convertPosition(current.state.y);
-    luchador3D.move(x, z);
+    const x = this.convertPosition(next.state.x) + this.HALF_LUCHADOR;
+    const z = this.convertPosition(next.state.y) + this.HALF_LUCHADOR;
+    luchador3D.moveTo(x, z);
   }
 
   updateBullet(bullet3D: Bullet3D, current: Bullet, next: Bullet) {
-    const x = this.convertPosition(next.x) - this.convertPosition(current.x);
-    const z = this.convertPosition(next.y) - this.convertPosition(current.y);
-    bullet3D.move(x, z);
+    const x = this.convertPosition(next.x) + this.HALF_BULLET;
+    const z = this.convertPosition(next.y) + this.HALF_BULLET;
+    bullet3D.moveTo(x, z);
   }
 
   vehicleRotation(luchador3D: Luchador3D, current: Luchador, next: Luchador) {
@@ -287,12 +294,12 @@ export class ArenaComponent implements OnInit {
   }
 
   convertPosition(n: number) {
-    return n / this.gameDefinition.luchadorSize;
+    let result: number = n / this.gameDefinition.luchadorSize;
+    return result;
   }
 
   // TODO: read this from luchador
   readonly turnSpeed: number = 180;
-
 
   fixAngle(value: number): number {
     if (Math.abs(value) > this.turnSpeed) {

@@ -1,5 +1,6 @@
 import { SharedConstants } from "./shared.constants";
 import * as BABYLON from "babylonjs";
+import * as GUI from "babylonjs-gui";
 import { Luchador } from "../watch-match/watch-match.model";
 
 export class Base3D {
@@ -9,6 +10,11 @@ export class Base3D {
   protected speed: any;
   protected mesh: BABYLON.Mesh;
   protected scene: BABYLON.Scene;
+  protected advancedTexture: GUI.AdvancedDynamicTexture;
+
+  constructor(){
+    this.advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
+  }
 
   animate(
     attribute: string,
@@ -71,9 +77,9 @@ export class Base3D {
     );
   }
 
-  move(x: number, z: number) {
-    this.mesh.position.x = this.mesh.position.x + x;
-    this.mesh.position.z = this.mesh.position.z + z;
+  moveTo(x: number, z: number) {
+    this.mesh.position.x = x;
+    this.mesh.position.z = z;
 
     // this.animate(
     //   "position.x",
@@ -84,10 +90,38 @@ export class Base3D {
 
   dispose(): any {
     this.mesh.dispose();
+    this.advancedTexture.dispose();
     // TODO: add Fadeout effect to remove elements from the scene
     // this.animate("visibility", 1, 0, this.speed, (mesh: BABYLON.Mesh) => {
     //   console.log("trying to remove the bullet");
     // mesh.dispose();
     // });
   }
+
+  addLabel(
+    text: string,
+    linkOffsetY: number,
+    textColor: BABYLON.Color3
+  ) {
+    var text1 = new BABYLON.GUI.TextBlock();
+    text1.text = text;
+    text1.color = "white";
+    text1.fontSize = 24;
+
+    var rect1 = new GUI.Rectangle();
+    rect1.width = 5;
+    rect1.height = "40px";
+    rect1.color = textColor.toHexString();
+    rect1.thickness = 0;
+    rect1.background = null;
+    rect1.linkOffsetY = linkOffsetY;
+    this.advancedTexture.addControl(rect1);
+
+    var label = new GUI.TextBlock();
+    label.text = text;
+    rect1.addControl(label);
+
+    rect1.linkWithMesh(this.mesh);
+  }
+
 }

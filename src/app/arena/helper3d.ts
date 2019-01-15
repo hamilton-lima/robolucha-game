@@ -1,7 +1,32 @@
 import * as BABYLON from "babylonjs";
+import * as GUI from "babylonjs-gui";
 
 // from https://www.babylonjs-playground.com/#2EYZPE
 export class Helper3D {
+  public static addLabelToMesh(
+    mesh: BABYLON.Mesh,
+    text: string,
+    linkOffsetY: number,
+    textColor: BABYLON.Color3
+  ) {
+    var advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
+
+    var rect1 = new GUI.Rectangle();
+    rect1.width = 0.05;
+    rect1.height = "40px";
+    rect1.color = textColor.toHexString();
+    rect1.thickness = 0;
+    rect1.background = null;
+    advancedTexture.addControl(rect1);
+
+    var label = new GUI.TextBlock();
+    label.text = text;
+    rect1.addControl(label);
+
+    rect1.linkWithMesh(mesh);
+    rect1.linkOffsetY = linkOffsetY;
+  }
+
   public static showAxis(scene, size) {
     var makeTextPlane = function(text, color, size) {
       var dynamicTexture = new BABYLON.DynamicTexture(
@@ -28,7 +53,6 @@ export class Helper3D {
       return plane;
     };
 
-
     var axisX = BABYLON.Mesh.CreateLines(
       "axisX",
       [
@@ -41,8 +65,11 @@ export class Helper3D {
       scene
     );
     axisX.color = new BABYLON.Color3(1, 0, 0);
-    var xChar = makeTextPlane("X", "red", size / 10);
-    xChar.position = new BABYLON.Vector3(0.9 * size, -0.05 * size, 0);
+    Helper3D.addLabelToMesh(axisX, "X", 0, axisX.color);
+
+    // var xChar = makeTextPlane("X", "red", size / 10);
+    // xChar.position = new BABYLON.Vector3(0.9 * size, -0.05 * size, 0);
+
     var axisY = BABYLON.Mesh.CreateLines(
       "axisY",
       [
@@ -55,8 +82,8 @@ export class Helper3D {
       scene
     );
     axisY.color = new BABYLON.Color3(0, 1, 0);
-    var yChar = makeTextPlane("Y", "green", size / 10);
-    yChar.position = new BABYLON.Vector3(0, 0.9 * size, -0.05 * size);
+    Helper3D.addLabelToMesh(axisY, "Y", 0, axisY.color);
+
     var axisZ = BABYLON.Mesh.CreateLines(
       "axisZ",
       [
@@ -69,7 +96,6 @@ export class Helper3D {
       scene
     );
     axisZ.color = new BABYLON.Color3(0, 0, 1);
-    var zChar = makeTextPlane("Z", "blue", size / 10);
-    zChar.position = new BABYLON.Vector3(0, 0.05 * size, 0.9 * size);
+    Helper3D.addLabelToMesh(axisZ, "Z", 0, axisZ.color);
   }
 }

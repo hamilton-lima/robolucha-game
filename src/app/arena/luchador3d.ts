@@ -53,8 +53,12 @@ export class Luchador3D extends Base3D {
           mesh.parent = self.mesh;
           // mesh.material = material;
         });
+
       }
     );
+
+    let green = BABYLON.Color3.FromHexString("#00FF00");
+    this.addLabel(luchador.state.name, -80, green);
   }
 
   rotateVehicle(value: number) {
@@ -70,4 +74,5 @@ export class Luchador3D extends Base3D {
   rotateGun(value: number) {
     // TODO: implement this
   }
+
 }
