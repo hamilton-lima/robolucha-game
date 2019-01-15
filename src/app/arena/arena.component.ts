@@ -11,6 +11,7 @@ import {
 } from "../watch-match/watch-match.model";
 import { Box3D } from "./box3d";
 import { Bullet3D } from "./bullet3d";
+import { Helper3D } from "./helper3d";
 
 @Component({
   selector: "app-arena",
@@ -21,6 +22,7 @@ export class ArenaComponent implements OnInit {
   @ViewChild("game") canvas;
   @Input() gameDefinition: GameDefinition;
   @Input() matchStateSubject: Subject<MatchState>;
+  @Input() debug: boolean = false;
 
   private engine: BABYLON.Engine;
   private scene: BABYLON.Scene;
@@ -110,6 +112,10 @@ export class ArenaComponent implements OnInit {
 
     // attach the camera to the canvas
     this.camera.attachControl(this.canvas.nativeElement, false);
+
+    if( this.debug ){
+      Helper3D.showAxis(this.scene, 5);
+    }
 
     // new Box3D(this.scene);
   }
@@ -202,14 +208,20 @@ export class ArenaComponent implements OnInit {
     });
   }
 
+  // used to centralize the mesh around the x,y position
+  halfLuchador() {
+    return this.convertPosition(this.gameDefinition.luchadorSize / 2);
+  }
+
+  readonly LUCHADOR_DEFAULT_Y = 0.5;
+
   calculatePosition(luchador: Luchador): BABYLON.Vector3 {
     // TODO: reset this when the model gets resized to 1
-    const DEFAULT_Y = 1.1;
 
     let result: BABYLON.Vector3 = new BABYLON.Vector3();
-    result.x = this.convertPosition(luchador.state.x);
-    result.y = DEFAULT_Y;
-    result.z = this.convertPosition(luchador.state.y);
+    result.x = this.convertPosition(luchador.state.x) + this.halfLuchador();
+    result.y = this.LUCHADOR_DEFAULT_Y;
+    result.z = this.convertPosition(luchador.state.y) + this.halfLuchador();
     return result;
   }
 
@@ -280,6 +292,7 @@ export class ArenaComponent implements OnInit {
 
   // TODO: read this from luchador
   readonly turnSpeed: number = 180;
+
 
   fixAngle(value: number): number {
     if (Math.abs(value) > this.turnSpeed) {

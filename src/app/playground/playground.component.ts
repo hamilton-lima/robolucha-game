@@ -12,6 +12,7 @@ export class PlaygroundComponent implements OnInit, AfterViewInit{
   readonly gameDefinition: GameDefinition;
   readonly matchStateSubject: Subject<MatchState>;
   data: string;
+  matchState: MatchState;
 
   constructor() {
     this.gameDefinition = {
@@ -25,7 +26,14 @@ export class PlaygroundComponent implements OnInit, AfterViewInit{
   }
 
   ngOnInit(): void {
-    this.data = JSON.stringify(sampleMatchState);
+    this.matchState = JSON.parse(JSON.stringify(sampleMatchState));
+
+    let id = 1;
+    this.matchState.luchadores.forEach(luchador => {
+      luchador.state.id = id ++;
+    });
+
+    this.data = JSON.stringify(this.matchState);
   }
 
   ngAfterViewInit(): void {
@@ -33,7 +41,7 @@ export class PlaygroundComponent implements OnInit, AfterViewInit{
   }
 
   onChange(event) {
-    const matchState = JSON.parse(event);
-    this.matchStateSubject.next(matchState);
+    this.matchState = JSON.parse(event);
+    this.matchStateSubject.next(this.matchState);
   }
 }
