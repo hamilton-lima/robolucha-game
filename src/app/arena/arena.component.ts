@@ -96,7 +96,7 @@ export class ArenaComponent implements OnInit {
       this.gameDefinition.arenaWidth + this.gameDefinition.luchadorSize
     );
     const groundHeight = this.convertPosition(
-      this.gameDefinition.arenaHeight - this.gameDefinition.luchadorSize
+      this.gameDefinition.arenaHeight
     );
 
     let ground = BABYLON.MeshBuilder.CreateGround(
@@ -108,7 +108,7 @@ export class ArenaComponent implements OnInit {
     console.log("ground dimensions", groundWidth, groundHeight);
 
     ground.position.x = groundWidth / 2;
-    ground.position.z = groundHeight / 2;
+    ground.position.z = (groundHeight / 2) ;
 
     let material = new BABYLON.StandardMaterial("ground-material", this.scene);
     material.diffuseColor = BABYLON.Color3.FromHexString("#2C401B"); // BABYLON.Color3.Random();
@@ -275,9 +275,10 @@ export class ArenaComponent implements OnInit {
   }
 
   vehicleRotation(luchador3D: Luchador3D, current: Luchador, next: Luchador) {
-    let value = next.state.angle - current.state.angle;
+    let value = next.state.angle;
     value = this.fixAngle(value);
-    value = this.angle2radian(value);
+    // * -1 to revert the direction so it matches the cartesian plane
+    value = this.angle2radian(value) * -1;
     luchador3D.rotateVehicle(value);
   }
 
