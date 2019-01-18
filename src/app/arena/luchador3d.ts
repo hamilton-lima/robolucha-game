@@ -54,8 +54,8 @@ export class Luchador3D extends Base3D {
 
         newMeshes.forEach(mesh => {
           mesh.parent = self.mesh;
-          // mesh.position.y = 1.0;
-          // mesh.rotation.z = - Math.PI / 2;
+          console.log("[Luchador3D] mesh.name", mesh.name );
+          console.log("[Luchador3D] mesh.id", mesh.id );
         });
 
       }
@@ -73,6 +73,8 @@ export class Luchador3D extends Base3D {
         newMeshes.forEach(mesh => {
           mesh.parent = self.mesh;
           mesh.material = material;
+          console.log("[Luchador3D] vehicle base mesh.name", mesh.name );
+          console.log("[Luchador3D] vehicle base mesh.id", mesh.id );
         });
       }
     );
@@ -89,8 +91,9 @@ export class Luchador3D extends Base3D {
         newMeshes.forEach(mesh => {
           mesh.parent = self.mesh;
           mesh.material = material;
-          // TODO: Remove this
-          // mesh.rotation.x = - Math.PI / 2;
+          console.log("[Luchador3D] vehicle turret mesh.name", mesh.name );
+          console.log("[Luchador3D] vehicle turret mesh.id", mesh.id );
+
         });
       }
     );

@@ -96,7 +96,7 @@ export class ArenaComponent implements OnInit {
       this.gameDefinition.arenaWidth + this.gameDefinition.luchadorSize
     );
     const groundHeight = this.convertPosition(
-      this.gameDefinition.arenaHeight
+      this.gameDefinition.arenaHeight  + this.gameDefinition.luchadorSize
     );
 
     let ground = BABYLON.MeshBuilder.CreateGround(
@@ -108,7 +108,7 @@ export class ArenaComponent implements OnInit {
     console.log("ground dimensions", groundWidth, groundHeight);
 
     ground.position.x = groundWidth / 2;
-    ground.position.z = (groundHeight / 2) ;
+    ground.position.z = groundHeight / 2;
 
     let material = new BABYLON.StandardMaterial("ground-material", this.scene);
     material.diffuseColor = BABYLON.Color3.FromHexString("#2C401B"); // BABYLON.Color3.Random();
@@ -224,7 +224,7 @@ export class ArenaComponent implements OnInit {
     });
   }
 
-  readonly LUCHADOR_DEFAULT_Y = 0.5;
+  readonly LUCHADOR_DEFAULT_Y = 0.0;
 
   calculatePosition(luchador: Luchador): BABYLON.Vector3 {
     // TODO: reset this when the model gets resized to 1
