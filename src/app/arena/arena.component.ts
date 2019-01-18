@@ -96,7 +96,7 @@ export class ArenaComponent implements OnInit {
       this.gameDefinition.arenaWidth + this.gameDefinition.luchadorSize
     );
     const groundHeight = this.convertPosition(
-      this.gameDefinition.arenaHeight  + this.gameDefinition.luchadorSize
+      this.gameDefinition.arenaHeight + this.gameDefinition.luchadorSize
     );
 
     let ground = BABYLON.MeshBuilder.CreateGround(
@@ -227,8 +227,6 @@ export class ArenaComponent implements OnInit {
   readonly LUCHADOR_DEFAULT_Y = 0.0;
 
   calculatePosition(luchador: Luchador): BABYLON.Vector3 {
-    // TODO: reset this when the model gets resized to 1
-
     let result: BABYLON.Vector3 = new BABYLON.Vector3();
     result.x = this.convertPosition(luchador.state.x) + this.HALF_LUCHADOR;
     result.y = this.LUCHADOR_DEFAULT_Y;
@@ -238,7 +236,7 @@ export class ArenaComponent implements OnInit {
 
   calculateBulletPosition(bullet: Bullet): BABYLON.Vector3 {
     // TODO: add marker at the model to define the Y of the bullet
-    const DEFAULT_Y = 0.5;
+    const DEFAULT_Y = 1.5;
 
     let result: BABYLON.Vector3 = new BABYLON.Vector3();
     result.x = this.convertPosition(bullet.x) + this.HALF_BULLET;
@@ -283,9 +281,10 @@ export class ArenaComponent implements OnInit {
   }
 
   gunRotation(luchador3D: Luchador3D, current: Luchador, next: Luchador): any {
-    let value = next.state.gunAngle - current.state.gunAngle;
+    let value = next.state.gunAngle;
     value = this.fixAngle(value);
-    value = this.angle2radian(value);
+    // * -1 to revert the direction so it matches the cartesian plane
+    value = this.angle2radian(value) * -1;
     luchador3D.rotateGun(value);
   }
 

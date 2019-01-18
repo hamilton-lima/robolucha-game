@@ -8,11 +8,10 @@ export class Luchador3D extends Base3D {
     return "luchador" + this.luchador.state.id;
   }
 
-  private meshes: Array<BABYLON.AbstractMesh> = [];
-  private base: Array<BABYLON.AbstractMesh> = [];
-  private turret: Array<BABYLON.AbstractMesh> = [];
+  private character: BABYLON.AbstractMesh;
+  private base: BABYLON.Mesh;
+  private turret: BABYLON.Mesh;
 
-  private parent: BABYLON.Mesh;
   private luchador: Luchador;
 
   constructor(
@@ -30,19 +29,25 @@ export class Luchador3D extends Base3D {
     let material = new BABYLON.StandardMaterial("material", scene);
     material.diffuseColor = BABYLON.Color3.FromHexString("#FAA21D");
 
-    this.mesh = BABYLON.Mesh.CreateBox("parent", 1, scene);
+    this.mesh = BABYLON.Mesh.CreateBox(this.getName(), 1, scene);
     this.mesh.isVisible = false;
     this.mesh.position.x = position.x;
     this.mesh.position.y = position.y;
     this.mesh.position.z = position.z;
-    // TODO: add vehicle
-    this.mesh.rotation.y = vehicleRotationY;
-
     this.mesh.scaling = new BABYLON.Vector3(1, 1, 1);
+
+    this.turret = BABYLON.Mesh.CreateBox(this.getName() + ".turret", 1, scene);
+    this.turret.parent = this.mesh;
+    this.turret.isVisible = false;
+    this.turret.rotation.y = gunRotationY;
+
+    this.base = BABYLON.Mesh.CreateBox(this.getName() + ".base", 1, scene);
+    this.base.parent = this.mesh;
+    this.base.isVisible = false;
+    this.base.rotation.y = vehicleRotationY;
+
     let self = this;
 
-    // luchador_test02.babylon
-    // luchador.babylon
     BABYLON.SceneLoader.ImportMesh(
       "",
       "assets/",
@@ -50,14 +55,15 @@ export class Luchador3D extends Base3D {
       scene,
       function(newMeshes, particleSystems) {
         console.log("[Luchador3D] imported meshes luchador", newMeshes);
-        self.meshes = newMeshes;
 
         newMeshes.forEach(mesh => {
-          mesh.parent = self.mesh;
-          console.log("[Luchador3D] mesh.name", mesh.name );
-          console.log("[Luchador3D] mesh.id", mesh.id );
+          console.log("[Luchador3D] mesh.name", mesh.name);
+          if (mesh.name == "robolucha_retopo") {
+            mesh.parent = self.turret;
+            self.character = mesh;
+            self.character.id = self.getName() + ".character";
+          }
         });
-
       }
     );
 
@@ -68,13 +74,12 @@ export class Luchador3D extends Base3D {
       scene,
       function(newMeshes, particleSystems) {
         console.log("[Luchador3D] imported meshes base", newMeshes);
-        self.base = newMeshes;
 
         newMeshes.forEach(mesh => {
-          mesh.parent = self.mesh;
-          mesh.material = material;
-          console.log("[Luchador3D] vehicle base mesh.name", mesh.name );
-          console.log("[Luchador3D] vehicle base mesh.id", mesh.id );
+          console.log("[Luchador3D] mesh.name", mesh.name);
+          if (mesh.name == "vehicle_base") {
+            mesh.parent = self.base;
+          }
         });
       }
     );
@@ -86,34 +91,25 @@ export class Luchador3D extends Base3D {
       scene,
       function(newMeshes, particleSystems) {
         console.log("[Luchador3D] imported meshes turret", newMeshes);
-        self.turret = newMeshes;
 
         newMeshes.forEach(mesh => {
-          mesh.parent = self.mesh;
-          mesh.material = material;
-          console.log("[Luchador3D] vehicle turret mesh.name", mesh.name );
-          console.log("[Luchador3D] vehicle turret mesh.id", mesh.id );
-
+          console.log("[Luchador3D] mesh.name", mesh.name);
+          if (mesh.name == "vehicle_turret") {
+            mesh.parent = self.turret;
+          }
         });
       }
     );
 
-    let green = BABYLON.Color3.FromHexString("#00FF00");
-    this.addLabel(luchador.state.name, -120, green);
+    let labelColor = BABYLON.Color3.FromHexString("#DDDDDD");
+    this.addLabel(luchador.state.name, -100, labelColor);
   }
 
   rotateVehicle(value: number) {
-    this.mesh.rotation.y = value;
-
-    // this.animate(
-    //   "rotation.y",
-    //   this.parent.rotation.y,
-    //   this.parent.rotation.y + value
-    // );
+    this.base.rotation.y = value;
   }
 
   rotateGun(value: number) {
-    // TODO: implement this
+    this.turret.rotation.y = value;
   }
-
 }
