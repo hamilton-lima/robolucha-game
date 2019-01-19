@@ -12,4 +12,4 @@ RUN ng build --prod
 FROM nginx:alpine
 
 # copy artifact build from the 'build environment'
-COPY --from=builder /usr/src/app/dist/robolucha-game /usr/share/nginx/html
+COPY --from=builder /usr/src/app/dist/www /usr/share/nginx/html
