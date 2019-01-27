@@ -1,16 +1,22 @@
-import { Component, OnInit, ViewChild, Input } from '@angular/core';
-import { GameDefinition, MatchState, Bullet, Luchador } from '../watch-match/watch-match.model';
-import { Subject } from 'rxjs';
-import { Luchador3D } from '../arena/luchador3d';
-import { Bullet3D } from '../arena/bullet3d';
-import { Scene3D } from '../arena/scene3d';
-import { Helper3D } from '../arena/helper3d';
-import { Box3D } from '../arena/box3d';
+import { Component, OnInit, ViewChild, Input } from "@angular/core";
+import {
+  GameDefinition,
+  MatchState,
+  Bullet,
+  Luchador
+} from "../watch-match/watch-match.model";
+import { Subject } from "rxjs";
+import { Luchador3D } from "../arena/luchador3d";
+import { Bullet3D } from "../arena/bullet3d";
+import { Scene3D } from "../arena/scene3d";
+import { Helper3D } from "../arena/helper3d";
+import { Box3D } from "../arena/box3d";
+import { CONTEXT } from "@angular/core/src/render3/interfaces/view";
 
 @Component({
-  selector: 'app-luchador-preview',
-  templateUrl: './luchador-preview.component.html',
-  styleUrls: ['./luchador-preview.component.css']
+  selector: "app-luchador-preview",
+  templateUrl: "./luchador-preview.component.html",
+  styleUrls: ["./luchador-preview.component.css"]
 })
 export class LuchadorPreviewComponent implements OnInit {
   @ViewChild("preview") canvas;
@@ -23,8 +29,12 @@ export class LuchadorPreviewComponent implements OnInit {
   scene3D: Scene3D;
   private character: BABYLON.AbstractMesh;
 
-  constructor() {
-  }
+  TEXTURE_WIDTH = 512;
+  TEXTURE_HEIGHT = 512;
+  material: BABYLON.StandardMaterial;
+  dynamicTexture: BABYLON.DynamicTexture;
+
+  constructor() {}
 
   ngOnInit() {
     this.engine = new BABYLON.Engine(this.canvas.nativeElement, true);
@@ -47,11 +57,7 @@ export class LuchadorPreviewComponent implements OnInit {
 
     // this.createGround();
     // create a FreeCamera, and set its position to (x:0, y:5, z:-10)
-    this.camera = new BABYLON.FreeCamera(
-      "camera1",
-      cameraPosition,
-      this.scene
-    );
+    this.camera = new BABYLON.FreeCamera("camera1", cameraPosition, this.scene);
     this.camera.rotation.x = this.angle2radian(45);
     // // target the camera to scene origin
     this.camera.setTarget(BABYLON.Vector3.Zero());
@@ -60,7 +66,7 @@ export class LuchadorPreviewComponent implements OnInit {
     this.loadModel();
   }
 
-  loadModel(){
+  loadModel() {
     const self = this;
 
     BABYLON.SceneLoader.ImportMesh(
@@ -77,14 +83,34 @@ export class LuchadorPreviewComponent implements OnInit {
             self.character = mesh;
             self.character.position = BABYLON.Vector3.Zero();
             self.character.position.y = -2;
+            self.loadDynamicTexture();
           }
         });
       }
     );
   }
 
+  loadDynamicTexture() {
+    this.dynamicTexture = new BABYLON.DynamicTexture(
+      "luchador-preview-dynamic-texture",
+      { width: this.TEXTURE_WIDTH, height: this.TEXTURE_HEIGHT },
+      this.scene,
+      false
+    );
+
+    this.material = new BABYLON.StandardMaterial("luchador-preview-material", this.scene);                    
+    this.material.diffuseTexture = this.dynamicTexture;
+    let context = this.dynamicTexture.getContext();
+    context.fillStyle = "#3366FF";
+    context.fillRect(0,0,this.TEXTURE_WIDTH, this.TEXTURE_HEIGHT);
+
+    this.character.material = this.material;
+    this.dynamicTexture.update();
+
+    // this.character.visibility = 1;
+  }
+
   render(): void {
-    // run the render loop
     this.engine.runRenderLoop(() => {
       this.scene.render();
     });
@@ -94,5 +120,4 @@ export class LuchadorPreviewComponent implements OnInit {
   angle2radian(angle: number): number {
     return angle * this.ANGLE2RADIAN;
   }
-
 }
