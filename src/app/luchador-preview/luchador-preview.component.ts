@@ -20,14 +20,11 @@ import { CONTEXT } from "@angular/core/src/render3/interfaces/view";
 })
 export class LuchadorPreviewComponent implements OnInit {
   @ViewChild("preview") canvas;
-  @ViewChild("debug") debugCanvas;
 
   private engine: BABYLON.Engine;
   private scene: BABYLON.Scene;
-  camera: BABYLON.FreeCamera;
+  private camera: BABYLON.FreeCamera;
   private light: BABYLON.Light;
-  ground: BABYLON.Mesh;
-  scene3D: Scene3D;
   private character: BABYLON.AbstractMesh;
 
   TEXTURE_WIDTH = 512;
@@ -101,13 +98,14 @@ export class LuchadorPreviewComponent implements OnInit {
       true
     );
     this.context = this.dynamicTexture.getContext();
-    console.log("dynamic texture width", this.dynamicTexture.getSize());
+    this.dynamicTexture.wrapR = 1;
+    this.dynamicTexture.wrapU = 1;
+    this.dynamicTexture.wrapV = 1;
 
     this.material = new BABYLON.StandardMaterial(
       "luchador-preview-material",
       this.scene
     );
-    console.log(">> material", this.character.material);
 
     this.character.material = this.material;
     this.character.visibility = 1;
@@ -115,11 +113,14 @@ export class LuchadorPreviewComponent implements OnInit {
     this.material.diffuseTexture = this.dynamicTexture;
     this.material.specularColor = new BABYLON.Color3(0, 0, 0);
     this.material.ambientColor = new BABYLON.Color3(0.588, 0.588, 0.588);
-    this.material.backFaceCulling = false;
 
     let sequence = forkJoin([
       this.loadImage("back.png"),
-      this.loadImage("face.png")
+      this.loadImage("face.png"),
+      this.loadImage("wrist.png"),
+      this.loadImage("ankle.png"),
+      this.loadImage("feet.png"),
+      this.loadImage("4.png"),
     ]);
 
     const self = this;
@@ -132,33 +133,21 @@ export class LuchadorPreviewComponent implements OnInit {
       inMemoryCanvas.height = self.TEXTURE_HEIGHT;
 
       let context = inMemoryCanvas.getContext("2d");
+
       context.imageSmoothingEnabled = true;
 
       // draw skin
-      context.fillStyle = "#0000DD";
+      context.fillStyle = "#00DD22";
       context.fillRect(0, 0, this.TEXTURE_WIDTH, this.TEXTURE_HEIGHT);
-      context.fill();
-
-      context.fillStyle = "#00DD00";
-      context.fillRect(0, 0, 50, 50);
-      context.fill();
-
-      context.fillStyle = "#FFFFFF";
-      context.fillRect(0, 150, 50, 50);
       context.fill();
 
       // draw layers
       images.forEach(image => {
         context.drawImage(image, 0, 0);
       });
-
+      
       self.context.drawImage(inMemoryCanvas, 0, 0);
       self.dynamicTexture.update();
-
-      const debugCtx = (<HTMLCanvasElement>(
-        this.debugCanvas.nativeElement
-      )).getContext("2d");
-      debugCtx.drawImage(inMemoryCanvas, 0, 0);
     });
   }
 
