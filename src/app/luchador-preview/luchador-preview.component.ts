@@ -5,7 +5,7 @@ import {
   Bullet,
   Luchador
 } from "../watch-match/watch-match.model";
-import { Subject } from "rxjs";
+import { Subject, concat, forkJoin } from "rxjs";
 import { Luchador3D } from "../arena/luchador3d";
 import { Bullet3D } from "../arena/bullet3d";
 import { Scene3D } from "../arena/scene3d";
@@ -20,6 +20,7 @@ import { CONTEXT } from "@angular/core/src/render3/interfaces/view";
 })
 export class LuchadorPreviewComponent implements OnInit {
   @ViewChild("preview") canvas;
+  @ViewChild("debug") debugCanvas;
 
   private engine: BABYLON.Engine;
   private scene: BABYLON.Scene;
@@ -98,16 +99,49 @@ export class LuchadorPreviewComponent implements OnInit {
       false
     );
 
-    this.material = new BABYLON.StandardMaterial("luchador-preview-material", this.scene);                    
+    this.material = new BABYLON.StandardMaterial(
+      "luchador-preview-material",
+      this.scene
+    );
     this.material.diffuseTexture = this.dynamicTexture;
     let context = this.dynamicTexture.getContext();
-    context.fillStyle = "#3366FF";
-    context.fillRect(0,0,this.TEXTURE_WIDTH, this.TEXTURE_HEIGHT);
+
+    // skin color
+    context.fillStyle = "#da8b6b";
+    context.fillRect(0, 0, this.TEXTURE_WIDTH, this.TEXTURE_HEIGHT);
 
     this.character.material = this.material;
-    this.dynamicTexture.update();
 
-    // this.character.visibility = 1;
+    let sequence = forkJoin([
+      this.loadImage("back.png"),
+      this.loadImage("face.png")
+    ]);
+
+    const self = this;
+    sequence.subscribe(images => {
+      console.log("all images loaded");
+      let context = self.dynamicTexture.getContext();
+
+      images.forEach(image => {
+        context.drawImage(image, 0, 0);
+        self.dynamicTexture.update();
+
+        const debugCtx = (<HTMLCanvasElement>this.debugCanvas.nativeElement).getContext('2d');
+        debugCtx.drawImage(image, 0, 0);
+      });
+    });
+
+  }
+
+  loadImage(name): Subject<HTMLImageElement> {
+    let result = new Subject<HTMLImageElement>();
+    let img = new Image();
+    img.src = "assets/dynamic-texture/" + name;
+    img.onload = () => {
+      result.next(img);
+      result.complete();
+    };
+    return result;
   }
 
   render(): void {
