@@ -34,6 +34,7 @@ export class LuchadorPreviewComponent implements OnInit {
   TEXTURE_HEIGHT = 512;
   material: BABYLON.StandardMaterial;
   dynamicTexture: BABYLON.DynamicTexture;
+  context: CanvasRenderingContext2D;
 
   constructor() {}
 
@@ -81,6 +82,7 @@ export class LuchadorPreviewComponent implements OnInit {
         newMeshes.forEach(mesh => {
           console.log("[Luchador3D] mesh.name", mesh.name);
           if (mesh.name == "robolucha_retopo") {
+            mesh.visibility = 0;
             self.character = mesh;
             self.character.position = BABYLON.Vector3.Zero();
             self.character.position.y = -2;
@@ -94,23 +96,26 @@ export class LuchadorPreviewComponent implements OnInit {
   loadDynamicTexture() {
     this.dynamicTexture = new BABYLON.DynamicTexture(
       "luchador-preview-dynamic-texture",
-      { width: this.TEXTURE_WIDTH, height: this.TEXTURE_HEIGHT },
+      this.TEXTURE_WIDTH,
       this.scene,
-      false
+      true
     );
+    this.context = this.dynamicTexture.getContext();
+    console.log("dynamic texture width", this.dynamicTexture.getSize());
 
     this.material = new BABYLON.StandardMaterial(
       "luchador-preview-material",
       this.scene
     );
-    this.material.diffuseTexture = this.dynamicTexture;
-    let context = this.dynamicTexture.getContext();
-
-    // skin color
-    context.fillStyle = "#da8b6b";
-    context.fillRect(0, 0, this.TEXTURE_WIDTH, this.TEXTURE_HEIGHT);
+    console.log(">> material", this.character.material);
 
     this.character.material = this.material;
+    this.character.visibility = 1;
+
+    this.material.diffuseTexture = this.dynamicTexture;
+    this.material.specularColor = new BABYLON.Color3(0, 0, 0);
+    this.material.ambientColor = new BABYLON.Color3(0.588, 0.588, 0.588);
+    this.material.backFaceCulling = false;
 
     let sequence = forkJoin([
       this.loadImage("back.png"),
@@ -119,18 +124,42 @@ export class LuchadorPreviewComponent implements OnInit {
 
     const self = this;
     sequence.subscribe(images => {
-      console.log("all images loaded");
-      let context = self.dynamicTexture.getContext();
+      console.log("all images loaded", images);
 
+      // temporary canvas
+      var inMemoryCanvas = document.createElement("canvas");
+      inMemoryCanvas.width = self.TEXTURE_WIDTH;
+      inMemoryCanvas.height = self.TEXTURE_HEIGHT;
+
+      let context = inMemoryCanvas.getContext("2d");
+      context.imageSmoothingEnabled = true;
+
+      // draw skin
+      context.fillStyle = "#0000DD";
+      context.fillRect(0, 0, this.TEXTURE_WIDTH, this.TEXTURE_HEIGHT);
+      context.fill();
+
+      context.fillStyle = "#00DD00";
+      context.fillRect(0, 0, 50, 50);
+      context.fill();
+
+      context.fillStyle = "#FFFFFF";
+      context.fillRect(0, 150, 50, 50);
+      context.fill();
+
+      // draw layers
       images.forEach(image => {
         context.drawImage(image, 0, 0);
-        self.dynamicTexture.update();
-
-        const debugCtx = (<HTMLCanvasElement>this.debugCanvas.nativeElement).getContext('2d');
-        debugCtx.drawImage(image, 0, 0);
       });
-    });
 
+      self.context.drawImage(inMemoryCanvas, 0, 0);
+      self.dynamicTexture.update();
+
+      const debugCtx = (<HTMLCanvasElement>(
+        this.debugCanvas.nativeElement
+      )).getContext("2d");
+      debugCtx.drawImage(inMemoryCanvas, 0, 0);
+    });
   }
 
   loadImage(name): Subject<HTMLImageElement> {
@@ -147,6 +176,9 @@ export class LuchadorPreviewComponent implements OnInit {
   render(): void {
     this.engine.runRenderLoop(() => {
       this.scene.render();
+      if (this.character) {
+        this.character.rotation.z += -0.03;
+      }
     });
   }
 
