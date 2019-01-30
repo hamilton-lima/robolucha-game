@@ -27,6 +27,7 @@ import { ArenaComponent } from './arena/arena.component';
 import { PlaygroundComponent } from './playground/playground.component';
 import { MaskEditorComponent } from './mask-editor/mask-editor.component';
 import { LuchadorPreviewComponent } from './luchador-preview/luchador-preview.component';
+import { MaskEditorDetailComponent } from './mask-editor-detail/mask-editor-detail.component';
 
 const ROUTES: Routes = [
   { path: "", redirectTo: "/luchador", pathMatch: "full" },
@@ -91,7 +92,8 @@ export function apiConfigFactory(): Configuration {
     ArenaComponent,
     PlaygroundComponent,
     MaskEditorComponent,
-    LuchadorPreviewComponent
+    LuchadorPreviewComponent,
+    MaskEditorDetailComponent
   ],
   imports: [
     BrowserModule,

@@ -32,6 +32,7 @@ export class LuchadorPreviewComponent implements OnInit {
   material: BABYLON.StandardMaterial;
   dynamicTexture: BABYLON.DynamicTexture;
   context: CanvasRenderingContext2D;
+  rotate: boolean = false;
 
   constructor() {}
 
@@ -165,7 +166,7 @@ export class LuchadorPreviewComponent implements OnInit {
   render(): void {
     this.engine.runRenderLoop(() => {
       this.scene.render();
-      if (this.character) {
+      if (this.character && this.rotate) {
         this.character.rotation.z += -0.03;
       }
     });
