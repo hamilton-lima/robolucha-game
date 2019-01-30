@@ -1,5 +1,5 @@
-// @see https://github.com/hamilton-lima/vaca5/blob/master/lib/static  js
-class NMSColor {
+// @see https://github.com/hamilton-lima/vaca5/blob/master/lib/ js
+export class NMSColor {
   static VINE_TOMATO = "#EF5026";
   static EGGPLANT = "#3C3755";
   static RED_PEPPER = "#C52728";
@@ -56,10 +56,33 @@ class NMSColor {
   static allColors = [];
 
   static init() {
-    for (var x in NMSColor) {
-      NMSColor.allColors.push(NMSColor[x]);
+    if (NMSColor.allColors.length == 0) {
+      for (var x in NMSColor) {
+        if (typeof NMSColor[x] === "string") {
+          const color = <Color>{
+            name: NMSColor.buildColorLabel(x),
+            color: NMSColor[x]
+          };
+          NMSColor.allColors.push(color);
+        }
+      }
     }
   }
+
+  static buildColorLabel(colorName: string) {
+    let lower = colorName.toLowerCase();
+    let words = lower.split("_");
+    let result = "";
+    words.forEach(word => {
+      result += word.charAt(0).toUpperCase() + word.slice(1) + " ";
+    });
+    return result;
+  }
+}
+
+export class Color {
+  name: string;
+  color: string;
 }
 
 NMSColor.init();
