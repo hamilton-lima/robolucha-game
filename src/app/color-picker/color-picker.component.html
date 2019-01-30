@@ -1,4 +1,4 @@
-<a
+<span
   *ngFor="let item of colors"
   (click)="selectColor(item.color)"
   class="color-block"
@@ -6,4 +6,4 @@
   placement="top"
   container="body"
   ngbTooltip="{{ item.name + ' (' + item.color + ')' }}"
-></a>
+></span>

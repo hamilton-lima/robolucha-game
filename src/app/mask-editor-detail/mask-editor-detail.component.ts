@@ -41,4 +41,8 @@ export class MaskEditorDetailComponent implements OnInit {
   isCurrent(category: Category): boolean {
     return this.current === category;
   }
+
+  update(key:string, value: string){
+    console.log("update", key, value);
+  }
 }
