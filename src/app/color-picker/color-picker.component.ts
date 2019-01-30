@@ -13,7 +13,6 @@ export class ColorPickerComponent implements OnInit {
 
   constructor() {
     this.colors = NMSColor.allColors;
-    console.log("colors", this.colors);
   }
 
   ngOnInit() {}

@@ -1,0 +1,6 @@
+<img
+  class="shape-block"
+  *ngFor="let image of getImages()"
+  src="{{ getImageSrc(image) }}"
+  (click)="selectShape(image)"
+/>

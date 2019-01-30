@@ -24,7 +24,7 @@
     >
       <ngb-panel id="mask-primary-color">
         <ng-template ngbPanelTitle>
-          <span 
+          <span
             class="color-block align-middle"
             [ngStyle]="{ 'background-color': '#FF0000' }"
             placement="top"
@@ -42,8 +42,8 @@
       </ngb-panel>
 
       <ngb-panel id="mask-secondary-color">
-        <ng-template ngbPanelTitle> 
-            <span 
+        <ng-template ngbPanelTitle>
+          <span
             class="color-block align-middle"
             [ngStyle]="{ 'background-color': '#FF0000' }"
             placement="top"
@@ -51,7 +51,8 @@
             ngbTooltip="{{ 'Color name' }}"
           ></span>
 
-          <span>Secondary Color</span> </ng-template>
+          <span>Secondary Color</span>
+        </ng-template>
         <ng-template ngbPanelContent>
           <app-color-picker
             (onChange)="update('mask.secondary-color', $event)"
@@ -60,14 +61,14 @@
       </ngb-panel>
 
       <ngb-panel id="mask-shape">
-          <ng-template ngbPanelTitle>
-            <span>Shape</span>
-          </ng-template>
-          <ng-template ngbPanelContent>
-            <span>Choose shape goes here</span>
-          </ng-template>
-        </ngb-panel>
-  
+        <ng-template ngbPanelTitle> <span>Shape</span> </ng-template>
+        <ng-template ngbPanelContent>
+          <app-shape-picker
+            (onChange)="update('mask.shape', $event)"
+            shapeName="maskShape"
+          ></app-shape-picker>
+        </ng-template>
+      </ngb-panel>
     </ngb-accordion>
   </div>
 </div>

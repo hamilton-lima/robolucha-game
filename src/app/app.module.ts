@@ -29,6 +29,7 @@ import { MaskEditorComponent } from './mask-editor/mask-editor.component';
 import { LuchadorPreviewComponent } from './luchador-preview/luchador-preview.component';
 import { MaskEditorDetailComponent } from './mask-editor-detail/mask-editor-detail.component';
 import { ColorPickerComponent } from './color-picker/color-picker.component';
+import { ShapePickerComponent } from './shape-picker/shape-picker.component';
 
 const ROUTES: Routes = [
   { path: "", redirectTo: "/luchador", pathMatch: "full" },
@@ -95,7 +96,8 @@ export function apiConfigFactory(): Configuration {
     MaskEditorComponent,
     LuchadorPreviewComponent,
     MaskEditorDetailComponent,
-    ColorPickerComponent
+    ColorPickerComponent,
+    ShapePickerComponent
   ],
   imports: [
     BrowserModule,
