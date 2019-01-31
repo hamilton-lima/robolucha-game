@@ -5,3 +5,7 @@
   margin-right: 5px;
   border: solid 1px black;
 }
+
+.selected {
+  border: solid 3px #007BFF;
+}

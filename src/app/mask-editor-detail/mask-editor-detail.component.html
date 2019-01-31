@@ -23,11 +23,7 @@
       activeIds="mask-primary-color"
     >
       <ngb-panel id="mask-primary-color">
-        <ng-template
-          [ngStyle]="{ 'background-color': '#0000FF' }"
-          ngbPanelTitle
-          aria-expanded="true"
-        >
+        <ng-template ngbPanelTitle>
           <span
             class="mask-editor-color-block align-middle"
             [ngStyle]="{ 'background-color': getColor('mask.primary.color') }"
@@ -40,13 +36,14 @@
         </ng-template>
         <ng-template ngbPanelContent>
           <app-color-picker
+            [current]="getColor('mask.primary.color')"
             (onChange)="update('mask.primary.color', $event)"
           ></app-color-picker>
         </ng-template>
       </ngb-panel>
 
       <ngb-panel id="mask-secondary-color">
-        <ng-template aria-expanded="false" ngbPanelTitle>
+        <ng-template ngbPanelTitle>
           <span
             class="mask-editor-color-block align-middle"
             [ngStyle]="{ 'background-color': getColor('mask.secondary.color') }"
@@ -59,6 +56,7 @@
         </ng-template>
         <ng-template ngbPanelContent>
           <app-color-picker
+            [current]="getColor('mask.secondary.color')"
             (onChange)="update('mask.secondary.color', $event)"
           ></app-color-picker>
         </ng-template>
@@ -66,12 +64,18 @@
 
       <ngb-panel id="mask-shape">
         <ng-template aria-expanded="false" ngbPanelTitle>
+          <img
+            class="mask-editor-shape-block align-middle"
+            src="{{ getShape('mask.shape') }}"
+          />
+
           <span>Shape</span>
         </ng-template>
         <ng-template ngbPanelContent>
           <app-shape-picker
+            [current]="getShapeName('mask.shape')"
             (onChange)="update('mask.shape', $event)"
-            shapeName="maskShape"
+            shapeName="mask.shape"
           ></app-shape-picker>
         </ng-template>
       </ngb-panel>

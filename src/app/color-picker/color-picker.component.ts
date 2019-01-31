@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output } from "@angular/core";
+import { Component, OnInit, EventEmitter, Output, Input } from "@angular/core";
 import { NMSColor } from "./nmscolor";
 
 @Component({
@@ -9,6 +9,7 @@ import { NMSColor } from "./nmscolor";
 export class ColorPickerComponent implements OnInit {
   colors;
 
+  @Input() current: string;
   @Output() onChange = new EventEmitter<string>();
 
   constructor(private nmsColors:NMSColor) {
@@ -18,6 +19,11 @@ export class ColorPickerComponent implements OnInit {
   ngOnInit() {}
 
   selectColor(color:string){
+    this.current = color;
     this.onChange.next(color);
+  }
+
+  isCurrent(color:string){
+    return color === this.current;
   }
 }

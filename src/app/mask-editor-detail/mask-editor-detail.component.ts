@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, ViewEncapsulation } from "@angular/core";
 import { MainLuchador, MainConfig } from "../sdk";
 import { NMSColor } from "../color-picker/nmscolor";
+import { ShapeConfig } from "../shape-picker/shape-config";
 
 enum Category {
   mask,
@@ -35,7 +36,7 @@ export class MaskEditorDetailComponent implements OnInit {
     { label: "Body", category: Category.body }
   ];
 
-  constructor(private nmsColor: NMSColor) {}
+  constructor(private nmsColor: NMSColor, private shapeConfig: ShapeConfig) {}
 
   ngOnInit() {
     console.log("mask editor detail luchador", this.luchador);
@@ -57,6 +58,11 @@ export class MaskEditorDetailComponent implements OnInit {
 
     if (found) {
       found.value = value;
+    } else {
+      this.luchador.configs.push( <MainConfig>{
+        key: key,
+        value: value
+      })
     }
   }
 
@@ -73,4 +79,25 @@ export class MaskEditorDetailComponent implements OnInit {
     const color = this.getColor(key);
     return this.nmsColor.getColorName(color) + " (" + color + ")";
   }
+
+  readonly EMPTY = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
+  
+  getShape(key: string) {
+    let found = this.luchador.configs.find((config: MainConfig) => {
+      return config.key == key;
+    });
+
+    let result = found ? this.shapeConfig.path + found.value : this.EMPTY;
+    return result;
+  }
+
+  getShapeName(key: string) {
+    let found = this.luchador.configs.find((config: MainConfig) => {
+      return config.key == key;
+    });
+
+    let result = found ? found.value : "";
+    return result;
+  }
+
 }

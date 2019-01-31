@@ -104,4 +104,15 @@ export class ShapeConfig {
     "boca0019.png",
     "boca0020.png"
   ];
+
+  images: Array<Array<string>>;
+  constructor(){
+    this.images = [];
+    this.images['mask.shape'] = this.maskShape;
+    this.images['background2'] = this.background2;
+    this.images['ornamentTop'] = this.ornamentTop;
+    this.images['ornamentBottom'] = this.ornamentBottom;
+    this.images['face'] = this.face;
+    this.images['mouth'] = this.mouth;
+  }
 }
