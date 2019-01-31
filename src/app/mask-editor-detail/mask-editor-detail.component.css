@@ -19,14 +19,14 @@ ngb-accordion .card-header > h5 > button[aria-expanded="true"] {
 }
 
 ngb-accordion .card-header > h5 > button:hover {
-  color: #ffffff !important;
+  color: #212529 !important;
   text-decoration: none;
 }
 
 ngb-accordion .card-header > h5 > button {
   text-align: left;
-  background-color: #6c757d;
-  color: #ffffff;
+  background-color: #F8F9FA;
+  color: #212529;
   text-decoration: none;
   width: 100%;
   height: 100%;

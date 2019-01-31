@@ -24,24 +24,6 @@ export class ShapeConfig {
     "segunda_cor0015.png"
   ];
 
-  background2 = [
-    "background2_0001.png",
-    "background2_0002.png",
-    "background2_0003.png",
-    "background2_0004.png",
-    "background2_0005.png",
-    "background2_0006.png",
-    "background2_0007.png",
-    "background2_0008.png",
-    "background2_0009.png",
-    "background2_0010.png",
-    "background2_0011.png",
-    "background2_0012.png",
-    "background2_0013.png",
-    "background2_0014.png",
-    "background2_0015.png"
-  ];
-
   ornamentTop = [
     "ornamento_cima0001.png",
     "ornamento_cima0002.png",
@@ -105,14 +87,19 @@ export class ShapeConfig {
     "boca0020.png"
   ];
 
+  eyes = [
+    "olho0001.png",
+    "olho0002.png"
+  ];
+
   images: Array<Array<string>>;
   constructor(){
     this.images = [];
     this.images['mask.shape'] = this.maskShape;
-    this.images['background2'] = this.background2;
-    this.images['ornamentTop'] = this.ornamentTop;
-    this.images['ornamentBottom'] = this.ornamentBottom;
-    this.images['face'] = this.face;
-    this.images['mouth'] = this.mouth;
+    this.images['mask.decoration.top.shape'] = this.ornamentTop;
+    this.images['mask.decoration.bottom.shape'] = this.ornamentBottom;
+    this.images['face.shape'] = this.face;
+    this.images['mouth.shape'] = this.mouth;
+    this.images['eyes.shape'] = this.eyes;
   }
 }
