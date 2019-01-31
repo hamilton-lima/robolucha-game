@@ -1,8 +1,33 @@
-.color-block {
-    width: 20px;
-    height: 20px;
-    display: inline-block;
-    margin-right: 5px;
-    border: solid 1px black;
-  }
-  
+.mask-editor-color-block {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  margin-right: 5px;
+  border: solid 1px black;
+}
+
+/* ::ng-deep .card .card-header {
+  background-color: blueviolet;
+} */
+
+ngb-accordion .card-header > h5 > button[aria-expanded="true"] {
+  background-color: #007bff !important;
+}
+
+ngb-accordion .card-header > h5 > button:hover {
+  color: #FFFFFF !important;  
+  text-decoration: none;
+}
+
+ngb-accordion .card-header > h5 > button {
+  text-align: left;
+  background-color: #6c757d;
+  color: #FFFFFF;
+  width: 100%;
+  height: 100%;
+  padding: 0.5rem 1.25rem; /* Or whatever padding you would have applied in the next rule*/
+}
+
+ngb-accordion .card-header {
+  padding: 0; /* Just to make sure the <a> fills the whole card header */
+}

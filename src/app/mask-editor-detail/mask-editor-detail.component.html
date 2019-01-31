@@ -6,8 +6,8 @@
         (click)="setCurrent(item.category)"
         type="button"
         [ngClass]="{
-          'btn-success': isCurrent(item.category),
-          'btn-primary': !isCurrent(item.category)
+          'btn-primary': isCurrent(item.category),
+          'btn-light': !isCurrent(item.category)
         }"
         class="btn"
       >
@@ -23,16 +23,20 @@
       activeIds="mask-primary-color"
     >
       <ngb-panel id="mask-primary-color">
-        <ng-template ngbPanelTitle>
+        <ng-template
+          [ngStyle]="{ 'background-color': '#0000FF' }"
+          ngbPanelTitle
+          aria-expanded="true"
+        >
           <span
-            class="color-block align-middle"
+            class="mask-editor-color-block align-middle"
             [ngStyle]="{ 'background-color': getColor('mask.primary.color') }"
             placement="top"
             container="body"
             ngbTooltip="{{ getColorLabel('mask.primary.color') }}"
           ></span>
 
-          <span>Primary Color</span>
+          <span class="mask-editor-subcategory-title">Primary Color</span>
         </ng-template>
         <ng-template ngbPanelContent>
           <app-color-picker
@@ -42,9 +46,9 @@
       </ngb-panel>
 
       <ngb-panel id="mask-secondary-color">
-        <ng-template ngbPanelTitle>
+        <ng-template aria-expanded="false" ngbPanelTitle>
           <span
-            class="color-block align-middle"
+            class="mask-editor-color-block align-middle"
             [ngStyle]="{ 'background-color': getColor('mask.secondary.color') }"
             placement="top"
             container="body"
@@ -61,7 +65,9 @@
       </ngb-panel>
 
       <ngb-panel id="mask-shape">
-        <ng-template ngbPanelTitle> <span>Shape</span> </ng-template>
+        <ng-template aria-expanded="false" ngbPanelTitle>
+          <span>Shape</span>
+        </ng-template>
         <ng-template ngbPanelContent>
           <app-shape-picker
             (onChange)="update('mask.shape', $event)"

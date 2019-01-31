@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Input, ViewEncapsulation } from "@angular/core";
 import { MainLuchador, MainConfig } from "../sdk";
 import { NMSColor } from "../color-picker/nmscolor";
 
@@ -18,7 +18,8 @@ export class CategoryOptions {
 @Component({
   selector: "app-mask-editor-detail",
   templateUrl: "./mask-editor-detail.component.html",
-  styleUrls: ["./mask-editor-detail.component.css"]
+  styleUrls: ["./mask-editor-detail.component.css"],
+  encapsulation: ViewEncapsulation.None
 })
 export class MaskEditorDetailComponent implements OnInit {
   @Input() luchador: MainLuchador;
