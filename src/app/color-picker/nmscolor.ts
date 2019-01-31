@@ -1,75 +1,86 @@
+import { Injectable } from "@angular/core";
+
 // @see https://github.com/hamilton-lima/vaca5/blob/master/lib/ js
+
+export class Color {
+  name: string;
+  color: string;
+}
+
+@Injectable({
+  providedIn: "root"
+})
 export class NMSColor {
-  static VINE_TOMATO = "#EF5026";
-  static EGGPLANT = "#3C3755";
-  static RED_PEPPER = "#C52728";
-  static PURPLE_CABBAGE = "#8E4980";
-  static BROCCOLI = "#2C401B";
-  static BRUSSELS_SPROUTS = "#86A23E";
-  static POTATO = "#D79851";
-  static RHUBARB = "#C15866";
-  static APPLE = "#E5493D";
-  static OKRA = "#5E7434";
-  static JICAMA = "#CB726E";
-  static FENNEL = "#CBC7A1";
-  static LEMON = "#FAF599";
-  static APRICOT = "#FFBE30";
-  static AVOCADO = "#C9C561";
-  static BLUEBERRY = "#353535";
-  static SOUR_CHERRY = "#AF1317";
-  static BEET = "#D73C2A";
-  static ASPERAGUS = "#C6BD62";
-  static WATERCRESS = "#9FB43B";
-  static TANGERINE = "#FAA21D";
-  static BANANA = "#FDDF6F";
-  static SPRING_ONION = "#702C23";
-  static PEAR = "#C8C846";
-  static CHARD = "#547838";
-  static FIG = "#68281F";
-  static GOLDEN_KIWI = "#F6D063";
-  static YELLOW_BELLPEPPER = "#FDC647";
-  static SQUASH_BLOSSOM = "#ECCC55";
-  static RED_KIDNEY_BEAN = "#CB9274";
-  static SQUASH = "#FBE70E";
-  static MUSCAT_GRAPES = "#AD709A";
-  static RED_BELLPEPPER = "#D12728";
-  static CARROT = "#E75F25";
-  static GREEN_CABBAGE = "#B4C346";
-  static PINEAPPLE = "#E2A528";
-  static DRAGON_FRUIT = "#C9A62E";
-  static ZUCCHINI = "#93A13F";
-  static KALE = "#47642E";
-  static CUCUMBER = "#456033";
-  static PEACH = "#F47747";
-  static FIDDLEHEAD = "#597A41";
-  static PURPLE_CAULIFLOWER = "#753C67";
-  static CARAMBOLA = "#E1B828";
-  static PAPAYA = "#EFAE20";
-  static LONG_BEAN = "#8A9E6D";
-  static STRAWBERRY = "#D62D28";
-  static TURNIP = "#B64885";
-  static RADISH = "#B32225";
-  static ARTICHOKE = "#879C3D";
-  static BUTTER_SQUASH = "#ECB481";
-  static MANGOSTEEN = "#9A1C1F";
+  VINE_TOMATO = "#EF5026";
+  EGGPLANT = "#3C3755";
+  RED_PEPPER = "#C52728";
+  PURPLE_CABBAGE = "#8E4980";
+  BROCCOLI = "#2C401B";
+  BRUSSELS_SPROUTS = "#86A23E";
+  POTATO = "#D79851";
+  RHUBARB = "#C15866";
+  APPLE = "#E5493D";
+  OKRA = "#5E7434";
+  JICAMA = "#CB726E";
+  FENNEL = "#CBC7A1";
+  LEMON = "#FAF599";
+  APRICOT = "#FFBE30";
+  AVOCADO = "#C9C561";
+  BLUEBERRY = "#353535";
+  SOUR_CHERRY = "#AF1317";
+  BEET = "#D73C2A";
+  ASPERAGUS = "#C6BD62";
+  WATERCRESS = "#9FB43B";
+  TANGERINE = "#FAA21D";
+  BANANA = "#FDDF6F";
+  SPRING_ONION = "#702C23";
+  PEAR = "#C8C846";
+  CHARD = "#547838";
+  FIG = "#68281F";
+  GOLDEN_KIWI = "#F6D063";
+  YELLOW_BELLPEPPER = "#FDC647";
+  SQUASH_BLOSSOM = "#ECCC55";
+  RED_KIDNEY_BEAN = "#CB9274";
+  SQUASH = "#FBE70E";
+  MUSCAT_GRAPES = "#AD709A";
+  RED_BELLPEPPER = "#D12728";
+  CARROT = "#E75F25";
+  GREEN_CABBAGE = "#B4C346";
+  PINEAPPLE = "#E2A528";
+  DRAGON_FRUIT = "#C9A62E";
+  ZUCCHINI = "#93A13F";
+  KALE = "#47642E";
+  CUCUMBER = "#456033";
+  PEACH = "#F47747";
+  FIDDLEHEAD = "#597A41";
+  PURPLE_CAULIFLOWER = "#753C67";
+  CARAMBOLA = "#E1B828";
+  PAPAYA = "#EFAE20";
+  LONG_BEAN = "#8A9E6D";
+  STRAWBERRY = "#D62D28";
+  TURNIP = "#B64885";
+  RADISH = "#B32225";
+  ARTICHOKE = "#879C3D";
+  BUTTER_SQUASH = "#ECB481";
+  MANGOSTEEN = "#9A1C1F";
 
-  static allColors = [];
+  allColors : Array<Color> = [];
 
-  static init() {
-    if (NMSColor.allColors.length == 0) {
-      for (var x in NMSColor) {
-        if (typeof NMSColor[x] === "string") {
-          const color = <Color>{
-            name: NMSColor.buildColorLabel(x),
-            color: NMSColor[x]
-          };
-          NMSColor.allColors.push(color);
-        }
+  constructor() {
+    const self = this;
+    Object.keys(this).forEach(key => {
+      if (typeof self[key] === "string") {
+        const color = self[key];
+        const item: Color = {
+          name: self.buildColorLabel(key),
+          color: color
+        };
+        self.allColors.push(item);
       }
-    }
+    });
   }
 
-  static buildColorLabel(colorName: string) {
+  buildColorLabel(colorName: string) {
     let lower = colorName.toLowerCase();
     let words = lower.split("_");
     let result = "";
@@ -78,11 +89,12 @@ export class NMSColor {
     });
     return result;
   }
-}
 
-export class Color {
-  name: string;
-  color: string;
-}
+  getColorName(color: string) {
+    const found = this.allColors.find( item =>{
+      return item.color == color;
+    });
 
-NMSColor.init();
+    return found ? found.name : "";
+  }
+}

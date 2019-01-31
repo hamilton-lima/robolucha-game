@@ -11,7 +11,12 @@
  */
 
 
-export interface MainJoinMatch {
+export interface MainConfig {
+    createdAt?: string;
+    deletedAt?: string;
+    id?: number;
+    key?: string;
     luchadorID?: number;
-    matchID?: number;
+    updatedAt?: string;
+    value?: string;
 }

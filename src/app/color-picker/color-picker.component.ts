@@ -11,8 +11,8 @@ export class ColorPickerComponent implements OnInit {
 
   @Output() onChange = new EventEmitter<string>();
 
-  constructor() {
-    this.colors = NMSColor.allColors;
+  constructor(private nmsColors:NMSColor) {
+    this.colors = nmsColors.allColors;
   }
 
   ngOnInit() {}

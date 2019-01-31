@@ -26,17 +26,17 @@
         <ng-template ngbPanelTitle>
           <span
             class="color-block align-middle"
-            [ngStyle]="{ 'background-color': '#FF0000' }"
+            [ngStyle]="{ 'background-color': getColor('mask.primary.color') }"
             placement="top"
             container="body"
-            ngbTooltip="{{ 'Color name' }}"
+            ngbTooltip="{{ getColorLabel('mask.primary.color') }}"
           ></span>
 
           <span>Primary Color</span>
         </ng-template>
         <ng-template ngbPanelContent>
           <app-color-picker
-            (onChange)="update('mask.primary-color', $event)"
+            (onChange)="update('mask.primary.color', $event)"
           ></app-color-picker>
         </ng-template>
       </ngb-panel>
@@ -45,17 +45,17 @@
         <ng-template ngbPanelTitle>
           <span
             class="color-block align-middle"
-            [ngStyle]="{ 'background-color': '#FF0000' }"
+            [ngStyle]="{ 'background-color': getColor('mask.secondary.color') }"
             placement="top"
             container="body"
-            ngbTooltip="{{ 'Color name' }}"
+            ngbTooltip="{{ getColorLabel('mask.secondary.color') }}"
           ></span>
 
           <span>Secondary Color</span>
         </ng-template>
         <ng-template ngbPanelContent>
           <app-color-picker
-            (onChange)="update('mask.secondary-color', $event)"
+            (onChange)="update('mask.secondary.color', $event)"
           ></app-color-picker>
         </ng-template>
       </ngb-panel>

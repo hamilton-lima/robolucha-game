@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { MainLuchador, DefaultService, MainCode } from '../sdk';
+import { MainLuchador, DefaultService, MainCode, MainConfig } from '../sdk';
 import { ActivatedRoute } from '@angular/router';
 
 const HIDE_SUCCESS_TIMEOUT = 3000;
@@ -27,7 +27,11 @@ export class MaskEditorComponent implements OnInit {
 
   refreshEditor(luchador) {
     console.log("refresh luchador", luchador);
+    // TODO: Remove this
+    luchador.configs.push( <MainConfig>{key: "mask.primary.color", value:"#D79851"});
+    luchador.configs.push( <MainConfig>{key: "mask.secondary.color", value:"#D79851"});
     this.luchador = luchador;
+
   }
 
 

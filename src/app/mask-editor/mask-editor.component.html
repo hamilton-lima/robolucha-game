@@ -19,7 +19,9 @@
 
 <div class="row">
   <div class="col-6"><app-luchador-preview></app-luchador-preview></div>
-  <div class="col-6"><app-mask-editor-detail></app-mask-editor-detail></div>
+  <div class="col-6">
+    <app-mask-editor-detail [luchador]="luchador"></app-mask-editor-detail>
+  </div>
 </div>
 
 <div class="row save-button">

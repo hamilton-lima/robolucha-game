@@ -10,10 +10,12 @@
  * Do not edit the class manually.
  */
 import { MainCode } from './mainCode';
+import { MainConfig } from './mainConfig';
 
 
 export interface MainLuchador {
     codes?: Array<MainCode>;
+    configs?: Array<MainConfig>;
     createdAt?: string;
     deletedAt?: string;
     id?: number;
