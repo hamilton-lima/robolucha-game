@@ -3,17 +3,21 @@ import { MainLuchador, MainConfig } from "../sdk";
 import { NMSColor } from "../color-picker/nmscolor";
 import { ShapeConfig } from "../shape-picker/shape-config";
 
-enum Category {
-  mask,
-  maskDecoration,
-  face,
-  mouthEyes,
-  body
+enum EditorType {
+  color,
+  shape
 }
 
 export class CategoryOptions {
+  id: string;
   label: string;
-  category: Category;
+  subcategories: Array<SubCategoryOptions>;
+}
+
+export class SubCategoryOptions {
+  label: string;
+  type: EditorType;
+  key: string;
 }
 
 @Component({
@@ -25,16 +29,33 @@ export class CategoryOptions {
 export class MaskEditorDetailComponent implements OnInit {
   @Input() luchador: MainLuchador;
 
-  current = Category.mask;
-  options = Category;
-
   categories = [
-    { label: "Mask", category: Category.mask },
-    { label: "Mask Decoration", category: Category.maskDecoration },
-    { label: "Face", category: Category.face },
-    { label: "Mouth / Eyes", category: Category.mouthEyes },
-    { label: "Body", category: Category.body }
+    {
+      id: "mask",
+      label: "Mask",
+      subcategories: [
+        {
+          label: "Primary Color",
+          type: EditorType.color,
+          key: "mask.primary.color"
+        },
+        {
+          label: "Secondary Color",
+          type: EditorType.color,
+          key: "mask.secondary.color"
+        },
+        { label: "Shape", type: EditorType.shape, key: "mask.shape" }
+      ]
+    },
+    { id: "mask.decoration", label: "Mask Decoration" },
+    { id: "face", label: "Face" },
+    { id: "mouth-eyes", label: "Mouth / Eyes" },
+    { id: "body", label: "Body" }
   ];
+
+  // select the first by default
+  current = this.categories[0].id;
+  type = EditorType;
 
   constructor(private nmsColor: NMSColor, private shapeConfig: ShapeConfig) {}
 
@@ -42,13 +63,13 @@ export class MaskEditorDetailComponent implements OnInit {
     console.log("mask editor detail luchador", this.luchador);
   }
 
-  setCurrent(category: Category) {
-    this.current = category;
+  setCurrent(id: string) {
+    this.current = id;
     console.log("current", this.current);
   }
 
-  isCurrent(category: Category): boolean {
-    return this.current === category;
+  isCurrent(id:string): boolean {
+    return this.current === id;
   }
 
   update(key: string, value: string) {
@@ -59,10 +80,10 @@ export class MaskEditorDetailComponent implements OnInit {
     if (found) {
       found.value = value;
     } else {
-      this.luchador.configs.push( <MainConfig>{
+      this.luchador.configs.push(<MainConfig>{
         key: key,
         value: value
-      })
+      });
     }
   }
 
@@ -80,8 +101,9 @@ export class MaskEditorDetailComponent implements OnInit {
     return this.nmsColor.getColorName(color) + " (" + color + ")";
   }
 
-  readonly EMPTY = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
-  
+  readonly EMPTY =
+    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
+
   getShape(key: string) {
     let found = this.luchador.configs.find((config: MainConfig) => {
       return config.key == key;
@@ -99,5 +121,4 @@ export class MaskEditorDetailComponent implements OnInit {
     let result = found ? found.value : "";
     return result;
   }
-
 }
