@@ -23,6 +23,7 @@ import { MaskEditorMediator } from "../mask-editor/mask-editor.mediator";
 })
 export class LuchadorPreviewComponent implements OnInit, OnDestroy {
   @ViewChild("preview") canvas;
+  @ViewChild("debug") debug;
   @Input() luchadorSubject: BehaviorSubject<MainLuchador>;
 
   private engine: BABYLON.Engine;
@@ -167,18 +168,17 @@ export class LuchadorPreviewComponent implements OnInit, OnDestroy {
       self.loadImage("feet")
     ]);
 
-    sequence.subscribe(images => {
+    sequence.subscribe((images: Array<HTMLImageElement>) => {
       console.log("all images loaded", images);
 
       if (self.luchador) {
-        const canvas = self.builder.build(
-          self.luchador,
-          images,
-          self.TEXTURE_WIDTH,
-          self.TEXTURE_HEIGHT
-        );
-        self.context.drawImage(canvas, 0, 0);
-        self.dynamicTexture.update();
+        self.builder
+          .build(self.luchador, images, self.TEXTURE_WIDTH, self.TEXTURE_HEIGHT)
+          .then(canvas => {
+            self.debug.nativeElement.getContext("2d").drawImage(canvas, 0, 0);
+            self.context.drawImage(canvas, 0, 0);
+            self.dynamicTexture.update();
+          });
       }
 
       self.loadingTexture = false;

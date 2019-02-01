@@ -5,25 +5,73 @@ import { MainLuchador, MainConfig } from "../sdk";
   providedIn: "root"
 })
 export class TextureBuilder {
-  build(luchador: MainLuchador, images, width, height): HTMLCanvasElement {
-    // temporary canvas
-    var canvas = document.createElement("canvas");
-    canvas.width = width;
-    canvas.height = height;
-    let context = canvas.getContext("2d");
-    context.imageSmoothingEnabled = true;
+  build(
+    luchador: MainLuchador,
+    images: Array<HTMLImageElement>,
+    width: number,
+    height: number
+  ): Promise<HTMLCanvasElement> {
+    return new Promise<HTMLCanvasElement>((resolve, reject) => {
+      // temporary canvas
+      var canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
+      let context = canvas.getContext("2d");
+      context.imageSmoothingEnabled = true;
 
-    // draw skin
-    context.fillStyle = this.getValue(luchador, "skin.color");
-    context.fillRect(0, 0, width, height);
-    context.fill();
+      // draw skin
+      context.fillStyle = this.getValue(luchador, "skin.color");
+      context.fillRect(0, 0, width, height);
+      context.fill();
 
-    // draw layers
-    images.forEach(image => {
-      context.drawImage(image, 0, 0);
+      // self.loadImage("back"),
+      // self.loadImage("face"),
+
+      let promises = [];
+      promises.push(
+        this.buildLayerFromColor(luchador, images, "feet", "feet.color")
+      );
+      promises.push(
+        this.buildLayerFromColor(luchador, images, "wrist", "wrist.color")
+      );
+      promises.push(
+        this.buildLayerFromColor(luchador, images, "ankle", "ankle.color")
+      );
+
+      Promise.all(promises).then(images => {
+        images.forEach(image => {
+          context.drawImage(image, 0, 0);
+        });
+        resolve(canvas);
+      });
+      // .then(image => {
+      //   context.drawImage(image, 0, 0);
+      //   resolve(canvas);
+      // });
+
+      // // draw layers
+
+      //      return canvas;
     });
+  }
 
-    return canvas;
+  buildLayerFromColor(
+    luchador: MainLuchador,
+    images: Array<HTMLImageElement>,
+    imageName: string,
+    colorName: string
+  ): Promise<HTMLImageElement> {
+    const self = this;
+
+    let color = self.getValue(luchador, colorName);
+    console.log("color", color);
+
+    const image = images.find(image => {
+      return image.name == imageName;
+    });
+    console.log("image", image);
+
+    return self.tint(image, color);
   }
 
   getValue(luchador: MainLuchador, key: string): string {
@@ -35,53 +83,36 @@ export class TextureBuilder {
     return result;
   }
 
-  hexToRgb(hex) {
-    if (hex.startsWith("#")) {
-      hex = hex.substring(1);
-    }
+  tint(img, color): Promise<HTMLImageElement> {
+    return new Promise<HTMLImageElement>(function(resolve, reject) {
+      let canvas = document.createElement("canvas");
+      canvas.width = img.width;
+      canvas.height = img.height;
+      var ctx = canvas.getContext("2d");
+      ctx.imageSmoothingEnabled = true;
 
-    var bigint = parseInt(hex, 16);
-    var _r = (bigint >> 16) & 255;
-    var _g = (bigint >> 8) & 255;
-    var _b = bigint & 255;
-    return {
-      red: _r,
-      green: _g,
-      blue: _b
-    };
-  }
+      ctx.drawImage(img, 0, 0);
 
-  tint(img, red, green, blue, name) {
-    var foo = document.createElement("canvas");
-    foo.width = img.width;
-    foo.height = img.height;
-    var ctx = foo.getContext("2d");
-    ctx.imageSmoothingEnabled = true;
-    ctx.drawImage(img, 0, 0);
+      var buffer = document.createElement("canvas");
+      buffer.width = img.width;
+      buffer.height = img.height;
+      var bx = buffer.getContext("2d");
 
-    var imageData = ctx.getImageData(0, 0, img.width, img.height);
-    var data = imageData.data;
+      bx.fillStyle = color;
+      bx.fillRect(0, 0, img.width, img.height);
+      bx.fill();
 
-    var l = data.length;
-    var counter = 0;
-    for (var i = 0; i < l; i += 4) {
-      data[i] = data[i] + red;
-      data[i + 1] = data[i + 1] + green;
-      data[i + 2] = data[i + 2] + blue;
-    }
+      ctx.globalCompositeOperation = "source-in";
+      ctx.drawImage(buffer, 0, 0);
 
-    ctx.putImageData(imageData, 0, 0);
-    var promise = new Promise(function(resolve, reject) {
       var image = new Image();
-      image.name = name;
+      image.name = img.name;
 
       image.onload = function() {
         resolve(image);
       };
 
-      image.src = foo.toDataURL("image/png");
+      image.src = canvas.toDataURL("image/png");
     });
-
-    return promise;
   }
 }
