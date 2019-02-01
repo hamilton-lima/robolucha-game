@@ -1,7 +1,17 @@
-import { Component, OnInit, Input, ViewEncapsulation } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  Input,
+  ViewEncapsulation,
+  Output,
+  EventEmitter,
+  OnDestroy
+} from "@angular/core";
 import { MainLuchador, MainConfig } from "../sdk";
 import { NMSColor } from "../color-picker/nmscolor";
 import { ShapeConfig } from "../shape-picker/shape-config";
+import { MaskEditorMediator } from "../mask-editor/mask-editor.mediator";
+import { Subscription } from "rxjs";
 
 enum EditorType {
   color,
@@ -26,8 +36,8 @@ export class SubCategoryOptions {
   styleUrls: ["./mask-editor-detail.component.css"],
   encapsulation: ViewEncapsulation.None
 })
-export class MaskEditorDetailComponent implements OnInit {
-  @Input() luchador: MainLuchador;
+export class MaskEditorDetailComponent implements OnInit, OnDestroy {
+  @Output() onChange = new EventEmitter();
 
   categories = [
     {
@@ -141,11 +151,26 @@ export class MaskEditorDetailComponent implements OnInit {
   // select the first by default
   current = this.categories[0].id;
   type = EditorType;
+  luchador: MainLuchador;
+  subscription: Subscription;
 
-  constructor(private nmsColor: NMSColor, private shapeConfig: ShapeConfig) {}
+  constructor(
+    private nmsColor: NMSColor,
+    private shapeConfig: ShapeConfig,
+    private mediator: MaskEditorMediator
+  ) {}
 
   ngOnInit() {
     console.log("mask editor detail luchador", this.luchador);
+    this.subscription = this.mediator.luchador.subscribe( luchador => {
+      this.luchador = luchador;
+    })
+  }
+
+  ngOnDestroy(): void {
+    if( this.subscription ){
+      this.subscription.unsubscribe();
+    }
   }
 
   setCurrent(id: string) {
@@ -170,6 +195,8 @@ export class MaskEditorDetailComponent implements OnInit {
         value: value
       });
     }
+
+    this.onChange.next(this.luchador);
   }
 
   getColor(key: string) {

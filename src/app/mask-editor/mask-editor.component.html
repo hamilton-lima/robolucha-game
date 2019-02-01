@@ -18,15 +18,17 @@
 </div>
 
 <div class="row">
-  <div class="col-6"><app-luchador-preview></app-luchador-preview></div>
   <div class="col-6">
-    <app-mask-editor-detail [luchador]="luchador"></app-mask-editor-detail>
+    <app-luchador-preview
+    ></app-luchador-preview>
+  </div>
+  <div class="col-6">
+    <app-mask-editor-detail
+      (onChange)="onUpdate($event)"
+    ></app-mask-editor-detail>
   </div>
 </div>
 
-<div class="row">
-  <span>{{ luchador.configs | json }} </span>
-</div>
 <div class="row save-button">
   <div class="col-12">
     <ngb-alert
