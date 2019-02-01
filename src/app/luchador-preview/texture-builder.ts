@@ -27,6 +27,7 @@ export class TextureBuilder {
       // self.loadImage("back"),
       // self.loadImage("face"),
 
+      // TODO: change promises to return canvas
       let promises = [];
       promises.push(
         this.buildLayerFromColor(luchador, images, "feet", "feet.color")
@@ -37,6 +38,7 @@ export class TextureBuilder {
       promises.push(
         this.buildLayerFromColor(luchador, images, "ankle", "ankle.color")
       );
+      // promises.push(this.buildMask(luchador, images));
 
       Promise.all(promises).then(images => {
         images.forEach(image => {
@@ -55,12 +57,32 @@ export class TextureBuilder {
     });
   }
 
+  buildMask(
+    luchador: MainLuchador,
+    images: Array<HTMLImageElement>
+  ): Promise<HTMLCanvasElement> {
+    const self = this;
+
+    return new Promise<HTMLCanvasElement>(function(resolve, reject) {
+    // let color = self.getValue(luchador, colorName);
+    // console.log("color", color);
+
+    // const image = images.find(image => {
+    //   return image.name == imageName;
+    // });
+    // console.log("image", image);
+
+
+
+    });
+  }
+
   buildLayerFromColor(
     luchador: MainLuchador,
     images: Array<HTMLImageElement>,
     imageName: string,
     colorName: string
-  ): Promise<HTMLImageElement> {
+  ): Promise<HTMLCanvasElement> {
     const self = this;
 
     let color = self.getValue(luchador, colorName);
@@ -83,8 +105,8 @@ export class TextureBuilder {
     return result;
   }
 
-  tint(img, color): Promise<HTMLImageElement> {
-    return new Promise<HTMLImageElement>(function(resolve, reject) {
+  tint(img, color): Promise<HTMLCanvasElement> {
+    return new Promise<HTMLCanvasElement>(function(resolve, reject) {
       let canvas = document.createElement("canvas");
       canvas.width = img.width;
       canvas.height = img.height;
@@ -104,15 +126,16 @@ export class TextureBuilder {
 
       ctx.globalCompositeOperation = "source-in";
       ctx.drawImage(buffer, 0, 0);
+      resolve(canvas);
 
-      var image = new Image();
-      image.name = img.name;
+      // var image = new Image();
+      // image.name = img.name;
 
-      image.onload = function() {
-        resolve(image);
-      };
+      // image.onload = function() {
+      //   resolve(image);
+      // };
 
-      image.src = canvas.toDataURL("image/png");
+      // image.src = canvas.toDataURL("image/png");
     });
   }
 }
