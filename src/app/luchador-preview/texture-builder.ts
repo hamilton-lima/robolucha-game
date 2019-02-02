@@ -20,7 +20,7 @@ export class TextureBuilder {
       context.imageSmoothingEnabled = true;
 
       // draw skin
-      context.fillStyle = this.getValue(luchador, "skin.color");
+      context.fillStyle = this.getValue(luchador, "skin.color", "#FFFFFF");
       context.fillRect(0, 0, width, height);
       context.fill();
 
@@ -32,13 +32,20 @@ export class TextureBuilder {
       promises.push(
         this.buildLayerFromColor(luchador, images, "feet", "feet.color")
       );
+
       promises.push(
         this.buildLayerFromColor(luchador, images, "wrist", "wrist.color")
       );
+
       promises.push(
         this.buildLayerFromColor(luchador, images, "ankle", "ankle.color")
       );
-      // promises.push(this.buildMask(luchador, images));
+
+      promises.push(
+        this.buildLayerFromColor(luchador, images, "back", "mask.primary.color")
+      );
+
+      promises.push(this.buildMask(luchador, images));
 
       Promise.all(promises).then(images => {
         images.forEach(image => {
@@ -46,14 +53,6 @@ export class TextureBuilder {
         });
         resolve(canvas);
       });
-      // .then(image => {
-      //   context.drawImage(image, 0, 0);
-      //   resolve(canvas);
-      // });
-
-      // // draw layers
-
-      //      return canvas;
     });
   }
 
@@ -64,16 +63,17 @@ export class TextureBuilder {
     const self = this;
 
     return new Promise<HTMLCanvasElement>(function(resolve, reject) {
-    // let color = self.getValue(luchador, colorName);
-    // console.log("color", color);
+      const canvas = self.buildLayerFromColor(
+        luchador,
+        images,
+        "face",
+        "mask.primary.color"
+      );
 
-    // const image = images.find(image => {
-    //   return image.name == imageName;
-    // });
-    // console.log("image", image);
+      let topDecoration = 
 
 
-
+      resolve(canvas);
     });
   }
 
@@ -85,27 +85,24 @@ export class TextureBuilder {
   ): Promise<HTMLCanvasElement> {
     const self = this;
 
-    let color = self.getValue(luchador, colorName);
-    console.log("color", color);
-
+    let color = self.getValue(luchador, colorName, "#000000");
     const image = images.find(image => {
       return image.name == imageName;
     });
-    console.log("image", image);
 
     return self.tint(image, color);
   }
 
-  getValue(luchador: MainLuchador, key: string): string {
+  getValue(luchador: MainLuchador, key: string, defaultValue: string): string {
     let found = luchador.configs.find((config: MainConfig) => {
       return config.key == key;
     });
 
-    let result = found ? found.value : "#000000";
+    let result = found ? found.value : defaultValue;
     return result;
   }
 
-  tint(img, color): Promise<HTMLCanvasElement> {
+  tint(img: HTMLImageElement, color: string): Promise<HTMLCanvasElement> {
     return new Promise<HTMLCanvasElement>(function(resolve, reject) {
       let canvas = document.createElement("canvas");
       canvas.width = img.width;
@@ -127,15 +124,6 @@ export class TextureBuilder {
       ctx.globalCompositeOperation = "source-in";
       ctx.drawImage(buffer, 0, 0);
       resolve(canvas);
-
-      // var image = new Image();
-      // image.name = img.name;
-
-      // image.onload = function() {
-      //   resolve(image);
-      // };
-
-      // image.src = canvas.toDataURL("image/png");
     });
   }
 }

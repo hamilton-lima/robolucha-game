@@ -15,6 +15,12 @@ import { CONTEXT } from "@angular/core/src/render3/interfaces/view";
 import { MainLuchador } from "../sdk";
 import { TextureBuilder } from "./texture-builder";
 import { MaskEditorMediator } from "../mask-editor/mask-editor.mediator";
+import {
+  maskEditorCategories,
+  CategoryOptions,
+  EditorType
+} from "../mask-editor/mask-editor-category.model";
+import { LuchadorConfigService } from "../mask-editor-detail/luchador-config.service";
 
 @Component({
   selector: "app-luchador-preview",
@@ -45,7 +51,8 @@ export class LuchadorPreviewComponent implements OnInit, OnDestroy {
 
   constructor(
     private builder: TextureBuilder,
-    private mediator: MaskEditorMediator
+    private mediator: MaskEditorMediator,
+    private luchadorConfigs: LuchadorConfigService
   ) {}
 
   ngOnInit() {
@@ -160,16 +167,20 @@ export class LuchadorPreviewComponent implements OnInit, OnDestroy {
     self.material.specularColor = new BABYLON.Color3(0, 0, 0);
     self.material.ambientColor = new BABYLON.Color3(0.588, 0.588, 0.588);
 
-    let sequence = forkJoin([
+    let images2Load = [
       self.loadImage("back"),
       self.loadImage("face"),
       self.loadImage("wrist"),
       self.loadImage("ankle"),
       self.loadImage("feet")
-    ]);
+    ];
+
+    self.addImagesFromShapes(self.luchador, images2Load, maskEditorCategories);
+
+    let sequence = forkJoin(images2Load);
 
     sequence.subscribe((images: Array<HTMLImageElement>) => {
-      console.log("all images loaded", images);
+      console.log("all images loaded", images.map(image => image.name));
 
       if (self.luchador) {
         self.builder
@@ -186,12 +197,45 @@ export class LuchadorPreviewComponent implements OnInit, OnDestroy {
     });
   }
 
+  /** Finds all shape image names and create the Loader for each one */
+  addImagesFromShapes(
+    luchador: MainLuchador,
+    images2Load: Array<Subject<HTMLImageElement>>,
+    categories: Array<CategoryOptions>
+  ) {
+    if (!luchador) {
+      return;
+    }
+
+    categories.forEach(category => {
+      category.subcategories.forEach(subcategory => {
+        if (subcategory.type == EditorType.shape) {
+          const fileName = this.luchadorConfigs.getShapeNoDefaultValue(
+            luchador,
+            subcategory.key
+          );
+
+          if (fileName) {
+            images2Load.push(
+              this.loadImageFromFileName(fileName, subcategory.key)
+            );
+          } 
+        }
+      });
+    });
+  }
+
   loadImage(name): Subject<HTMLImageElement> {
+    const fileName = "assets/shapes/" + name + ".png";
+    return this.loadImageFromFileName(fileName, name);
+  }
+
+  loadImageFromFileName(fileName, name): Subject<HTMLImageElement> {
     let result = new Subject<HTMLImageElement>();
     let img = new Image();
     img.name = name;
 
-    img.src = "assets/dynamic-texture/" + name + ".png";
+    img.src = fileName;
     img.onload = () => {
       result.next(img);
       result.complete();
