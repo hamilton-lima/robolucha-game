@@ -29,7 +29,7 @@ import { LuchadorConfigService } from "../mask-editor-detail/luchador-config.ser
 })
 export class LuchadorPreviewComponent implements OnInit, OnDestroy {
   @ViewChild("preview") canvas;
-  @ViewChild("debug") debug;
+  // @ViewChild("debug") debug;
   @Input() luchadorSubject: BehaviorSubject<MainLuchador>;
 
   private engine: BABYLON.Engine;
@@ -187,7 +187,7 @@ export class LuchadorPreviewComponent implements OnInit, OnDestroy {
         self.builder
           .build(self.luchador, images, self.TEXTURE_WIDTH, self.TEXTURE_HEIGHT)
           .then(canvas => {
-            self.debug.nativeElement.getContext("2d").drawImage(canvas, 0, 0);
+            // self.debug.nativeElement.getContext("2d").drawImage(canvas, 0, 0);
             self.context.drawImage(canvas, 0, 0);
             self.dynamicTexture.update();
           });

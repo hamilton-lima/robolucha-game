@@ -59,22 +59,22 @@ export const maskEditorCategories: Array<CategoryOptions> = [
       }
     ]
   },
-  {
-    id: "face",
-    label: "Face",
-    subcategories: [
-      {
-        label: "Face Color",
-        type: EditorType.color,
-        key: "face.color"
-      },
-      {
-        label: "Face Shape",
-        type: EditorType.shape,
-        key: "face.shape"
-      }
-    ]
-  },
+  // {
+  //   id: "face",
+  //   label: "Face",
+  //   subcategories: [
+  //     {
+  //       label: "Face Color",
+  //       type: EditorType.color,
+  //       key: "face.color"
+  //     },
+  //     {
+  //       label: "Face Shape",
+  //       type: EditorType.shape,
+  //       key: "face.shape"
+  //     }
+  //   ]
+  // },
   {
     id: "mouth-eyes",
     label: "Mouth / Eyes",

@@ -47,15 +47,16 @@ export class TextureBuilder {
 
       promises.push(this.buildMask(luchador, images));
 
-      Promise.all(promises).then(images => {
-        images.forEach(image => {
-          context.drawImage(image, 0, 0);
+      Promise.all(promises)
+        .then(images => {
+          images.forEach(image => {
+            context.drawImage(image, 0, 0);
+          });
+          resolve(canvas);
+        })
+        .catch(function(error) {
+          console.error("Error drawing texture", error);
         });
-        resolve(canvas);
-      }).catch(function(error) {
-        console.error("Error drawing texture", error);
-      });
-
     });
   }
 
@@ -77,6 +78,13 @@ export class TextureBuilder {
 
       canvasPromise
         .then(canvas => {
+          let maskShape = self.buildLayerFromColor(
+            luchador,
+            images,
+            "mask.shape",
+            "mask.secondary.color"
+          );
+
           let topDecoration = self.buildLayerFromColor(
             luchador,
             images,
@@ -103,7 +111,13 @@ export class TextureBuilder {
           });
           const mouth = self.image2Canvas(mouthImage);
 
-          const promises = [topDecoration, bottomDecoration, eyes, mouth];
+          const promises = [
+            maskShape,
+            topDecoration,
+            bottomDecoration,
+            eyes,
+            mouth
+          ];
 
           Promise.all(promises)
             .then(tintedLayers => {
@@ -117,7 +131,6 @@ export class TextureBuilder {
             .catch(function(error) {
               console.error("Error drawing mask layers", error);
             });
-
         })
         .catch(function(error) {
           console.error("Error building base mask layer", error);
