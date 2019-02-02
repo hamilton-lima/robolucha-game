@@ -52,9 +52,14 @@ export class TextureBuilder {
           context.drawImage(image, 0, 0);
         });
         resolve(canvas);
+      }).catch(function(error) {
+        console.error("Error drawing texture", error);
       });
+
     });
   }
+
+  readonly maskLayers = { x: 229, y: 65 };
 
   buildMask(
     luchador: MainLuchador,
@@ -63,15 +68,77 @@ export class TextureBuilder {
     const self = this;
 
     return new Promise<HTMLCanvasElement>(function(resolve, reject) {
-      const canvas = self.buildLayerFromColor(
+      const canvasPromise = self.buildLayerFromColor(
         luchador,
         images,
         "face",
         "mask.primary.color"
       );
 
-      let topDecoration = 
+      canvasPromise
+        .then(canvas => {
+          let topDecoration = self.buildLayerFromColor(
+            luchador,
+            images,
+            "mask.decoration.top.shape",
+            "mask.decoration.top.color"
+          );
 
+          let bottomDecoration = self.buildLayerFromColor(
+            luchador,
+            images,
+            "mask.decoration.bottom.shape",
+            "mask.decoration.bottom.color"
+          );
+
+          let eyes = self.buildLayerFromColor(
+            luchador,
+            images,
+            "eyes.shape",
+            "eyes.color"
+          );
+
+          let mouthImage = images.find(image => {
+            return image.name == "mouth.shape";
+          });
+          const mouth = self.image2Canvas(mouthImage);
+
+          const promises = [topDecoration, bottomDecoration, eyes, mouth];
+
+          Promise.all(promises)
+            .then(tintedLayers => {
+              const context = canvas.getContext("2d");
+              console.log("drawing layers", tintedLayers, self.maskLayers);
+              tintedLayers.forEach(layer => {
+                context.drawImage(layer, self.maskLayers.x, self.maskLayers.y);
+              });
+              resolve(canvas);
+            })
+            .catch(function(error) {
+              console.error("Error drawing mask layers", error);
+            });
+
+        })
+        .catch(function(error) {
+          console.error("Error building base mask layer", error);
+        });
+    });
+  }
+
+  image2Canvas(img: HTMLImageElement): Promise<HTMLCanvasElement> {
+    return new Promise<HTMLCanvasElement>(function(resolve, reject) {
+      let canvas = document.createElement("canvas");
+      if (img) {
+        canvas.width = img.width;
+        canvas.height = img.height;
+        var ctx = canvas.getContext("2d");
+        ctx.imageSmoothingEnabled = true;
+
+        ctx.drawImage(img, 0, 0);
+      } else {
+        canvas.width = 1;
+        canvas.height = 1;
+      }
 
       resolve(canvas);
     });
@@ -90,7 +157,14 @@ export class TextureBuilder {
       return image.name == imageName;
     });
 
-    return self.tint(image, color);
+    console.log("buildLayerFromColor", imageName, image, colorName, color);
+
+    if (image) {
+      return self.tint(image, color);
+    } else {
+      let canvas = document.createElement("canvas");
+      return Promise.resolve(canvas);
+    }
   }
 
   getValue(luchador: MainLuchador, key: string, defaultValue: string): string {
@@ -121,8 +195,10 @@ export class TextureBuilder {
       bx.fillRect(0, 0, img.width, img.height);
       bx.fill();
 
+      let originalComposition = ctx.globalCompositeOperation;
       ctx.globalCompositeOperation = "source-in";
       ctx.drawImage(buffer, 0, 0);
+      ctx.globalCompositeOperation = originalComposition;
       resolve(canvas);
     });
   }

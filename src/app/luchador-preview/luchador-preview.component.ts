@@ -132,6 +132,7 @@ export class LuchadorPreviewComponent implements OnInit, OnDestroy {
             self.character = mesh;
             self.character.position = BABYLON.Vector3.Zero();
             self.character.position.y = -2;
+            self.character.rotation.z = 1;
             self.loadDynamicTexture(self, resolve, reject);
           }
         });
@@ -248,6 +249,7 @@ export class LuchadorPreviewComponent implements OnInit, OnDestroy {
       this.scene.render();
       if (this.character && this.rotate) {
         this.character.rotation.z += -0.03;
+        console.log("rotarion ", this.character.rotation.z);
       }
     });
   }
