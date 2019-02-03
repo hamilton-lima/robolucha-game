@@ -77,32 +77,40 @@ export class ArenaComponent implements OnInit {
       this.nextMatchState = matchState;
     });
 
-    this.loadScene();
+    this.createScene();
+    // this.loadScene();
   }
 
   createScene(): void {
-    // const lightAndCameraPosition = new BABYLON.Vector3(10, 10, -15);
+    const lightAndCameraPosition = new BABYLON.Vector3(10, 10, -15);
     // create a basic BJS Scene object
     this.scene = new BABYLON.Scene(this.engine);
     // create a basic light, aiming 0,1,0 - meaning, to the sky
-    // this.light = new BABYLON.HemisphericLight(
-    //   "light1",
-    //   lightAndCameraPosition,
-    //   this.scene
-    // );
-    // this.createGround();
+    this.light = new BABYLON.HemisphericLight(
+      "light1",
+      lightAndCameraPosition,
+      this.scene
+    );
+    this.createGround();
     // create a FreeCamera, and set its position to (x:0, y:5, z:-10)
-    // this.camera = new BABYLON.FreeCamera(
-    //   "camera1",
-    //   lightAndCameraPosition,
-    //   this.scene
-    // );
-    // this.camera.rotation.x = this.angle2radian(45);
+    this.camera = new BABYLON.FreeCamera(
+      "camera1",
+      lightAndCameraPosition,
+      this.scene
+    );
+    this.camera.rotation.x = this.angle2radian(45);
     // // target the camera to scene origin
-    // // this.camera.setTarget(this.ground.position);
+    this.camera.setTarget(this.ground.position);
     // // attach the camera to the canvas
-    // this.camera.attachControl(this.canvas.nativeElement, false);
+    this.camera.attachControl(this.canvas.nativeElement, false);
     // new Box3D(this.scene);
+
+    if (this.debug) {
+      Helper3D.showAxis(this.scene, 5);
+    }
+
+    this.render();
+
   }
 
   loadScene() {
