@@ -24,6 +24,7 @@ export class ArenaComponent implements OnInit {
   @Input() gameDefinition: GameDefinition;
   @Input() matchStateSubject: Subject<MatchState>;
   @Input() debug: boolean = false;
+  @Input() currentLuchador: number;
 
   private engine: BABYLON.Engine;
   private scene: BABYLON.Scene;
@@ -65,6 +66,11 @@ export class ArenaComponent implements OnInit {
   }
 
   ngOnInit() {
+    if( ! this.currentLuchador ){
+      console.error("currentLuchador missing");
+      return;
+    }
+
     this.HALF_LUCHADOR = this.convertPosition(
       this.gameDefinition.luchadorSize / 2
     );
