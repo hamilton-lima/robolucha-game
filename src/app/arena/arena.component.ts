@@ -13,6 +13,8 @@ import { Box3D } from "./box3d";
 import { Bullet3D } from "./bullet3d";
 import { Helper3D } from "./helper3d";
 import { Scene3D } from "./scene3d";
+import { GroundTile3D } from "./ground-tile3D";
+import { Wall3D } from "./wall3D";
 
 @Component({
   selector: "app-arena",
@@ -66,7 +68,7 @@ export class ArenaComponent implements OnInit {
   }
 
   ngOnInit() {
-    if( ! this.currentLuchador ){
+    if (!this.currentLuchador) {
       console.error("currentLuchador missing");
       return;
     }
@@ -97,7 +99,9 @@ export class ArenaComponent implements OnInit {
       lightAndCameraPosition,
       this.scene
     );
-    this.createGround();
+    // this.createGround();
+    this.composeGround();
+    this.composeWalls();
     // create a FreeCamera, and set its position to (x:0, y:5, z:-10)
     this.camera = new BABYLON.FreeCamera(
       "camera1",
@@ -105,9 +109,7 @@ export class ArenaComponent implements OnInit {
       this.scene
     );
     this.camera.rotation.x = this.angle2radian(45);
-    // // target the camera to scene origin
-    this.camera.setTarget(this.ground.position);
-    // // attach the camera to the canvas
+    // this.camera.setTarget(this.ground.position);
     this.camera.attachControl(this.canvas.nativeElement, false);
     // new Box3D(this.scene);
 
@@ -116,7 +118,87 @@ export class ArenaComponent implements OnInit {
     }
 
     this.render();
+  }
 
+  composeGround(): any {
+    const groundWidth = this.convertPosition(this.gameDefinition.arenaWidth);
+    const groundHeight = this.convertPosition(this.gameDefinition.arenaHeight);
+
+    let ground = new GroundTile3D(this.scene);
+    ground.loading.then(mesh => {
+      let tiles = [];
+      for (let x = 0; x < groundWidth; x += 1) {
+        for (let z = 0; z < groundHeight; z += 1) {
+          let i = mesh.clone("tile-" + x + "." + z);
+          i.position.x = x;
+          i.position.y = 0;
+          i.position.z = z;
+        }
+      }
+
+      console.log(">>> ground loaded");
+    });
+  }
+
+  composeWalls(): any {
+    const width = this.convertPosition(this.gameDefinition.arenaWidth);
+    const height = this.convertPosition(this.gameDefinition.arenaHeight);
+
+    let wall = new Wall3D(this.scene);
+    wall.loading.then(mesh => {
+      const box = mesh.getBoundingInfo().boundingBox;
+      // const meshX = box.maximum.x - box.minimum.x;
+      // const meshZ = box.maximum.z - box.minimum.z;
+
+      const meshX = 1.5;
+      const meshZ = 0.5;
+
+      console.log(
+        "mesh bounding",
+        mesh.getBoundingInfo().boundingBox,
+        meshX,
+        meshZ
+      );
+      console.log("mesh geometry", mesh.geometry.extend);
+
+      const bottomZ = -meshZ;
+      const topZ = height + 2 * meshZ;
+      const topRotation = this.angle2radian(90);
+      const bottomRotation = this.angle2radian(270);
+
+      const leftX = -meshX;
+      const rightX = width + 2 * meshX;
+      const rightRotation = this.angle2radian(180);
+
+      for (let x = -meshX; x < width; x += meshX) {
+        let iBottom = mesh.clone("wall-" + x + "." + bottomZ);
+        iBottom.position.x = x;
+        iBottom.position.y = 0;
+        iBottom.position.z = bottomZ;
+        iBottom.rotation.y = bottomRotation;
+
+        let iTop = mesh.clone("wall-" + x + "." + topZ);
+        iTop.position.x = x;
+        iTop.position.y = 0;
+        iTop.position.z = topZ;
+        iTop.rotation.y = topRotation;
+      }
+
+      for (let z = -meshZ; z < height; z += meshZ) {
+        let iLeft = mesh.clone("wall-" + leftX + "." + z);
+        iLeft.position.x = leftX;
+        iLeft.position.y = 0;
+        iLeft.position.z = z;
+
+        let iRight = mesh.clone("wall-" + rightX + "." + z);
+        iRight.position.x = rightX;
+        iRight.position.y = 0;
+        iRight.position.z = z;
+        iRight.rotation.y = rightRotation;
+      }
+
+      console.log(">>> walls loaded");
+    });
   }
 
   loadScene() {
@@ -128,11 +210,11 @@ export class ArenaComponent implements OnInit {
       (scene: BABYLON.Scene) => {
         self.scene = scene;
         // // Attach camera
-        
-        console.log(">> loaded scene lights", scene.lights );
-        console.log(">> loaded scene camera", scene.activeCamera );
 
-        scene.lights.forEach( light => {
+        console.log(">> loaded scene lights", scene.lights);
+        console.log(">> loaded scene camera", scene.activeCamera);
+
+        scene.lights.forEach(light => {
           console.log("light intensity", light.intensity);
           light.intensity = 0.7;
         });
@@ -154,8 +236,6 @@ export class ArenaComponent implements OnInit {
   }
 
   createGround() {
-    // create ground
-    // TODO: investigate this dimension
     const groundWidth = this.convertPosition(
       this.gameDefinition.arenaWidth + this.gameDefinition.luchadorSize
     );
