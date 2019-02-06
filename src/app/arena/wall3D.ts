@@ -1,34 +1,34 @@
 import * as BABYLON from "babylonjs";
 
 export class Wall3D {
-  private parent: BABYLON.Mesh;
+  private mesh: BABYLON.AbstractMesh;
   scene: BABYLON.Scene;
   material: BABYLON.StandardMaterial;
-  loading: Promise<BABYLON.Mesh>;
+  loading: Promise<BABYLON.AbstractMesh>;
 
   public constructor(scene: BABYLON.Scene) {
     this.scene = scene;
-    this.parent = BABYLON.Mesh.CreateBox("scene-parent", 1, scene);
-    this.parent.isVisible = false;
     this.loading = this.loadMesh();
   }
 
   loadMesh() {
     let self = this;
-    return new Promise<BABYLON.Mesh>((resolve, reject) => {
-      BABYLON.SceneLoader.ImportMesh(
+    return new Promise<BABYLON.AbstractMesh>((resolve, reject) => {
+      BABYLON.SceneLoader.ImportMeshAsync(
         "",
         "assets/",
         "arena_eachPiece_wall.babylon",
-        self.scene,
-        function(newMeshes, particleSystems) {
-          console.log("[Wall3D] imported mesh", newMeshes);
-
-          newMeshes.forEach(mesh => {
-            mesh.parent = self.parent;
-          });
-
-          resolve(self.parent);
+        self.scene
+      ).then(
+        (value: {
+          meshes: BABYLON.AbstractMesh[];
+          particleSystems: BABYLON.IParticleSystem[];
+          skeletons: BABYLON.Skeleton[];
+          animationGroups: BABYLON.AnimationGroup[];
+        }) => {
+          self.mesh = value.meshes[0];
+          self.mesh.isVisible = false;
+          resolve(self.mesh);
         }
       );
     });

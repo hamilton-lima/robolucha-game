@@ -146,58 +146,52 @@ export class ArenaComponent implements OnInit {
 
     let wall = new Wall3D(this.scene);
     wall.loading.then(mesh => {
-      const box = mesh.getBoundingInfo().boundingBox;
-      // const meshX = box.maximum.x - box.minimum.x;
-      // const meshZ = box.maximum.z - box.minimum.z;
+      const meshX = 2.49;
+      const meshZ = 1.15;
 
-      const meshX = 1.5;
-      const meshZ = 0.5;
-
-      console.log(
-        "mesh bounding",
-        mesh.getBoundingInfo().boundingBox,
-        meshX,
-        meshZ
-      );
-      console.log("mesh geometry", mesh.geometry.extend);
-
-      const bottomZ = -meshZ;
-      const topZ = height + 2 * meshZ;
+      const bottomZ = -meshX;
+      const topZ = height + meshX * 1.5;
       const topRotation = this.angle2radian(90);
       const bottomRotation = this.angle2radian(270);
+      const verticalStep = meshZ;
+      const maxZ = height + verticalStep;
 
       const leftX = -meshX;
-      const rightX = width + 2 * meshX;
+      const rightX = width + meshX * 1.5;
       const rightRotation = this.angle2radian(180);
+      const horizontalStep = meshZ;
+      const maxX = width + horizontalStep;
 
-      for (let x = -meshX; x < width; x += meshX) {
-        let iBottom = mesh.clone("wall-" + x + "." + bottomZ);
+      for (let x = 0; x < maxX; x += horizontalStep) {
+        let iTop = mesh.clone("wall-" + x + "." + topZ, null);
+        iTop.position.x = x + meshZ;
+        iTop.position.y = 0;
+        iTop.position.z = topZ;
+        iTop.rotation.y = topRotation;
+        iTop.isVisible = true;
+
+        let iBottom = mesh.clone("wall-" + x + "." + bottomZ, null);
         iBottom.position.x = x;
         iBottom.position.y = 0;
         iBottom.position.z = bottomZ;
         iBottom.rotation.y = bottomRotation;
-
-        let iTop = mesh.clone("wall-" + x + "." + topZ);
-        iTop.position.x = x;
-        iTop.position.y = 0;
-        iTop.position.z = topZ;
-        iTop.rotation.y = topRotation;
+        iBottom.isVisible = true;
       }
 
-      for (let z = -meshZ; z < height; z += meshZ) {
-        let iLeft = mesh.clone("wall-" + leftX + "." + z);
+      for (let z = 0; z < maxZ; z += verticalStep) {
+        let iLeft = mesh.clone("wall-" + leftX + "." + z, null);
         iLeft.position.x = leftX;
         iLeft.position.y = 0;
-        iLeft.position.z = z;
+        iLeft.position.z = z + meshZ;
+        iLeft.isVisible = true;
 
-        let iRight = mesh.clone("wall-" + rightX + "." + z);
+        let iRight = mesh.clone("wall-" + rightX + "." + z, null);
         iRight.position.x = rightX;
         iRight.position.y = 0;
         iRight.position.z = z;
         iRight.rotation.y = rightRotation;
+        iRight.isVisible = true;
       }
-
-      console.log(">>> walls loaded");
     });
   }
 
