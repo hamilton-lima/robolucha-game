@@ -15,6 +15,7 @@ import { Helper3D } from "./helper3d";
 import { Scene3D } from "./scene3d";
 import { GroundTile3D } from "./ground-tile3D";
 import { Wall3D } from "./wall3D";
+import { Single3D } from "./single3D";
 
 @Component({
   selector: "app-arena",
@@ -102,6 +103,8 @@ export class ArenaComponent implements OnInit {
     // this.createGround();
     this.composeGround();
     this.composeWalls();
+    this.addExtras();
+
     // create a FreeCamera, and set its position to (x:0, y:5, z:-10)
     this.camera = new BABYLON.FreeCamera(
       "camera1",
@@ -120,15 +123,43 @@ export class ArenaComponent implements OnInit {
     this.render();
   }
 
+  addExtras(): any {
+    let single = new Single3D(this.scene);
+    single.loading.then(mesh => {
+      let extra = mesh.clone("extra.0", null);
+      const groundWidth = this.convertPosition(this.gameDefinition.arenaWidth);
+      const max = 30;
+      const rangeZ = [-6, -10];
+      const rangeX = [-6, groundWidth];
+      const rangeAngle = [0, 360];
+      for (let x = 1; x <= max; x++) {
+        let extra = mesh.clone("extra." + x, null);
+        extra.isVisible = true;
+        extra.position.y = 0;
+        extra.position.x =
+          rangeX[0] + Math.abs(rangeX[1] - rangeX[0]) * Math.random();
+        extra.position.z =
+          rangeZ[0] - Math.abs(rangeZ[1] - rangeZ[0]) * Math.random();
+        extra.rotation.y = this.angle2radian(
+          rangeAngle[0] +
+            Math.abs(rangeAngle[1] - rangeAngle[0]) * Math.random()
+        );
+
+        console.log("extra", extra.position);
+      }
+    });
+  }
+
   composeGround(): any {
     const groundWidth = this.convertPosition(this.gameDefinition.arenaWidth);
     const groundHeight = this.convertPosition(this.gameDefinition.arenaHeight);
+    const tileSize = 2;
 
     let ground = new GroundTile3D(this.scene);
     ground.loading.then(mesh => {
       let tiles = [];
-      for (let x = 0; x < groundWidth; x += 1) {
-        for (let z = 0; z < groundHeight; z += 1) {
+      for (let x = 0; x <= groundWidth; x += tileSize) {
+        for (let z = 0; z <= groundHeight; z += tileSize) {
           let i = mesh.clone("tile-" + x + "." + z);
           i.position.x = x;
           i.position.y = 0;

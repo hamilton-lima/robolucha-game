@@ -87,7 +87,7 @@ export class Luchador3D extends Base3D {
     BABYLON.SceneLoader.ImportMesh(
       "",
       "assets/",
-      "robolucha_vehicle_turret02.babylon",
+      "vehicleTurret_textured.babylon",
       scene,
       function(newMeshes, particleSystems) {
         console.log("[Luchador3D] imported meshes turret", newMeshes);

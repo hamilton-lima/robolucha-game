@@ -19,7 +19,7 @@ export class GroundTile3D {
       BABYLON.SceneLoader.ImportMesh(
         "",
         "assets/",
-        "arena_eachPiece_floor.babylon",
+        "2x2_arenaFloor.babylon",
         self.scene,
         function(newMeshes, particleSystems) {
           console.log("[GroundTile3D] imported mesh", newMeshes);
