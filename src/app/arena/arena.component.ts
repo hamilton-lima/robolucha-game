@@ -140,7 +140,7 @@ export class ArenaComponent implements OnInit {
           rangeX[0] + Math.abs(rangeX[1] - rangeX[0]) * Math.random();
         extra.position.z =
           rangeZ[0] - Math.abs(rangeZ[1] - rangeZ[0]) * Math.random();
-        extra.rotation.y = this.angle2radian(
+        extra.rotation.z = this.angle2radian(
           rangeAngle[0] +
             Math.abs(rangeAngle[1] - rangeAngle[0]) * Math.random()
         );

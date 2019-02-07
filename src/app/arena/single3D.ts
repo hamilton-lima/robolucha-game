@@ -27,7 +27,11 @@ export class Single3D {
           skeletons: BABYLON.Skeleton[];
           animationGroups: BABYLON.AnimationGroup[];
         }) => {
-          self.mesh = value.meshes[0];
+          value.meshes.forEach(mesh => {
+            if (mesh.name == "0dot5_wallPiece") {
+              self.mesh = mesh;
+            }
+          });
           self.mesh.isVisible = false;
           resolve(self.mesh);
         }
