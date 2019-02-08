@@ -124,4 +124,8 @@ export class Base3D {
     rect1.linkWithMesh(this.mesh);
   }
 
+  getPosition(): BABYLON.Vector3{
+    return this.mesh.position;
+  }
+
 }

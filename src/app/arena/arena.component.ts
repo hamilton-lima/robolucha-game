@@ -45,6 +45,11 @@ export class ArenaComponent implements OnInit {
   ground: BABYLON.Mesh;
   scene3D: Scene3D;
 
+  readonly CAMERA_POSITION = new BABYLON.Vector3(0, 28, -20);
+  cameraZoom = new BABYLON.Vector3(0, 0, 0);
+  cameraZoomLevel = 0;
+  cameraZoomLevels = [-5, 20];
+
   constructor() {
     this.currentMatchState = {
       events: [],
@@ -91,16 +96,18 @@ export class ArenaComponent implements OnInit {
   }
 
   createScene(): void {
-    const lightAndCameraPosition = new BABYLON.Vector3(10, 10, -15);
+    const lightPosition = new BABYLON.Vector3(10, 10, -15);
     // create a basic BJS Scene object
     this.scene = new BABYLON.Scene(this.engine);
     // create a basic light, aiming 0,1,0 - meaning, to the sky
+
     this.light = new BABYLON.HemisphericLight(
       "light1",
-      lightAndCameraPosition,
+      lightPosition,
       this.scene
     );
-    // this.createGround();
+
+    this.createGround();
     this.composeGround();
     this.composeWalls();
     this.addExtras();
@@ -108,11 +115,11 @@ export class ArenaComponent implements OnInit {
     // create a FreeCamera, and set its position to (x:0, y:5, z:-10)
     this.camera = new BABYLON.FreeCamera(
       "camera1",
-      lightAndCameraPosition,
+      this.CAMERA_POSITION,
       this.scene
     );
+
     this.camera.rotation.x = this.angle2radian(45);
-    // this.camera.setTarget(this.ground.position);
     this.camera.attachControl(this.canvas.nativeElement, false);
     // new Box3D(this.scene);
 
@@ -128,7 +135,7 @@ export class ArenaComponent implements OnInit {
     single.loading.then(mesh => {
       let extra = mesh.clone("extra.0", null);
       const groundWidth = this.convertPosition(this.gameDefinition.arenaWidth);
-      const max = 30;
+      const max = 10;
       const rangeZ = [-6, -10];
       const rangeX = [-6, groundWidth];
       const rangeAngle = [0, 360];
@@ -144,8 +151,6 @@ export class ArenaComponent implements OnInit {
           rangeAngle[0] +
             Math.abs(rangeAngle[1] - rangeAngle[0]) * Math.random()
         );
-
-        console.log("extra", extra.position);
       }
     });
   }
@@ -261,12 +266,16 @@ export class ArenaComponent implements OnInit {
   }
 
   createGround() {
-    const groundWidth = this.convertPosition(
-      this.gameDefinition.arenaWidth + this.gameDefinition.luchadorSize
-    );
-    const groundHeight = this.convertPosition(
-      this.gameDefinition.arenaHeight + this.gameDefinition.luchadorSize
-    );
+    const multiplier = 10;
+    const groundWidth =
+      this.convertPosition(
+        this.gameDefinition.arenaWidth + this.gameDefinition.luchadorSize
+      ) * multiplier;
+
+    const groundHeight =
+      this.convertPosition(
+        this.gameDefinition.arenaHeight + this.gameDefinition.luchadorSize
+      ) * multiplier;
 
     this.ground = BABYLON.MeshBuilder.CreateGround(
       "ground1",
@@ -276,11 +285,19 @@ export class ArenaComponent implements OnInit {
 
     console.log("ground dimensions", groundWidth, groundHeight);
 
-    this.ground.position.x = groundWidth / 2;
-    this.ground.position.z = groundHeight / 2;
+    this.ground.position.x = -5; //groundWidth / 2 * -1;
+    this.ground.position.z = -5; //groundHeight / 2 * -1;
+    this.ground.position.y = -0.1;
+
+    console.log(
+      "ground dimensions",
+      groundWidth,
+      groundHeight,
+      this.ground.position
+    );
 
     let material = new BABYLON.StandardMaterial("ground-material", this.scene);
-    material.diffuseColor = BABYLON.Color3.FromHexString("#2C401B"); // BABYLON.Color3.Random();
+    material.diffuseColor = BABYLON.Color3.FromHexString("#619FD7"); // BABYLON.Color3.Random();
     this.ground.material = material;
   }
 
@@ -299,7 +316,17 @@ export class ArenaComponent implements OnInit {
 
     this.updateBullets();
     this.removeBullets();
+    this.updateCamera();
     this.currentMatchState = this.nextMatchState;
+  }
+
+  updateCamera(): any {
+    const luchador3D = this.luchadores[this.currentLuchador];
+    if (luchador3D) {
+      const position = this.CAMERA_POSITION.add(luchador3D.getPosition());
+      this.camera.position = position;
+      this.camera.setTarget(luchador3D.getPosition());
+    }
   }
 
   removeBullets(): any {
@@ -338,19 +365,19 @@ export class ArenaComponent implements OnInit {
 
   updateLuchadores() {
     this.nextMatchState.luchadores.forEach((luchador: Luchador) => {
-      let currentLuchador = this.currentMatchState.luchadores.find(
+      let currentState = this.currentMatchState.luchadores.find(
         (search: Luchador) => {
           return search.state.id == luchador.state.id;
         }
       );
 
-      if (currentLuchador) {
+      if (currentState) {
         // found update the state
         const luchador3D = this.luchadores[luchador.state.id];
 
-        this.update(luchador3D, currentLuchador, luchador);
-        this.vehicleRotation(luchador3D, currentLuchador, luchador);
-        this.gunRotation(luchador3D, currentLuchador, luchador);
+        this.update(luchador3D, currentState, luchador);
+        this.vehicleRotation(luchador3D, currentState, luchador);
+        this.gunRotation(luchador3D, currentState, luchador);
       } else {
         // not found add to the scene
         const position = this.calculatePosition(luchador);
