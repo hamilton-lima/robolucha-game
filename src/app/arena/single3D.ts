@@ -1,5 +1,5 @@
-import * as BABYLON from "babylonjs";
-import { FindValueSubscriber } from "rxjs/internal/operators/find";
+import { MeshLoader } from './mesh.loader';
+import * as BABYLON from 'babylonjs';
 
 export class Single3D {
   private mesh: BABYLON.AbstractMesh;
@@ -9,33 +9,10 @@ export class Single3D {
 
   public constructor(scene: BABYLON.Scene) {
     this.scene = scene;
-    this.loading = this.loadMesh();
-  }
-
-  loadMesh() {
-    let self = this;
-    return new Promise<BABYLON.AbstractMesh>((resolve, reject) => {
-      BABYLON.SceneLoader.ImportMeshAsync(
-        "",
-        "assets/",
-        "0dot5_wallPiece.babylon",
-        self.scene
-      ).then(
-        (value: {
-          meshes: BABYLON.AbstractMesh[];
-          particleSystems: BABYLON.IParticleSystem[];
-          skeletons: BABYLON.Skeleton[];
-          animationGroups: BABYLON.AnimationGroup[];
-        }) => {
-          value.meshes.forEach(mesh => {
-            if (mesh.name == "0dot5_wallPiece") {
-              self.mesh = mesh;
-            }
-          });
-          self.mesh.isVisible = false;
-          resolve(self.mesh);
-        }
-      );
-    });
+    this.loading = MeshLoader.load(
+      scene,
+      '0dot5_wallPiece.babylon',
+      '0dot5_wallPiece'
+    );
   }
 }
