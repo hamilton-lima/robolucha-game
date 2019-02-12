@@ -1,7 +1,7 @@
-import * as BABYLON from "babylonjs";
-import { FindValueSubscriber } from "rxjs/internal/operators/find";
+import * as BABYLON from 'babylonjs';
+import { FindValueSubscriber } from 'rxjs/internal/operators/find';
 
-export class Single3D {
+export class Square3D {
   private mesh: BABYLON.AbstractMesh;
   scene: BABYLON.Scene;
   material: BABYLON.StandardMaterial;
@@ -13,12 +13,12 @@ export class Single3D {
   }
 
   loadMesh() {
-    let self = this;
+    const self = this;
     return new Promise<BABYLON.AbstractMesh>((resolve, reject) => {
       BABYLON.SceneLoader.ImportMeshAsync(
-        "",
-        "assets/",
-        "0dot5_wallPiece.babylon",
+        '',
+        'assets/',
+        '182x275_wallPiece.babylon',
         self.scene
       ).then(
         (value: {
@@ -28,7 +28,7 @@ export class Single3D {
           animationGroups: BABYLON.AnimationGroup[];
         }) => {
           value.meshes.forEach(mesh => {
-            if (mesh.name == "0dot5_wallPiece") {
+            if (mesh.name === '182x275_wallPiece') {
               self.mesh = mesh;
             }
           });

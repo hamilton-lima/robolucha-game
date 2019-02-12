@@ -1,32 +1,35 @@
-import { Component, OnInit, ViewChild, Input } from "@angular/core";
-import * as BABYLON from "babylonjs";
-import { Luchador3D } from "./luchador3d";
-import { MainLoginRequest, MainLuchador } from "../sdk";
-import { Observable, interval, Subject } from "rxjs";
+import { Component, OnInit, ViewChild, Input } from '@angular/core';
+import * as BABYLON from 'babylonjs';
+import { Luchador3D } from './luchador3d';
+import { MainLoginRequest, MainLuchador } from '../sdk';
+import { Observable, interval, Subject } from 'rxjs';
 import {
   GameDefinition,
   MatchState,
   Luchador,
   Bullet
-} from "../watch-match/watch-match.model";
-import { Box3D } from "./box3d";
-import { Bullet3D } from "./bullet3d";
-import { Helper3D } from "./helper3d";
-import { Scene3D } from "./scene3d";
-import { GroundTile3D } from "./ground-tile3D";
-import { Wall3D } from "./wall3D";
-import { Single3D } from "./single3D";
+} from '../watch-match/watch-match.model';
+import { Box3D } from './box3d';
+import { Bullet3D } from './bullet3d';
+import { Helper3D } from './helper3d';
+import { Scene3D } from './scene3d';
+import { GroundTile3D } from './ground-tile3D';
+import { Wall3D } from './wall3D';
+import { Single3D } from './single3D';
+import { Random3D } from './random3D';
+import { Square3D } from './square3D';
 
 @Component({
-  selector: "app-arena",
-  templateUrl: "./arena.component.html",
-  styleUrls: ["./arena.component.css"]
+  selector: 'app-arena',
+  templateUrl: './arena.component.html',
+  styleUrls: ['./arena.component.css']
 })
 export class ArenaComponent implements OnInit {
-  @ViewChild("game") canvas;
+  @ViewChild('game') canvas;
   @Input() gameDefinition: GameDefinition;
   @Input() matchStateSubject: Subject<MatchState>;
-  @Input() debug: boolean = false;
+  @Input() debug = false;
+  @Input() cameraFollowLuchador = true;
   @Input() currentLuchador: number;
 
   private engine: BABYLON.Engine;
@@ -75,7 +78,7 @@ export class ArenaComponent implements OnInit {
 
   ngOnInit() {
     if (!this.currentLuchador) {
-      console.error("currentLuchador missing");
+      console.error('currentLuchador missing');
       return;
     }
 
@@ -102,7 +105,7 @@ export class ArenaComponent implements OnInit {
     // create a basic light, aiming 0,1,0 - meaning, to the sky
 
     this.light = new BABYLON.HemisphericLight(
-      "light1",
+      'light1',
       lightPosition,
       this.scene
     );
@@ -114,12 +117,12 @@ export class ArenaComponent implements OnInit {
 
     // create a FreeCamera, and set its position to (x:0, y:5, z:-10)
     this.camera = new BABYLON.FreeCamera(
-      "camera1",
+      'camera1',
       this.CAMERA_POSITION,
       this.scene
     );
 
-    this.camera.rotation.x = this.angle2radian(45);
+    this.camera.rotation.x = Helper3D.angle2radian(45);
     this.camera.attachControl(this.canvas.nativeElement, false);
     // new Box3D(this.scene);
 
@@ -131,28 +134,15 @@ export class ArenaComponent implements OnInit {
   }
 
   addExtras(): any {
-    let single = new Single3D(this.scene);
-    single.loading.then(mesh => {
-      let extra = mesh.clone("extra.0", null);
-      const groundWidth = this.convertPosition(this.gameDefinition.arenaWidth);
-      const max = 10;
-      const rangeZ = [-6, -10];
-      const rangeX = [-6, groundWidth];
-      const rangeAngle = [0, 360];
-      for (let x = 1; x <= max; x++) {
-        let extra = mesh.clone("extra." + x, null);
-        extra.isVisible = true;
-        extra.position.y = 0;
-        extra.position.x =
-          rangeX[0] + Math.abs(rangeX[1] - rangeX[0]) * Math.random();
-        extra.position.z =
-          rangeZ[0] - Math.abs(rangeZ[1] - rangeZ[0]) * Math.random();
-        extra.rotation.z = this.angle2radian(
-          rangeAngle[0] +
-            Math.abs(rangeAngle[1] - rangeAngle[0]) * Math.random()
-        );
-      }
-    });
+    const groundWidth = this.convertPosition(this.gameDefinition.arenaWidth);
+    const single = new Single3D(this.scene);
+    const square = new Square3D(this.scene);
+
+    const randomizer = new Random3D( single.loading );
+    const randomizerSquare = new Random3D( square.loading );
+
+    randomizer.add(-6, groundWidth, -6, -10, 40);
+    randomizerSquare.add(-6, groundWidth, -6, -10, 20);
   }
 
   composeGround(): any {
@@ -160,19 +150,19 @@ export class ArenaComponent implements OnInit {
     const groundHeight = this.convertPosition(this.gameDefinition.arenaHeight);
     const tileSize = 2;
 
-    let ground = new GroundTile3D(this.scene);
+    const ground = new GroundTile3D(this.scene);
     ground.loading.then(mesh => {
-      let tiles = [];
+      const tiles = [];
       for (let x = 0; x <= groundWidth; x += tileSize) {
         for (let z = 0; z <= groundHeight; z += tileSize) {
-          let i = mesh.clone("tile-" + x + "." + z);
+          const i = mesh.clone('tile-' + x + '.' + z);
           i.position.x = x;
           i.position.y = 0;
           i.position.z = z;
         }
       }
 
-      console.log(">>> ground loaded");
+      console.log('>>> ground loaded');
     });
   }
 
@@ -180,33 +170,33 @@ export class ArenaComponent implements OnInit {
     const width = this.convertPosition(this.gameDefinition.arenaWidth);
     const height = this.convertPosition(this.gameDefinition.arenaHeight);
 
-    let wall = new Wall3D(this.scene);
+    const wall = new Wall3D(this.scene);
     wall.loading.then(mesh => {
       const meshX = 2.49;
       const meshZ = 1.15;
 
       const bottomZ = -meshX;
       const topZ = height + meshX * 1.5;
-      const topRotation = this.angle2radian(90);
-      const bottomRotation = this.angle2radian(270);
+      const topRotation = Helper3D.angle2radian(90);
+      const bottomRotation = Helper3D.angle2radian(270);
       const verticalStep = meshZ;
       const maxZ = height + verticalStep;
 
       const leftX = -meshX;
       const rightX = width + meshX * 1.5;
-      const rightRotation = this.angle2radian(180);
+      const rightRotation = Helper3D.angle2radian(180);
       const horizontalStep = meshZ;
       const maxX = width + horizontalStep;
 
       for (let x = 0; x < maxX; x += horizontalStep) {
-        let iTop = mesh.clone("wall-" + x + "." + topZ, null);
+        const iTop = mesh.clone('wall-' + x + '.' + topZ, null);
         iTop.position.x = x + meshZ;
         iTop.position.y = 0;
         iTop.position.z = topZ;
         iTop.rotation.y = topRotation;
         iTop.isVisible = true;
 
-        let iBottom = mesh.clone("wall-" + x + "." + bottomZ, null);
+        const iBottom = mesh.clone('wall-' + x + '.' + bottomZ, null);
         iBottom.position.x = x;
         iBottom.position.y = 0;
         iBottom.position.z = bottomZ;
@@ -215,13 +205,13 @@ export class ArenaComponent implements OnInit {
       }
 
       for (let z = 0; z < maxZ; z += verticalStep) {
-        let iLeft = mesh.clone("wall-" + leftX + "." + z, null);
+        const iLeft = mesh.clone('wall-' + leftX + '.' + z, null);
         iLeft.position.x = leftX;
         iLeft.position.y = 0;
         iLeft.position.z = z + meshZ;
         iLeft.isVisible = true;
 
-        let iRight = mesh.clone("wall-" + rightX + "." + z, null);
+        const iRight = mesh.clone('wall-' + rightX + '.' + z, null);
         iRight.position.x = rightX;
         iRight.position.y = 0;
         iRight.position.z = z;
@@ -232,20 +222,20 @@ export class ArenaComponent implements OnInit {
   }
 
   loadScene() {
-    let self = this;
+    const self = this;
     BABYLON.SceneLoader.Load(
-      "assets/",
-      "camera_and_light.babylon",
+      'assets/',
+      'camera_and_light.babylon',
       this.engine,
       (scene: BABYLON.Scene) => {
         self.scene = scene;
         // // Attach camera
 
-        console.log(">> loaded scene lights", scene.lights);
-        console.log(">> loaded scene camera", scene.activeCamera);
+        console.log('>> loaded scene lights', scene.lights);
+        console.log('>> loaded scene camera', scene.activeCamera);
 
         scene.lights.forEach(light => {
-          console.log("light intensity", light.intensity);
+          console.log('light intensity', light.intensity);
           light.intensity = 0.7;
         });
 
@@ -278,26 +268,26 @@ export class ArenaComponent implements OnInit {
       ) * multiplier;
 
     this.ground = BABYLON.MeshBuilder.CreateGround(
-      "ground1",
+      'ground1',
       { width: groundWidth, height: groundHeight, subdivisions: 16 },
       this.scene
     );
 
-    console.log("ground dimensions", groundWidth, groundHeight);
+    console.log('ground dimensions', groundWidth, groundHeight);
 
-    this.ground.position.x = -5; //groundWidth / 2 * -1;
-    this.ground.position.z = -5; //groundHeight / 2 * -1;
+    this.ground.position.x = -5; // groundWidth / 2 * -1;
+    this.ground.position.z = -5; // groundHeight / 2 * -1;
     this.ground.position.y = -0.1;
 
     console.log(
-      "ground dimensions",
+      'ground dimensions',
       groundWidth,
       groundHeight,
       this.ground.position
     );
 
-    let material = new BABYLON.StandardMaterial("ground-material", this.scene);
-    material.diffuseColor = BABYLON.Color3.FromHexString("#619FD7"); // BABYLON.Color3.Random();
+    const material = new BABYLON.StandardMaterial('ground-material', this.scene);
+    material.diffuseColor = BABYLON.Color3.FromHexString('#619FD7'); // BABYLON.Color3.Random();
     this.ground.material = material;
   }
 
@@ -322,7 +312,7 @@ export class ArenaComponent implements OnInit {
 
   updateCamera(): any {
     const luchador3D = this.luchadores[this.currentLuchador];
-    if (luchador3D) {
+    if (luchador3D && this.cameraFollowLuchador) {
       const position = this.CAMERA_POSITION.add(luchador3D.getPosition());
       this.camera.position = position;
       this.camera.setTarget(luchador3D.getPosition());
@@ -331,8 +321,8 @@ export class ArenaComponent implements OnInit {
 
   removeBullets(): any {
     this.currentMatchState.bullets.forEach((bullet: Bullet) => {
-      let found = this.nextMatchState.bullets.find((search: Bullet) => {
-        return search.id == bullet.id;
+      const found = this.nextMatchState.bullets.find((search: Bullet) => {
+        return search.id === bullet.id;
       });
 
       if (!found) {
@@ -346,8 +336,8 @@ export class ArenaComponent implements OnInit {
 
   updateBullets(): any {
     this.nextMatchState.bullets.forEach((bullet: Bullet) => {
-      let current = this.currentMatchState.bullets.find((search: Bullet) => {
-        return search.id == bullet.id;
+      const current = this.currentMatchState.bullets.find((search: Bullet) => {
+        return search.id === bullet.id;
       });
 
       if (current) {
@@ -365,9 +355,9 @@ export class ArenaComponent implements OnInit {
 
   updateLuchadores() {
     this.nextMatchState.luchadores.forEach((luchador: Luchador) => {
-      let currentState = this.currentMatchState.luchadores.find(
+      const currentState = this.currentMatchState.luchadores.find(
         (search: Luchador) => {
-          return search.state.id == luchador.state.id;
+          return search.state.id === luchador.state.id;
         }
       );
 
@@ -381,8 +371,8 @@ export class ArenaComponent implements OnInit {
       } else {
         // not found add to the scene
         const position = this.calculatePosition(luchador);
-        const vehicleRotation = this.angle2radian(luchador.state.angle);
-        const gunRotation = this.angle2radian(luchador.state.gunAngle);
+        const vehicleRotation = Helper3D.angle2radian(luchador.state.angle);
+        const gunRotation = Helper3D.angle2radian(luchador.state.gunAngle);
 
         const newLuchador = new Luchador3D(
           luchador,
@@ -400,7 +390,7 @@ export class ArenaComponent implements OnInit {
   readonly LUCHADOR_DEFAULT_Y = 0.0;
 
   calculatePosition(luchador: Luchador): BABYLON.Vector3 {
-    let result: BABYLON.Vector3 = new BABYLON.Vector3();
+    const result: BABYLON.Vector3 = new BABYLON.Vector3();
     result.x = this.convertPosition(luchador.state.x) + this.HALF_LUCHADOR;
     result.y = this.LUCHADOR_DEFAULT_Y;
     result.z = this.convertPosition(luchador.state.y) + this.HALF_LUCHADOR;
@@ -411,7 +401,7 @@ export class ArenaComponent implements OnInit {
     // TODO: add marker at the model to define the Y of the bullet
     const DEFAULT_Y = 1.5;
 
-    let result: BABYLON.Vector3 = new BABYLON.Vector3();
+    const result: BABYLON.Vector3 = new BABYLON.Vector3();
     result.x = this.convertPosition(bullet.x) + this.HALF_BULLET;
     result.y = DEFAULT_Y;
     result.z = this.convertPosition(bullet.y) + this.HALF_BULLET;
@@ -420,8 +410,8 @@ export class ArenaComponent implements OnInit {
 
   removeLuchadores(): any {
     this.currentMatchState.luchadores.forEach((luchador: Luchador) => {
-      let found = this.nextMatchState.luchadores.find((search: Luchador) => {
-        return search.state.id == luchador.state.id;
+      const found = this.nextMatchState.luchadores.find((search: Luchador) => {
+        return search.state.id === luchador.state.id;
       });
 
       if (!found) {
@@ -449,7 +439,7 @@ export class ArenaComponent implements OnInit {
     let value = next.state.angle;
     value = this.fixAngle(value);
     // * -1 to revert the direction so it matches the cartesian plane
-    value = this.angle2radian(value) * -1;
+    value = Helper3D.angle2radian(value) * -1;
     luchador3D.rotateVehicle(value);
   }
 
@@ -457,17 +447,12 @@ export class ArenaComponent implements OnInit {
     let value = next.state.gunAngle;
     value = this.fixAngle(value);
     // * -1 to revert the direction so it matches the cartesian plane
-    value = this.angle2radian(value) * -1;
+    value = Helper3D.angle2radian(value) * -1;
     luchador3D.rotateGun(value);
   }
 
-  readonly ANGLE2RADIAN = Math.PI / 180;
-  angle2radian(angle: number): number {
-    return angle * this.ANGLE2RADIAN;
-  }
-
   convertPosition(n: number) {
-    let result: number = n / this.gameDefinition.luchadorSize;
+    const result: number = n / this.gameDefinition.luchadorSize;
     return result;
   }
 

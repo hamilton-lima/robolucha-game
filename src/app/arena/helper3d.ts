@@ -3,6 +3,12 @@ import * as GUI from "babylonjs-gui";
 
 // from https://www.babylonjs-playground.com/#2EYZPE
 export class Helper3D {
+
+  static readonly ANGLE2RADIAN = Math.PI / 180;
+  public static angle2radian(angle: number): number {
+    return angle * Helper3D.ANGLE2RADIAN;
+  }
+
   public static addLabelToMesh(
     mesh: BABYLON.Mesh,
     text: string,
@@ -98,4 +104,6 @@ export class Helper3D {
     axisZ.color = new BABYLON.Color3(0, 0, 1);
     Helper3D.addLabelToMesh(axisZ, "Z", 0, axisZ.color);
   }
+
+
 }
