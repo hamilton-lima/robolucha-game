@@ -1,7 +1,11 @@
 import * as BABYLON from 'babylonjs';
 
 export class MeshLoader {
-  public static load(scene: BABYLON.Scene, fileName: string, meshName: string) {
+  public static loadVisible(scene: BABYLON.Scene, fileName: string, meshName: string) {
+    return MeshLoader.load(scene, fileName, meshName, true);
+  }
+
+  public static load(scene: BABYLON.Scene, fileName: string, meshName: string, visible = false) {
     const self = this;
     return new Promise<BABYLON.AbstractMesh>((resolve, reject) => {
       BABYLON.SceneLoader.ImportMeshAsync('', 'assets/', fileName, scene).then(
@@ -20,7 +24,7 @@ export class MeshLoader {
             }
           });
           if (result) {
-            result.isVisible = false;
+            result.isVisible = visible;
             resolve(result);
           } else {
             reject('Mesh not found: ' + meshName);
