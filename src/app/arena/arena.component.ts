@@ -18,6 +18,7 @@ import { Wall3D } from './wall3D';
 import { Single3D } from './single3D';
 import { Random3D } from './random3D';
 import { Square3D } from './square3D';
+import { SceneBuilder } from './scene.builder3D';
 
 @Component({
   selector: 'app-arena',
@@ -45,7 +46,6 @@ export class ArenaComponent implements OnInit {
 
   private HALF_LUCHADOR: number;
   private HALF_BULLET: number;
-  ground: BABYLON.Mesh;
   scene3D: Scene3D;
 
   readonly CAMERA_POSITION = new BABYLON.Vector3(0, 28, -20);
@@ -95,27 +95,29 @@ export class ArenaComponent implements OnInit {
     });
 
     this.createScene();
-    // this.loadScene();
   }
 
   createScene(): void {
-    const lightPosition = new BABYLON.Vector3(10, 10, -15);
-    // create a basic BJS Scene object
-    this.scene = new BABYLON.Scene(this.engine);
-    // create a basic light, aiming 0,1,0 - meaning, to the sky
+    this.engine.displayLoadingUI();
+    this.engine.loadingUIText = "Loading the arena";
 
+    this.scene = new BABYLON.Scene(this.engine);
+
+    const lightPosition = new BABYLON.Vector3(10, 10, -15);
     this.light = new BABYLON.HemisphericLight(
       'light1',
       lightPosition,
       this.scene
     );
 
-    this.createGround();
-    this.composeGround();
-    this.composeWalls();
-    this.addExtras();
+    const builder = new SceneBuilder(this.scene, this.gameDefinition);
+    builder.build().then(() => {
+      console.log("finished loading");
+      this.engine.hideLoadingUI();
+      this.render();
 
-    // create a FreeCamera, and set its position to (x:0, y:5, z:-10)
+    });
+
     this.camera = new BABYLON.FreeCamera(
       'camera1',
       this.CAMERA_POSITION,
@@ -124,180 +126,11 @@ export class ArenaComponent implements OnInit {
 
     this.camera.rotation.x = Helper3D.angle2radian(45);
     this.camera.attachControl(this.canvas.nativeElement, false);
-    // new Box3D(this.scene);
 
     if (this.debug) {
       Helper3D.showAxis(this.scene, 5);
     }
 
-    this.render();
-  }
-
-  addExtras(): any {
-    const groundWidth = this.convertPosition(this.gameDefinition.arenaWidth);
-    const single = new Single3D(this.scene);
-    const square = new Square3D(this.scene);
-
-    const randomizer = new Random3D(single.loading);
-    const randomizerSquare = new Random3D(square.loading);
-
-    randomizer.add(-6, groundWidth, -6, -10, 40);
-    randomizerSquare.add(-6, groundWidth, -6, -10, 20);
-  }
-
-  composeGround(): any {
-    const groundWidth = this.convertPosition(this.gameDefinition.arenaWidth);
-    const groundHeight = this.convertPosition(this.gameDefinition.arenaHeight);
-    const tileSize = 2;
-
-    let otherTile = new BABYLON.StandardMaterial("otherr-tile", this.scene);
-    otherTile.diffuseTexture = new BABYLON.Texture("assets/floor_L_color.png", this.scene);
-    let counter = 0;
-
-    const ground = new GroundTile3D(this.scene);
-    ground.loading.then(mesh => {
-      const tiles = [];
-      for (let x = 0; x <= groundWidth; x += tileSize) {
-        for (let z = 0; z <= groundHeight; z += tileSize) {
-          const i = mesh.clone('tile-' + x + '.' + z, null);
-          i.isVisible = true;
-          i.position.x = x;
-          i.position.y = 0;
-          i.position.z = z;
-          if (counter++ % 2 > 0) {
-            console.log("other" );
-            i.material = otherTile;
-          }
-        }
-      }
-
-      console.log('>>> ground loaded');
-    });
-  }
-
-  composeWalls(): any {
-    const width = this.convertPosition(this.gameDefinition.arenaWidth);
-    const height = this.convertPosition(this.gameDefinition.arenaHeight);
-
-    const wall = new Wall3D(this.scene);
-    wall.loading.then(mesh => {
-      const meshX = 2.49;
-      const meshZ = 1.15;
-
-      const bottomZ = -meshX;
-      const topZ = height + meshX * 1.5;
-      const topRotation = Helper3D.angle2radian(90);
-      const bottomRotation = Helper3D.angle2radian(270);
-      const verticalStep = meshZ;
-      const maxZ = height + verticalStep;
-
-      const leftX = -meshX;
-      const rightX = width + meshX * 1.5;
-      const rightRotation = Helper3D.angle2radian(180);
-      const horizontalStep = meshZ;
-      const maxX = width + horizontalStep;
-
-      for (let x = 0; x < maxX; x += horizontalStep) {
-        const iTop = mesh.clone('wall-' + x + '.' + topZ, null);
-        iTop.position.x = x + meshZ;
-        iTop.position.y = 0;
-        iTop.position.z = topZ;
-        iTop.rotation.y = topRotation;
-        iTop.isVisible = true;
-
-        const iBottom = mesh.clone('wall-' + x + '.' + bottomZ, null);
-        iBottom.position.x = x;
-        iBottom.position.y = 0;
-        iBottom.position.z = bottomZ;
-        iBottom.rotation.y = bottomRotation;
-        iBottom.isVisible = true;
-      }
-
-      for (let z = 0; z < maxZ; z += verticalStep) {
-        const iLeft = mesh.clone('wall-' + leftX + '.' + z, null);
-        iLeft.position.x = leftX;
-        iLeft.position.y = 0;
-        iLeft.position.z = z + meshZ;
-        iLeft.isVisible = true;
-
-        const iRight = mesh.clone('wall-' + rightX + '.' + z, null);
-        iRight.position.x = rightX;
-        iRight.position.y = 0;
-        iRight.position.z = z;
-        iRight.rotation.y = rightRotation;
-        iRight.isVisible = true;
-      }
-    });
-  }
-
-  loadScene() {
-    const self = this;
-    BABYLON.SceneLoader.Load(
-      'assets/',
-      'camera_and_light.babylon',
-      this.engine,
-      (scene: BABYLON.Scene) => {
-        self.scene = scene;
-        // // Attach camera
-
-        console.log('>> loaded scene lights', scene.lights);
-        console.log('>> loaded scene camera', scene.activeCamera);
-
-        scene.lights.forEach(light => {
-          console.log('light intensity', light.intensity);
-          light.intensity = 0.7;
-        });
-
-        // self.scene.activeCamera.attachControl(self.canvas, false);
-        self.createGroundFromModel();
-
-        if (self.debug) {
-          Helper3D.showAxis(self.scene, 5);
-        }
-
-        this.render();
-      }
-    );
-  }
-
-  createGroundFromModel() {
-    this.scene3D = new Scene3D(this.scene);
-  }
-
-  createGround() {
-    const multiplier = 10;
-    const groundWidth =
-      this.convertPosition(
-        this.gameDefinition.arenaWidth + this.gameDefinition.luchadorSize
-      ) * multiplier;
-
-    const groundHeight =
-      this.convertPosition(
-        this.gameDefinition.arenaHeight + this.gameDefinition.luchadorSize
-      ) * multiplier;
-
-    this.ground = BABYLON.MeshBuilder.CreateGround(
-      'ground1',
-      { width: groundWidth, height: groundHeight, subdivisions: 16 },
-      this.scene
-    );
-
-    console.log('ground dimensions', groundWidth, groundHeight);
-
-    this.ground.position.x = -5; // groundWidth / 2 * -1;
-    this.ground.position.z = -5; // groundHeight / 2 * -1;
-    this.ground.position.y = -0.1;
-
-    console.log(
-      'ground dimensions',
-      groundWidth,
-      groundHeight,
-      this.ground.position
-    );
-
-    const material = new BABYLON.StandardMaterial('ground-material', this.scene);
-    material.diffuseColor = BABYLON.Color3.FromHexString('#619FD7'); // BABYLON.Color3.Random();
-    this.ground.material = material;
   }
 
   render(): void {
