@@ -138,8 +138,8 @@ export class ArenaComponent implements OnInit {
     const single = new Single3D(this.scene);
     const square = new Square3D(this.scene);
 
-    const randomizer = new Random3D( single.loading );
-    const randomizerSquare = new Random3D( square.loading );
+    const randomizer = new Random3D(single.loading);
+    const randomizerSquare = new Random3D(square.loading);
 
     randomizer.add(-6, groundWidth, -6, -10, 40);
     randomizerSquare.add(-6, groundWidth, -6, -10, 20);
@@ -150,15 +150,24 @@ export class ArenaComponent implements OnInit {
     const groundHeight = this.convertPosition(this.gameDefinition.arenaHeight);
     const tileSize = 2;
 
+    let otherTile = new BABYLON.StandardMaterial("otherr-tile", this.scene);
+    otherTile.diffuseTexture = new BABYLON.Texture("assets/floor_L_color.png", this.scene);
+    let counter = 0;
+
     const ground = new GroundTile3D(this.scene);
     ground.loading.then(mesh => {
       const tiles = [];
       for (let x = 0; x <= groundWidth; x += tileSize) {
         for (let z = 0; z <= groundHeight; z += tileSize) {
-          const i = mesh.clone('tile-' + x + '.' + z);
+          const i = mesh.clone('tile-' + x + '.' + z, null);
+          i.isVisible = true;
           i.position.x = x;
           i.position.y = 0;
           i.position.z = z;
+          if (counter++ % 2 > 0) {
+            console.log("other" );
+            i.material = otherTile;
+          }
         }
       }
 
