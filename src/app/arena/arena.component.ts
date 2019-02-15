@@ -111,12 +111,14 @@ export class ArenaComponent implements OnInit {
     );
 
     const builder = new SceneBuilder(this.scene, this.gameDefinition);
-    builder.build().then(() => {
-      console.log("finished loading");
-      this.engine.hideLoadingUI();
-      this.render();
-
-    });
+    Promise.all([
+      this.updateLuchadores(),
+      builder.build()])
+      .then(() => {
+        console.log("finished loading");
+        this.engine.hideLoadingUI();
+        this.render();
+      });
 
     this.camera = new BABYLON.FreeCamera(
       'camera1',
@@ -196,6 +198,7 @@ export class ArenaComponent implements OnInit {
   }
 
   updateLuchadores() {
+    const loaders = [];
     this.nextMatchState.luchadores.forEach((luchador: Luchador) => {
       const currentState = this.currentMatchState.luchadores.find(
         (search: Luchador) => {
@@ -224,9 +227,11 @@ export class ArenaComponent implements OnInit {
           gunRotation
         );
 
+        loaders.push(newLuchador.loader);
         this.luchadores[luchador.state.id] = newLuchador;
       }
     });
+    return Promise.all(loaders);
   }
 
   readonly LUCHADOR_DEFAULT_Y = 0.0;

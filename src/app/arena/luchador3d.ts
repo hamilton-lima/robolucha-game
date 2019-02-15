@@ -14,6 +14,7 @@ export class Luchador3D extends Base3D {
   private turret: BABYLON.Mesh;
 
   private luchador: Luchador;
+  public loader: Promise<any>;
 
   constructor(
     luchador: Luchador,
@@ -52,6 +53,8 @@ export class Luchador3D extends Base3D {
     let charLoader = MeshLoader.loadVisible(scene, 'robolucha_char03.babylon', 'robolucha_retopo');
     let baseLoader = MeshLoader.loadVisible(scene, 'vehicle_base_anim01.babylon', 'vehicle_base');
     let turretLoader = MeshLoader.loadVisible(scene, 'vehicle_turret_anim01.babylon', 'vehicle_turret');
+
+    this.loader = Promise.all([charLoader, baseLoader, turretLoader]);
 
     charLoader.then(mesh => {
       mesh.parent = self.turret;
