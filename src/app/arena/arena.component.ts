@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, OnChanges, SimpleChanges } from '@angular/core';
 import * as BABYLON from 'babylonjs';
 import { Luchador3D } from './luchador3d';
 import { MainLoginRequest, MainLuchador } from '../sdk';
@@ -20,12 +20,18 @@ import { Random3D } from './random3D';
 import { Square3D } from './square3D';
 import { SceneBuilder } from './scene.builder3D';
 
+class SavedCamera {
+  target: BABYLON.Vector3;
+  position: BABYLON.Vector3;
+}
+
 @Component({
   selector: 'app-arena',
   templateUrl: './arena.component.html',
   styleUrls: ['./arena.component.css']
 })
-export class ArenaComponent implements OnInit {
+export class ArenaComponent implements OnInit, OnChanges {
+
   @ViewChild('game') canvas;
   @Input() gameDefinition: GameDefinition;
   @Input() matchStateSubject: Subject<MatchState>;
@@ -49,6 +55,7 @@ export class ArenaComponent implements OnInit {
   scene3D: Scene3D;
 
   readonly CAMERA_POSITION = new BABYLON.Vector3(0, 28, -20);
+  readonly ROBOLUCHA_SAVED_CAMERA = "robolucha-saved-camera";
   cameraZoom = new BABYLON.Vector3(0, 0, 0);
   cameraZoomLevel = 0;
   cameraZoomLevels = [-5, 20];
@@ -97,6 +104,41 @@ export class ArenaComponent implements OnInit {
     this.createScene();
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (!this.cameraFollowLuchador) {
+      this.setCameraFromSavedState();
+    }
+  }
+
+  setCameraFromSavedState() {
+    const savedCameraState = localStorage.getItem(this.ROBOLUCHA_SAVED_CAMERA);
+    console.log(this.ROBOLUCHA_SAVED_CAMERA, savedCameraState);
+
+    if (savedCameraState) {
+      const cameraState: SavedCamera = JSON.parse(savedCameraState);
+
+      this.camera.position.set(
+        cameraState.position.x,
+        cameraState.position.y,
+        cameraState.position.z);
+
+      this.camera.setTarget(new BABYLON.Vector3(
+        cameraState.target.x,
+        cameraState.target.y,
+        cameraState.target.z));
+    }
+  }
+
+  saveCameraState() {
+    let cameraState: SavedCamera = {
+      position: this.camera.position,
+      target: this.camera.getTarget()
+    };
+
+    const savedCameraState = JSON.stringify(cameraState);
+    localStorage.setItem(this.ROBOLUCHA_SAVED_CAMERA, savedCameraState);
+  }
+
   createScene(): void {
     this.engine.displayLoadingUI();
     this.engine.loadingUIText = "Loading the arena";
@@ -129,6 +171,10 @@ export class ArenaComponent implements OnInit {
     this.camera.rotation.x = Helper3D.angle2radian(45);
     this.camera.attachControl(this.canvas.nativeElement, false);
 
+    if (!this.cameraFollowLuchador) {
+      this.setCameraFromSavedState();
+    }
+
     if (this.debug) {
       Helper3D.showAxis(this.scene, 5);
     }
@@ -160,6 +206,8 @@ export class ArenaComponent implements OnInit {
       const position = this.CAMERA_POSITION.add(luchador3D.getPosition());
       this.camera.position = position;
       this.camera.setTarget(luchador3D.getPosition());
+    } else {
+      this.saveCameraState();
     }
   }
 
