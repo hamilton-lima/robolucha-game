@@ -1,13 +1,12 @@
 .quote-area{
     
-    flex-basis: 60%;
-    margin-right: 5%;
+    border-radius: 6px;
 }
-
+/*
 .login-form{
     flex-basis: 40%;
     padding-left: 5%;
 }
 .login-main{
     display: flex;
-}
+} */
