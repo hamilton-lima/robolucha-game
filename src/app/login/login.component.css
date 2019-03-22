@@ -1,0 +1,13 @@
+.quote-area{
+    
+    flex-basis: 60%;
+    margin-right: 5%;
+}
+
+.login-form{
+    flex-basis: 40%;
+    padding-left: 5%;
+}
+.login-main{
+    display: flex;
+}
