@@ -105,9 +105,7 @@ export function apiConfigFactory(): Configuration {
     MaskEditorDetailComponent,
     ColorPickerComponent,
     ShapePickerComponent,
-    PlayComponent,
-    TestCompComponent,
-    Test3Component
+    PlayComponent
   ],
   imports: [
     BrowserModule,
