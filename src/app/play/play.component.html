@@ -1,7 +1,11 @@
-<p>
-  play!
-</p>
-<app-list-matches></app-list-matches>
-<div *ngIf="checkMatch()">
-<app-watch-match></app-watch-match>
+<app-header></app-header>
+
+<!-- Inverter dependendo do checkMatch -->
+<div *ngIf="checkMatch();else match_list">
+    <app-watch-match></app-watch-match>
 </div>
+<ng-template #match_list>
+    <div > 
+        <app-list-matches></app-list-matches>
+    </div>
+</ng-template>
