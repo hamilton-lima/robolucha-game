@@ -30,6 +30,7 @@ import { LuchadorPreviewComponent } from './luchador-preview/luchador-preview.co
 import { MaskEditorDetailComponent } from './mask-editor-detail/mask-editor-detail.component';
 import { ColorPickerComponent } from './color-picker/color-picker.component';
 import { ShapePickerComponent } from './shape-picker/shape-picker.component';
+import { PlayComponent } from './play/play.component';
 
 const ROUTES: Routes = [
   { path: "", redirectTo: "/luchador", pathMatch: "full" },
@@ -40,32 +41,22 @@ const ROUTES: Routes = [
     resolve: { luchador: LuchadorResolverService }
   },
   {
-    path: "mask-editor",
+    path: "mask",
     component: MaskEditorComponent,
     canActivate: [LoginActivate],
     resolve: { luchador: LuchadorResolverService }
-  },
-  {
-    path: "match",
-    component: ListMatchesComponent,
-    canActivate: [LoginActivate]
   },
   {
     path: "playground",
     component: PlaygroundComponent,
     canActivate: [LoginActivate]
   },
-  {
-    path: "watch",
-    component: WatchMatchComponent,
-    canActivate: [LoginActivate],
-    resolve: { luchador: LuchadorResolverService }
-  },
   { path: "login", component: LoginComponent },
   {
-    path: "setup",
-    component: SetupComponent,
-    canActivate: [LoginActivate]
+    path: "play",
+    component: PlayComponent,
+    canActivate: [LoginActivate],
+    resolve: { luchador: LuchadorResolverService }
   },
   { path: "**", component: NotFoundComponent }
 ];
@@ -97,7 +88,8 @@ export function apiConfigFactory(): Configuration {
     LuchadorPreviewComponent,
     MaskEditorDetailComponent,
     ColorPickerComponent,
-    ShapePickerComponent
+    ShapePickerComponent,
+    PlayComponent
   ],
   imports: [
     BrowserModule,
