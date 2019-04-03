@@ -41,8 +41,6 @@ export class LuchadorComponent implements OnInit {
   }
 
   canDeactivate(){
-    console.log("user leaving");
-    console.log(this.dirty);
     if (this.dirty){
       return window.confirm("You have unsaved changes to your luchador code. Are you sure you want to leave?");
     }
