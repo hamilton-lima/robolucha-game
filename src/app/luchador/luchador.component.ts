@@ -97,6 +97,7 @@ export class LuchadorComponent implements OnInit {
 
     remoteCall.subscribe(luchador => {
       this.successMessage = "Luchador updated";
+      this.dirty = false;
       setTimeout(() => this.successMessage = null, HIDE_SUCCESS_TIMEOUT);
 
       this.refreshEditor(luchador);
