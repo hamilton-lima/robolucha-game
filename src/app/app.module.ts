@@ -31,13 +31,14 @@ import { MaskEditorDetailComponent } from './mask-editor-detail/mask-editor-deta
 import { ColorPickerComponent } from './color-picker/color-picker.component';
 import { ShapePickerComponent } from './shape-picker/shape-picker.component';
 import { PlayComponent } from './play/play.component';
-
+import { CanDeactivateGuard } from './can-deactivate-guard.service';
 const ROUTES: Routes = [
   { path: "", redirectTo: "/luchador", pathMatch: "full" },
   {
     path: "luchador",
     component: LuchadorComponent,
     canActivate: [LoginActivate],
+    canDeactivate: [CanDeactivateGuard],
     resolve: { luchador: LuchadorResolverService }
   },
   {
@@ -116,7 +117,7 @@ export function apiConfigFactory(): Configuration {
     NgbModule,
     AceEditorModule
   ],
-  providers: [LoginActivate, AuthService],
+  providers: [LoginActivate, AuthService, CanDeactivateGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
