@@ -40,6 +40,13 @@ export class LuchadorComponent implements OnInit {
     this.refreshEditor(data.luchador);
   }
 
+  canDeactivate(){
+    if (this.dirty){
+      return window.confirm("You have unsaved changes to your luchador code. Are you sure you want to leave?");
+    }
+    return true;
+  }
+
   refreshEditor(luchador) {
     console.log("refresh luchador", luchador);
     this.luchador = luchador;
@@ -88,6 +95,7 @@ export class LuchadorComponent implements OnInit {
 
     remoteCall.subscribe(luchador => {
       this.successMessage = "Luchador updated";
+      this.dirty = false;
       setTimeout(() => this.successMessage = null, HIDE_SUCCESS_TIMEOUT);
 
       this.refreshEditor(luchador);
