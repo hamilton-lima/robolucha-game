@@ -70,7 +70,7 @@ export class LuchadorPreviewComponent implements OnInit, OnDestroy {
 
           // TODO: control active promise
           new Promise(function(resolve, reject) {
-            self.loadDynamicTexture(self, resolve, reject);
+            self.builder.loadDynamicTexture(self, resolve, reject);
           });
 
           console.log("luchador preview", self.luchador);
@@ -133,115 +133,11 @@ export class LuchadorPreviewComponent implements OnInit, OnDestroy {
             self.character.position = BABYLON.Vector3.Zero();
             self.character.position.y = -2;
             self.character.rotation.z = 1;
-            self.loadDynamicTexture(self, resolve, reject);
+            self.builder.loadDynamicTexture(self, resolve, reject);
           }
         });
       }
     );
-  }
-
-  loadDynamicTexture(self, resolve, reject) {
-    if (self.loadingTexture) {
-      return;
-    }
-    self.loadingTexture = true;
-    self.dynamicTexture = new BABYLON.DynamicTexture(
-      "luchador-preview-dynamic-texture",
-      self.TEXTURE_WIDTH,
-      self.scene,
-      true
-    );
-    self.context = self.dynamicTexture.getContext();
-    self.dynamicTexture.wrapR = 1;
-    self.dynamicTexture.wrapU = 1;
-    self.dynamicTexture.wrapV = 1;
-
-    self.material = new BABYLON.StandardMaterial(
-      "luchador-preview-material",
-      self.scene
-    );
-
-    self.character.material = self.material;
-    self.character.visibility = 1;
-
-    self.material.diffuseTexture = self.dynamicTexture;
-    self.material.specularColor = new BABYLON.Color3(0, 0, 0);
-    self.material.ambientColor = new BABYLON.Color3(0.588, 0.588, 0.588);
-
-    let images2Load = [
-      self.loadImage("back"),
-      self.loadImage("face"),
-      self.loadImage("wrist"),
-      self.loadImage("ankle"),
-      self.loadImage("feet")
-    ];
-
-    self.addImagesFromShapes(self.luchador, images2Load, maskEditorCategories);
-
-    let sequence = forkJoin(images2Load);
-
-    sequence.subscribe((images: Array<HTMLImageElement>) => {
-      console.log("all images loaded", images.map(image => image.name));
-
-      if (self.luchador) {
-        self.builder
-          .build(self.luchador, images, self.TEXTURE_WIDTH, self.TEXTURE_HEIGHT)
-          .then(canvas => {
-            // self.debug.nativeElement.getContext("2d").drawImage(canvas, 0, 0);
-            self.context.drawImage(canvas, 0, 0);
-            self.dynamicTexture.update();
-          });
-      }
-
-      self.loadingTexture = false;
-      resolve();
-    });
-  }
-
-  /** Finds all shape image names and create the Loader for each one */
-  addImagesFromShapes(
-    luchador: MainLuchador,
-    images2Load: Array<Subject<HTMLImageElement>>,
-    categories: Array<CategoryOptions>
-  ) {
-    if (!luchador) {
-      return;
-    }
-
-    categories.forEach(category => {
-      category.subcategories.forEach(subcategory => {
-        if (subcategory.type == EditorType.shape) {
-          const fileName = this.luchadorConfigs.getShapeNoDefaultValue(
-            luchador,
-            subcategory.key
-          );
-
-          if (fileName) {
-            images2Load.push(
-              this.loadImageFromFileName(fileName, subcategory.key)
-            );
-          } 
-        }
-      });
-    });
-  }
-
-  loadImage(name): Subject<HTMLImageElement> {
-    const fileName = "assets/shapes/" + name + ".png";
-    return this.loadImageFromFileName(fileName, name);
-  }
-
-  loadImageFromFileName(fileName, name): Subject<HTMLImageElement> {
-    let result = new Subject<HTMLImageElement>();
-    let img = new Image();
-    img.name = name;
-
-    img.src = fileName;
-    img.onload = () => {
-      result.next(img);
-      result.complete();
-    };
-    return result;
   }
 
   render(): void {

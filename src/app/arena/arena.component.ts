@@ -52,7 +52,7 @@ export class ArenaComponent implements OnInit, OnChanges {
 
   private HALF_LUCHADOR: number;
   private HALF_BULLET: number;
-  scene3D: Scene3D;
+  scene3D: Scene3D; //can remove?
 
   readonly CAMERA_POSITION = new BABYLON.Vector3(0, 28, -20);
   readonly ROBOLUCHA_SAVED_CAMERA = "robolucha-saved-camera";
