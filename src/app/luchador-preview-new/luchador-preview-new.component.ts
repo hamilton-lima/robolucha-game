@@ -9,6 +9,9 @@ import {
 } from "../watch-match/watch-match.model";
 import { MainLuchador } from "../sdk";
 import { ActivatedRoute } from "@angular/router";
+import { MaskEditorMediator } from "../mask-editor/mask-editor.mediator";
+import { Subscription } from "rxjs";
+import { t } from "@angular/core/src/render3";
 
 @Component({
   selector: "app-luchador-preview-new",
@@ -25,7 +28,14 @@ export class LuchadorPreviewNewComponent implements OnInit {
   private light: BABYLON.PointLight;
   private luchador3d: Luchador3D;
   private luchador: MainLuchador;
-  constructor(private builder: TextureBuilder, private route: ActivatedRoute) {
+
+  private current: Promise<void>;
+  private subscription: Subscription;
+
+
+  constructor(private builder: TextureBuilder, 
+    private route: ActivatedRoute, 
+    private mediator: MaskEditorMediator) {
     this.luchador = {};
   }
 
@@ -34,31 +44,82 @@ export class LuchadorPreviewNewComponent implements OnInit {
     const self = this;
     this.luchador = data.luchador;
     this.engine = new BABYLON.Engine(this.canvas.nativeElement, true);
-    this.createScene();
-    this.builder.loadDynamicLuchadorTexture(self.luchador3d, self.luchador, ()=>{}, ()=>{});
+    this.current = this.createScene();
+    this.current.then(() => {
+      console.log("createscene then");
+      this.render();      
+      this.subscription = this.mediator.luchador.subscribe(
+        (luchador: MainLuchador) => {
+          self.luchador = luchador;
+  
+          new Promise(function(resolve, reject) {
+            self.builder.loadDynamicLuchadorTexture(self.luchador3d, luchador, resolve, reject);
+            console.log("Loading DynTex");
+
+            self.loadModel(self, resolve, reject);
+          });
+        });
+    });
+    
+    // this.builder.loadDynamicLuchadorTexture(self.luchador3d, self.luchador, ()=>{}, ()=>{});
+  }
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  }
+  createScene(): Promise<void> {
+    const self = this;
+    console.log("Create Scene Start")
+    
+    return new Promise(function(resolve, reject) {
+      console.log("Create Scene Promise Start");
+      self.scene = new BABYLON.Scene(self.engine);
+      self.camera = new BABYLON.FreeCamera("camera", new Vector3(0, 2, -6), self.scene);
+      self.camera.attachControl(self.canvas.nativeElement, false);
+      self.light = new BABYLON.PointLight('light', self.camera.position, self.scene);
+      console.log("Create Scene Promise End")
+      self.loadModel(self, resolve, reject);
+    });
   }
 
-  createScene(): void {
-    this.scene = new BABYLON.Scene(this.engine);
-    this.camera = new BABYLON.FreeCamera("camera", new Vector3(0, 2, -6), this.scene);
-    this.camera.attachControl(this.canvas.nativeElement, false);
-    this.light = new BABYLON.PointLight('light', this.camera.position, this.scene);
-
-    this.luchador3d = new Luchador3D(
-      this.dummyLuchador(),
-      this.scene,
-      new Vector3(0, 0, 0),
-      1,
-      1
-    );
-    this.render();
-  }
   render(): void {
     // run the render loop
+    console.log("Render!");
+    
     this.engine.runRenderLoop(() => {
       this.scene.render();
     });
   }
+
+  loadModel(self, resolve, reject){
+    console.log("Load Model Start")
+    // self.engine.stopRenderLoop();
+    if(self.luchador3d)
+    {
+      self.luchador3d.dispose();
+      // let scene : BABYLON.Scene = self.scene;
+      // let luchador3d : Luchador3D = self.luchador3d;
+      // luchador3d.
+      // scene.getMeshByID(self.luchador3d.mesh.id).dispose();
+      console.log("disposed!");
+    }
+    
+    self.luchador3d = new Luchador3D(
+        self.dummyLuchador(),
+        self.scene,
+        new Vector3(0, 0, 0),
+        1,
+        1
+      );
+    
+      
+    console.log("Load Model End")
+    self.builder.loadDynamicLuchadorTexture(self.luchador3d, self.luchador, resolve, reject);
+    // self.engine.stopRenderLoop();
+    self.render();
+  }
+
   dummyLuchador(): Luchador {
     return { state: this.dummyState(), name: "", mask: this.dummyMask() };
   }

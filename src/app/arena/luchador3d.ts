@@ -83,6 +83,15 @@ export class Luchador3D extends Base3D {
     this.base.rotation.y = value;
   }
 
+  dispose()
+  {
+    this.character.dispose();
+    this.base.dispose();
+    this.turret.dispose();
+    this.mesh.dispose();
+    this.advancedTexture.dispose();
+  }
+
   rotateGun(value: number) {
     this.turret.rotation.y = value;
   }
