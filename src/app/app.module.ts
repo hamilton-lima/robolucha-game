@@ -43,33 +43,17 @@ const ROUTES: Routes = [
     resolve: { luchador: LuchadorResolverService }
   },
   {
-    path: "mask-editor",
+    path: "mask",
     component: MaskEditorComponent,
     canActivate: [LoginActivate],
     resolve: { luchador: LuchadorResolverService }
-  },
-  {
-    path: "match",
-    component: ListMatchesComponent,
-    canActivate: [LoginActivate]
   },
   {
     path: "playground",
     component: PlaygroundComponent,
     canActivate: [LoginActivate]
   },
-  {
-    path: "watch",
-    component: WatchMatchComponent,
-    canActivate: [LoginActivate],
-    resolve: { luchador: LuchadorResolverService }
-  },
   { path: "login", component: LoginComponent },
-  {
-    path: "setup",
-    component: SetupComponent,
-    canActivate: [LoginActivate]
-  },
   {
     path: "play",
     component: PlayComponent,

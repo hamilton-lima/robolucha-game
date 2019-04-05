@@ -1,99 +1,101 @@
 <app-header></app-header>
-<div class="row">
-  <div class="col-10">
-    <h1>{{ luchador.name }}</h1>
+<div class="container">
+  <div class="row">
+    <div class="col-10">
+      <h1>{{ luchador.name }}</h1>
+    </div>
+    <div class="col-2">
+      <button
+        *ngIf="dirty"
+        class="btn btn-primary float-right align-bottom"
+        (click)="save()"
+      >
+        Save
+      </button>
+    </div>
   </div>
-  <div class="col-2">
-    <button
-      *ngIf="dirty"
-      class="btn btn-primary float-right align-bottom"
-      (click)="save()"
-    >
-      Save
-    </button>
+
+  <div class="row">
+    <div class="col-12"><hr /></div>
   </div>
-</div>
 
-<div class="row">
-  <div class="col-12"><hr /></div>
-</div>
+  <div class="row">
+    <div class="col-12">
+      <ngb-tabset>
+        <ngb-tab title="On Repeat">
+          <ng-template ngbTabContent>
+            <div>
+              <app-code-editor
+                [script]="codes.onRepeat.script"
+                (onChange)="updateCode('onRepeat', $event)"
+              ></app-code-editor>
+            </div>
+          </ng-template>
+        </ngb-tab>
+        <ngb-tab title="On Start">
+          <ng-template ngbTabContent>
+            <div>
+              <app-code-editor
+                [script]="codes.onStart.script"
+                (onChange)="updateCode('onStart', $event)"
+              ></app-code-editor>
+            </div>
+          </ng-template>
+        </ngb-tab>
+        <ngb-tab title="On Got Damage">
+          <ng-template ngbTabContent>
+            <div>
+              <app-code-editor
+                [script]="codes.onGotDamage.script"
+                (onChange)="updateCode('onGotDamage', $event)"
+              ></app-code-editor>
+            </div>
+          </ng-template>
+        </ngb-tab>
 
-<div class="row">
-  <div class="col-12">
-    <ngb-tabset>
-      <ngb-tab title="On Repeat">
-        <ng-template ngbTabContent>
-          <div>
-            <app-code-editor
-              [script]="codes.onRepeat.script"
-              (onChange)="updateCode('onRepeat', $event)"
-            ></app-code-editor>
-          </div>
-        </ng-template>
-      </ngb-tab>
-      <ngb-tab title="On Start">
-        <ng-template ngbTabContent>
-          <div>
-            <app-code-editor
-              [script]="codes.onStart.script"
-              (onChange)="updateCode('onStart', $event)"
-            ></app-code-editor>
-          </div>
-        </ng-template>
-      </ngb-tab>
-      <ngb-tab title="On Got Damage">
-        <ng-template ngbTabContent>
-          <div>
-            <app-code-editor
-              [script]="codes.onGotDamage.script"
-              (onChange)="updateCode('onGotDamage', $event)"
-            ></app-code-editor>
-          </div>
-        </ng-template>
-      </ngb-tab>
-
-      <ngb-tab title="On Found">
-        <ng-template ngbTabContent>
-          <div>
-            <app-code-editor
-              [script]="codes.onFound.script"
-              (onChange)="updateCode('onFound', $event)"
-            ></app-code-editor>
-          </div>
-        </ng-template>
-      </ngb-tab>
-      <ngb-tab title="On Hit Other">
-        <ng-template ngbTabContent>
-          <div>
-            <app-code-editor
-              [script]="codes.onHitOther.script"
-              (onChange)="updateCode('onHitOther', $event)"
-            ></app-code-editor>
-          </div>
-        </ng-template>
-      </ngb-tab>
-      <ngb-tab title="On Hit Wall">
-        <ng-template ngbTabContent>
-          <div>
-            <app-code-editor
-              [script]="codes.onHitWall.script"
-              (onChange)="updateCode('onHitWall', $event)"
-            ></app-code-editor>
-          </div>
-        </ng-template>
-      </ngb-tab>
-    </ngb-tabset>
+        <ngb-tab title="On Found">
+          <ng-template ngbTabContent>
+            <div>
+              <app-code-editor
+                [script]="codes.onFound.script"
+                (onChange)="updateCode('onFound', $event)"
+              ></app-code-editor>
+            </div>
+          </ng-template>
+        </ngb-tab>
+        <ngb-tab title="On Hit Other">
+          <ng-template ngbTabContent>
+            <div>
+              <app-code-editor
+                [script]="codes.onHitOther.script"
+                (onChange)="updateCode('onHitOther', $event)"
+              ></app-code-editor>
+            </div>
+          </ng-template>
+        </ngb-tab>
+        <ngb-tab title="On Hit Wall">
+          <ng-template ngbTabContent>
+            <div>
+              <app-code-editor
+                [script]="codes.onHitWall.script"
+                (onChange)="updateCode('onHitWall', $event)"
+              ></app-code-editor>
+            </div>
+          </ng-template>
+        </ngb-tab>
+      </ngb-tabset>
+    </div>
   </div>
-</div>
 
-<div class="row save-button">
-  <div class="col-12">
-    <ngb-alert
-      class="success-message"
-      *ngIf="successMessage"
-      type="success"
-      (close)="successMessage = null"
-      >{{ successMessage }}</ngb-alert
-    >
+  <div class="row save-button">
+    <div class="col-12">
+      <ngb-alert
+        class="success-message"
+        *ngIf="successMessage"
+        type="success"
+        (close)="successMessage = null"
+        >{{ successMessage }}</ngb-alert
+      >
+    </div>
   </div>
 </div>
