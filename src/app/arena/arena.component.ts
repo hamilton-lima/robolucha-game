@@ -19,6 +19,8 @@ import { Single3D } from './single3D';
 import { Random3D } from './random3D';
 import { Square3D } from './square3D';
 import { SceneBuilder } from './scene.builder3D';
+import { TextureBuilder } from '../luchador-preview/texture-builder';
+import { ActivatedRoute } from '@angular/router';
 
 class SavedCamera {
   target: BABYLON.Vector3;
@@ -52,7 +54,11 @@ export class ArenaComponent implements OnInit, OnChanges {
 
   private HALF_LUCHADOR: number;
   private HALF_BULLET: number;
-  scene3D: Scene3D;
+  scene3D: Scene3D; //can remove?
+
+
+
+  private currentLuchadorData : MainLuchador;
 
   readonly CAMERA_POSITION = new BABYLON.Vector3(0, 28, -20);
   readonly ROBOLUCHA_SAVED_CAMERA = "robolucha-saved-camera";
@@ -60,7 +66,8 @@ export class ArenaComponent implements OnInit, OnChanges {
   cameraZoomLevel = 0;
   cameraZoomLevels = [-5, 20];
 
-  constructor() {
+  constructor(private builder: TextureBuilder, 
+    private route: ActivatedRoute) {
     this.currentMatchState = {
       events: [],
       bullets: [],
@@ -88,6 +95,8 @@ export class ArenaComponent implements OnInit, OnChanges {
       console.error('currentLuchador missing');
       return;
     }
+    const data = this.route.snapshot.data;
+    this.currentLuchadorData = data.luchador;
 
     this.HALF_LUCHADOR = this.convertPosition(
       this.gameDefinition.luchadorSize / 2
@@ -102,6 +111,7 @@ export class ArenaComponent implements OnInit, OnChanges {
     });
 
     this.createScene();
+    
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -266,7 +276,7 @@ export class ArenaComponent implements OnInit, OnChanges {
         const position = this.calculatePosition(luchador);
         const vehicleRotation = Helper3D.angle2radian(luchador.state.angle);
         const gunRotation = Helper3D.angle2radian(luchador.state.gunAngle);
-
+        
         const newLuchador = new Luchador3D(
           luchador,
           this.scene,
@@ -276,7 +286,13 @@ export class ArenaComponent implements OnInit, OnChanges {
         );
 
         loaders.push(newLuchador.loader);
+        
+        // this.builder.loadDynamicLuchadorTexture(newLuchador)
         this.luchadores[luchador.state.id] = newLuchador;
+        if (newLuchador == this.luchadores[this.currentLuchador])
+        {
+          this.builder.loadDynamicLuchadorTexture(this.luchadores[this.currentLuchador], this.currentLuchadorData, ()=>{}, ()=>{});
+        }
       }
     });
     return Promise.all(loaders);

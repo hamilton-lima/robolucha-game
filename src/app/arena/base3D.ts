@@ -127,5 +127,11 @@ export class Base3D {
   getPosition(): BABYLON.Vector3{
     return this.mesh.position;
   }
+  getScene(): BABYLON.Scene{
+    return this.scene;
+  }
 
+  setMaterial(material : BABYLON.Material){
+    this.mesh.material = material;
+  }
 }

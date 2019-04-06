@@ -8,14 +8,15 @@ export class Luchador3D extends Base3D {
   getName(): string {
     return "luchador" + this.luchador.state.id;
   }
-
+  TEXTURE_WIDTH = 512;
+  TEXTURE_HEIGHT = 512;
   private character: BABYLON.AbstractMesh;
   private base: BABYLON.Mesh;
   private turret: BABYLON.Mesh;
+  private charMaterial : BABYLON.Material;
 
   private luchador: Luchador;
   public loader: Promise<any>;
-
   constructor(
     luchador: Luchador,
     scene: BABYLON.Scene,
@@ -24,7 +25,7 @@ export class Luchador3D extends Base3D {
     gunRotationY: number
   ) {
     super();
-
+    
     this.scene = scene;
     this.luchador = luchador;
 
@@ -59,6 +60,9 @@ export class Luchador3D extends Base3D {
     charLoader.then(mesh => {
       mesh.parent = self.turret;
       self.character = mesh;
+      if(self.setCharacterMaterial)
+        self.character.material = self.charMaterial; //Is this too much gambiarra?
+
       self.character.id = self.getName() + ".character";
     })
 
@@ -79,7 +83,23 @@ export class Luchador3D extends Base3D {
     this.base.rotation.y = value;
   }
 
+  dispose()
+  {
+    this.character.dispose();
+    this.base.dispose();
+    this.turret.dispose();
+    this.mesh.dispose();
+    this.advancedTexture.dispose();
+  }
+
   rotateGun(value: number) {
     this.turret.rotation.y = value;
+  }
+  setCharacterMaterial(material) {
+    this.charMaterial = material;
+  }
+  getLuchador() : Luchador{
+    console.log(this.luchador);
+    return this.luchador;
   }
 }
