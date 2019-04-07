@@ -9,17 +9,20 @@ import {
 import { LuchadorConfigService } from "../mask-editor-detail/luchador-config.service";
 import { Luchador3D } from "./luchador3d";
 import { Base3D } from "./base3D";
+import { Luchador } from "../watch-match/watch-match.model";
+
+const TEXTURE_WIDTH = 512;
+const TEXTURE_HEIGHT = 512;
 
 @Injectable({
   providedIn: "root"
 })
 export class TextureBuilder {
-  constructor(    
-    private luchadorConfigs: LuchadorConfigService
-  ){
+  constructor(private luchadorConfigs: LuchadorConfigService) {
     this.loadingTextures = new Array<Base3D>();
   }
   private loadingTextures: Array<Base3D>;
+
   build(
     luchador: MainLuchador,
     images: Array<HTMLImageElement>,
@@ -139,7 +142,11 @@ export class TextureBuilder {
               const context = canvas.getContext("2d");
               console.log("drawing layers", tintedLayers, target.maskLayers);
               tintedLayers.forEach(layer => {
-                context.drawImage(layer, target.maskLayers.x, target.maskLayers.y);
+                context.drawImage(
+                  layer,
+                  target.maskLayers.x,
+                  target.maskLayers.y
+                );
               });
               resolve(canvas);
             })
@@ -231,114 +238,61 @@ export class TextureBuilder {
     });
   }
 
-  loadDynamicTexture(target, resolve, reject) {
-    if (target.loadingTexture) {
-      return;
-    }
-    target.loadingTexture = true;
-    target.dynamicTexture = new BABYLON.DynamicTexture(
-      "luchador-preview-dynamic-texture",
-      target.TEXTURE_WIDTH,
-      target.scene,
-      true
-    );
-    target.context = target.dynamicTexture.getContext();
-    target.dynamicTexture.wrapR = 1;
-    target.dynamicTexture.wrapU = 1;
-    target.dynamicTexture.wrapV = 1;
+  loadDynamicTexture(
+    luchador: MainLuchador,
+    scene: BABYLON.Scene
+  ): Promise<BABYLON.StandardMaterial> {
+    const self = this;
 
-    target.material = new BABYLON.StandardMaterial(
-      "luchador-preview-material",
-      target.scene
-    );
+    return new Promise<BABYLON.StandardMaterial>(function(resolve, reject) {
+      let dynamicTexture = new BABYLON.DynamicTexture(
+        "luchador-preview-dynamic-texture",
+        TEXTURE_WIDTH,
+        scene,
+        true
+      );
 
-    target.character.material = target.material;
-    target.character.visibility = 1;
+      let context = dynamicTexture.getContext();
+      dynamicTexture.wrapR = 1;
+      dynamicTexture.wrapU = 1;
+      dynamicTexture.wrapV = 1;
 
-    target.material.diffuseTexture = target.dynamicTexture;
-    target.material.specularColor = new BABYLON.Color3(0, 0, 0);
-    target.material.ambientColor = new BABYLON.Color3(0.588, 0.588, 0.588);
+      let material = new BABYLON.StandardMaterial(
+        "luchador-preview-material",
+        scene
+      );
 
-    let images2Load = [
-      this.loadImage("back"),
-      this.loadImage("face"),
-      this.loadImage("wrist"),
-      this.loadImage("ankle"),
-      this.loadImage("feet")
-    ];
+      material.diffuseTexture = dynamicTexture;
+      material.specularColor = new BABYLON.Color3(0, 0, 0);
+      material.ambientColor = new BABYLON.Color3(0.588, 0.588, 0.588);
 
-    this.addImagesFromShapes(target.luchador, images2Load, maskEditorCategories);
+      let images2Load = [
+        self.loadImage("back"),
+        self.loadImage("face"),
+        self.loadImage("wrist"),
+        self.loadImage("ankle"),
+        self.loadImage("feet")
+      ];
 
-    let sequence = forkJoin(images2Load);
+      self.addImagesFromShapes(luchador, images2Load, maskEditorCategories);
 
-    sequence.subscribe((images: Array<HTMLImageElement>) => {
-      console.log("all images loaded", images.map(image => image.name));
+      let sequence = forkJoin(images2Load);
 
-      if (target.luchador) {
-        this.build(target.luchador, images, target.TEXTURE_WIDTH, target.TEXTURE_HEIGHT)
-          .then(canvas => {
-            // target.debug.nativeElement.getContext("2d").drawImage(canvas, 0, 0);
-            target.context.drawImage(canvas, 0, 0);
-            target.dynamicTexture.update();
-          });
-      }
+      sequence.subscribe((images: Array<HTMLImageElement>) => {
+        console.log("all images loaded", images.map(image => image.name));
 
-      target.loadingTexture = false;
-      resolve();
-    });
-  }
+        if (luchador) {
+          self.build(luchador, images, TEXTURE_WIDTH, TEXTURE_HEIGHT).then(
+            canvas => {
+              // target.debug.nativeElement.getContext("2d").drawImage(canvas, 0, 0);
+              context.drawImage(canvas, 0, 0);
+              dynamicTexture.update();
+            }
+          );
+        }
+      });
 
-  loadDynamicLuchadorTexture(target:Luchador3D, luchador : MainLuchador, resolve, reject){
-    if (this.loadingTextures.indexOf(target) != -1)
-    {
-      return;
-    }
-    this.loadingTextures.push(target);
-    let dynamicTexture = new BABYLON.DynamicTexture("luchador-dynamic-texture", 
-    target.TEXTURE_WIDTH, target.getScene(), true);
-    let context = dynamicTexture.getContext();
-    dynamicTexture.wrapR = 1;
-    dynamicTexture.wrapU = 1;
-    dynamicTexture.wrapV = 1;
-
-    let material = new BABYLON.StandardMaterial(
-      "luchador-dynamic-material",
-      target.getScene()
-    );
-
-    material.diffuseTexture = dynamicTexture;
-    material.specularColor = new BABYLON.Color3(0, 0, 0);
-    material.ambientColor = new BABYLON.Color3(0.588, 0.588, 0.588);
-    target.setCharacterMaterial(material);
-
-    
-    let images2Load = [
-      this.loadImage("back"),
-      this.loadImage("face"),
-      this.loadImage("wrist"),
-      this.loadImage("ankle"),
-      this.loadImage("feet")
-    ];
-
-    
-    this.addImagesFromShapes(luchador, images2Load, maskEditorCategories);
-
-    let sequence = forkJoin(images2Load);
-
-    sequence.subscribe((images: Array<HTMLImageElement>) => {
-      console.log("all images loaded", images.map(image => image.name));
-
-      if (luchador) {
-        this.build(luchador, images, target.TEXTURE_WIDTH, target.TEXTURE_HEIGHT)
-          .then(canvas => {
-            // target.debug.nativeElement.getContext("2d").drawImage(canvas, 0, 0);
-            context.drawImage(canvas, 0, 0);
-            dynamicTexture.update();
-          });
-      }
-
-      this.loadingTextures.splice(this.loadingTextures.indexOf(target),1);
-      resolve();
+      resolve(material);
     });
   }
 
@@ -364,7 +318,7 @@ export class TextureBuilder {
             images2Load.push(
               this.loadImageFromFileName(fileName, subcategory.key)
             );
-          } 
+          }
         }
       });
     });
@@ -387,5 +341,4 @@ export class TextureBuilder {
     };
     return result;
   }
-
 }
