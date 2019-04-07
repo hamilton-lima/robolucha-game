@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { Luchador3D } from "../arena/luchador3d";
-import { TextureBuilder } from "../luchador-preview/texture-builder";
+import { TextureBuilder } from "../arena/texture-builder";
 import { Vector3 } from "babylonjs";
 import {
   Luchador,
@@ -46,16 +46,14 @@ export class LuchadorPreviewNewComponent implements OnInit {
     this.engine = new BABYLON.Engine(this.canvas.nativeElement, true);
     this.current = this.createScene();
     this.current.then(() => {
-      console.log("createscene then");
       this.render();      
+
       this.subscription = this.mediator.luchador.subscribe(
         (luchador: MainLuchador) => {
           self.luchador = luchador;
   
           new Promise(function(resolve, reject) {
             self.builder.loadDynamicLuchadorTexture(self.luchador3d, luchador, resolve, reject);
-            console.log("Loading DynTex");
-
             self.loadModel(self, resolve, reject);
           });
         });
