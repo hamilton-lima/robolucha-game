@@ -13,7 +13,7 @@ import { Helper3D } from "../arena/helper3d";
 import { Box3D } from "../arena/box3d";
 import { CONTEXT } from "@angular/core/src/render3/interfaces/view";
 import { MainLuchador } from "../sdk";
-import { TextureBuilder } from "./texture-builder";
+import { TextureBuilder } from "../arena/texture-builder";
 import { MaskEditorMediator } from "../mask-editor/mask-editor.mediator";
 import {
   maskEditorCategories,
@@ -38,8 +38,6 @@ export class LuchadorPreviewComponent implements OnInit, OnDestroy {
   private light: BABYLON.Light;
   private character: BABYLON.AbstractMesh;
 
-  TEXTURE_WIDTH = 512;
-  TEXTURE_HEIGHT = 512;
   material: BABYLON.StandardMaterial;
   dynamicTexture: BABYLON.DynamicTexture;
   context: CanvasRenderingContext2D;
@@ -68,10 +66,11 @@ export class LuchadorPreviewComponent implements OnInit, OnDestroy {
         (luchador: MainLuchador) => {
           self.luchador = luchador;
 
-          // TODO: control active promise
-          new Promise(function(resolve, reject) {
-            self.builder.loadDynamicTexture(self, resolve, reject);
-          });
+          self.builder
+            .loadDynamicTexture(self.luchador, self.scene)
+            .then(material => {
+              self.character.material = material;
+            });
 
           console.log("luchador preview", self.luchador);
         }
@@ -89,7 +88,7 @@ export class LuchadorPreviewComponent implements OnInit, OnDestroy {
     const self = this;
     return new Promise(function(resolve, reject) {
       const lightPosition = new BABYLON.Vector3(0, 10, -10);
-      const cameraPosition = new BABYLON.Vector3(2.5, 2.5, -2.5);
+      const cameraPosition = new BABYLON.Vector3(2.0, 2.0, -2.5);
       self.scene = new BABYLON.Scene(self.engine);
 
       // create a basic light, aiming 0,1,0 - meaning, to the sky
@@ -133,7 +132,18 @@ export class LuchadorPreviewComponent implements OnInit, OnDestroy {
             self.character.position = BABYLON.Vector3.Zero();
             self.character.position.y = -2;
             self.character.rotation.z = 1;
-            self.builder.loadDynamicTexture(self, resolve, reject);
+
+            let material = new BABYLON.StandardMaterial("material", self.scene);
+            material.diffuseColor = BABYLON.Color3.FromHexString("#FAA21D");
+            self.character.material  = material;
+
+            self.builder
+            .loadDynamicTexture(self.luchador, self.scene)
+            .then(material => {
+              self.character.material = material;
+              mesh.visibility = 1;
+              resolve();
+            });
           }
         });
       }
