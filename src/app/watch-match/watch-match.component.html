@@ -1,25 +1,20 @@
-<div class="row">
-  <app-arena
-    [gameDefinition]="gameDefinition"
-    [matchStateSubject]="matchStateSubject"
-    [debug]="false"
-    [currentLuchador]="luchador.id"
-  ></app-arena>
-</div>
+
 
 <div *ngIf="matchState" class="container">
-  <!-- TODO: move arena back here -->
+  <div class="row">
+    <app-arena
+      [gameDefinition]="gameDefinition"
+      [matchStateSubject]="matchStateSubject"
+      [debug]="false"
+      [currentLuchador]="luchador.id"
+    ></app-arena>
+  </div>
 
   <div class="row">
     <h3>{{ matchState.clock }}</h3>
   </div>
 
-  <!-- <div class="row">
-    <div class="col">
-      bullets: {{ matchState | json }}
-    </div>
-  </div> -->
-
+  
   <div class="row">
     <div class="col">
       <div class="row">
@@ -42,4 +37,11 @@
       </div>
     </div>
   </div>
+
+  <div class="row">
+      <div class="col">
+        bullets: {{ matchState | json }}
+      </div>
+  </div>
+
 </div>
