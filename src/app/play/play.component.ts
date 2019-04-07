@@ -21,10 +21,8 @@ export class PlayComponent implements OnInit {
   checkMatch(){
     if (this.shared.getCurrentMatch() == null)
     {
-      console.log("No match");
       return false;
     }
-    console.log("Has match");
     return true;
   }
 }
