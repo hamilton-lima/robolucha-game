@@ -67,7 +67,7 @@ export class LuchadorPreviewComponent implements OnInit, OnDestroy {
           self.luchador = luchador;
 
           self.builder
-            .loadDynamicTexture(self.luchador, self.scene)
+            .loadDynamicTexture(self.luchador.configs, self.scene)
             .then(material => {
               self.character.material = material;
             });

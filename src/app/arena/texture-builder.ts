@@ -7,9 +7,6 @@ import {
   EditorType
 } from "../mask-editor/mask-editor-category.model";
 import { LuchadorConfigService } from "../mask-editor-detail/luchador-config.service";
-import { Luchador3D } from "./luchador3d";
-import { Base3D } from "./base3D";
-import { Luchador } from "../watch-match/watch-match.model";
 
 const TEXTURE_WIDTH = 512;
 const TEXTURE_HEIGHT = 512;
@@ -18,19 +15,16 @@ const TEXTURE_HEIGHT = 512;
   providedIn: "root"
 })
 export class TextureBuilder {
-  constructor(private luchadorConfigs: LuchadorConfigService) {
-    this.loadingTextures = new Array<Base3D>();
-  }
-  private loadingTextures: Array<Base3D>;
+  constructor(private luchadorConfigs: LuchadorConfigService) {}
 
-  build(
-    luchador: MainLuchador,
+  private build(
+    configs: MainConfig [],
     images: Array<HTMLImageElement>,
     width: number,
     height: number
   ): Promise<HTMLCanvasElement> {
     return new Promise<HTMLCanvasElement>((resolve, reject) => {
-      // temporary canvas
+
       var canvas = document.createElement("canvas");
       canvas.width = width;
       canvas.height = height;
@@ -38,32 +32,28 @@ export class TextureBuilder {
       context.imageSmoothingEnabled = true;
 
       // draw skin
-      context.fillStyle = this.getValue(luchador, "skin.color", "#FFFFFF");
+      context.fillStyle = this.getValue(configs, "skin.color", "#FFFFFF");
       context.fillRect(0, 0, width, height);
       context.fill();
 
-      // target.loadImage("back"),
-      // target.loadImage("face"),
-
-      // TODO: change promises to return canvas
       let promises = [];
       promises.push(
-        this.buildLayerFromColor(luchador, images, "feet", "feet.color")
+        this.buildLayerFromColor(configs, images, "feet", "feet.color")
       );
 
       promises.push(
-        this.buildLayerFromColor(luchador, images, "wrist", "wrist.color")
+        this.buildLayerFromColor(configs, images, "wrist", "wrist.color")
       );
 
       promises.push(
-        this.buildLayerFromColor(luchador, images, "ankle", "ankle.color")
+        this.buildLayerFromColor(configs, images, "ankle", "ankle.color")
       );
 
       promises.push(
-        this.buildLayerFromColor(luchador, images, "back", "mask.primary.color")
+        this.buildLayerFromColor(configs, images, "back", "mask.primary.color")
       );
 
-      promises.push(this.buildMask(luchador, images));
+      promises.push(this.buildMask(configs, images));
 
       Promise.all(promises)
         .then(images => {
@@ -78,17 +68,17 @@ export class TextureBuilder {
     });
   }
 
-  readonly maskLayers = { x: 229, y: 65 };
+  private readonly maskLayers = { x: 229, y: 65 };
 
-  buildMask(
-    luchador: MainLuchador,
+  private buildMask(
+    configs: MainConfig [],
     images: Array<HTMLImageElement>
   ): Promise<HTMLCanvasElement> {
     const target = this;
 
     return new Promise<HTMLCanvasElement>(function(resolve, reject) {
       const canvasPromise = target.buildLayerFromColor(
-        luchador,
+        configs,
         images,
         "face",
         "mask.primary.color"
@@ -97,28 +87,28 @@ export class TextureBuilder {
       canvasPromise
         .then(canvas => {
           let maskShape = target.buildLayerFromColor(
-            luchador,
+            configs,
             images,
             "mask.shape",
             "mask.secondary.color"
           );
 
           let topDecoration = target.buildLayerFromColor(
-            luchador,
+            configs,
             images,
             "mask.decoration.top.shape",
             "mask.decoration.top.color"
           );
 
           let bottomDecoration = target.buildLayerFromColor(
-            luchador,
+            configs,
             images,
             "mask.decoration.bottom.shape",
             "mask.decoration.bottom.color"
           );
 
           let eyes = target.buildLayerFromColor(
-            luchador,
+            configs,
             images,
             "eyes.shape",
             "eyes.color"
@@ -160,7 +150,7 @@ export class TextureBuilder {
     });
   }
 
-  image2Canvas(img: HTMLImageElement): Promise<HTMLCanvasElement> {
+  private image2Canvas(img: HTMLImageElement): Promise<HTMLCanvasElement> {
     return new Promise<HTMLCanvasElement>(function(resolve, reject) {
       let canvas = document.createElement("canvas");
       if (img) {
@@ -179,15 +169,15 @@ export class TextureBuilder {
     });
   }
 
-  buildLayerFromColor(
-    luchador: MainLuchador,
+  private buildLayerFromColor(
+    configs: MainConfig [],
     images: Array<HTMLImageElement>,
     imageName: string,
     colorName: string
   ): Promise<HTMLCanvasElement> {
     const target = this;
 
-    let color = target.getValue(luchador, colorName, "#000000");
+    let color = target.getValue(configs, colorName, "#000000");
     const image = images.find(image => {
       return image.name == imageName;
     });
@@ -202,8 +192,8 @@ export class TextureBuilder {
     }
   }
 
-  getValue(luchador: MainLuchador, key: string, defaultValue: string): string {
-    let found = luchador.configs.find((config: MainConfig) => {
+  private getValue(configs: MainConfig [], key: string, defaultValue: string): string {
+    let found = configs.find((config: MainConfig) => {
       return config.key == key;
     });
 
@@ -211,7 +201,7 @@ export class TextureBuilder {
     return result;
   }
 
-  tint(img: HTMLImageElement, color: string): Promise<HTMLCanvasElement> {
+  private tint(img: HTMLImageElement, color: string): Promise<HTMLCanvasElement> {
     return new Promise<HTMLCanvasElement>(function(resolve, reject) {
       let canvas = document.createElement("canvas");
       canvas.width = img.width;
@@ -238,8 +228,8 @@ export class TextureBuilder {
     });
   }
 
-  loadDynamicTexture(
-    luchador: MainLuchador,
+  public loadDynamicTexture(
+    configs: MainConfig [],
     scene: BABYLON.Scene
   ): Promise<BABYLON.StandardMaterial> {
     const self = this;
@@ -274,15 +264,15 @@ export class TextureBuilder {
         self.loadImage("feet")
       ];
 
-      self.addImagesFromShapes(luchador, images2Load, maskEditorCategories);
+      self.addImagesFromShapes(configs, images2Load, maskEditorCategories);
 
       let sequence = forkJoin(images2Load);
 
       sequence.subscribe((images: Array<HTMLImageElement>) => {
         console.log("all images loaded", images.map(image => image.name));
 
-        if (luchador) {
-          self.build(luchador, images, TEXTURE_WIDTH, TEXTURE_HEIGHT).then(
+        if (configs) {
+          self.build(configs, images, TEXTURE_WIDTH, TEXTURE_HEIGHT).then(
             canvas => {
               // target.debug.nativeElement.getContext("2d").drawImage(canvas, 0, 0);
               context.drawImage(canvas, 0, 0);
@@ -297,20 +287,17 @@ export class TextureBuilder {
   }
 
   /** Finds all shape image names and create the Loader for each one */
-  addImagesFromShapes(
-    luchador: MainLuchador,
+  private addImagesFromShapes(
+    configs: MainConfig [],
     images2Load: Array<Subject<HTMLImageElement>>,
     categories: Array<CategoryOptions>
   ) {
-    if (!luchador) {
-      return;
-    }
 
     categories.forEach(category => {
       category.subcategories.forEach(subcategory => {
         if (subcategory.type == EditorType.shape) {
           const fileName = this.luchadorConfigs.getShapeNoDefaultValue(
-            luchador,
+            configs,
             subcategory.key
           );
 
@@ -324,12 +311,12 @@ export class TextureBuilder {
     });
   }
 
-  loadImage(name): Subject<HTMLImageElement> {
+  private loadImage(name): Subject<HTMLImageElement> {
     const fileName = "assets/shapes/" + name + ".png";
     return this.loadImageFromFileName(fileName, name);
   }
 
-  loadImageFromFileName(fileName, name): Subject<HTMLImageElement> {
+  private loadImageFromFileName(fileName, name): Subject<HTMLImageElement> {
     let result = new Subject<HTMLImageElement>();
     let img = new Image();
     img.name = name;
