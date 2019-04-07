@@ -285,6 +285,7 @@ export class ArenaComponent implements OnInit, OnChanges {
         );
 
         loaders.push(newLuchador.loader);
+        this.luchadores[luchador.state.id] = newLuchador;
       }
     });
     return Promise.all(loaders);
