@@ -9,14 +9,24 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { MainLuchador } from './mainLuchador';
 
 
 export interface MainMatch {
+    arenaHeight?: number;
+    arenaWidth?: number;
+    buletSpeed?: number;
+    bulletSize?: number;
     createdAt?: string;
     deletedAt?: string;
     duration?: number;
+    fps?: number;
     id?: number;
     lastTimeAlive?: string;
+    luchadorSize?: number;
+    maxParticipants?: number;
+    minParticipants?: number;
+    participants?: Array<MainLuchador>;
     timeEnd?: string;
     timeStart?: string;
     updatedAt?: string;

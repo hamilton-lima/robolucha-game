@@ -12,10 +12,6 @@
 
 
 export interface MainMatchParticipant {
-    createdAt?: string;
-    deletedAt?: string;
-    id?: number;
     luchadorID?: number;
     matchID?: number;
-    updatedAt?: string;
 }
