@@ -19,7 +19,7 @@ import { Single3D } from './single3D';
 import { Random3D } from './random3D';
 import { Square3D } from './square3D';
 import { SceneBuilder } from './scene.builder3D';
-import { TextureBuilder } from '../luchador-preview/texture-builder';
+import { TextureBuilder } from './texture-builder';
 import { ActivatedRoute } from '@angular/router';
 
 class SavedCamera {
@@ -55,8 +55,6 @@ export class ArenaComponent implements OnInit, OnChanges {
   private HALF_LUCHADOR: number;
   private HALF_BULLET: number;
   scene3D: Scene3D; //can remove?
-
-
 
   private currentLuchadorData : MainLuchador;
 
@@ -279,6 +277,7 @@ export class ArenaComponent implements OnInit, OnChanges {
         
         const newLuchador = new Luchador3D(
           luchador,
+          this.builder,
           this.scene,
           position,
           vehicleRotation,
@@ -286,13 +285,6 @@ export class ArenaComponent implements OnInit, OnChanges {
         );
 
         loaders.push(newLuchador.loader);
-        
-        // this.builder.loadDynamicLuchadorTexture(newLuchador)
-        this.luchadores[luchador.state.id] = newLuchador;
-        if (newLuchador == this.luchadores[this.currentLuchador])
-        {
-          this.builder.loadDynamicLuchadorTexture(this.luchadores[this.currentLuchador], this.currentLuchadorData, ()=>{}, ()=>{});
-        }
       }
     });
     return Promise.all(loaders);

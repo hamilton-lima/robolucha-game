@@ -3,6 +3,7 @@ import * as BABYLON from "babylonjs";
 import { Luchador } from "../watch-match/watch-match.model";
 import { Base3D } from "./base3D";
 import { MeshLoader } from "./mesh.loader";
+import { TextureBuilder } from "./texture-builder";
 
 export class Luchador3D extends Base3D {
   getName(): string {
@@ -19,13 +20,14 @@ export class Luchador3D extends Base3D {
   public loader: Promise<any>;
   constructor(
     luchador: Luchador,
+    builder: TextureBuilder,
     scene: BABYLON.Scene,
     position: BABYLON.Vector3,
     vehicleRotationY: number,
     gunRotationY: number
   ) {
     super();
-    
+
     this.scene = scene;
     this.luchador = luchador;
 
@@ -60,9 +62,6 @@ export class Luchador3D extends Base3D {
     charLoader.then(mesh => {
       mesh.parent = self.turret;
       self.character = mesh;
-      if(self.setCharacterMaterial)
-        self.character.material = self.charMaterial; //Is this too much gambiarra?
-
       self.character.id = self.getName() + ".character";
     })
 
