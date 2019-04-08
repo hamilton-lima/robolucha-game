@@ -7,34 +7,14 @@ export interface LuchadorState {
   angle: number;
   gunAngle: number;
   fireCoolDown: number;
-  headColor: string;
-  bodyColor: string;
   k: number;
   d: number;
   score: number;
 }
 
-export interface Mask {
-  background: string;
-  backgroundColor: string;
-  background2: string;
-  background2Color: string;
-  ornamentTop: string;
-  ornamentTopColor: string;
-  ornamentBottom: string;
-  ornamentBottomColor: string;
-  face: string;
-  faceColor: string;
-  mouth: string;
-  mouthColor: string;
-  eye: string;
-  eyeColor: string;
-}
-
 export interface Luchador {
   state: LuchadorState;
   name: string;
-  mask: Mask;
 }
 
 export interface Bullet {

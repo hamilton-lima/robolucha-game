@@ -13,8 +13,6 @@ export default {
         angle: 0,
         gunAngle: 0,
         fireCoolDown: 0,
-        headColor: "#61786C",
-        bodyColor: "#8AAB9B",
         k: 0,
         d: 0,
         score: 0
@@ -47,8 +45,6 @@ export default {
         angle: 270,
         gunAngle: 0,
         fireCoolDown: 0,
-        headColor: "#61786C",
-        bodyColor: "#8AAB9B",
         k: 0,
         d: 0,
         score: 0
@@ -81,8 +77,6 @@ export default {
         angle: 180,
         gunAngle: 0,
         fireCoolDown: 0,
-        headColor: "#61786C",
-        bodyColor: "#8AAB9B",
         k: 0,
         d: 0,
         score: 0
@@ -115,8 +109,6 @@ export default {
         angle: 90,
         gunAngle: 0,
         fireCoolDown: 0,
-        headColor: "#61786C",
-        bodyColor: "#8AAB9B",
         k: 0,
         d: 0,
         score: 0
