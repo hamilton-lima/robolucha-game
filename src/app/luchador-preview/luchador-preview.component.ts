@@ -1,26 +1,8 @@
 import { Component, OnInit, ViewChild, Input, OnDestroy } from "@angular/core";
-import {
-  GameDefinition,
-  MatchState,
-  Bullet,
-  Luchador
-} from "../watch-match/watch-match.model";
-import { Subject, concat, forkJoin, BehaviorSubject, Subscription } from "rxjs";
-import { Luchador3D } from "../arena/luchador3d";
-import { Bullet3D } from "../arena/bullet3d";
-import { Scene3D } from "../arena/scene3d";
-import { Helper3D } from "../arena/helper3d";
-import { Box3D } from "../arena/box3d";
-import { CONTEXT } from "@angular/core/src/render3/interfaces/view";
-import { MainLuchador } from "../sdk";
+import { BehaviorSubject, Subscription } from "rxjs";
+import { MainLuchador, MainConfig } from "../sdk";
 import { TextureBuilder } from "../arena/texture-builder";
 import { MaskEditorMediator } from "../mask-editor/mask-editor.mediator";
-import {
-  maskEditorCategories,
-  CategoryOptions,
-  EditorType
-} from "../mask-editor/mask-editor-category.model";
-import { LuchadorConfigService } from "../mask-editor-detail/luchador-config.service";
 
 @Component({
   selector: "app-luchador-preview",
@@ -49,33 +31,27 @@ export class LuchadorPreviewComponent implements OnInit, OnDestroy {
 
   constructor(
     private builder: TextureBuilder,
-    private mediator: MaskEditorMediator,
-    private luchadorConfigs: LuchadorConfigService
+    private mediator: MaskEditorMediator
   ) {}
 
   ngOnInit() {
     const self = this;
-
     this.engine = new BABYLON.Engine(this.canvas.nativeElement, true);
-    // TODO: control active promise
-    this.current = this.createScene();
-    this.current.then(() => {
-      this.render();
-
-      this.subscription = this.mediator.luchador.subscribe(
-        (luchador: MainLuchador) => {
-          self.luchador = luchador;
-
+    this.subscription = this.mediator.configs.subscribe(
+      (configs: MainConfig[]) => {
+        if (self.character) {
           self.builder
-            .loadDynamicTexture(self.luchador.configs, self.scene)
+            .loadDynamicTexture(configs, self.scene)
             .then(material => {
               self.character.material = material;
             });
-
-          console.log("luchador preview", self.luchador);
+        } else {
+          this.current = this.createScene(configs).then(() => {
+            this.render();
+          });
         }
-      );
-    });
+      }
+    );
   }
 
   ngOnDestroy(): void {
@@ -84,7 +60,7 @@ export class LuchadorPreviewComponent implements OnInit, OnDestroy {
     }
   }
 
-  createScene(): Promise<void> {
+  createScene(configs: MainConfig[]): Promise<void> {
     const self = this;
     return new Promise(function(resolve, reject) {
       const lightPosition = new BABYLON.Vector3(0, 10, -10);
@@ -111,17 +87,17 @@ export class LuchadorPreviewComponent implements OnInit, OnDestroy {
       self.camera.setTarget(BABYLON.Vector3.Zero());
       // // attach the camera to the canvas
       self.camera.attachControl(self.canvas.nativeElement, false);
-      self.loadModel(self, resolve, reject);
+      self.loadModel(self, configs, resolve);
     });
   }
 
-  loadModel(self, resolve, reject) {
+  loadModel(self, configs: MainConfig[], resolve) {
     BABYLON.SceneLoader.ImportMesh(
       "",
       "assets/",
       "robolucha_char03.babylon",
       self.scene,
-      function(newMeshes, particleSystems) {
+      function(newMeshes) {
         console.log("[Luchador Preview] imported meshes luchador", newMeshes);
 
         newMeshes.forEach(mesh => {
@@ -135,15 +111,15 @@ export class LuchadorPreviewComponent implements OnInit, OnDestroy {
 
             let material = new BABYLON.StandardMaterial("material", self.scene);
             material.diffuseColor = BABYLON.Color3.FromHexString("#FAA21D");
-            self.character.material  = material;
+            self.character.material = material;
 
             self.builder
-            .loadDynamicTexture(self.luchador, self.scene)
-            .then(material => {
-              self.character.material = material;
-              mesh.visibility = 1;
-              resolve();
-            });
+              .loadDynamicTexture(configs, self.scene)
+              .then(material => {
+                self.character.material = material;
+                mesh.visibility = 1;
+                resolve();
+              });
           }
         });
       }
@@ -155,7 +131,7 @@ export class LuchadorPreviewComponent implements OnInit, OnDestroy {
       this.scene.render();
       if (this.character && this.rotate) {
         this.character.rotation.z += -0.03;
-        console.log("rotarion ", this.character.rotation.z);
+        console.log("rotation ", this.character.rotation.z);
       }
     });
   }

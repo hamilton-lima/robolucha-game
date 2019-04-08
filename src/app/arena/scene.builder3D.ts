@@ -1,7 +1,4 @@
 import * as BABYLON from 'babylonjs';
-import { Luchador3D } from './luchador3d';
-import { MainLoginRequest, MainLuchador } from '../sdk';
-import { Observable, interval, Subject } from 'rxjs';
 import { Single3D } from './single3D';
 import { Square3D } from './square3D';
 import { Random3D } from './random3D';

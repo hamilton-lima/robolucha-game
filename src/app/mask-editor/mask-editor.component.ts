@@ -28,34 +28,36 @@ export class MaskEditorComponent implements OnInit {
 
   ngOnInit() {
     const data = this.route.snapshot.data;
-    this.refreshEditor(data.luchador);
+    console.log('configs on maskeditor', data.luchador.configs);
+    this.refreshEditor(data.luchador.configs);
     this.luchador = data.luchador;
   }
 
-  refreshEditor(luchador) {
-    console.log("refresh luchador", luchador);
-    this.mediator.luchador.next(luchador);
+  refreshEditor(configs: MainConfig[]) {
+    console.log("refresh luchador", configs);
+    this.mediator.configs.next(configs);
     this.dirty = false;
   }
 
   save() {
-    let luchador = this.mediator.luchador.value;
-    if( luchador ){
-      const remoteCall = this.api.privateLuchadorPut(luchador);
+    let configs = this.mediator.configs.value;
+    if( configs.length > 0 ){
+      this.luchador.configs = configs;
+      const remoteCall = this.api.privateLuchadorPut(this.luchador);
 
       remoteCall.subscribe(luchador => {
         this.successMessage = "Luchador updated";
         setTimeout(() => (this.successMessage = null), HIDE_SUCCESS_TIMEOUT);
   
-        this.refreshEditor(luchador);
+        this.refreshEditor(luchador.configs);
         this.cdRef.detectChanges();
       });
     }
   }
 
-  onUpdate(luchador: MainLuchador) {
+  onUpdate(configs: MainConfig []) {
     this.dirty = true;
-    console.log("update on luchador", luchador );
-    this.mediator.luchador.next(luchador);
+    console.log("update on luchador", configs );
+    this.mediator.configs.next(configs);
   }
 }
