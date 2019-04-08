@@ -1,11 +1,18 @@
 <app-header></app-header>
 
-<!-- Inverter dependendo do checkMatch -->
-<div *ngIf="checkMatch();else match_list">
-    <app-watch-match></app-watch-match>
-</div>
-<ng-template #match_list>
-    <div > 
-        <app-list-matches></app-list-matches>
+<div class="container">
+  <!-- Inverter dependendo do checkMatch -->
+  <div class="row" *ngIf="checkMatch(); else match_list">
+    <div class="col-10">
+      <app-watch-match></app-watch-match>
     </div>
-</ng-template>
+  </div>
+
+  <ng-template #match_list>
+    <div class="row">
+      <div class="col-10">
+        <app-list-matches></app-list-matches>
+      </div>
+    </div>
+  </ng-template>
+</div>

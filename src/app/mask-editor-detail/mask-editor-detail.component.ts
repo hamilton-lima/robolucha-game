@@ -29,20 +29,18 @@ export class MaskEditorDetailComponent implements OnInit, OnDestroy {
   current = this.categories[0].id;
   
   type = EditorType;
-  luchador: MainLuchador;
+  configs: MainConfig[];
   subscription: Subscription;
 
   constructor(
-    private nmsColor: NMSColor,
-    private shapeConfig: ShapeConfig,
     private mediator: MaskEditorMediator,
     private luchadorConfigs: LuchadorConfigService
   ) {}
 
   ngOnInit() {
-    console.log("mask editor detail luchador", this.luchador);
-    this.subscription = this.mediator.luchador.subscribe(luchador => {
-      this.luchador = luchador;
+    console.log("mask editor detail luchador", this.configs);
+    this.subscription = this.mediator.configs.subscribe(configs => {
+      this.configs = configs;
     });
   }
 
@@ -62,35 +60,35 @@ export class MaskEditorDetailComponent implements OnInit, OnDestroy {
   }
 
   update(key: string, value: string) {
-    let found = this.luchador.configs.find((config: MainConfig) => {
+    let found = this.configs.find((config: MainConfig) => {
       return config.key == key;
     });
 
     if (found) {
       found.value = value;
     } else {
-      this.luchador.configs.push(<MainConfig>{
+      this.configs.push(<MainConfig>{
         key: key,
         value: value
       });
     }
 
-    this.onChange.next(this.luchador);
+    this.onChange.next(this.configs);
   }
 
   getShapeName(key) {
-    return this.luchadorConfigs.getShapeName(this.luchador, key);
+    return this.luchadorConfigs.getShapeName(this.configs, key);
   }
 
   getColor(key) {
-    return this.luchadorConfigs.getColor(this.luchador, key);
+    return this.luchadorConfigs.getColor(this.configs, key);
   }
 
   getShape(key) {
-    return this.luchadorConfigs.getShape(this.luchador, key);
+    return this.luchadorConfigs.getShape(this.configs, key);
   }
 
   getColorLabel(key) {
-    return this.luchadorConfigs.getColorLabel(this.luchador, key);
+    return this.luchadorConfigs.getColorLabel(this.configs, key);
   }
 }

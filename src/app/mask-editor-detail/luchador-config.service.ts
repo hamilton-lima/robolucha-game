@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { MainConfig, MainLuchador } from "../sdk";
+import { MainConfig } from "../sdk";
 import { NMSColor } from "../color-picker/nmscolor";
 import { ShapeConfig } from "../shape-picker/shape-config";
 
@@ -9,8 +9,8 @@ import { ShapeConfig } from "../shape-picker/shape-config";
 export class LuchadorConfigService {
   constructor(private nmsColor: NMSColor, private shapeConfig: ShapeConfig) {}
 
-  getColor(luchador: MainLuchador, key: string) {
-    let found = luchador.configs.find((config: MainConfig) => {
+  getColor(configs: MainConfig [], key: string) {
+    let found = configs.find((config: MainConfig) => {
       return config.key == key;
     });
 
@@ -18,16 +18,16 @@ export class LuchadorConfigService {
     return result;
   }
 
-  getColorLabel(luchador: MainLuchador, key: string) {
-    const color = this.getColor(luchador, key);
+  getColorLabel(configs: MainConfig [], key: string) {
+    const color = this.getColor(configs, key);
     return this.nmsColor.getColorName(color) + " (" + color + ")";
   }
 
   readonly EMPTY =
     "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
 
-  getShape(luchador: MainLuchador, key: string) {
-    let found = luchador.configs.find((config: MainConfig) => {
+  getShape(configs: MainConfig [], key: string) {
+    let found = configs.find((config: MainConfig) => {
       return config.key == key;
     });
 
@@ -35,8 +35,8 @@ export class LuchadorConfigService {
     return result;
   }
 
-  getShapeNoDefaultValue(luchador: MainLuchador, key: string) {
-    let found = luchador.configs.find((config: MainConfig) => {
+  getShapeNoDefaultValue(configs: MainConfig [], key: string) {
+    let found = configs.find((config: MainConfig) => {
       return config.key == key;
     });
 
@@ -44,8 +44,8 @@ export class LuchadorConfigService {
     return result;
   }
 
-  getShapeName(luchador: MainLuchador, key: string) {
-    let found = luchador.configs.find((config: MainConfig) => {
+  getShapeName(configs: MainConfig [], key: string) {
+    let found = configs.find((config: MainConfig) => {
       return config.key == key;
     });
 

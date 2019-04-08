@@ -18,6 +18,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs/Observable';
 
+import { MainConfig } from '../model/mainConfig';
 import { MainJoinMatch } from '../model/mainJoinMatch';
 import { MainLoginRequest } from '../model/mainLoginRequest';
 import { MainLoginResponse } from '../model/mainLoginResponse';
@@ -114,6 +115,57 @@ export class DefaultService {
     }
 
     /**
+     * Create Gamecomponent as Luchador
+     * 
+     * @param request Luchador
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public internalGameComponentPost(request: MainLuchador, observe?: 'body', reportProgress?: boolean): Observable<MainLuchador>;
+    public internalGameComponentPost(request: MainLuchador, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<MainLuchador>>;
+    public internalGameComponentPost(request: MainLuchador, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<MainLuchador>>;
+    public internalGameComponentPost(request: MainLuchador, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (request === null || request === undefined) {
+            throw new Error('Required parameter request was null or undefined when calling internalGameComponentPost.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (ApiKeyAuth) required
+        if (this.configuration.apiKeys["Authorization"]) {
+            headers = headers.set('Authorization', this.configuration.apiKeys["Authorization"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        let httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set("Accept", httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json'
+        ];
+        let httpContentTypeSelected:string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set("Content-Type", httpContentTypeSelected);
+        }
+
+        return this.httpClient.post<MainLuchador>(`${this.basePath}/internal/game-component`,
+            request,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * find Luchador by ID
      * 
      * @param luchadorID int valid
@@ -163,7 +215,7 @@ export class DefaultService {
     }
 
     /**
-     * adds match participant
+     * Adds luchador to a match
      * 
      * @param request MatchParticipant
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -265,7 +317,47 @@ export class DefaultService {
     }
 
     /**
-     * join match
+     * returns application health check information
+     * 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public internalReadyGet(observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public internalReadyGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public internalReadyGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public internalReadyGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // authentication (ApiKeyAuth) required
+        if (this.configuration.apiKeys["Authorization"]) {
+            headers = headers.set('Authorization', this.configuration.apiKeys["Authorization"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+        ];
+        let httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set("Accept", httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+        ];
+
+        return this.httpClient.get<any>(`${this.basePath}/internal/ready`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Sends message with the request to join the match
      * 
      * @param request JoinMatch
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -400,6 +492,101 @@ export class DefaultService {
         return this.httpClient.put<MainLuchador>(`${this.basePath}/private/luchador`,
             request,
             {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * find maskConfig for a luchador
+     * 
+     * @param id Luchador ID
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public privateMaskConfigIdGet(id: number, observe?: 'body', reportProgress?: boolean): Observable<Array<MainConfig>>;
+    public privateMaskConfigIdGet(id: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<MainConfig>>>;
+    public privateMaskConfigIdGet(id: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<MainConfig>>>;
+    public privateMaskConfigIdGet(id: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling privateMaskConfigIdGet.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (ApiKeyAuth) required
+        if (this.configuration.apiKeys["Authorization"]) {
+            headers = headers.set('Authorization', this.configuration.apiKeys["Authorization"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        let httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set("Accept", httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json'
+        ];
+
+        return this.httpClient.get<Array<MainConfig>>(`${this.basePath}/private/mask-config/${encodeURIComponent(String(id))}`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * return luchador configs for current match
+     * 
+     * @param matchID int valid
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public privateMatchConfigGet(matchID?: number, observe?: 'body', reportProgress?: boolean): Observable<Array<MainLuchador>>;
+    public privateMatchConfigGet(matchID?: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<MainLuchador>>>;
+    public privateMatchConfigGet(matchID?: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<MainLuchador>>>;
+    public privateMatchConfigGet(matchID?: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (matchID !== undefined) {
+            queryParameters = queryParameters.set('matchID', <any>matchID);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (ApiKeyAuth) required
+        if (this.configuration.apiKeys["Authorization"]) {
+            headers = headers.set('Authorization', this.configuration.apiKeys["Authorization"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        let httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set("Accept", httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json'
+        ];
+
+        return this.httpClient.get<Array<MainLuchador>>(`${this.basePath}/private/match-config`,
+            {
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
