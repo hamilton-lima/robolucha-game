@@ -13,7 +13,7 @@ export class Luchador3D extends Base3D {
     id: number,
     name: string,
     scene: BABYLON.Scene,
-    material: BABYLON.StandardMaterial,
+    material: Promise<BABYLON.StandardMaterial>,
     position: BABYLON.Vector3,
     vehicleRotationY: number,
     gunRotationY: number
@@ -64,8 +64,8 @@ export class Luchador3D extends Base3D {
     charLoader.then(mesh => {
       mesh.parent = self.turret;
       self.character = mesh;
-      self.character.material = material;
       self.character.id = self.getName() + ".character";
+      material.then( result => self.character.material = result );
     });
 
     baseLoader.then(mesh => {

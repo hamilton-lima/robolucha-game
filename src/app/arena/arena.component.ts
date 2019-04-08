@@ -43,8 +43,8 @@ export class ArenaComponent implements OnInit, OnChanges {
   private engine: BABYLON.Engine;
   private scene: BABYLON.Scene;
   private camera: BABYLON.FreeCamera;
-  private light: BABYLON.HemisphericLight
-  
+  private light: BABYLON.HemisphericLight;
+
   private luchadores: Array<Luchador3D>;
   private bullets: Array<Bullet3D>;
 
@@ -85,11 +85,13 @@ export class ArenaComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     if (!this.currentLuchador) {
-      console.error('currentLuchador missing');
+      console.error("currentLuchador missing");
       return;
     }
 
-    this.HALF_LUCHADOR = this.convertPosition(this.gameDefinition.luchadorSize / 2);
+    this.HALF_LUCHADOR = this.convertPosition(
+      this.gameDefinition.luchadorSize / 2
+    );
     this.HALF_BULLET = this.convertPosition(this.gameDefinition.bulletSize / 2);
     this.engine = new BABYLON.Engine(this.canvas.nativeElement, true);
 
@@ -147,23 +149,20 @@ export class ArenaComponent implements OnInit, OnChanges {
 
     const lightPosition = new BABYLON.Vector3(10, 10, -15);
     this.light = new BABYLON.HemisphericLight(
-      'light1',
+      "light1",
       lightPosition,
       this.scene
     );
 
     const builder = new SceneBuilder(this.scene, this.gameDefinition);
-    Promise.all([
-      this.updateLuchadores(),
-      builder.build()])
-      .then(() => {
-        console.log("finished loading");
-        this.engine.hideLoadingUI();
-        this.render();
-      });
+    Promise.all([this.updateLuchadores(), builder.build()]).then(() => {
+      console.log("finished loading");
+      this.engine.hideLoadingUI();
+      this.render();
+    });
 
     this.camera = new BABYLON.FreeCamera(
-      'camera1',
+      "camera1",
       this.CAMERA_POSITION,
       this.scene
     );
@@ -266,43 +265,42 @@ export class ArenaComponent implements OnInit, OnChanges {
         const vehicleRotation = Helper3D.angle2radian(luchador.state.angle);
         const gunRotation = Helper3D.angle2radian(luchador.state.gunAngle);
 
-        // read the mask config from API
-        this.api.privateMaskConfigIdGet(luchador.state.id).subscribe( configs =>{
-          console.log('mask config loaded', luchador.state.id, configs);
+        // create new luchador3D
+        const newLuchador = new Luchador3D(
+          luchador.state.id,
+          luchador.state.name,
+          this.scene,
+          this.loadMask(luchador.state.id),
+          position,
+          vehicleRotation,
+          gunRotation
+        );
 
-          // build the material using dynamic texture 
-          let loader = this.builder.loadDynamicTexture(configs, this.scene).then( material =>{
-            console.log('dynamic texture loaded loaded', luchador.state.id, material );
-            
-            // create new luchador3D
-            const newLuchador = new Luchador3D(
-              luchador.state.id, 
-              luchador.state.name,
-              this.scene,
-              material,
-              position,
-              vehicleRotation,
-              gunRotation
-            );
+        // save the new luchador3D
+        this.luchadores[luchador.state.id] = newLuchador;
 
-            // save the new luchador3D
-            this.luchadores[luchador.state.id] = newLuchador;
-            
-            // return luchador3D promise to load all components
-            return newLuchador.loader.then( value => {
-              console.log('luchador loaded finished', value );
-            });
-          });
-
-          // add luchador3D loaders to the list of loaders
-          loaders.push(loader);
-        });
-
+        // add luchador3D loaders to the list of loaders
+        loaders.push(newLuchador.loader);
       }
     });
-    
+
     // combine all loaders in a single promise
     return Promise.all(loaders);
+  }
+
+  loadMask(id: number): Promise<BABYLON.StandardMaterial> {
+    return new Promise<BABYLON.StandardMaterial>((resolve, reject) => {
+      // read the mask from the API
+      this.api.privateMaskConfigIdGet(id).subscribe(configs => {
+        console.log("mask config loaded", id, configs);
+
+        // build the material using dynamic texture
+        this.builder.loadDynamicTexture(configs, this.scene).then(material => {
+          console.log("dynamic texture loaded loaded", id, material);
+          resolve(material);
+        });
+      });
+    });
   }
 
   readonly LUCHADOR_DEFAULT_Y = 0.0;
