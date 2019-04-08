@@ -1,26 +1,26 @@
-import { Component, OnInit, ViewChild, Input, OnChanges, SimpleChanges } from '@angular/core';
-import * as BABYLON from 'babylonjs';
-import { Luchador3D } from './luchador3d';
-import { MainLoginRequest, MainLuchador } from '../sdk';
-import { Observable, interval, Subject } from 'rxjs';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  Input,
+  OnChanges,
+  SimpleChanges
+} from "@angular/core";
+import * as BABYLON from "babylonjs";
+import { Luchador3D } from "./luchador3d";
+import { DefaultService } from "../sdk";
+import { Subject } from "rxjs";
 import {
   GameDefinition,
   MatchState,
   Luchador,
   Bullet
-} from '../watch-match/watch-match.model';
-import { Box3D } from './box3d';
-import { Bullet3D } from './bullet3d';
-import { Helper3D } from './helper3d';
-import { Scene3D } from './scene3d';
-import { GroundTile3D } from './ground-tile3D';
-import { Wall3D } from './wall3D';
-import { Single3D } from './single3D';
-import { Random3D } from './random3D';
-import { Square3D } from './square3D';
-import { SceneBuilder } from './scene.builder3D';
-import { TextureBuilder } from './texture-builder';
-import { ActivatedRoute } from '@angular/router';
+} from "../watch-match/watch-match.model";
+import { Bullet3D } from "./bullet3d";
+import { Helper3D } from "./helper3d";
+import { SceneBuilder } from "./scene.builder3D";
+import { TextureBuilder } from "./texture-builder";
+import { ActivatedRoute } from "@angular/router";
 
 class SavedCamera {
   target: BABYLON.Vector3;
@@ -28,13 +28,12 @@ class SavedCamera {
 }
 
 @Component({
-  selector: 'app-arena',
-  templateUrl: './arena.component.html',
-  styleUrls: ['./arena.component.css']
+  selector: "app-arena",
+  templateUrl: "./arena.component.html",
+  styleUrls: ["./arena.component.css"]
 })
 export class ArenaComponent implements OnInit, OnChanges {
-
-  @ViewChild('game') canvas;
+  @ViewChild("game") canvas;
   @Input() gameDefinition: GameDefinition;
   @Input() matchStateSubject: Subject<MatchState>;
   @Input() debug = false;
@@ -44,8 +43,8 @@ export class ArenaComponent implements OnInit, OnChanges {
   private engine: BABYLON.Engine;
   private scene: BABYLON.Scene;
   private camera: BABYLON.FreeCamera;
-  private light: BABYLON.Light;
-
+  private light: BABYLON.HemisphericLight
+  
   private luchadores: Array<Luchador3D>;
   private bullets: Array<Bullet3D>;
 
@@ -54,9 +53,6 @@ export class ArenaComponent implements OnInit, OnChanges {
 
   private HALF_LUCHADOR: number;
   private HALF_BULLET: number;
-  scene3D: Scene3D; //can remove?
-
-  private currentLuchadorData : MainLuchador;
 
   readonly CAMERA_POSITION = new BABYLON.Vector3(0, 28, -20);
   readonly ROBOLUCHA_SAVED_CAMERA = "robolucha-saved-camera";
@@ -64,8 +60,7 @@ export class ArenaComponent implements OnInit, OnChanges {
   cameraZoomLevel = 0;
   cameraZoomLevels = [-5, 20];
 
-  constructor(private builder: TextureBuilder, 
-    private route: ActivatedRoute) {
+  constructor(private builder: TextureBuilder, private api: DefaultService) {
     this.currentMatchState = {
       events: [],
       bullets: [],
@@ -93,15 +88,9 @@ export class ArenaComponent implements OnInit, OnChanges {
       console.error('currentLuchador missing');
       return;
     }
-    const data = this.route.snapshot.data;
-    this.currentLuchadorData = data.luchador;
 
-    this.HALF_LUCHADOR = this.convertPosition(
-      this.gameDefinition.luchadorSize / 2
-    );
-
+    this.HALF_LUCHADOR = this.convertPosition(this.gameDefinition.luchadorSize / 2);
     this.HALF_BULLET = this.convertPosition(this.gameDefinition.bulletSize / 2);
-
     this.engine = new BABYLON.Engine(this.canvas.nativeElement, true);
 
     this.matchStateSubject.subscribe((matchState: MatchState) => {
@@ -109,7 +98,6 @@ export class ArenaComponent implements OnInit, OnChanges {
     });
 
     this.createScene();
-    
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -128,12 +116,16 @@ export class ArenaComponent implements OnInit, OnChanges {
       this.camera.position.set(
         cameraState.position.x,
         cameraState.position.y,
-        cameraState.position.z);
+        cameraState.position.z
+      );
 
-      this.camera.setTarget(new BABYLON.Vector3(
-        cameraState.target.x,
-        cameraState.target.y,
-        cameraState.target.z));
+      this.camera.setTarget(
+        new BABYLON.Vector3(
+          cameraState.target.x,
+          cameraState.target.y,
+          cameraState.target.z
+        )
+      );
     }
   }
 
@@ -186,7 +178,6 @@ export class ArenaComponent implements OnInit, OnChanges {
     if (this.debug) {
       Helper3D.showAxis(this.scene, 5);
     }
-
   }
 
   render(): void {
@@ -243,7 +234,7 @@ export class ArenaComponent implements OnInit, OnChanges {
       if (current) {
         // found update the state
         const bullet3D = this.bullets[bullet.id];
-        this.updateBullet(bullet3D, current, bullet);
+        this.updateBullet(bullet3D, bullet);
       } else {
         // not found add to the scene
         const position = this.calculateBulletPosition(bullet);
@@ -266,28 +257,51 @@ export class ArenaComponent implements OnInit, OnChanges {
         // found update the state
         const luchador3D = this.luchadores[luchador.state.id];
 
-        this.update(luchador3D, currentState, luchador);
-        this.vehicleRotation(luchador3D, currentState, luchador);
-        this.gunRotation(luchador3D, currentState, luchador);
+        this.update(luchador3D, luchador);
+        this.vehicleRotation(luchador3D, luchador);
+        this.gunRotation(luchador3D, luchador);
       } else {
         // not found add to the scene
         const position = this.calculatePosition(luchador);
         const vehicleRotation = Helper3D.angle2radian(luchador.state.angle);
         const gunRotation = Helper3D.angle2radian(luchador.state.gunAngle);
-        
-        const newLuchador = new Luchador3D(
-          luchador,
-          this.builder,
-          this.scene,
-          position,
-          vehicleRotation,
-          gunRotation
-        );
 
-        loaders.push(newLuchador.loader);
-        this.luchadores[luchador.state.id] = newLuchador;
+        // read the mask config from API
+        this.api.privateMaskConfigIdGet(luchador.state.id).subscribe( configs =>{
+          console.log('mask config loaded', luchador.state.id, configs);
+
+          // build the material using dynamic texture 
+          let loader = this.builder.loadDynamicTexture(configs, this.scene).then( material =>{
+            console.log('dynamic texture loaded loaded', luchador.state.id, material );
+            
+            // create new luchador3D
+            const newLuchador = new Luchador3D(
+              luchador.state.id, 
+              luchador.state.name,
+              this.scene,
+              material,
+              position,
+              vehicleRotation,
+              gunRotation
+            );
+
+            // save the new luchador3D
+            this.luchadores[luchador.state.id] = newLuchador;
+            
+            // return luchador3D promise to load all components
+            return newLuchador.loader.then( value => {
+              console.log('luchador loaded finished', value );
+            });
+          });
+
+          // add luchador3D loaders to the list of loaders
+          loaders.push(loader);
+        });
+
       }
     });
+    
+    // combine all loaders in a single promise
     return Promise.all(loaders);
   }
 
@@ -327,19 +341,19 @@ export class ArenaComponent implements OnInit, OnChanges {
     });
   }
 
-  update(luchador3D: Luchador3D, current: Luchador, next: Luchador) {
+  update(luchador3D: Luchador3D, next: Luchador) {
     const x = this.convertPosition(next.state.x) + this.HALF_LUCHADOR;
     const z = this.convertPosition(next.state.y) + this.HALF_LUCHADOR;
     luchador3D.moveTo(x, z);
   }
 
-  updateBullet(bullet3D: Bullet3D, current: Bullet, next: Bullet) {
+  updateBullet(bullet3D: Bullet3D, next: Bullet) {
     const x = this.convertPosition(next.x) + this.HALF_BULLET;
     const z = this.convertPosition(next.y) + this.HALF_BULLET;
     bullet3D.moveTo(x, z);
   }
 
-  vehicleRotation(luchador3D: Luchador3D, current: Luchador, next: Luchador) {
+  vehicleRotation(luchador3D: Luchador3D, next: Luchador) {
     let value = next.state.angle;
     value = this.fixAngle(value);
     // * -1 to revert the direction so it matches the cartesian plane
@@ -347,7 +361,7 @@ export class ArenaComponent implements OnInit, OnChanges {
     luchador3D.rotateVehicle(value);
   }
 
-  gunRotation(luchador3D: Luchador3D, current: Luchador, next: Luchador): any {
+  gunRotation(luchador3D: Luchador3D, next: Luchador): any {
     let value = next.state.gunAngle;
     value = this.fixAngle(value);
     // * -1 to revert the direction so it matches the cartesian plane
