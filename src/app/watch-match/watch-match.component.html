@@ -10,9 +10,9 @@
     ></app-arena>
   </div>
 
-  <div class="row">
+  <!-- <div class="row">
     <h3>{{ matchState.clock }}</h3>
-  </div>
+  </div> -->
 
   
   <div class="row">
@@ -21,27 +21,31 @@
         <table class="table">
           <thead>
             <tr>
-              <th scope="col">id</th>
-              <th scope="col">Luchador name</th>
-              <th scope="col">JSON</th>
+              <!-- <th scope="col">id</th> -->
+              <th scope="col">Luchador</th>
+              <th scope="col">Kills</th>
+              <th scope="col">Deaths</th>
+              <th scope="col">Score</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let luchador of matchState.luchadores">
-              <td>{{ luchador.state.id }}</td>
+              <!-- <td>{{ luchador.state.id }}</td> -->
               <td>{{ luchador.name }}</td>
-              <td>{{ luchador.state | json }}</td>
+              <td>{{ luchador.state.k }}</td>
+              <td>{{ luchador.state.d }}</td>
+              <td>{{ luchador.state.score }}</td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
   </div>
-
+<!-- 
   <div class="row">
       <div class="col">
         bullets: {{ matchState | json }}
       </div>
-  </div>
+  </div> -->
 
 </div>
