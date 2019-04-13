@@ -1,4 +1,5 @@
 import * as BABYLON from "babylonjs";
+import * as GUI from "babylonjs-gui";
 import { Base3D } from "./base3D";
 import { MeshLoader } from "./mesh.loader";
 
@@ -8,6 +9,11 @@ export class Luchador3D extends Base3D {
   private turret: BABYLON.Mesh;
   public loader: Promise<any>;
   public id: number;
+  private lifeBar: GUI.Rectangle;
+  private lifeBarFill: GUI.Rectangle;
+  private healthText: GUI.TextBlock;
+  private health: number;
+
 
   constructor(
     id: number,
@@ -39,6 +45,38 @@ export class Luchador3D extends Base3D {
     this.base.isVisible = false;
     this.base.rotation.y = vehicleRotationY;
 
+    this.lifeBar = new GUI.Rectangle(this.getName()+".lifeBar");
+    this.lifeBar.width = "50px";
+    this.lifeBar.height = "15px";
+    this.lifeBar.color = "red"
+    this.lifeBar.thickness = 1;
+    this.lifeBar.background = "black";
+    this.lifeBar.alpha = 0.5;
+    this.lifeBar.linkOffsetY = -80;
+    this.advancedTexture.addControl(this.lifeBar);
+    this.lifeBar.linkWithMesh(this.mesh);
+
+    this.lifeBarFill = new GUI.Rectangle(this.getName()+".lifeBarFill");
+    this.lifeBarFill.width = "50px";
+    this.lifeBarFill.height = "15px";
+    this.lifeBarFill.color = "red";
+    this.lifeBarFill.thickness = 0;
+    this.lifeBarFill.background = "red";
+    this.lifeBarFill.alpha = 0.5;
+    this.lifeBarFill.linkOffsetY = -80;
+    this.advancedTexture.addControl(this.lifeBarFill);
+    this.lifeBarFill.linkWithMesh(this.mesh);
+
+    this.health = 10;
+    this.healthText = new GUI.TextBlock();
+    this.healthText.text = "10";
+    this.healthText.color = "white";
+    this.healthText.fontSize = 12;
+    this.healthText.linkOffsetY = - 79;
+    this.advancedTexture.addControl(this.healthText);
+    this.healthText.linkWithMesh(this.mesh);
+
+   
     let self = this;
 
     let charLoader = MeshLoader.loadVisible(
@@ -58,6 +96,7 @@ export class Luchador3D extends Base3D {
       "vehicle_turret_anim01.babylon",
       "vehicle_turret"
     );
+
 
     this.loader = Promise.all([charLoader, baseLoader, turretLoader]);
 
@@ -99,4 +138,17 @@ export class Luchador3D extends Base3D {
   getName(): string {
     return "luchador" + this.id;
   }
+
+  setHealth(value: number){
+    this.health = value;
+    this.healthText.text = this.health+"";
+    // this.lifeBarFill.linkOffsetX = - (this.health)+"px";
+    let fillW = (50 * (this.health/20))
+ 
+    this.lifeBarFill.width = fillW +"px"; //TODO: Get MaxHealth instead of hardcoding 20
+    this.lifeBar.linkOffsetX = (50 - fillW)/2 + "px"; 
+    // this.lifeBarFill.linkOffsetX = -12.5;
+    
+  }
+  
 }

@@ -343,6 +343,8 @@ export class ArenaComponent implements OnInit, OnChanges {
     const x = this.convertPosition(next.state.x) + this.HALF_LUCHADOR;
     const z = this.convertPosition(next.state.y) + this.HALF_LUCHADOR;
     luchador3D.moveTo(x, z);
+    luchador3D.setHealth(next.state.life);
+    
   }
 
   updateBullet(bullet3D: Bullet3D, next: Bullet) {

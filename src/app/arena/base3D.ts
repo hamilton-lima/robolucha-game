@@ -109,11 +109,12 @@ export class Base3D {
     text1.fontSize = 24;
 
     var rect1 = new GUI.Rectangle();
-    rect1.width = 5;
-    rect1.height = "40px";
+    rect1.width = ((text.length * 10)+7) + "px";
+    rect1.height = "20px";
     rect1.color = textColor.toHexString();
     rect1.thickness = 0;
-    rect1.background = null;
+    rect1.background = "black";
+    rect1.alpha = 0.5;
     rect1.linkOffsetY = linkOffsetY;
     this.advancedTexture.addControl(rect1);
 
