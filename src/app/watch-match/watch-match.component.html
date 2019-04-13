@@ -8,12 +8,13 @@
       [debug]="false"
       [currentLuchador]="luchador.id"
     ></app-arena>
+      <div class="message-area" *ngFor="let msg of getUserMessages()">
+        <ngb-alert class="user-message" *ngIf="msg" type={{msg.boxType}} >
+          {{msg.type}}: "{{msg.message}}"
+        </ngb-alert> 
+        
+      </div>
   </div>
-
-  <!-- <div class="row">
-    <h3>{{ matchState.clock }}</h3>
-  </div> -->
-
   
   <div class="row">
     <div class="col">
@@ -21,7 +22,6 @@
         <table class="table">
           <thead>
             <tr>
-              <!-- <th scope="col">id</th> -->
               <th scope="col">Luchador</th>
               <th scope="col">Kills</th>
               <th scope="col">Deaths</th>
@@ -30,7 +30,6 @@
           </thead>
           <tbody>
             <tr *ngFor="let luchador of sortedScores()">
-              <!-- <td>{{ luchador.state.id }}</td> -->
               <td>{{ luchador.name }}</td>
               <td>{{ luchador.state.k }}</td>
               <td>{{ luchador.state.d }}</td>
@@ -41,11 +40,5 @@
       </div>
     </div>
   </div>
-<!-- 
-  <div class="row">
-      <div class="col">
-        bullets: {{ matchState | json }}
-      </div>
-  </div> -->
 
 </div>
