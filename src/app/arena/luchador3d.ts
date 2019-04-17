@@ -9,8 +9,10 @@ export class Luchador3D extends Base3D {
   private turret: BABYLON.Mesh;
   public loader: Promise<any>;
   public id: number;
+
   private lifeBar: GUI.Rectangle;
   private lifeBarFill: GUI.Rectangle;
+  private dividers: Array<GUI.Rectangle>;
   private healthText: GUI.TextBlock;
   private health: number;
 
@@ -45,6 +47,8 @@ export class Luchador3D extends Base3D {
     this.base.isVisible = false;
     this.base.rotation.y = vehicleRotationY;
 
+
+
     this.lifeBar = new GUI.Rectangle(this.getName()+".lifeBar");
     this.lifeBar.width = "50px";
     this.lifeBar.height = "15px";
@@ -56,6 +60,21 @@ export class Luchador3D extends Base3D {
     this.advancedTexture.addControl(this.lifeBar);
     this.lifeBar.linkWithMesh(this.mesh);
 
+    /*for (let i = 0; i < 5; i++) {
+      let divider = new GUI.Rectangle(this.getName()+".dividers"+i);
+      divider.width = "11px";
+      divider.height = "15px";
+      divider.color = "green";
+      divider.thickness = 1;
+      divider.alpha = 1;
+      divider.linkOffsetY = -80;
+      divider.linkOffsetX = (i*10) -17 -i + "px";
+      this.advancedTexture.addControl(divider);
+      divider.linkWithMesh(this.mesh);
+      
+   }*/
+
+
     this.lifeBarFill = new GUI.Rectangle(this.getName()+".lifeBarFill");
     this.lifeBarFill.width = "50px";
     this.lifeBarFill.height = "15px";
@@ -64,8 +83,10 @@ export class Luchador3D extends Base3D {
     this.lifeBarFill.background = "red";
     this.lifeBarFill.alpha = 0.5;
     this.lifeBarFill.linkOffsetY = -80;
+    
     this.advancedTexture.addControl(this.lifeBarFill);
     this.lifeBarFill.linkWithMesh(this.mesh);
+
 
     this.health = 10;
     this.healthText = new GUI.TextBlock();
@@ -76,7 +97,8 @@ export class Luchador3D extends Base3D {
     this.advancedTexture.addControl(this.healthText);
     this.healthText.linkWithMesh(this.mesh);
 
-   
+
+
     let self = this;
 
     let charLoader = MeshLoader.loadVisible(
@@ -146,8 +168,8 @@ export class Luchador3D extends Base3D {
     let fillW = (50 * (this.health/20))
  
     this.lifeBarFill.width = fillW +"px"; //TODO: Get MaxHealth instead of hardcoding 20
-    this.lifeBar.linkOffsetX = (50 - fillW)/2 + "px"; 
-    // this.lifeBarFill.linkOffsetX = -12.5;
+    this.lifeBarFill.linkOffsetX = ((50 - fillW)/2) - (50 - fillW) + "px"; 
+    //this.lifeBarFill.linkOffsetX = -12.5;
     
   }
   
