@@ -52,30 +52,19 @@ export class Luchador3D extends Base3D {
     this.lifeBar = new GUI.Rectangle(this.getName()+".lifeBar");
     this.lifeBar.width = "50px";
     this.lifeBar.height = "15px";
-    this.lifeBar.color = "red"
+    this.lifeBar.color = "red";
     this.lifeBar.thickness = 1;
     this.lifeBar.background = "black";
     this.lifeBar.alpha = 0.5;
     this.lifeBar.linkOffsetY = -80;
+    this.lifeBar.linkOffsetX = -30 + this.lifeBar.widthInPixels/2;
     this.advancedTexture.addControl(this.lifeBar);
     this.lifeBar.linkWithMesh(this.mesh);
 
-    /*for (let i = 0; i < 5; i++) {
-      let divider = new GUI.Rectangle(this.getName()+".dividers"+i);
-      divider.width = "11px";
-      divider.height = "15px";
-      divider.color = "green";
-      divider.thickness = 1;
-      divider.alpha = 1;
-      divider.linkOffsetY = -80;
-      divider.linkOffsetX = (i*10) -17 -i + "px";
-      this.advancedTexture.addControl(divider);
-      divider.linkWithMesh(this.mesh);
-      
-   }*/
-
+  
 
     this.lifeBarFill = new GUI.Rectangle(this.getName()+".lifeBarFill");
+    this.lifeBarFill.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
     this.lifeBarFill.width = "50px";
     this.lifeBarFill.height = "15px";
     this.lifeBarFill.color = "red";
@@ -87,6 +76,18 @@ export class Luchador3D extends Base3D {
     this.advancedTexture.addControl(this.lifeBarFill);
     this.lifeBarFill.linkWithMesh(this.mesh);
 
+  for (let i = 0; i < 5; i++) {
+      let divider = new GUI.Rectangle(this.getName()+".dividers"+i);
+      divider.width = "11px";
+      divider.height = "15px";
+      divider.color = "black";
+      divider.thickness = 1;
+      divider.alpha = 1;
+      divider.linkOffsetY = -80;
+      divider.linkOffsetX = -30 + this.lifeBar.widthInPixels/2 - 20 + ((i) * 11) -i + "px"; /*(i*10) -17 -i + */ 
+      this.advancedTexture.addControl(divider);
+      divider.linkWithMesh(this.mesh);
+   }
 
     this.health = 10;
     this.healthText = new GUI.TextBlock();
@@ -138,7 +139,7 @@ export class Luchador3D extends Base3D {
     });
 
     let labelColor = BABYLON.Color3.FromHexString("#DDDDDD");
-    this.addLabel(name, -100, labelColor);
+    this.addLabel(name, -100, -30, labelColor);
   }
 
   rotateVehicle(value: number) {
@@ -161,14 +162,14 @@ export class Luchador3D extends Base3D {
     return "luchador" + this.id;
   }
 
-  setHealth(value: number){
+  setHealth(value: number) {
     this.health = value;
     this.healthText.text = this.health+"";
     // this.lifeBarFill.linkOffsetX = - (this.health)+"px";
-    let fillW = (50 * (this.health/20))
+    let fillW = (50 * (this.health/20));
  
     this.lifeBarFill.width = fillW +"px"; //TODO: Get MaxHealth instead of hardcoding 20
-    this.lifeBarFill.linkOffsetX = ((50 - fillW)/2) - (50 - fillW) + "px"; 
+    this.lifeBarFill.linkOffsetX = -30 + this.lifeBar.widthInPixels/2 + (((50 - fillW) / 2) - (50 - fillW)) + "px"; 
     //this.lifeBarFill.linkOffsetX = -12.5;
     
   }
