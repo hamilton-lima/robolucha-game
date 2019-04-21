@@ -62,12 +62,12 @@ export class WatchMatchComponent implements OnInit, OnDestroy {
         this.onMessage = this.service.watch(details).subscribe(message => {
           this.message = message;
           let parsedMessage = JSON.parse(this.message);
-          if(parsedMessage.type == "Match State") {
+          if(parsedMessage.type == "match-state") {
             console.log("event: Match State");
             this.matchState = parsedMessage.message;
             this.matchStateSubject.next(this.matchState);
           }
-          else if (parsedMessage.type == "Message") {
+          else if (parsedMessage.type == "message") {
             console.log("event: Message");
             if (parsedMessage.message.luchadorID == this.luchador.id) {
               this.userMessage = parsedMessage.message;
