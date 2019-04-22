@@ -41,6 +41,11 @@ export interface MatchState {
   clock: number;
 }
 
+export interface MessageEnvelope {
+  type: string;
+  message: any;
+}
+
 export interface GameDefinition {
     id?: number;
     name?: string;

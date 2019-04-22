@@ -8,12 +8,25 @@
       [debug]="false"
       [currentLuchador]="luchador.id"
     ></app-arena>
+      <div class="message-area">
+        <table class="table table-sm">
+          <thead>
+            <tr>
+              <!-- <th scope="col">Time</th> -->
+              <th scope="col">Type</th>
+              <th scope="col">Message</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let msg of getUserMessages()" >
+              <!-- <td>{{msg.when}}</td> -->
+              <td [style.background-color]="msg.color">{{msg.type}}</td>
+              <td [style.background-color]="msg.color">{{msg.message}}</td>
+            </tr> 
+          </tbody>
+        </table>
+      </div>
   </div>
-
-  <!-- <div class="row">
-    <h3>{{ matchState.clock }}</h3>
-  </div> -->
-
   
   <div class="row">
     <div class="col">
@@ -21,7 +34,6 @@
         <table class="table">
           <thead>
             <tr>
-              <!-- <th scope="col">id</th> -->
               <th scope="col">Luchador</th>
               <th scope="col">Kills</th>
               <th scope="col">Deaths</th>
@@ -30,7 +42,6 @@
           </thead>
           <tbody>
             <tr *ngFor="let luchador of sortedScores()">
-              <!-- <td>{{ luchador.state.id }}</td> -->
               <td>{{ luchador.name }}</td>
               <td>{{ luchador.state.k }}</td>
               <td>{{ luchador.state.d }}</td>
@@ -41,11 +52,5 @@
       </div>
     </div>
   </div>
-<!-- 
-  <div class="row">
-      <div class="col">
-        bullets: {{ matchState | json }}
-      </div>
-  </div> -->
 
 </div>
