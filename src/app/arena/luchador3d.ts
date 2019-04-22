@@ -15,7 +15,11 @@ export class Luchador3D extends Base3D {
   private dividers: Array<GUI.Rectangle>;
   private healthText: GUI.TextBlock;
   private health: number;
+  private showHealthNumber = false;
 
+  private readonly OFFSET_X = -30;
+  private readonly OFFSET_Y = -65;
+  private readonly LABEL_OFFSET_Y = -85;
 
   constructor(
     id: number,
@@ -47,31 +51,27 @@ export class Luchador3D extends Base3D {
     this.base.isVisible = false;
     this.base.rotation.y = vehicleRotationY;
 
-
-
     this.lifeBar = new GUI.Rectangle(this.getName()+".lifeBar");
     this.lifeBar.width = "50px";
     this.lifeBar.height = "15px";
-    this.lifeBar.color = "red";
+    this.lifeBar.color = "green";
     this.lifeBar.thickness = 1;
     this.lifeBar.background = "black";
     this.lifeBar.alpha = 0.5;
-    this.lifeBar.linkOffsetY = -80;
-    this.lifeBar.linkOffsetX = -30 + this.lifeBar.widthInPixels/2;
+    this.lifeBar.linkOffsetY = this.OFFSET_Y;
+    this.lifeBar.linkOffsetX = this.OFFSET_X + this.lifeBar.widthInPixels/2;
     this.advancedTexture.addControl(this.lifeBar);
     this.lifeBar.linkWithMesh(this.mesh);
-
-  
 
     this.lifeBarFill = new GUI.Rectangle(this.getName()+".lifeBarFill");
     this.lifeBarFill.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
     this.lifeBarFill.width = "50px";
     this.lifeBarFill.height = "15px";
-    this.lifeBarFill.color = "red";
+    this.lifeBarFill.color = "green";
     this.lifeBarFill.thickness = 0;
-    this.lifeBarFill.background = "red";
+    this.lifeBarFill.background = "green";
     this.lifeBarFill.alpha = 0.5;
-    this.lifeBarFill.linkOffsetY = -80;
+    this.lifeBarFill.linkOffsetY = this.OFFSET_Y;
     
     this.advancedTexture.addControl(this.lifeBarFill);
     this.lifeBarFill.linkWithMesh(this.mesh);
@@ -83,22 +83,23 @@ export class Luchador3D extends Base3D {
       divider.color = "black";
       divider.thickness = 1;
       divider.alpha = 1;
-      divider.linkOffsetY = -80;
-      divider.linkOffsetX = -30 + this.lifeBar.widthInPixels/2 - 20 + ((i) * 11) -i + "px"; /*(i*10) -17 -i + */ 
+      divider.linkOffsetY = this.OFFSET_Y;
+      divider.linkOffsetX = this.OFFSET_X + this.lifeBar.widthInPixels/2 - 20 + ((i) * 11) -i + "px"; /*(i*10) -17 -i + */ 
       this.advancedTexture.addControl(divider);
       divider.linkWithMesh(this.mesh);
    }
 
     this.health = 10;
-    this.healthText = new GUI.TextBlock();
-    this.healthText.text = "10";
-    this.healthText.color = "white";
-    this.healthText.fontSize = 12;
-    this.healthText.linkOffsetY = - 79;
-    this.advancedTexture.addControl(this.healthText);
-    this.healthText.linkWithMesh(this.mesh);
 
-
+    if( this.showHealthNumber ){
+      this.healthText = new GUI.TextBlock();
+      this.healthText.text = "10";
+      this.healthText.color = "white";
+      this.healthText.fontSize = 12;
+      this.healthText.linkOffsetY = this.OFFSET_Y;
+      this.advancedTexture.addControl(this.healthText);
+      this.healthText.linkWithMesh(this.mesh);
+    }
 
     let self = this;
 
@@ -139,7 +140,7 @@ export class Luchador3D extends Base3D {
     });
 
     let labelColor = BABYLON.Color3.FromHexString("#DDDDDD");
-    this.addLabel(name, -100, -30, labelColor);
+    this.addLabel(name, this.LABEL_OFFSET_Y, this.OFFSET_X, labelColor);
   }
 
   rotateVehicle(value: number) {
@@ -164,13 +165,16 @@ export class Luchador3D extends Base3D {
 
   setHealth(value: number) {
     this.health = value;
-    this.healthText.text = this.health+"";
-    // this.lifeBarFill.linkOffsetX = - (this.health)+"px";
+
+    if( this.showHealthNumber ){
+      this.healthText.text = this.health+"";
+    }
+
+    //TODO: Get MaxHealth instead of hardcoding 20
     let fillW = (50 * (this.health/20));
  
-    this.lifeBarFill.width = fillW +"px"; //TODO: Get MaxHealth instead of hardcoding 20
+    this.lifeBarFill.width = fillW +"px"; 
     this.lifeBarFill.linkOffsetX = -30 + this.lifeBar.widthInPixels/2 + (((50 - fillW) / 2) - (50 - fillW)) + "px"; 
-    //this.lifeBarFill.linkOffsetX = -12.5;
     
   }
   
