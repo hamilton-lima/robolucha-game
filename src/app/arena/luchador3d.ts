@@ -1,4 +1,5 @@
 import * as BABYLON from "babylonjs";
+import * as GUI from "babylonjs-gui";
 import { Base3D } from "./base3D";
 import { MeshLoader } from "./mesh.loader";
 
@@ -8,6 +9,17 @@ export class Luchador3D extends Base3D {
   private turret: BABYLON.Mesh;
   public loader: Promise<any>;
   public id: number;
+
+  private lifeBar: GUI.Rectangle;
+  private lifeBarFill: GUI.Rectangle;
+  private dividers: Array<GUI.Rectangle>;
+  private healthText: GUI.TextBlock;
+  private health: number;
+  private showHealthNumber = false;
+
+  private readonly OFFSET_X = -30;
+  private readonly OFFSET_Y = -65;
+  private readonly LABEL_OFFSET_Y = -85;
 
   constructor(
     id: number,
@@ -39,6 +51,56 @@ export class Luchador3D extends Base3D {
     this.base.isVisible = false;
     this.base.rotation.y = vehicleRotationY;
 
+    this.lifeBar = new GUI.Rectangle(this.getName()+".lifeBar");
+    this.lifeBar.width = "50px";
+    this.lifeBar.height = "15px";
+    this.lifeBar.color = "green";
+    this.lifeBar.thickness = 1;
+    this.lifeBar.background = "black";
+    this.lifeBar.alpha = 0.5;
+    this.lifeBar.linkOffsetY = this.OFFSET_Y;
+    this.lifeBar.linkOffsetX = this.OFFSET_X + this.lifeBar.widthInPixels/2;
+    this.advancedTexture.addControl(this.lifeBar);
+    this.lifeBar.linkWithMesh(this.mesh);
+
+    this.lifeBarFill = new GUI.Rectangle(this.getName()+".lifeBarFill");
+    this.lifeBarFill.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
+    this.lifeBarFill.width = "50px";
+    this.lifeBarFill.height = "15px";
+    this.lifeBarFill.color = "green";
+    this.lifeBarFill.thickness = 0;
+    this.lifeBarFill.background = "green";
+    this.lifeBarFill.alpha = 0.5;
+    this.lifeBarFill.linkOffsetY = this.OFFSET_Y;
+    
+    this.advancedTexture.addControl(this.lifeBarFill);
+    this.lifeBarFill.linkWithMesh(this.mesh);
+
+  for (let i = 0; i < 5; i++) {
+      let divider = new GUI.Rectangle(this.getName()+".dividers"+i);
+      divider.width = "11px";
+      divider.height = "15px";
+      divider.color = "black";
+      divider.thickness = 1;
+      divider.alpha = 1;
+      divider.linkOffsetY = this.OFFSET_Y;
+      divider.linkOffsetX = this.OFFSET_X + this.lifeBar.widthInPixels/2 - 20 + ((i) * 11) -i + "px"; /*(i*10) -17 -i + */ 
+      this.advancedTexture.addControl(divider);
+      divider.linkWithMesh(this.mesh);
+   }
+
+    this.health = 10;
+
+    if( this.showHealthNumber ){
+      this.healthText = new GUI.TextBlock();
+      this.healthText.text = "10";
+      this.healthText.color = "white";
+      this.healthText.fontSize = 12;
+      this.healthText.linkOffsetY = this.OFFSET_Y;
+      this.advancedTexture.addControl(this.healthText);
+      this.healthText.linkWithMesh(this.mesh);
+    }
+
     let self = this;
 
     let charLoader = MeshLoader.loadVisible(
@@ -59,6 +121,7 @@ export class Luchador3D extends Base3D {
       "vehicle_turret"
     );
 
+
     this.loader = Promise.all([charLoader, baseLoader, turretLoader]);
 
     charLoader.then(mesh => {
@@ -77,7 +140,7 @@ export class Luchador3D extends Base3D {
     });
 
     let labelColor = BABYLON.Color3.FromHexString("#DDDDDD");
-    this.addLabel(name, -100, labelColor);
+    this.addLabel(name, this.LABEL_OFFSET_Y, this.OFFSET_X, labelColor);
   }
 
   rotateVehicle(value: number) {
@@ -99,4 +162,20 @@ export class Luchador3D extends Base3D {
   getName(): string {
     return "luchador" + this.id;
   }
+
+  setHealth(value: number) {
+    this.health = value;
+
+    if( this.showHealthNumber ){
+      this.healthText.text = this.health+"";
+    }
+
+    //TODO: Get MaxHealth instead of hardcoding 20
+    let fillW = (50 * (this.health/20));
+ 
+    this.lifeBarFill.width = fillW +"px"; 
+    this.lifeBarFill.linkOffsetX = -30 + this.lifeBar.widthInPixels/2 + (((50 - fillW) / 2) - (50 - fillW)) + "px"; 
+    
+  }
+  
 }
