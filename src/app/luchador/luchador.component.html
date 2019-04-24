@@ -3,7 +3,7 @@
   <div class="row">
     <div class="col-10">
       <h1 *ngIf="!editingName">{{ luchador.name }}</h1>
-      <input *ngIf="editingName" class="title-edit" [(ngModel)]="editedName">
+      <input #titleEdit *ngIf="editingName" class="title-edit" minlength="1" maxlength="30"  [(ngModel)]="editedName" placeholder="{{editedName}}">
       <button *ngIf="!editingName" class="btn btn-primary float-left align-bottom btn-edit" (click)="editName()">Edit Name</button>
       <button *ngIf="editingName" class="btn btn-primary float-left align-bottom btn-edit" (click)="saveName()">Save Name</button>
       <!-- <button class="btn btn-primary float-left align-bottom">Create Random Name</button>-->

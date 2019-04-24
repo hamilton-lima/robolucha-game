@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from "@angular/core";
+import { Component, OnInit, ChangeDetectorRef, ViewChild, ElementRef, AfterViewChecked} from "@angular/core";
 import { DefaultService } from "../sdk/api/default.service";
 import { MainLuchador } from "../sdk/model/mainLuchador";
 import { MainCode } from "../sdk/model/mainCode";
@@ -12,12 +12,18 @@ const HIDE_SUCCESS_TIMEOUT = 3000;
   templateUrl: "./luchador.component.html",
   styleUrls: ["./luchador.component.css"]
 })
-export class LuchadorComponent implements OnInit {
+export class LuchadorComponent implements OnInit, AfterViewChecked {
+  private titleEdit: ElementRef;
+  @ViewChild("titleEdit") set content(content: ElementRef){
+    this.titleEdit = content;
+  }
+  
   luchador: MainLuchador;
   dirty: boolean;
   editingName: boolean;
   editedName: string;
   successMessage: string;
+  addingEdit: boolean;
 
   codes = {
     onStart: <MainCode>{},
@@ -43,6 +49,14 @@ export class LuchadorComponent implements OnInit {
 
     this.refreshEditor(data.luchador);
     this.editedName = this.luchador.name;
+  }
+
+    public ngAfterViewChecked(): void {
+      if (this.addingEdit) {
+        this.titleEdit.nativeElement.focus();
+      }
+      this.addingEdit = false;
+  
   }
 
   canDeactivate() {
@@ -110,7 +124,8 @@ export class LuchadorComponent implements OnInit {
 
   editName() {
     this.editingName = true;
-
+    this.addingEdit = true;
+    //this.editField.nativeElement.focus();
   }
 
   saveName() {
