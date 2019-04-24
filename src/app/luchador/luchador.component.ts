@@ -15,6 +15,8 @@ const HIDE_SUCCESS_TIMEOUT = 3000;
 export class LuchadorComponent implements OnInit {
   luchador: MainLuchador;
   dirty: boolean;
+  editingName: boolean;
+  editedName: string;
   successMessage: string;
 
   codes = {
@@ -29,19 +31,22 @@ export class LuchadorComponent implements OnInit {
   constructor(
     private route: ActivatedRoute, 
     private api: DefaultService, 
-    private cdRef : ChangeDetectorRef) {
+    private cdRef: ChangeDetectorRef) {
     this.luchador = {};
   }
 
   ngOnInit() {
     const data = this.route.snapshot.data;
     this.dirty = false;
+    this.editingName = false;
+
 
     this.refreshEditor(data.luchador);
+    this.editedName = this.luchador.name;
   }
 
-  canDeactivate(){
-    if (this.dirty){
+  canDeactivate() {
+    if (this.dirty) {
       return window.confirm("You have unsaved changes to your luchador code. Are you sure you want to leave?");
     }
     return true;
@@ -101,5 +106,23 @@ export class LuchadorComponent implements OnInit {
       this.refreshEditor(luchador);
       this.cdRef.detectChanges();    
     });
+  }
+
+  editName() {
+    this.editingName = true;
+
+  }
+
+  saveName() {
+    this.luchador.name = this.editedName;
+    //let temp = {name: this.editedName};
+    const remoteCall = this.api.privateLuchadorPut(this.luchador);
+
+    remoteCall.subscribe(luchador => {
+      this.successMessage = "Luchador updated";
+      this.editingName = false;
+      setTimeout(() => this.successMessage = null, HIDE_SUCCESS_TIMEOUT);
+    });
+
   }
 }

@@ -5,3 +5,15 @@
 .success-message {
   width: 100%;
 }
+
+.btn-edit{
+	margin-right: 1em;
+}
+
+.title-edit {
+	font-weight: 500;
+	font-size: 2.5rem;
+	outline: none;
+	border: 0px solid;
+	width: 100%;
+}
