@@ -1,7 +1,7 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { GameDefinition, MatchState } from '../watch-match/watch-match.model';
 import { Subject } from 'rxjs';
-import onlyLuchadorMatchState from './only-luchador-match-state';
+import defaultMatchState from './default-match-state';
 
 @Component({
   selector: 'app-playground',
@@ -27,7 +27,7 @@ export class PlaygroundComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.matchState = JSON.parse(JSON.stringify(onlyLuchadorMatchState));
+    this.matchState = JSON.parse(JSON.stringify(defaultMatchState));
 
     let id = 1;
     this.matchState.luchadores.forEach(luchador => {
@@ -42,6 +42,7 @@ export class PlaygroundComponent implements OnInit, AfterViewInit {
   }
 
   onChange(event) {
+    console.log('on change', event );
     this.matchState = JSON.parse(event);
     this.matchStateSubject.next(this.matchState);
   }

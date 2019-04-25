@@ -5,9 +5,10 @@ import { ActivatedRoute } from "@angular/router";
 import { SharedStateService } from "../shared-state.service";
 import { Subscription, Subject } from "rxjs";
 import { MatchState, GameDefinition } from "./watch-match.model";
+import { formatDate } from "@angular/common";
 
-const MESSAGE_TIMEOUT = 3000;
-const MAX_MESSAGES = 5;
+// const MESSAGE_TIMEOUT = 3000;
+const MAX_MESSAGES = 20;
 @Component({
   selector: "app-watch-match",
   templateUrl: "./watch-match.component.html",
@@ -51,25 +52,24 @@ export class WatchMatchComponent implements OnInit, OnDestroy {
     this.subscription = this.service.ready.subscribe(() => {
       console.log("on ready", this.shared.getCurrentMatch());
 
-      // TODO: add event to do this
       if (this.shared.getCurrentMatch()) {
         const details: WatchDetails = {
           luchadorID: this.luchador.id,
           matchID: this.shared.getCurrentMatch().id
         };
-        console.log("watch details", details);
+
         this.onMessage = this.service.watch(details).subscribe(message => {
           this.message = message;
           let parsedMessage = JSON.parse(this.message);
-          if(parsedMessage.type == "Match State") {
+
+          if(parsedMessage.type == "match-state") {
             this.matchState = parsedMessage.message;
             this.matchStateSubject.next(this.matchState);
           }
-          else if (parsedMessage.type == "Message") {
-
+          else if (parsedMessage.type == "message") {
             if (parsedMessage.message.luchadorID == this.luchador.id) {
               this.userMessage = parsedMessage.message;
-              this.chooseBoxType();
+              this.processMessage();
             }
             this.processMessageList();
           }
@@ -80,38 +80,34 @@ export class WatchMatchComponent implements OnInit, OnDestroy {
     this.service.connect();
   }
 
-  private chooseBoxType() {
+  private processMessage() {
     switch (this.userMessage.type) {
       case "debug": {
-        this.userMessage.boxType = "info";
-        break;
-      }
-      case "say": {
-        this.userMessage.boxType = "secondary";
+        this.userMessage.color = "";
         break;
       }
       case "warning": {
-        this.userMessage.boxType = "warning";
+        this.userMessage.color = "#fff3cd";
         break;
       }
       case "danger": {
-        this.userMessage.boxType = "danger";
+        this.userMessage.color = "#f8d7da";
         break;
       }
     }
+    this.userMessage.when = this.matchState.clock.toString();
   }
 
   private processMessageList() {
     this.cleanMessageList();
 
     let l = this.messageList.push(this.userMessage);
-    //max is 5 elements, remove oldest
+    //max elements reached, remove oldest
     if (l > MAX_MESSAGES) {
       this.messageList.splice(0, 1);
       l = this.messageList.length;
     }
-    setTimeout(() => this.messageList[l - 1] = null, MESSAGE_TIMEOUT);
-    setTimeout(() => this.cleanMessageList(), MESSAGE_TIMEOUT * 2);
+    
   }
 
   private cleanMessageList() {

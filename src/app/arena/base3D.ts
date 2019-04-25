@@ -107,7 +107,7 @@ export class Base3D {
     var text1 = new BABYLON.GUI.TextBlock();
     text1.text = text;
     text1.color = "white";
-    text1.fontSize = 24;
+    text1.fontSize = 18;
 
     var rect1 = new GUI.Rectangle();
     rect1.width = ((text.length * 10)+7) + "px";
