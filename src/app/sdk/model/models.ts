@@ -6,4 +6,6 @@ export * from './mainLoginResponse';
 export * from './mainLuchador';
 export * from './mainMatch';
 export * from './mainMatchParticipant';
+export * from './mainMatchScore';
+export * from './mainScoreList';
 export * from './mainUserSetting';
