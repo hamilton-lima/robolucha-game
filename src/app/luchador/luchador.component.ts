@@ -1,7 +1,12 @@
 import { Component, OnInit, ChangeDetectorRef, ViewChild, ElementRef, AfterViewChecked} from "@angular/core";
+
+import { HttpResponse } from '@angular/common/http';
+import { Observable } from 'rxjs/Observable';
 import { DefaultService } from "../sdk/api/default.service";
 import { MainLuchador } from "../sdk/model/mainLuchador";
 import { MainCode } from "../sdk/model/mainCode";
+
+import { MainUpdateLuchadorResponse } from '../sdk/model/mainUpdateLuchadorResponse';
 import { ActivatedRoute } from "@angular/router";
 import { debounceTime } from "rxjs/operators";
 
@@ -13,12 +18,21 @@ const HIDE_SUCCESS_TIMEOUT = 3000;
   styleUrls: ["./luchador.component.css"]
 })
 export class LuchadorComponent implements OnInit, AfterViewChecked {
-  private titleEdit: ElementRef;
-  @ViewChild("titleEdit") set content(content: ElementRef){
-    this.titleEdit = content;
+  // private titleEdit: ElementRef;
+  // @ViewChild("titleEdit") set content(content: ElementRef) {
+    // this.titleEdit = content;
+  // }
+  @ViewChild("titleEdit") titleEdit:ElementRef;  
+
+  private nameForm: ElementRef;
+  @ViewChild("nameForm" ) set formContent(content: ElementRef) {
+    this.nameForm = content;
   }
-  
+
   luchador: MainLuchador;
+  luchadorResponse: MainUpdateLuchadorResponse;
+  renameErrorMessage: string;
+  displayErrorMessage: boolean;
   dirty: boolean;
   editingName: boolean;
   editedName: string;
@@ -45,17 +59,18 @@ export class LuchadorComponent implements OnInit, AfterViewChecked {
     const data = this.route.snapshot.data;
     this.dirty = false;
     this.editingName = false;
-
-
+    this.renameErrorMessage = "";
+    
     this.refreshEditor(data.luchador);
     this.editedName = this.luchador.name;
   }
 
     public ngAfterViewChecked(): void {
-      if (this.addingEdit) {
-        this.titleEdit.nativeElement.focus();
-      }
-      this.addingEdit = false;
+      // if (this.addingEdit) {
+      //   // console.log(this.titleEdit);
+      //   this.titleEdit.nativeElement.focus();
+      // }
+      // this.addingEdit = false;
   
   }
 
@@ -112,12 +127,12 @@ export class LuchadorComponent implements OnInit, AfterViewChecked {
   save() {
     const remoteCall = this.api.privateLuchadorPut(this.luchador);
 
-    remoteCall.subscribe(luchador => {
+    remoteCall.subscribe(response => {
       this.successMessage = "Luchador updated";
       this.dirty = false;
       setTimeout(() => this.successMessage = null, HIDE_SUCCESS_TIMEOUT);
 
-      this.refreshEditor(luchador);
+      this.refreshEditor(response.luchador);
       this.cdRef.detectChanges();    
     });
   }
@@ -128,15 +143,26 @@ export class LuchadorComponent implements OnInit, AfterViewChecked {
     //this.editField.nativeElement.focus();
   }
 
+  nameInputChanged() {
+    this.displayErrorMessage = false;
+  }
+
   saveName() {
     this.luchador.name = this.editedName;
-    //let temp = {name: this.editedName};
     const remoteCall = this.api.privateLuchadorPut(this.luchador);
+    
+    remoteCall.subscribe( response => {
+      if (response.errors == null || response.errors.length == 0) {
+        this.displayErrorMessage = false;
+        this.successMessage = "Luchador name updated";
+        this.editingName = false;
+        setTimeout(() => this.successMessage = null, HIDE_SUCCESS_TIMEOUT);
+      }
+      else {
+        this.displayErrorMessage = true;
+        this.renameErrorMessage = response.errors.join(', ');
+      }
 
-    remoteCall.subscribe(luchador => {
-      this.successMessage = "Luchador updated";
-      this.editingName = false;
-      setTimeout(() => this.successMessage = null, HIDE_SUCCESS_TIMEOUT);
     });
 
   }

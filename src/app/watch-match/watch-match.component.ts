@@ -60,8 +60,10 @@ export class WatchMatchComponent implements OnInit, OnDestroy {
 
         this.onMessage = this.service.watch(details).subscribe(message => {
           this.message = message;
+          console.log(this.message);
           let parsedMessage = JSON.parse(this.message);
-
+          parsedMessage.type = parsedMessage.type.toLowerCase();
+          console.log(parsedMessage);
           if(parsedMessage.type == "match-state") {
             this.matchState = parsedMessage.message;
             this.matchStateSubject.next(this.matchState);
@@ -130,10 +132,10 @@ export class WatchMatchComponent implements OnInit, OnDestroy {
 
     this.service.close();
   }
-  sortedScores(){
+  sortedScores() {
     return this.matchState.luchadores.sort(this.compareScores).reverse();
   }
-  compareScores(a,b){
+  compareScores(a,b) {
     if (a.state.score < b.state.score)
       return -1;
     if (a.state.score > b.state.score)
@@ -141,8 +143,8 @@ export class WatchMatchComponent implements OnInit, OnDestroy {
     return 0;
   }
 
-  getUserMessages(){
-    if (this.messageList){
+  getUserMessages() {
+    if (this.messageList) {
       return this.messageList;
     }
     return [];

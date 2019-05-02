@@ -25,6 +25,7 @@ import { MainLoginResponse } from '../model/mainLoginResponse';
 import { MainLuchador } from '../model/mainLuchador';
 import { MainMatch } from '../model/mainMatch';
 import { MainMatchParticipant } from '../model/mainMatchParticipant';
+import { MainUpdateLuchadorResponse } from '../model/mainUpdateLuchadorResponse';
 import { MainUserSetting } from '../model/mainUserSetting';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -456,9 +457,9 @@ export class DefaultService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public privateLuchadorPut(request: MainLuchador, observe?: 'body', reportProgress?: boolean): Observable<MainLuchador>;
-    public privateLuchadorPut(request: MainLuchador, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<MainLuchador>>;
-    public privateLuchadorPut(request: MainLuchador, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<MainLuchador>>;
+    public privateLuchadorPut(request: MainLuchador, observe?: 'body', reportProgress?: boolean): Observable<MainUpdateLuchadorResponse>;
+    public privateLuchadorPut(request: MainLuchador, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<MainUpdateLuchadorResponse>>;
+    public privateLuchadorPut(request: MainLuchador, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<MainUpdateLuchadorResponse>>;
     public privateLuchadorPut(request: MainLuchador, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (request === null || request === undefined) {
             throw new Error('Required parameter request was null or undefined when calling privateLuchadorPut.');
@@ -489,7 +490,7 @@ export class DefaultService {
             headers = headers.set("Content-Type", httpContentTypeSelected);
         }
 
-        return this.httpClient.put<MainLuchador>(`${this.basePath}/private/luchador`,
+        return this.httpClient.put<MainUpdateLuchadorResponse>(`${this.basePath}/private/luchador`,
             request,
             {
                 withCredentials: this.configuration.withCredentials,
