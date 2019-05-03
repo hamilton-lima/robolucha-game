@@ -7,7 +7,6 @@ import { Subscription, Subject } from "rxjs";
 import { MatchState, GameDefinition } from "./watch-match.model";
 import { formatDate } from "@angular/common";
 
-// const MESSAGE_TIMEOUT = 3000;
 const MAX_MESSAGES = 20;
 @Component({
   selector: "app-watch-match",
@@ -46,7 +45,7 @@ export class WatchMatchComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.luchador = this.route.snapshot.data.luchador;
-    this.messageList =[];
+    this.messageList = [];
     console.log("watch match oninit", this.luchador);
 
     this.subscription = this.service.ready.subscribe(() => {
@@ -60,15 +59,13 @@ export class WatchMatchComponent implements OnInit, OnDestroy {
 
         this.onMessage = this.service.watch(details).subscribe(message => {
           this.message = message;
-          console.log(this.message);
           let parsedMessage = JSON.parse(this.message);
           parsedMessage.type = parsedMessage.type.toLowerCase();
-          console.log(parsedMessage);
-          if(parsedMessage.type == "match-state") {
+
+          if (parsedMessage.type == "match-state") {
             this.matchState = parsedMessage.message;
             this.matchStateSubject.next(this.matchState);
-          }
-          else if (parsedMessage.type == "message") {
+          } else if (parsedMessage.type == "message") {
             if (parsedMessage.message.luchadorID == this.luchador.id) {
               this.userMessage = parsedMessage.message;
               this.processMessage();
@@ -109,7 +106,6 @@ export class WatchMatchComponent implements OnInit, OnDestroy {
       this.messageList.splice(0, 1);
       l = this.messageList.length;
     }
-    
   }
 
   private cleanMessageList() {
@@ -132,14 +128,20 @@ export class WatchMatchComponent implements OnInit, OnDestroy {
 
     this.service.close();
   }
+
   sortedScores() {
     return this.matchState.luchadores.sort(this.compareScores).reverse();
   }
-  compareScores(a,b) {
-    if (a.state.score < b.state.score)
+
+  compareScores(a, b) {
+    if (a.state.score < b.state.score) {
       return -1;
-    if (a.state.score > b.state.score)
+    }
+
+    if (a.state.score > b.state.score) {
       return 1;
+    }
+
     return 0;
   }
 
