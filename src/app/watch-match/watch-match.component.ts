@@ -6,6 +6,7 @@ import { SharedStateService } from "../shared-state.service";
 import { Subscription, Subject } from "rxjs";
 import { MatchState, GameDefinition } from "./watch-match.model";
 import { formatDate } from "@angular/common";
+import * as moment from 'moment';
 
 const MAX_MESSAGES = 20;
 @Component({
@@ -46,10 +47,10 @@ export class WatchMatchComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.luchador = this.route.snapshot.data.luchador;
     this.messageList = [];
-    console.log("watch match oninit", this.luchador);
+    // console.log("watch match oninit", this.luchador);
 
     this.subscription = this.service.ready.subscribe(() => {
-      console.log("on ready", this.shared.getCurrentMatch());
+      // console.log("on ready", this.shared.getCurrentMatch());
 
       if (this.shared.getCurrentMatch()) {
         const details: WatchDetails = {
@@ -143,6 +144,23 @@ export class WatchMatchComponent implements OnInit, OnDestroy {
     }
 
     return 0;
+  }
+
+  parsedMatchTime(){
+    let duration = moment.duration(this.matchState.clock);
+    return this.formatDuration(duration);
+  }
+
+  formatDuration(duration):string{
+    let min = duration.minutes();
+    let sec = duration.seconds();
+    if (min < 10) { 
+      min = "0" + min;
+    }
+    if (sec < 10) {
+      sec = "0" + sec;
+    }
+    return min + ":" + sec;
   }
 
   getUserMessages() {
