@@ -25,6 +25,8 @@ import { MainLoginResponse } from '../model/mainLoginResponse';
 import { MainLuchador } from '../model/mainLuchador';
 import { MainMatch } from '../model/mainMatch';
 import { MainMatchParticipant } from '../model/mainMatchParticipant';
+import { MainMatchScore } from '../model/mainMatchScore';
+import { MainScoreList } from '../model/mainScoreList';
 import { MainUpdateLuchadorResponse } from '../model/mainUpdateLuchadorResponse';
 import { MainUserSetting } from '../model/mainUserSetting';
 
