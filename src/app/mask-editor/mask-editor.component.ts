@@ -39,6 +39,15 @@ export class MaskEditorComponent implements OnInit {
     this.dirty = false;
   }
 
+  random(){
+    this.api.privateMaskRandomGet().subscribe(configs => {
+      this.luchador.configs = configs;
+      this.refreshEditor(this.luchador.configs);
+      this.dirty = true;
+      this.cdRef.detectChanges();
+    });
+  }
+
   save() {
     let configs = this.mediator.configs.value;
     if( configs.length > 0 ){
