@@ -54,11 +54,11 @@ export class MaskEditorComponent implements OnInit {
       this.luchador.configs = configs;
       const remoteCall = this.api.privateLuchadorPut(this.luchador);
 
-      remoteCall.subscribe(luchador => {
+      remoteCall.subscribe(response => {
         this.successMessage = "Luchador updated";
         setTimeout(() => (this.successMessage = null), HIDE_SUCCESS_TIMEOUT);
   
-        this.refreshEditor(luchador.configs);
+        this.refreshEditor(response.luchador.configs);
         this.cdRef.detectChanges();
       });
     }

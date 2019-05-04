@@ -110,7 +110,7 @@ export class ArenaComponent implements OnInit, OnChanges {
 
   setCameraFromSavedState() {
     const savedCameraState = localStorage.getItem(this.ROBOLUCHA_SAVED_CAMERA);
-    console.log(this.ROBOLUCHA_SAVED_CAMERA, savedCameraState);
+    // console.log(this.ROBOLUCHA_SAVED_CAMERA, savedCameraState);
 
     if (savedCameraState) {
       const cameraState: SavedCamera = JSON.parse(savedCameraState);
@@ -292,11 +292,11 @@ export class ArenaComponent implements OnInit, OnChanges {
     return new Promise<BABYLON.StandardMaterial>((resolve, reject) => {
       // read the mask from the API
       this.api.privateMaskConfigIdGet(id).subscribe(configs => {
-        console.log("mask config loaded", id, configs);
+        // console.log("mask config loaded", id, configs);
 
         // build the material using dynamic texture
         this.builder.loadDynamicTexture(configs, this.scene).then(material => {
-          console.log("dynamic texture loaded loaded", id, material);
+          // console.log("dynamic texture loaded loaded", id, material);
           resolve(material);
         });
       });

@@ -2,12 +2,16 @@
 
 <div *ngIf="matchState" class="container">
   <div class="row">
+    <div class="clock">
+      {{parsedMatchTime()}}
+    </div>
     <app-arena
       [gameDefinition]="gameDefinition"
       [matchStateSubject]="matchStateSubject"
       [debug]="false"
       [currentLuchador]="luchador.id"
     ></app-arena>
+
       <div class="message-area">
         <table class="table table-sm">
           <thead>
