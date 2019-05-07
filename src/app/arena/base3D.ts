@@ -11,6 +11,7 @@ export class Base3D {
   protected mesh: BABYLON.Mesh;
   protected scene: BABYLON.Scene;
   protected advancedTexture: GUI.AdvancedDynamicTexture;
+  protected label: GUI.TextBlock;
 
   constructor() {
     this.advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
@@ -104,25 +105,26 @@ export class Base3D {
     baseOffsetX: number,
     textColor: BABYLON.Color3
   ) {
-    var text1 = new BABYLON.GUI.TextBlock();
-    text1.text = text;
-    text1.color = "white";
-    text1.fontSize = 18;
+    // var text1 = new BABYLON.GUI.TextBlock();
+    // text1.text = text;
+    // text1.color = "white";
+    // text1.fontSize = 18;
+    const width = (text.length * 10)+7;
 
     var rect1 = new GUI.Rectangle();
-    rect1.width = ((text.length * 10)+7) + "px";
+    rect1.width = width + "px";
     rect1.height = "20px";
     rect1.color = textColor.toHexString();
     rect1.thickness = 0;
     rect1.background = "black";
     rect1.alpha = 0.5;
     rect1.linkOffsetY = linkOffsetY;
-    rect1.linkOffsetX = baseOffsetX + rect1.widthInPixels/2;
+    rect1.linkOffsetX = baseOffsetX + rect1.widthInPixels / 2;
     this.advancedTexture.addControl(rect1);
 
-    var label = new GUI.TextBlock();
-    label.text = text;
-    rect1.addControl(label);
+    this.label = new GUI.TextBlock();
+    this.label.text = text;
+    rect1.addControl(this.label);
 
     rect1.linkWithMesh(this.mesh);
   }
@@ -130,11 +132,18 @@ export class Base3D {
   getPosition(): BABYLON.Vector3 {
     return this.mesh.position;
   }
+
   getScene(): BABYLON.Scene {
     return this.scene;
   }
 
   setMaterial(material: BABYLON.Material) {
     this.mesh.material = material;
+  }
+
+  setLabel(label: string) {
+    if (this.label) {
+      this.label.text = label;
+    }
   }
 }

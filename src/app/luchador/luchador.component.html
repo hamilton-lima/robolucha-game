@@ -7,7 +7,7 @@
 
 
       <form *ngIf="editingName" #nameForm="ngForm" (ngSubmit)="saveName()">
-        <input name="titleEdit" #titleEdit="ngModel" *ngIf="editingName" class="title-edit" required minlength="3" maxlength="30"  (keydown)="nameInputChanged()" [(ngModel)]="editedName" placeholder="{{editedName}}">
+        <input name="titleEdit" #titleEdit="ngModel" *ngIf="editingName" class="title-edit" required minlength="3" maxlength="40"  (keydown)="nameInputChanged()" [(ngModel)]="editedName" placeholder="{{editedName}}">
         <button [disabled]="!nameForm.form.valid" type="submit" class="btn btn-primary float-left align-bottom btn-edit" >Save Name</button>
         <div *ngIf="renameErrorMessage && displayErrorMessage" class="alert alert-danger luchador-validate">
           {{renameErrorMessage}}
