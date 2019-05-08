@@ -34,26 +34,9 @@
   
   <div class="row">
     <div class="col">
-      <div class="row">
-        <table class="table">
-          <thead>
-            <tr>
-              <th scope="col">Luchador</th>
-              <th scope="col">Kills</th>
-              <th scope="col">Deaths</th>
-              <th scope="col">Score</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let luchador of sortedScores()">
-              <td>{{ luchador.name }}</td>
-              <td>{{ luchador.state.k }}</td>
-              <td>{{ luchador.state.d }}</td>
-              <td>{{ luchador.state.score }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <app-score
+        [matchStateSubject]="matchStateSubject"
+      ></app-score>
     </div>
   </div>
 
