@@ -2,9 +2,9 @@
 
 <div *ngIf="matchState" class="container">
   <div class="row">
-    <div class="clock">
-      {{parsedMatchTime()}}
-    </div>
+    <app-clock 
+      [matchState]="matchState"
+    ></app-clock>
     <app-arena
       [gameDefinition]="gameDefinition"
       [matchStateSubject]="matchStateSubject"
