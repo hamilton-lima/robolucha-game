@@ -130,22 +130,6 @@ export class WatchMatchComponent implements OnInit, OnDestroy {
     this.service.close();
   }
 
-  sortedScores() {
-    return this.matchState.luchadores.sort(this.compareScores).reverse();
-  }
-
-  compareScores(a, b) {
-    if (a.state.score < b.state.score) {
-      return -1;
-    }
-
-    if (a.state.score > b.state.score) {
-      return 1;
-    }
-
-    return 0;
-  }
-
   parsedMatchTime(){
     let duration = moment.duration(this.matchState.clock);
     return this.formatDuration(duration);
