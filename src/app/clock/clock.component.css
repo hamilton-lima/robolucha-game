@@ -1,3 +1,5 @@
 .clock {
-    width: 100%;   
+    width: 10%;   
+    left: 50%;
+    position: relative;
 }

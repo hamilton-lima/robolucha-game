@@ -1,10 +1,11 @@
 
 
-<div *ngIf="matchState" class="container">
-  <div class="row">
+<div *ngIf="matchState">
+  <div>
     <app-clock 
       [matchState]="matchState"
     ></app-clock>
+
     <app-arena
       [gameDefinition]="gameDefinition"
       [matchStateSubject]="matchStateSubject"
@@ -12,24 +13,23 @@
       [currentLuchador]="luchador.id"
     ></app-arena>
 
-      <div class="message-area">
-        <table class="table table-sm">
-          <thead>
-            <tr>
-              <!-- <th scope="col">Time</th> -->
-              <th scope="col">Type</th>
-              <th scope="col">Message</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let msg of getUserMessages()" >
-              <!-- <td>{{msg.when}}</td> -->
-              <td [style.background-color]="msg.color">{{msg.type}}</td>
-              <td [style.background-color]="msg.color">{{msg.message}}</td>
-            </tr> 
-          </tbody>
-        </table>
-      </div>
+    <!-- Should make this its own component too? -->
+    <div class="message-area">
+      <table class="table table-sm">
+        <thead>
+          <tr>
+            <th scope="col">Type</th>
+            <th scope="col">Message</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let msg of getUserMessages()" >
+            <td [style.background-color]="msg.color">{{msg.type}}</td>
+            <td [style.background-color]="msg.color">{{msg.message}}</td>
+          </tr> 
+        </tbody>
+      </table>
+    </div>
   </div>
   
   <div class="row">
