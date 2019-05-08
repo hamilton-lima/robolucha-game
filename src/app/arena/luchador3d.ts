@@ -2,6 +2,7 @@ import * as BABYLON from "babylonjs";
 import * as GUI from "babylonjs-gui";
 import { Base3D } from "./base3D";
 import { MeshLoader } from "./mesh.loader";
+import { Helper3D } from "./helper3d";
 
 export class Luchador3D extends Base3D {
   private character: BABYLON.AbstractMesh;
@@ -17,6 +18,10 @@ export class Luchador3D extends Base3D {
   private health: number;
   private showHealthNumber = false;
 
+
+  private radarDisc: BABYLON.Mesh;
+  private radarMaterial: BABYLON.StandardMaterial;
+
   private readonly OFFSET_X = -30;
   private readonly OFFSET_Y = -65;
   private readonly LABEL_OFFSET_Y = -85;
@@ -28,7 +33,9 @@ export class Luchador3D extends Base3D {
     material: Promise<BABYLON.StandardMaterial>,
     position: BABYLON.Vector3,
     vehicleRotationY: number,
-    gunRotationY: number
+    gunRotationY: number,
+    radarAngle: number,
+    radarRadius: number
   ) {
     super();
 
@@ -50,6 +57,18 @@ export class Luchador3D extends Base3D {
     this.base.parent = this.mesh;
     this.base.isVisible = false;
     this.base.rotation.y = vehicleRotationY;
+
+    this.radarMaterial = new BABYLON.StandardMaterial(this.getName()+".radarMaterial", scene);
+    this.radarMaterial.emissiveColor = new BABYLON.Color3(1,1,1);
+    this.radarMaterial.alpha = 0.5;
+
+
+    this.radarDisc = BABYLON.MeshBuilder.CreateDisc(this.getName()+".turret.radar", {radius: radarRadius/100, arc: radarAngle/360, tessellation: 32, sideOrientation: BABYLON.Mesh.DOUBLESIDE}, scene);
+    this.radarDisc.parent = this.turret;
+    this.radarDisc.material = this.radarMaterial;
+    this.radarDisc.position.y = this.radarDisc.position.y + 1;
+    this.radarDisc.rotation.x = Helper3D.angle2radian(90);
+
 
     this.lifeBar = new GUI.Rectangle(this.getName()+".lifeBar");
     this.lifeBar.width = "50px";
@@ -75,6 +94,8 @@ export class Luchador3D extends Base3D {
     
     this.advancedTexture.addControl(this.lifeBarFill);
     this.lifeBarFill.linkWithMesh(this.mesh);
+
+
 
   for (let i = 0; i < 5; i++) {
       let divider = new GUI.Rectangle(this.getName()+".dividers"+i);
