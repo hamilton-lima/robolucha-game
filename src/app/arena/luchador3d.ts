@@ -63,12 +63,13 @@ export class Luchador3D extends Base3D {
     this.radarMaterial.alpha = 0.5;
 
 
-    this.radarDisc = BABYLON.MeshBuilder.CreateDisc(this.getName()+".turret.radar", {radius: radarRadius/100, arc: radarAngle/360, tessellation: 32, sideOrientation: BABYLON.Mesh.DOUBLESIDE}, scene);
+    this.radarDisc = BABYLON.MeshBuilder.CreateDisc(this.getName()+".turret.radar", {radius: radarRadius/100, arc: radarAngle/360, tessellation: 24, sideOrientation: BABYLON.Mesh.DOUBLESIDE}, scene);
     this.radarDisc.parent = this.turret;
     this.radarDisc.material = this.radarMaterial;
-    this.radarDisc.position.y = this.radarDisc.position.y + 1;
+    this.radarDisc.position.y = this.radarDisc.position.y + 0.2;
     this.radarDisc.rotation.x = Helper3D.angle2radian(90);
-
+    this.radarDisc.rotation.y = Helper3D.angle2radian((radarAngle/2));
+    // this.radarDisc.renderingGroupId = 1; //this is for testing and should be removed.
 
     this.lifeBar = new GUI.Rectangle(this.getName()+".lifeBar");
     this.lifeBar.width = "50px";
