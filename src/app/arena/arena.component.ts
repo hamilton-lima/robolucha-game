@@ -275,7 +275,7 @@ export class ArenaComponent implements OnInit, OnChanges {
           vehicleRotation,
           gunRotation,
           45,
-          200
+          this.convertPosition(200)
         );
 
         // save the new luchador3D
