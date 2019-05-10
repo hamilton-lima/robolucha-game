@@ -7,8 +7,9 @@ import { Subscription, Subject } from "rxjs";
 import { MatchState, GameDefinition } from "./watch-match.model";
 import { formatDate } from "@angular/common";
 import { Message } from "../message/message.model";
+import * as moment from 'moment';
 
-// const MESSAGE_TIMEOUT = 3000;
+
 @Component({
   selector: "app-watch-match",
   templateUrl: "./watch-match.component.html",
@@ -52,7 +53,7 @@ export class WatchMatchComponent implements OnInit, OnDestroy {
     console.log("watch match oninit", this.luchador);
 
     this.subscription = this.service.ready.subscribe(() => {
-      console.log("on ready", this.shared.getCurrentMatch());
+      // console.log("on ready", this.shared.getCurrentMatch());
 
       if (this.shared.getCurrentMatch()) {
         const details: WatchDetails = {
@@ -63,12 +64,12 @@ export class WatchMatchComponent implements OnInit, OnDestroy {
         this.onMessage = this.service.watch(details).subscribe(message => {
           this.message = message;
           let parsedMessage = JSON.parse(this.message);
+          parsedMessage.type = parsedMessage.type.toLowerCase();
 
-          if(parsedMessage.type == "match-state") {
+          if (parsedMessage.type == "match-state") {
             this.matchState = parsedMessage.message;
             this.matchStateSubject.next(this.matchState);
-          }
-          else if (parsedMessage.type == "message") {
+          } else if (parsedMessage.type == "message") {
             if (parsedMessage.message.luchadorID == this.luchador.id) {
               this.userMessage = parsedMessage.message;
               this.messageSubject.next(this.userMessage);
@@ -97,16 +98,22 @@ export class WatchMatchComponent implements OnInit, OnDestroy {
 
     this.service.close();
   }
-  sortedScores(){
-    return this.matchState.luchadores.sort(this.compareScores).reverse();
-  }
-  compareScores(a,b){
-    if (a.state.score < b.state.score)
-      return -1;
-    if (a.state.score > b.state.score)
-      return 1;
-    return 0;
+
+  parsedMatchTime(){
+    let duration = moment.duration(this.matchState.clock);
+    return this.formatDuration(duration);
   }
 
+  formatDuration(duration):string{
+    let min = duration.minutes();
+    let sec = duration.seconds();
+    if (min < 10) { 
+      min = "0" + min;
+    }
+    if (sec < 10) {
+      sec = "0" + sec;
+    }
+    return min + ":" + sec;
+  }
 
 }

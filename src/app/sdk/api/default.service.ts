@@ -25,6 +25,9 @@ import { MainLoginResponse } from '../model/mainLoginResponse';
 import { MainLuchador } from '../model/mainLuchador';
 import { MainMatch } from '../model/mainMatch';
 import { MainMatchParticipant } from '../model/mainMatchParticipant';
+import { MainMatchScore } from '../model/mainMatchScore';
+import { MainScoreList } from '../model/mainScoreList';
+import { MainUpdateLuchadorResponse } from '../model/mainUpdateLuchadorResponse';
 import { MainUserSetting } from '../model/mainUserSetting';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -62,6 +65,57 @@ export class DefaultService {
         return false;
     }
 
+
+    /**
+     * saves a match score
+     * 
+     * @param request ScoreList
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public internalAddMatchScoresPost(request: MainScoreList, observe?: 'body', reportProgress?: boolean): Observable<MainMatchScore>;
+    public internalAddMatchScoresPost(request: MainScoreList, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<MainMatchScore>>;
+    public internalAddMatchScoresPost(request: MainScoreList, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<MainMatchScore>>;
+    public internalAddMatchScoresPost(request: MainScoreList, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (request === null || request === undefined) {
+            throw new Error('Required parameter request was null or undefined when calling internalAddMatchScoresPost.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (ApiKeyAuth) required
+        if (this.configuration.apiKeys["Authorization"]) {
+            headers = headers.set('Authorization', this.configuration.apiKeys["Authorization"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        let httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set("Accept", httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json'
+        ];
+        let httpContentTypeSelected:string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set("Content-Type", httpContentTypeSelected);
+        }
+
+        return this.httpClient.post<MainMatchScore>(`${this.basePath}/internal/add-match-scores`,
+            request,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
 
     /**
      * ends existing match
@@ -456,9 +510,9 @@ export class DefaultService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public privateLuchadorPut(request: MainLuchador, observe?: 'body', reportProgress?: boolean): Observable<MainLuchador>;
-    public privateLuchadorPut(request: MainLuchador, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<MainLuchador>>;
-    public privateLuchadorPut(request: MainLuchador, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<MainLuchador>>;
+    public privateLuchadorPut(request: MainLuchador, observe?: 'body', reportProgress?: boolean): Observable<MainUpdateLuchadorResponse>;
+    public privateLuchadorPut(request: MainLuchador, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<MainUpdateLuchadorResponse>>;
+    public privateLuchadorPut(request: MainLuchador, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<MainUpdateLuchadorResponse>>;
     public privateLuchadorPut(request: MainLuchador, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (request === null || request === undefined) {
             throw new Error('Required parameter request was null or undefined when calling privateLuchadorPut.');
@@ -489,7 +543,7 @@ export class DefaultService {
             headers = headers.set("Content-Type", httpContentTypeSelected);
         }
 
-        return this.httpClient.put<MainLuchador>(`${this.basePath}/private/luchador`,
+        return this.httpClient.put<MainUpdateLuchadorResponse>(`${this.basePath}/private/luchador`,
             request,
             {
                 withCredentials: this.configuration.withCredentials,
@@ -537,6 +591,48 @@ export class DefaultService {
         ];
 
         return this.httpClient.get<Array<MainConfig>>(`${this.basePath}/private/mask-config/${encodeURIComponent(String(id))}`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * create random maskConfig
+     * 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public privateMaskRandomGet(observe?: 'body', reportProgress?: boolean): Observable<Array<MainConfig>>;
+    public privateMaskRandomGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<MainConfig>>>;
+    public privateMaskRandomGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<MainConfig>>>;
+    public privateMaskRandomGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // authentication (ApiKeyAuth) required
+        if (this.configuration.apiKeys["Authorization"]) {
+            headers = headers.set('Authorization', this.configuration.apiKeys["Authorization"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        let httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set("Accept", httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json'
+        ];
+
+        return this.httpClient.get<Array<MainConfig>>(`${this.basePath}/private/mask-random`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

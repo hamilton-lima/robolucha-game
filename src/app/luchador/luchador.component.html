@@ -2,7 +2,21 @@
 <div class="container">
   <div class="row">
     <div class="col-10">
-      <h1>{{ luchador.name }}</h1>
+      <h1 *ngIf="!editingName">{{ luchador.name }}</h1>
+      <button *ngIf="!editingName" class="btn btn-primary float-left align-bottom btn-edit" (click)="editName()">Edit Name</button>
+
+
+      <form *ngIf="editingName" #nameForm="ngForm" (ngSubmit)="saveName()">
+        <input name="titleEdit" #titleEdit="ngModel" *ngIf="editingName" class="title-edit" required minlength="3" maxlength="40"  (keydown)="nameInputChanged()" [(ngModel)]="editedName" placeholder="{{editedName}}">
+        <button [disabled]="!nameForm.form.valid" type="submit" class="btn btn-primary float-left align-bottom btn-edit" >Save Name</button>
+        <div *ngIf="renameErrorMessage && displayErrorMessage" class="alert alert-danger luchador-validate">
+          {{renameErrorMessage}}
+        </div>
+        <div *ngIf="!nameForm.form.valid && titleEdit.errors.minlength" class="alert alert-danger luchador-validate">
+          Luchador name must have at least 3 letters!
+        </div>
+      </form>
+      <!-- <button class="btn btn-primary float-left align-bottom">Create Random Name</button>-->
     </div>
     <div class="col-2">
       <button
@@ -94,8 +108,7 @@
         *ngIf="successMessage"
         type="success"
         (close)="successMessage = null"
-        >{{ successMessage }}</ngb-alert
-      >
+        >{{ successMessage }}</ngb-alert>
     </div>
   </div>
 </div>

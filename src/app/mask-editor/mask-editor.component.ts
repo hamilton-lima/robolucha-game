@@ -39,17 +39,26 @@ export class MaskEditorComponent implements OnInit {
     this.dirty = false;
   }
 
+  random(){
+    this.api.privateMaskRandomGet().subscribe(configs => {
+      this.luchador.configs = configs;
+      this.refreshEditor(this.luchador.configs);
+      this.dirty = true;
+      this.cdRef.detectChanges();
+    });
+  }
+
   save() {
     let configs = this.mediator.configs.value;
     if( configs.length > 0 ){
       this.luchador.configs = configs;
       const remoteCall = this.api.privateLuchadorPut(this.luchador);
 
-      remoteCall.subscribe(luchador => {
+      remoteCall.subscribe(response => {
         this.successMessage = "Luchador updated";
         setTimeout(() => (this.successMessage = null), HIDE_SUCCESS_TIMEOUT);
   
-        this.refreshEditor(luchador.configs);
+        this.refreshEditor(response.luchador.configs);
         this.cdRef.detectChanges();
       });
     }

@@ -197,7 +197,6 @@ export class Luchador3D extends Base3D {
  
     this.lifeBarFill.width = fillW +"px"; 
     this.lifeBarFill.linkOffsetX = -30 + this.lifeBar.widthInPixels/2 + (((50 - fillW) / 2) - (50 - fillW)) + "px"; 
-    
   }
-  
+
 }

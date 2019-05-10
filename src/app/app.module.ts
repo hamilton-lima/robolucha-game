@@ -33,6 +33,7 @@ import { ShapePickerComponent } from './shape-picker/shape-picker.component';
 import { PlayComponent } from './play/play.component';
 import { CanDeactivateGuard } from './can-deactivate-guard.service';
 import { MessageComponent } from './message/message.component';
+import { ScoreComponent } from './score/score.component';
 const ROUTES: Routes = [
   { path: "", redirectTo: "/luchador", pathMatch: "full" },
   {
@@ -92,7 +93,8 @@ export function apiConfigFactory(): Configuration {
     ColorPickerComponent,
     ShapePickerComponent,
     PlayComponent,
-    MessageComponent
+    MessageComponent,
+    ScoreComponent
   ],
   imports: [
     BrowserModule,
