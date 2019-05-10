@@ -8,24 +8,11 @@
       [debug]="false"
       [currentLuchador]="luchador.id"
     ></app-arena>
-      <div class="message-area">
-        <table class="table table-sm">
-          <thead>
-            <tr>
-              <!-- <th scope="col">Time</th> -->
-              <th scope="col">Type</th>
-              <th scope="col">Message</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let msg of getUserMessages()" >
-              <!-- <td>{{msg.when}}</td> -->
-              <td [style.background-color]="msg.color">{{msg.type}}</td>
-              <td [style.background-color]="msg.color">{{msg.message}}</td>
-            </tr> 
-          </tbody>
-        </table>
-      </div>
+
+    <app-message
+        [messageSubject]="messageSubject"  
+    ></app-message>
+
   </div>
   
   <div class="row">

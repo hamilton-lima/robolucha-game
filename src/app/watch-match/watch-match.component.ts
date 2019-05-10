@@ -6,9 +6,9 @@ import { SharedStateService } from "../shared-state.service";
 import { Subscription, Subject } from "rxjs";
 import { MatchState, GameDefinition } from "./watch-match.model";
 import { formatDate } from "@angular/common";
+import { Message } from "../message/message.model";
 
 // const MESSAGE_TIMEOUT = 3000;
-const MAX_MESSAGES = 20;
 @Component({
   selector: "app-watch-match",
   templateUrl: "./watch-match.component.html",
@@ -17,11 +17,12 @@ const MAX_MESSAGES = 20;
 export class WatchMatchComponent implements OnInit, OnDestroy {
   readonly gameDefinition: GameDefinition;
   readonly matchStateSubject: Subject<MatchState>;
+  readonly messageSubject: Subject<Message>;
 
   luchador: MainLuchador;
   message: string;
-  userMessage: any;
-  messageList: Array<any>;
+  userMessage: Message;
+  // messageList: Array<any>;
   matchState: MatchState;
   subscription: Subscription;
   onMessage: Subscription;
@@ -42,11 +43,12 @@ export class WatchMatchComponent implements OnInit, OnDestroy {
     };
 
     this.matchStateSubject = new Subject<MatchState>();
+    this.messageSubject = new Subject<Message>();
   }
 
   ngOnInit() {
     this.luchador = this.route.snapshot.data.luchador;
-    this.messageList =[];
+    // this.messageList =[];
     console.log("watch match oninit", this.luchador);
 
     this.subscription = this.service.ready.subscribe(() => {
@@ -69,9 +71,11 @@ export class WatchMatchComponent implements OnInit, OnDestroy {
           else if (parsedMessage.type == "message") {
             if (parsedMessage.message.luchadorID == this.luchador.id) {
               this.userMessage = parsedMessage.message;
-              this.processMessage();
+              this.messageSubject.next(this.userMessage);
+              // this.processMessage();
+
             }
-            this.processMessageList();
+            // this.processMessageList();
           }
         });
       }
@@ -80,44 +84,7 @@ export class WatchMatchComponent implements OnInit, OnDestroy {
     this.service.connect();
   }
 
-  private processMessage() {
-    switch (this.userMessage.type) {
-      case "debug": {
-        this.userMessage.color = "";
-        break;
-      }
-      case "warning": {
-        this.userMessage.color = "#fff3cd";
-        break;
-      }
-      case "danger": {
-        this.userMessage.color = "#f8d7da";
-        break;
-      }
-    }
-    this.userMessage.when = this.matchState.clock.toString();
-  }
 
-  private processMessageList() {
-    this.cleanMessageList();
-
-    let l = this.messageList.push(this.userMessage);
-    //max elements reached, remove oldest
-    if (l > MAX_MESSAGES) {
-      this.messageList.splice(0, 1);
-      l = this.messageList.length;
-    }
-    
-  }
-
-  private cleanMessageList() {
-    //removing null elements
-    for (let i = 0; i < this.messageList.length; i++) {
-      if (!this.messageList[i]) {
-        this.messageList.splice(i, 1);
-      }
-    }
-  }
 
   ngOnDestroy(): void {
     if (this.subscription) {
@@ -141,10 +108,5 @@ export class WatchMatchComponent implements OnInit, OnDestroy {
     return 0;
   }
 
-  getUserMessages(){
-    if (this.messageList){
-      return this.messageList;
-    }
-    return [];
-  }
+
 }
