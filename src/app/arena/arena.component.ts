@@ -273,7 +273,9 @@ export class ArenaComponent implements OnInit, OnChanges {
           this.loadMask(luchador.state.id),
           position,
           vehicleRotation,
-          gunRotation
+          gunRotation,
+          45,
+          this.convertPosition(420)
         );
 
         // save the new luchador3D
