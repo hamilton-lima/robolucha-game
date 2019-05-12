@@ -1,5 +1,5 @@
 export const environment = {
   production: false,
-  BASE_PATH:'http://api.robolucha.com',
-  PUBLISHER:'ws://publisher.robolucha.com/ws'
+  BASE_PATH:'http://game.robolucha.com/api',
+  PUBLISHER:'ws://game.robolucha.com/publisher'
 };
