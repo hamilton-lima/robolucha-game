@@ -13,3 +13,6 @@ FROM nginx:alpine
 
 # copy artifact build from the 'build environment'
 COPY --from=builder /usr/src/app/dist/www /usr/share/nginx/html
+RUN ls -alh /usr/share/nginx/html
+
+COPY nginx.conf /etc/nginx/nginx.conf
