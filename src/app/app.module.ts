@@ -7,7 +7,6 @@ import { HeaderComponent } from "./header/header.component";
 import { BodyComponent } from "./body/body.component";
 import { LoginActivate } from "./login.activate.service";
 import { DashBoardComponent } from "./dash-board/dash-board.component";
-import { LoginComponent } from "./login/login.component";
 import { NotFoundComponent } from "./not-found/not-found.component";
 import { AuthService } from "./auth.service";
 import { SetupComponent } from "./setup/setup.component";
@@ -53,7 +52,6 @@ const ROUTES: Routes = [
     component: PlaygroundComponent,
     canActivate: [LoginActivate]
   },
-  { path: "login", component: LoginComponent },
   {
     path: "play",
     component: PlayComponent,
@@ -77,7 +75,6 @@ export function apiConfigFactory(): Configuration {
     HeaderComponent,
     BodyComponent,
     DashBoardComponent,
-    LoginComponent,
     NotFoundComponent,
     SetupComponent,
     LuchadorComponent,

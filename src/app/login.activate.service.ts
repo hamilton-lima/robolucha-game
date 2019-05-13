@@ -7,6 +7,7 @@ import {
   RouterStateSnapshot
 } from "@angular/router";
 import { Observable } from "rxjs";
+import { map } from "rxjs/operators";
 
 @Injectable()
 export class LoginActivate implements CanActivate {
@@ -15,10 +16,16 @@ export class LoginActivate implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean> | Promise<boolean> | boolean {
+    
+    return this.authService.isLoggedIn().pipe(
+      map(user => {
+        return user ? true : false;
+      })
+    );
+
     if (!this.authService.isLoggedIn()) {
       this.router.navigate(["login"]);
     }
     return true;
   }
 }
-
