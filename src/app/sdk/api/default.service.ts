@@ -20,14 +20,13 @@ import { Observable }                                        from 'rxjs/Observab
 
 import { MainConfig } from '../model/mainConfig';
 import { MainJoinMatch } from '../model/mainJoinMatch';
-import { MainLoginRequest } from '../model/mainLoginRequest';
-import { MainLoginResponse } from '../model/mainLoginResponse';
 import { MainLuchador } from '../model/mainLuchador';
 import { MainMatch } from '../model/mainMatch';
 import { MainMatchParticipant } from '../model/mainMatchParticipant';
 import { MainMatchScore } from '../model/mainMatchScore';
 import { MainScoreList } from '../model/mainScoreList';
 import { MainUpdateLuchadorResponse } from '../model/mainUpdateLuchadorResponse';
+import { MainUser } from '../model/mainUser';
 import { MainUserSetting } from '../model/mainUserSetting';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -401,6 +400,48 @@ export class DefaultService {
         ];
 
         return this.httpClient.get<any>(`${this.basePath}/internal/ready`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * find The current user information
+     * 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public privateGetUserGet(observe?: 'body', reportProgress?: boolean): Observable<MainUser>;
+    public privateGetUserGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<MainUser>>;
+    public privateGetUserGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<MainUser>>;
+    public privateGetUserGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // authentication (ApiKeyAuth) required
+        if (this.configuration.apiKeys["Authorization"]) {
+            headers = headers.set('Authorization', this.configuration.apiKeys["Authorization"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        let httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set("Accept", httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json'
+        ];
+
+        return this.httpClient.get<MainUser>(`${this.basePath}/private/get-user`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -816,52 +857,6 @@ export class DefaultService {
         }
 
         return this.httpClient.put<MainUserSetting>(`${this.basePath}/private/user/setting`,
-            request,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Logs the user
-     * 
-     * @param request LoginRequest
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public publicLoginPost(request: MainLoginRequest, observe?: 'body', reportProgress?: boolean): Observable<MainLoginResponse>;
-    public publicLoginPost(request: MainLoginRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<MainLoginResponse>>;
-    public publicLoginPost(request: MainLoginRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<MainLoginResponse>>;
-    public publicLoginPost(request: MainLoginRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-        if (request === null || request === undefined) {
-            throw new Error('Required parameter request was null or undefined when calling publicLoginPost.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        let httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set("Accept", httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-            'application/json'
-        ];
-        let httpContentTypeSelected:string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set("Content-Type", httpContentTypeSelected);
-        }
-
-        return this.httpClient.post<MainLoginResponse>(`${this.basePath}/public/login`,
             request,
             {
                 withCredentials: this.configuration.withCredentials,
