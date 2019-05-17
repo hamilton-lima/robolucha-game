@@ -1,8 +1,8 @@
 
 
-<div *ngIf="matchState">
+<div class="watch-main" *ngIf="matchState">
   <div>
-    <app-clock 
+    <app-clock class="clock"
       [matchState]="matchState"
     ></app-clock>
 
@@ -12,7 +12,9 @@
       [debug]="false"
       [currentLuchador]="luchador.id"
     ></app-arena>
-
+    <button (click)="toggleScore()">
+      <span>toggle score</span>
+    </button>
     <!-- Should make this its own component too? -->
     <div class="message-area">
       <table class="table table-sm">
@@ -32,12 +34,9 @@
     </div>
   </div>
   
-  <div class="row">
-    <div class="col">
-      <app-score
-        [matchStateSubject]="matchStateSubject"
-      ></app-score>
-    </div>
-  </div>
+  <app-score class="score"
+    [@slideInOut]="scoreState"
+    [matchStateSubject]="matchStateSubject"
+  ></app-score>
 
 </div>

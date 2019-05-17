@@ -4,3 +4,11 @@
 .message-area{
     width: 100%;
 }
+.watch-main{
+    margin-top:1.4%
+}
+
+.clock{
+    z-index: 3;
+    position: relative;
+}

@@ -7,12 +7,25 @@ import { Subscription, Subject } from "rxjs";
 import { MatchState, GameDefinition } from "./watch-match.model";
 import { formatDate } from "@angular/common";
 import * as moment from 'moment';
+import { trigger, state, style, transition, animate} from '@angular/animations';
 
 const MAX_MESSAGES = 20;
 @Component({
   selector: "app-watch-match",
   templateUrl: "./watch-match.component.html",
-  styleUrls: ["./watch-match.component.css"]
+  styleUrls: ["./watch-match.component.css"],
+  animations: [
+    trigger('slideInOut', [
+      state('in', style({
+        transform: 'translate3d(0, 0, 0)'
+      })),
+      state('out', style({
+        transform: 'translate3d(100%, 0, 0)'
+      })),
+      transition('in => out', animate('400ms ease-in-out')),
+      transition('out => in', animate('400ms ease-in-out'))
+    ]),
+  ]
 })
 export class WatchMatchComponent implements OnInit, OnDestroy {
   readonly gameDefinition: GameDefinition;
@@ -25,6 +38,7 @@ export class WatchMatchComponent implements OnInit, OnDestroy {
   matchState: MatchState;
   subscription: Subscription;
   onMessage: Subscription;
+  scoreState:string = 'out';
 
   constructor(
     private route: ActivatedRoute,
@@ -78,6 +92,10 @@ export class WatchMatchComponent implements OnInit, OnDestroy {
     });
 
     this.service.connect();
+  }
+
+  toggleScore() {
+    this.scoreState = this.scoreState === 'out' ? 'in' : 'out';
   }
 
   private processMessage() {
