@@ -25,7 +25,7 @@ export class MessageComponent implements OnInit {
       this.message = message;
       this.processMessage();
       this.processMessageList();
-    });
+    }); 
 
   }
 
