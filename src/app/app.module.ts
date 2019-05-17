@@ -35,6 +35,7 @@ import { PlayComponent } from './play/play.component';
 import { CanDeactivateGuard } from './can-deactivate-guard.service';
 import { ScoreComponent } from './score/score.component';
 import { ClockComponent } from './clock/clock.component';
+import { CodeEditorPanelComponent } from './code-editor-panel/code-editor-panel.component';
 const ROUTES: Routes = [
   { path: "", redirectTo: "/luchador", pathMatch: "full" },
   {
@@ -95,7 +96,8 @@ export function apiConfigFactory(): Configuration {
     ShapePickerComponent,
     PlayComponent,
     ScoreComponent,
-    ClockComponent
+    ClockComponent,
+    CodeEditorPanelComponent
   ],
   imports: [
     BrowserModule,

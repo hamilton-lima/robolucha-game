@@ -18,15 +18,6 @@
       </form>
       <!-- <button class="btn btn-primary float-left align-bottom">Create Random Name</button>-->
     </div>
-    <div class="col-2">
-      <button
-        *ngIf="dirty"
-        class="btn btn-primary float-right align-bottom"
-        (click)="save()"
-      >
-        Save
-      </button>
-    </div>
   </div>
 
   <div class="row">
@@ -35,69 +26,7 @@
 
   <div class="row">
     <div class="col-12">
-      <ngb-tabset>
-        <ngb-tab title="On Repeat">
-          <ng-template ngbTabContent>
-            <div>
-              <app-code-editor
-                [script]="codes.onRepeat.script"
-                (onChange)="updateCode('onRepeat', $event)"
-              ></app-code-editor>
-            </div>
-          </ng-template>
-        </ngb-tab>
-        <ngb-tab title="On Start">
-          <ng-template ngbTabContent>
-            <div>
-              <app-code-editor
-                [script]="codes.onStart.script"
-                (onChange)="updateCode('onStart', $event)"
-              ></app-code-editor>
-            </div>
-          </ng-template>
-        </ngb-tab>
-        <ngb-tab title="On Got Damage">
-          <ng-template ngbTabContent>
-            <div>
-              <app-code-editor
-                [script]="codes.onGotDamage.script"
-                (onChange)="updateCode('onGotDamage', $event)"
-              ></app-code-editor>
-            </div>
-          </ng-template>
-        </ngb-tab>
-
-        <ngb-tab title="On Found">
-          <ng-template ngbTabContent>
-            <div>
-              <app-code-editor
-                [script]="codes.onFound.script"
-                (onChange)="updateCode('onFound', $event)"
-              ></app-code-editor>
-            </div>
-          </ng-template>
-        </ngb-tab>
-        <ngb-tab title="On Hit Other">
-          <ng-template ngbTabContent>
-            <div>
-              <app-code-editor
-                [script]="codes.onHitOther.script"
-                (onChange)="updateCode('onHitOther', $event)"
-              ></app-code-editor>
-            </div>
-          </ng-template>
-        </ngb-tab>
-        <ngb-tab title="On Hit Wall">
-          <ng-template ngbTabContent>
-            <div>
-              <app-code-editor
-                [script]="codes.onHitWall.script"
-                (onChange)="updateCode('onHitWall', $event)"
-              ></app-code-editor>
-            </div>
-          </ng-template>
-        </ngb-tab>
-      </ngb-tabset>
+      <app-code-editor-panel></app-code-editor-panel>
     </div>
   </div>
 
