@@ -16,11 +16,22 @@ const MAX_MESSAGES = 20;
   styleUrls: ["./watch-match.component.css"],
   animations: [
     trigger('slideInOut', [
+      
       state('in', style({
-        transform: 'translate3d(0, 0, 0)'
+        transform: 'translate3d({{inVal}}, 0, 0)'
+      }), {params: {inVal:0}}),
+      state('out', style({
+        transform: 'translate3d({{outVal}}, 0, 0)'
+      }), {params:{outVal:'100%'}}),
+      transition('in => out', animate('400ms ease-in-out')),
+      transition('out => in', animate('400ms ease-in-out'))
+    ]),
+    trigger('slideInOutLeft', [
+      state('in', style({
+        transform: 'translate3d(100%, 0, 0)'
       })),
       state('out', style({
-        transform: 'translate3d(100%, 0, 0)'
+        transform: 'translate3d(0, 0, 0)'
       })),
       transition('in => out', animate('400ms ease-in-out')),
       transition('out => in', animate('400ms ease-in-out'))
@@ -39,6 +50,7 @@ export class WatchMatchComponent implements OnInit, OnDestroy {
   subscription: Subscription;
   onMessage: Subscription;
   scoreState:string = 'out';
+  codeState:string = 'out';
 
   constructor(
     private route: ActivatedRoute,
@@ -96,6 +108,9 @@ export class WatchMatchComponent implements OnInit, OnDestroy {
 
   toggleScore() {
     this.scoreState = this.scoreState === 'out' ? 'in' : 'out';
+  }
+  toggleCode() {
+    this.codeState = this.codeState === 'out' ? 'in' : 'out';
   }
 
   private processMessage() {

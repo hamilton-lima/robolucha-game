@@ -12,3 +12,16 @@
     z-index: 3;
     position: relative;
 }
+
+.code-editor-panel {
+    position: fixed;
+    left: -30%;
+    top: 10%;
+    right: auto;
+    bottom: 0;
+    width: 30%;
+    min-width: 250px;
+    height: auto;
+    z-index: 9999;
+    background-color: whitesmoke;
+  }

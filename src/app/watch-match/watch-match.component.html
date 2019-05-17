@@ -12,7 +12,12 @@
       [debug]="false"
       [currentLuchador]="luchador.id"
     ></app-arena>
-    <button (click)="toggleScore()">
+    <button (click)="toggleCode()" class="btn btn-primary float-left"
+    [@slideInOut]="{value: codeState, params:{inVal:'400%', outVal:0}}">
+      <span>toggle code</span>
+    </button>
+    <button (click)="toggleScore()" class="btn btn-primary float-right" 
+    [@slideInOut]="{value: scoreState, params:{inVal:'-365%', outVal:0}}">
       <span>toggle score</span>
     </button>
     <!-- Should make this its own component too? -->
@@ -33,6 +38,10 @@
       </table>
     </div>
   </div>
+
+  <app-code-editor-panel class="code-editor-panel"
+  [@slideInOut]="{value: codeState, params:{inVal:'100%', outVal:0}}">
+  </app-code-editor-panel>
   
   <app-score class="score"
     [@slideInOut]="scoreState"

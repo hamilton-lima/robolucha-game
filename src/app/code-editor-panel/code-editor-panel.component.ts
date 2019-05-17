@@ -1,4 +1,4 @@
-import { Component, OnInit,ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit,ChangeDetectorRef,  Input } from '@angular/core';
 import { MainCode } from "../sdk/model/mainCode";
 
 import { MainUpdateLuchadorResponse } from '../sdk/model/mainUpdateLuchadorResponse';
@@ -15,7 +15,6 @@ const HIDE_SUCCESS_TIMEOUT = 3000;
   styleUrls: ['./code-editor-panel.component.css']
 })
 export class CodeEditorPanelComponent implements OnInit {
-
   dirty: boolean;
   luchador: MainLuchador;
   luchadorResponse: MainUpdateLuchadorResponse;
