@@ -12,14 +12,20 @@
       [debug]="false"
       [currentLuchador]="luchador.id"
     ></app-arena>
-    <button (click)="toggleCode()" class="btn btn-primary float-left"
-    [@slideInOut]="{value: codeState, params:{inVal:'400%', outVal:0}}">
-      <span>toggle code</span>
-    </button>
-    <button (click)="toggleScore()" class="btn btn-primary float-right" 
-    [@slideInOut]="{value: scoreState, params:{inVal:'-365%', outVal:0}}">
-      <span>toggle score</span>
-    </button>
+    <ul class="panel-selector float-right">
+      <li>
+        <button (click)="toggleCode()" class="btn btn-primary"    >
+          <!-- [@slideInOut]="{value: codeState, params:{inVal:'400%', outVal:0}}" -->
+          <span>toggle code</span>
+        </button>
+      </li>
+      <li>
+        <button (click)="toggleScore()" class="btn btn-primary" >
+          <!-- [@slideInOut]="{value: scoreState, params:{inVal:'-365%', outVal:0}}" -->
+          <span>toggle score</span>
+        </button>
+      </li>
+    </ul>
     <!-- Should make this its own component too? -->
     <div class="message-area">
       <table class="table table-sm">
@@ -40,11 +46,11 @@
   </div>
 
   <app-code-editor-panel class="code-editor-panel"
-  [@slideInOut]="{value: codeState, params:{inVal:'100%', outVal:0}}">
+  [@slideInOut]="{value: codeState, params:{inVal:'145%', outVal:0}}">
   </app-code-editor-panel>
   
   <app-score class="score"
-    [@slideInOut]="scoreState"
+    [@slideInOut]="{value: scoreState, params:{inVal:'-30%', outVal:'100%'}}"
     [matchStateSubject]="matchStateSubject"
   ></app-score>
 

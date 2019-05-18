@@ -108,9 +108,11 @@ export class WatchMatchComponent implements OnInit, OnDestroy {
 
   toggleScore() {
     this.scoreState = this.scoreState === 'out' ? 'in' : 'out';
+    this.codeState = 'out';
   }
   toggleCode() {
     this.codeState = this.codeState === 'out' ? 'in' : 'out';
+    this.scoreState = 'out';
   }
 
   private processMessage() {
