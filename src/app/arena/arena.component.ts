@@ -21,6 +21,7 @@ import { Helper3D } from "./helper3d";
 import { SceneBuilder } from "./scene.builder3D";
 import { TextureBuilder } from "./texture-builder";
 import { ActivatedRoute } from "@angular/router";
+import { SharedConstants } from "./shared.constants";
 
 class SavedCamera {
   target: BABYLON.Vector3;
@@ -110,7 +111,6 @@ export class ArenaComponent implements OnInit, OnChanges {
 
   setCameraFromSavedState() {
     const savedCameraState = localStorage.getItem(this.ROBOLUCHA_SAVED_CAMERA);
-    // console.log(this.ROBOLUCHA_SAVED_CAMERA, savedCameraState);
 
     if (savedCameraState) {
       const cameraState: SavedCamera = JSON.parse(savedCameraState);
@@ -372,7 +372,9 @@ export class ArenaComponent implements OnInit, OnChanges {
   }
 
   convertPosition(n: number) {
-    const result: number = n / this.gameDefinition.luchadorSize;
+    const result: number = n / this.gameDefinition.luchadorSize
+      * SharedConstants.LUCHADOR_MODEL_WIDTH;
+
     return result;
   }
 

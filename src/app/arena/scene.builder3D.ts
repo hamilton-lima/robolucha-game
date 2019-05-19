@@ -6,6 +6,7 @@ import { GroundTile3D } from './ground-tile3D';
 import { Wall3D } from './wall3D';
 import { Helper3D } from './helper3d';
 import { GameDefinition } from '../watch-match/watch-match.model';
+import { SharedConstants } from './shared.constants';
 
 export class SceneBuilder {
 
@@ -178,7 +179,8 @@ export class SceneBuilder {
     }
 
     convertPosition(n: number) {
-        const result: number = n / this.gameDefinition.luchadorSize;
+        const result: number = n / this.gameDefinition.luchadorSize 
+            * SharedConstants.LUCHADOR_MODEL_WIDTH;
         return result;
     }
 
