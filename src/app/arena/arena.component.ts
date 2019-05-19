@@ -371,8 +371,10 @@ export class ArenaComponent implements OnInit, OnChanges {
     luchador3D.rotateGun(value);
   }
 
+  readonly luchadorModelWidth = 3;
+
   convertPosition(n: number) {
-    const result: number = n / this.gameDefinition.luchadorSize;
+    const result: number = (n / this.gameDefinition.luchadorSize) * this.luchadorModelWidth;
     return result;
   }
 
