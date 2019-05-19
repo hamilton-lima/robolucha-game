@@ -35,8 +35,8 @@ export class WatchMatchComponent implements OnInit, OnDestroy {
     this.message = "N/A";
 
     this.gameDefinition = {
-      arenaWidth: 2400,
-      arenaHeight: 1200,
+      arenaWidth: 1200,
+      arenaHeight: 600,
       luchadorSize: 60,
       bulletSize: 16
     };
