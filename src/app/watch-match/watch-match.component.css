@@ -29,6 +29,21 @@
     z-index: 9999;
     background-color: whitesmoke;
   }
+
+  .message-panel{
+    position: fixed;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    top: 100%;
+    bottom: 0;
+    width: 55%;
+    min-width: 250px;
+    height: 68%;
+    z-index: 9999;
+    background-color: whitesmoke;
+    overflow-y: scroll;
+  }
   
 .panel-selector{
     list-style: none;

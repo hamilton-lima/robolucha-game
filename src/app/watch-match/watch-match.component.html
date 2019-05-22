@@ -15,32 +15,36 @@
     <ul class="panel-selector float-right">
       <li>
         <button (click)="toggleCode()" class="btn btn-primary"    >
-          <!-- [@slideInOut]="{value: codeState, params:{inVal:'400%', outVal:0}}" -->
           <span>toggle code</span>
         </button>
       </li>
       <li>
         <button (click)="toggleScore()" class="btn btn-primary" >
-          <!-- [@slideInOut]="{value: scoreState, params:{inVal:'-365%', outVal:0}}" -->
           <span>toggle score</span>
         </button>
       </li>
+      <li>
+        <button (click)="toggleMessages()" class="btn btn-primary" >
+          <span>toggle messages</span>
+        </button>
+      </li>
     </ul>
-    <!-- Should make this its own component too? -->
-
-    <app-message 
-        [messageSubject]="messageSubject"  
-    ></app-message>
+    
 
   </div>
   
   <app-code-editor-panel class="code-editor-panel"
-  [@slideInOut]="{value: codeState, params:{inVal:'145%', outVal:0}}">
+  [@slideInOut]="{value: panelStates.code, params:{inVal:'145%', outVal:0}}">
   </app-code-editor-panel>
   
   <app-score class="score"
-    [@slideInOut]="{value: scoreState, params:{inVal:'-30%', outVal:'100%'}}"
+    [@slideInOut]="{value: panelStates.score, params:{inVal:'-30%', outVal:'100%'}}"
     [matchStateSubject]="matchStateSubject"
   ></app-score>
+
+  <app-message class="message-panel"
+      [@slideInOutVert]="{value: panelStates.message, params:{inVal:'-120%', outVal:'100%'}}"
+      [messageSubject]="messageSubject"  
+  ></app-message>
 
 </div>

@@ -25,16 +25,17 @@ import { trigger, state, style, transition, animate} from '@angular/animations';
       transition('in => out', animate('400ms ease-in-out')),
       transition('out => in', animate('400ms ease-in-out'))
     ]),
-    trigger('slideInOutLeft', [
+    trigger('slideInOutVert', [
+      
       state('in', style({
-        transform: 'translate3d(100%, 0, 0)'
-      })),
+        transform: 'translate3d(0, {{inVal}}, 0)'
+      }), {params: {inVal:0}}),
       state('out', style({
-        transform: 'translate3d(0, 0, 0)'
-      })),
+        transform: 'translate3d(0, {{outVal}}, 0)'
+      }), {params:{outVal:'100%'}}),
       transition('in => out', animate('400ms ease-in-out')),
       transition('out => in', animate('400ms ease-in-out'))
-    ]),
+    ])
   ]
 })
 export class WatchMatchComponent implements OnInit, OnDestroy {
@@ -49,9 +50,12 @@ export class WatchMatchComponent implements OnInit, OnDestroy {
   matchState: MatchState;
   subscription: Subscription;
   onMessage: Subscription;
-  scoreState:string = 'out';
-  codeState:string = 'out';
 
+  //trocar isso por uma maquina de estados de verdade
+  scoreState:string = 'out'; 
+  codeState:string = 'out';
+  messageState:string = 'out';
+  panelStates = {score: 'out', code: 'out', message: 'out'};
   constructor(
     private route: ActivatedRoute,
     private service: WatchMatchService,
@@ -110,12 +114,22 @@ export class WatchMatchComponent implements OnInit, OnDestroy {
   }
 
   toggleScore() {
-    this.scoreState = this.scoreState === 'out' ? 'in' : 'out';
-    this.codeState = 'out';
+    this.panelStates.score = this.panelStates.score === 'out' ? 'in' : 'out';
+    this.panelStates.code = 'out';
+    this.panelStates.message = 'out';
   }
   toggleCode() {
-    this.codeState = this.codeState === 'out' ? 'in' : 'out';
-    this.scoreState = 'out';
+    this.panelStates.code = this.panelStates.code === 'out' ? 'in' : 'out';
+    this.panelStates.score = 'out';
+    this.panelStates.message = 'out';
+
+  }
+
+  toggleMessages() {
+    this.panelStates.message  = this.panelStates.message === 'out' ? 'in' : 'out';
+    this.panelStates.score = 'out';
+    this.panelStates.code = 'out';
+
   }
 
   ngOnDestroy(): void {
