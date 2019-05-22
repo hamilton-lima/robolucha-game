@@ -33,6 +33,7 @@ import { ColorPickerComponent } from './color-picker/color-picker.component';
 import { ShapePickerComponent } from './shape-picker/shape-picker.component';
 import { PlayComponent } from './play/play.component';
 import { CanDeactivateGuard } from './can-deactivate-guard.service';
+import { MessageComponent } from './message/message.component';
 import { ScoreComponent } from './score/score.component';
 import { ClockComponent } from './clock/clock.component';
 import { CodeEditorPanelComponent } from './code-editor-panel/code-editor-panel.component';
@@ -97,7 +98,8 @@ export function apiConfigFactory(): Configuration {
     PlayComponent,
     ScoreComponent,
     ClockComponent,
-    CodeEditorPanelComponent
+    CodeEditorPanelComponent,
+    MessageComponent
   ],
   imports: [
     BrowserModule,

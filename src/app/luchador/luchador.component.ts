@@ -51,6 +51,8 @@ export class LuchadorComponent implements OnInit, AfterViewChecked {
     this.editingName = false;
     this.renameErrorMessage = "";
     
+    this.luchador = data.luchador;
+
     this.editedName = this.luchador.name;
   }
 

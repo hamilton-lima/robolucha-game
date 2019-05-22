@@ -27,24 +27,13 @@
       </li>
     </ul>
     <!-- Should make this its own component too? -->
-    <div class="message-area">
-      <table class="table table-sm">
-        <thead>
-          <tr>
-            <th scope="col">Type</th>
-            <th scope="col">Message</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let msg of getUserMessages()" >
-            <td [style.background-color]="msg.color">{{msg.type}}</td>
-            <td [style.background-color]="msg.color">{{msg.message}}</td>
-          </tr> 
-        </tbody>
-      </table>
-    </div>
-  </div>
 
+    <app-message 
+        [messageSubject]="messageSubject"  
+    ></app-message>
+
+  </div>
+  
   <app-code-editor-panel class="code-editor-panel"
   [@slideInOut]="{value: codeState, params:{inVal:'145%', outVal:0}}">
   </app-code-editor-panel>
