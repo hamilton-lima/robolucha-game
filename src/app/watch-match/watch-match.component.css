@@ -19,7 +19,7 @@
 
 .code-editor-panel {
     position: fixed;
-    left: -55%;
+    left: -65%;
     top: 20%;
     right: auto;
     bottom: 0;
@@ -47,9 +47,10 @@
   
 .panel-selector{
     list-style: none;
-    position: absolute;
+    position: fixed;
     right: 1%;
     top: 30%;
+    z-index: 10000;
 
 }
 
@@ -80,7 +81,7 @@
 
 .panel-selector .btn-round {
     margin-bottom: 20px;
-    z-index: 90000;
+    z-index: 10000;
 
 }
 
