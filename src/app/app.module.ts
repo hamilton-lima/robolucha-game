@@ -36,6 +36,14 @@ import { MessageComponent } from './message/message.component';
 import { ScoreComponent } from './score/score.component';
 import { ClockComponent } from './clock/clock.component';
 import { CodeEditorPanelComponent } from './code-editor-panel/code-editor-panel.component';
+
+
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { fas } from '@fortawesome/free-solid-svg-icons';
+
+library.add(fas);
+
 const ROUTES: Routes = [
   { path: "", redirectTo: "/luchador", pathMatch: "full" },
   {
@@ -106,7 +114,8 @@ export function apiConfigFactory(): Configuration {
     RouterModule.forRoot(ROUTES, { useHash: true }),
     NgbModule,
     AceEditorModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    FontAwesomeModule
   ],
   providers: [LoginActivate, AuthService, CanDeactivateGuard],
   bootstrap: [AppComponent]

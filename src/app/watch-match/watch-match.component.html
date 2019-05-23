@@ -14,18 +14,31 @@
     ></app-arena>
     <ul class="panel-selector float-right">
       <li>
-        <button (click)="toggleCode()" class="btn btn-primary"    >
-          <span>toggle code</span>
+        <button (click)="toggleCode()" class="btn-round">
+          <fa-icon
+            [styles]="{'stroke': 'white', 'color': 'white'}"
+            [icon]="['fas', 'edit']"
+            size="2x"
+          ></fa-icon>
         </button>
       </li>
       <li>
-        <button (click)="toggleScore()" class="btn btn-primary" >
-          <span>toggle score</span>
+        <button (click)="toggleScore()" class="btn-round" >
+          <fa-icon
+           [styles]="{'stroke': 'white', 'color': 'white'}"
+            [icon]="['fas', 'trophy']"
+            size="2x"
+          ></fa-icon>
         </button>
       </li>
       <li>
-        <button (click)="toggleMessages()" class="btn btn-primary" >
-          <span>toggle messages</span>
+        <button (click)="toggleMessages()" class="btn-round" >
+            <fa-icon
+            [styles]="{'stroke': 'white', 'color': 'white'}"
+            [icon]="['fas', 'comment']"
+
+            size="2x"
+          ></fa-icon>
         </button>
       </li>
     </ul>

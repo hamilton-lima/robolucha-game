@@ -53,6 +53,34 @@
 
 }
 
-.panel-selector .btn {
-    margin-bottom: 20px;
+.btn-round{
+    width: 60px;
+    height: 60px;
+    text-align: center;
+    padding: 6px 0;
+    font-size: 12px;
+    line-height: 1.42;
+    border-radius: 30px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3);
+    border:none;
+    background-color: #007bff;
 }
+
+.btn-round:hover{
+    background-color: #0069d9;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3);
+}
+
+
+
+
+.btn-round span{ 
+    color: white;
+}
+
+.panel-selector .btn-round {
+    margin-bottom: 20px;
+    z-index: 90000;
+
+}
+
