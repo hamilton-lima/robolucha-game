@@ -44,8 +44,9 @@
     </ul>
 
     <div class="matchover-alert" *ngIf="matchOver">
-      <p>This match is over!</p>
-      <button class="btn btn-primary float-right" (click)="toList()"><span>Return to List</span></button>
+      <h1>This match is over!</h1>
+      <button class="btn btn-primary float-right" (click)="toList()"><span>Return to Match List</span></button>
+      <app-score [matchStateSubject]="matchStateSubject"></app-score>
     </div>
     
 
