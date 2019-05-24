@@ -1,0 +1,18 @@
+<div class="message-area">
+  <table class="table table-sm">
+    <thead>
+      <tr>
+        <!-- <th scope="col">Time</th> -->
+        <th class="message-type" scope="col">Type</th>
+        <th class="user-message" scope="col">Message</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let msg of messageList" >
+        <!-- <td>{{msg.when}}</td> -->
+        <td class="message-type" [style.background-color]="msg.color">{{msg.type}}</td>
+        <td class="user-message" [style.background-color]="msg.color">{{msg.message}}</td>
+      </tr> 
+    </tbody>
+  </table>
+</div>

@@ -5,27 +5,57 @@ import { ActivatedRoute } from "@angular/router";
 import { SharedStateService } from "../shared-state.service";
 import { Subscription, Subject } from "rxjs";
 import { MatchState, GameDefinition } from "./watch-match.model";
-import { formatDate } from "@angular/common";
-import * as moment from 'moment';
+import { Message } from "../message/message.model";
+import { trigger, state, style, transition, animate} from '@angular/animations';
 
-const MAX_MESSAGES = 20;
+
 @Component({
   selector: "app-watch-match",
   templateUrl: "./watch-match.component.html",
-  styleUrls: ["./watch-match.component.css"]
+  styleUrls: ["./watch-match.component.css"],
+  animations: [
+    trigger('slideInOut', [
+      
+      state('in', style({
+        transform: 'translate3d({{inVal}}, 0, 0)'
+      }), {params: {inVal:0}}),
+      state('out', style({
+        transform: 'translate3d({{outVal}}, 0, 0)'
+      }), {params:{outVal:'100%'}}),
+      transition('in => out', animate('400ms ease-in-out')),
+      transition('out => in', animate('400ms ease-in-out'))
+    ]),
+    trigger('slideInOutVert', [
+      
+      state('in', style({
+        transform: 'translate3d(0, {{inVal}}, 0)'
+      }), {params: {inVal:0}}),
+      state('out', style({
+        transform: 'translate3d(0, {{outVal}}, 0)'
+      }), {params:{outVal:'100%'}}),
+      transition('in => out', animate('400ms ease-in-out')),
+      transition('out => in', animate('400ms ease-in-out'))
+    ])
+  ]
 })
 export class WatchMatchComponent implements OnInit, OnDestroy {
   readonly gameDefinition: GameDefinition;
   readonly matchStateSubject: Subject<MatchState>;
+  readonly messageSubject: Subject<Message>;
 
   luchador: MainLuchador;
   message: string;
-  userMessage: any;
-  messageList: Array<any>;
+  userMessage: Message;
+  // messageList: Array<any>;
   matchState: MatchState;
   subscription: Subscription;
   onMessage: Subscription;
 
+  //trocar isso por uma maquina de estados de verdade
+  scoreState:string = 'out'; 
+  codeState:string = 'out';
+  messageState:string = 'out';
+  panelStates = {score: 'out', code: 'out', message: 'out'};
   constructor(
     private route: ActivatedRoute,
     private service: WatchMatchService,
@@ -42,12 +72,13 @@ export class WatchMatchComponent implements OnInit, OnDestroy {
     };
 
     this.matchStateSubject = new Subject<MatchState>();
+    this.messageSubject = new Subject<Message>();
   }
 
   ngOnInit() {
     this.luchador = this.route.snapshot.data.luchador;
-    this.messageList = [];
-    // console.log("watch match oninit", this.luchador);
+    // this.messageList =[];
+    console.log("watch match oninit", this.luchador);
 
     this.subscription = this.service.ready.subscribe(() => {
       // console.log("on ready", this.shared.getCurrentMatch());
@@ -69,9 +100,11 @@ export class WatchMatchComponent implements OnInit, OnDestroy {
           } else if (parsedMessage.type == "message") {
             if (parsedMessage.message.luchadorID == this.luchador.id) {
               this.userMessage = parsedMessage.message;
-              this.processMessage();
+              this.messageSubject.next(this.userMessage);
+              // this.processMessage();
+
             }
-            this.processMessageList();
+            // this.processMessageList();
           }
         });
       }
@@ -80,42 +113,23 @@ export class WatchMatchComponent implements OnInit, OnDestroy {
     this.service.connect();
   }
 
-  private processMessage() {
-    switch (this.userMessage.type) {
-      case "debug": {
-        this.userMessage.color = "";
-        break;
-      }
-      case "warning": {
-        this.userMessage.color = "#fff3cd";
-        break;
-      }
-      case "danger": {
-        this.userMessage.color = "#f8d7da";
-        break;
-      }
-    }
-    this.userMessage.when = this.matchState.clock.toString();
+  toggleScore() {
+    this.panelStates.score = this.panelStates.score === 'out' ? 'in' : 'out';
+    this.panelStates.code = 'out';
+    this.panelStates.message = 'out';
+  }
+  toggleCode() {
+    this.panelStates.code = this.panelStates.code === 'out' ? 'in' : 'out';
+    this.panelStates.score = 'out';
+    this.panelStates.message = 'out';
+
   }
 
-  private processMessageList() {
-    this.cleanMessageList();
+  toggleMessages() {
+    this.panelStates.message  = this.panelStates.message === 'out' ? 'in' : 'out';
+    this.panelStates.score = 'out';
+    this.panelStates.code = 'out';
 
-    let l = this.messageList.push(this.userMessage);
-    //max elements reached, remove oldest
-    if (l > MAX_MESSAGES) {
-      this.messageList.splice(0, 1);
-      l = this.messageList.length;
-    }
-  }
-
-  private cleanMessageList() {
-    //removing null elements
-    for (let i = 0; i < this.messageList.length; i++) {
-      if (!this.messageList[i]) {
-        this.messageList.splice(i, 1);
-      }
-    }
   }
 
   ngOnDestroy(): void {
@@ -130,27 +144,6 @@ export class WatchMatchComponent implements OnInit, OnDestroy {
     this.service.close();
   }
 
-  parsedMatchTime(){
-    let duration = moment.duration(this.matchState.clock);
-    return this.formatDuration(duration);
-  }
 
-  formatDuration(duration):string{
-    let min = duration.minutes();
-    let sec = duration.seconds();
-    if (min < 10) { 
-      min = "0" + min;
-    }
-    if (sec < 10) {
-      sec = "0" + sec;
-    }
-    return min + ":" + sec;
-  }
 
-  getUserMessages() {
-    if (this.messageList) {
-      return this.messageList;
-    }
-    return [];
-  }
 }

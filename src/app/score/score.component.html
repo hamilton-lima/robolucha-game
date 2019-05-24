@@ -1,20 +1,20 @@
-<div class="row">
-    <table class="table">
-      <thead>
-        <tr>
-          <th scope="col">Luchador</th>
-          <th scope="col">Kills</th>
-          <th scope="col">Deaths</th>
-          <th scope="col">Score</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let score of sortedScores()">
-          <td>{{ score.name }}</td>
-          <td>{{ score.k }}</td>
-          <td>{{ score.d }}</td>
-          <td>{{ score.score }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+<div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Luchador</th>
+        <th scope="col">Kills</th>
+        <th scope="col">Deaths</th>
+        <th scope="col">Score</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let score of sortedScores()">
+        <td>{{ score.name }}</td>
+        <td>{{ score.k }}</td>
+        <td>{{ score.d }}</td>
+        <td>{{ score.score }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,6 +1,7 @@
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppComponent } from "./app.component";
 import { HeaderComponent } from "./header/header.component";
@@ -31,7 +32,18 @@ import { ColorPickerComponent } from './color-picker/color-picker.component';
 import { ShapePickerComponent } from './shape-picker/shape-picker.component';
 import { PlayComponent } from './play/play.component';
 import { CanDeactivateGuard } from './can-deactivate-guard.service';
+import { MessageComponent } from './message/message.component';
 import { ScoreComponent } from './score/score.component';
+import { ClockComponent } from './clock/clock.component';
+import { CodeEditorPanelComponent } from './code-editor-panel/code-editor-panel.component';
+
+
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { fas } from '@fortawesome/free-solid-svg-icons';
+
+library.add(fas);
+
 const ROUTES: Routes = [
   { path: "", redirectTo: "/luchador", pathMatch: "full" },
   {
@@ -89,7 +101,10 @@ export function apiConfigFactory(): Configuration {
     ColorPickerComponent,
     ShapePickerComponent,
     PlayComponent,
-    ScoreComponent
+    ScoreComponent,
+    ClockComponent,
+    CodeEditorPanelComponent,
+    MessageComponent
   ],
   imports: [
     BrowserModule,
@@ -98,7 +113,9 @@ export function apiConfigFactory(): Configuration {
     ApiModule.forRoot(apiConfigFactory),
     RouterModule.forRoot(ROUTES, { useHash: true }),
     NgbModule,
-    AceEditorModule
+    AceEditorModule,
+    BrowserAnimationsModule,
+    FontAwesomeModule
   ],
   providers: [LoginActivate, AuthService, CanDeactivateGuard],
   bootstrap: [AppComponent]

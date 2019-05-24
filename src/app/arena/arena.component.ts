@@ -94,6 +94,7 @@ export class ArenaComponent implements OnInit, OnChanges {
       this.gameDefinition.luchadorSize / 2
     );
     this.HALF_BULLET = this.convertPosition(this.gameDefinition.bulletSize / 2);
+    this.canvas.nativeElement.width = window.innerWidth*0.99;
     this.engine = new BABYLON.Engine(this.canvas.nativeElement, true);
 
     this.matchStateSubject.subscribe((matchState: MatchState) => {
