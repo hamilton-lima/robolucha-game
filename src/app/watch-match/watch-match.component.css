@@ -57,13 +57,18 @@
 .matchover-alert{
     z-index: 4;
     position: absolute;
-    left: 50%;
-    right: 50%;
+    left: 37%;
     top: 40%;
     background-color: white;
-    width: 40%;
-    height: 30%;
+    width: 30%;
+    height: 25%;
+}
 
+.matchover-alert p{
+    margin: 25px;
+}
+.matchover-alert button{
+    margin: 20px;
 }
 
 .btn-round{

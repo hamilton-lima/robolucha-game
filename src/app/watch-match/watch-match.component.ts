@@ -103,7 +103,7 @@ export class WatchMatchComponent implements OnInit, OnDestroy {
             if (this.matchState.clock < 100)
             {
               this.matchOver = true;
-
+              this.closeAllPanels();
             }
           } else if (parsedMessage.type == "message") {
             if (parsedMessage.message.luchadorID == this.luchador.id) {
@@ -119,6 +119,12 @@ export class WatchMatchComponent implements OnInit, OnDestroy {
     });
 
     this.service.connect();
+  }
+
+  closeAllPanels(){
+    this.panelStates.score = 'out';
+    this.panelStates.code = 'out';
+    this.panelStates.message = 'out';
   }
 
   toggleScore() {
