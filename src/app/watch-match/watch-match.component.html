@@ -42,6 +42,11 @@
         </button>
       </li>
     </ul>
+
+    <div class="matchover-alert" *ngIf="matchOver">
+      <span>This match is over!</span>
+      <button class="btn btn-primary" (click)="toList()">Return to List</button>
+    </div>
     
 
   </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, Output, EventEmitter } from "@angular/core";
 import { WatchMatchService, WatchDetails } from "./watch-match.service";
 import { MainLuchador } from "../sdk/model/models";
 import { ActivatedRoute } from "@angular/router";
@@ -39,6 +39,7 @@ import { trigger, state, style, transition, animate} from '@angular/animations';
   ]
 })
 export class WatchMatchComponent implements OnInit, OnDestroy {
+  @Output() matchFinished = new EventEmitter<boolean>();
   readonly gameDefinition: GameDefinition;
   readonly matchStateSubject: Subject<MatchState>;
   readonly messageSubject: Subject<Message>;
@@ -50,6 +51,8 @@ export class WatchMatchComponent implements OnInit, OnDestroy {
   matchState: MatchState;
   subscription: Subscription;
   onMessage: Subscription;
+
+  matchOver: boolean;
 
   //trocar isso por uma maquina de estados de verdade
   scoreState:string = 'out'; 
@@ -97,6 +100,11 @@ export class WatchMatchComponent implements OnInit, OnDestroy {
           if (parsedMessage.type == "match-state") {
             this.matchState = parsedMessage.message;
             this.matchStateSubject.next(this.matchState);
+            if (this.matchState.clock < 100)
+            {
+              this.matchOver = true;
+
+            }
           } else if (parsedMessage.type == "message") {
             if (parsedMessage.message.luchadorID == this.luchador.id) {
               this.userMessage = parsedMessage.message;
@@ -144,6 +152,10 @@ export class WatchMatchComponent implements OnInit, OnDestroy {
     this.service.close();
   }
 
+  toList(): void{
+    this.matchFinished.emit(true);
+    
+  }
 
 
 }

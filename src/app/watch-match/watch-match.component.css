@@ -54,6 +54,18 @@
 
 }
 
+.matchover-alert{
+    z-index: 4;
+    position: absolute;
+    left: 50%;
+    right: 50%;
+    top: 40%;
+    background-color: white;
+    width: 40%;
+    height: 30%;
+
+}
+
 .btn-round{
     width: 60px;
     height: 60px;

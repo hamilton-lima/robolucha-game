@@ -9,13 +9,19 @@ import { debug } from 'util';
   styleUrls: ['./play.component.css']
 })
 export class PlayComponent implements OnInit {
+  hasMatch : boolean;
 
   constructor(
     private shared: SharedStateService) {
    }
 
   ngOnInit() {
-    this.checkMatch();
+    this.hasMatch = true;
+  }
+
+
+  endMatch(){
+    this.shared.setCurrentMatch(null);
   }
 
   checkMatch(){
