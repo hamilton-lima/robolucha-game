@@ -54,6 +54,24 @@
 
 }
 
+.matchover-alert{
+    z-index: 4;
+    position: absolute;
+    left: 37%;
+    top: 40%;
+    background-color: white;
+    width: 30%;
+    max-height: 75%;
+    overflow-y: scroll;
+}
+
+.matchover-alert p{
+    margin: 25px;
+}
+.matchover-alert button{
+    margin: 20px;
+}
+
 .btn-round{
     width: 60px;
     height: 60px;
@@ -85,3 +103,20 @@
 
 }
 
+.score-last{ 
+    overflow-y: scroll;
+}
+
+.score {
+    position: fixed;
+    left: auto;
+    top: 20%;
+    right: 0;
+    bottom: 0;
+    width: 60%;
+    min-width: 250px;
+    height: 60%;
+    z-index: 9999;
+    background-color: whitesmoke;
+    overflow-y: scroll;
+  }
