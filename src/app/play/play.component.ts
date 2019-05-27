@@ -1,34 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-
-import { SharedStateService } from "../shared-state.service";
-import { debug } from 'util';
+import { Component } from "@angular/core";
+import { Router } from "@angular/router";
+import { MainMatch } from "../sdk";
 
 @Component({
-  selector: 'app-play',
-  templateUrl: './play.component.html',
-  styleUrls: ['./play.component.css']
+  selector: "app-play",
+  templateUrl: "./play.component.html",
+  styleUrls: ["./play.component.css"]
 })
-export class PlayComponent implements OnInit {
-  hasMatch : boolean;
+export class PlayComponent {
 
-  constructor(
-    private shared: SharedStateService) {
-   }
+  constructor(private router: Router) {}
 
-  ngOnInit() {
-    this.hasMatch = true;
-  }
-
-
-  endMatch(){
-    this.shared.setCurrentMatch(null);
-  }
-
-  checkMatch(){
-    if (this.shared.getCurrentMatch() == null)
-    {
-      return false;
-    }
-    return true;
+  watch(match: MainMatch){
+    this.router.navigate(["watch", match.id]);
   }
 }

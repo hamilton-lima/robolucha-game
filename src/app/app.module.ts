@@ -7,7 +7,6 @@ import { AppComponent } from "./app.component";
 import { HeaderComponent } from "./header/header.component";
 import { BodyComponent } from "./body/body.component";
 import { LoginActivate } from "./login.activate.service";
-import { DashBoardComponent } from "./dash-board/dash-board.component";
 import { NotFoundComponent } from "./not-found/not-found.component";
 import { AuthService } from "./auth.service";
 import { SetupComponent } from "./setup/setup.component";
@@ -36,11 +35,10 @@ import { MessageComponent } from './message/message.component';
 import { ScoreComponent } from './score/score.component';
 import { ClockComponent } from './clock/clock.component';
 import { CodeEditorPanelComponent } from './code-editor-panel/code-editor-panel.component';
-
-
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
+import { WatchPageComponent } from './watch-page/watch-page.component';
 
 library.add(fas);
 
@@ -70,6 +68,12 @@ const ROUTES: Routes = [
     canActivate: [LoginActivate],
     resolve: { luchador: LuchadorResolverService }
   },
+  {
+    path: "watch/:id",
+    component: WatchPageComponent,
+    canActivate: [LoginActivate],
+    resolve: { luchador: LuchadorResolverService }
+  },
   { path: "**", component: NotFoundComponent }
 ];
 
@@ -86,7 +90,6 @@ export function apiConfigFactory(): Configuration {
     AppComponent,
     HeaderComponent,
     BodyComponent,
-    DashBoardComponent,
     NotFoundComponent,
     SetupComponent,
     LuchadorComponent,
@@ -104,7 +107,8 @@ export function apiConfigFactory(): Configuration {
     ScoreComponent,
     ClockComponent,
     CodeEditorPanelComponent,
-    MessageComponent
+    MessageComponent,
+    WatchPageComponent
   ],
   imports: [
     BrowserModule,
