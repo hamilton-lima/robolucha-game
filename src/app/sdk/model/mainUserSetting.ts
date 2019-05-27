@@ -12,10 +12,7 @@
 
 
 export interface MainUserSetting {
-    createdAt?: string;
-    deletedAt?: string;
     id?: number;
     lastOption?: string;
-    updatedAt?: string;
     userID?: number;
 }
