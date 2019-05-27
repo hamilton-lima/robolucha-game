@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, Output, EventEmitter } from "@angular/core";
 import { WatchMatchService, WatchDetails } from "./watch-match.service";
-import { MainLuchador } from "../sdk/model/models";
+import { MainGameComponent } from "../sdk/model/models";
 import { ActivatedRoute } from "@angular/router";
 import { SharedStateService } from "../shared-state.service";
 import { Subscription, Subject } from "rxjs";
@@ -44,7 +44,7 @@ export class WatchMatchComponent implements OnInit, OnDestroy {
   readonly matchStateSubject: Subject<MatchState>;
   readonly messageSubject: Subject<Message>;
 
-  luchador: MainLuchador;
+  luchador: MainGameComponent;
   message: string;
   userMessage: Message;
   // messageList: Array<any>;

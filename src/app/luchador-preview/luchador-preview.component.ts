@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, Input, OnDestroy } from "@angular/core";
 import { BehaviorSubject, Subscription } from "rxjs";
-import { MainLuchador, MainConfig } from "../sdk";
+import { MainGameComponent, MainConfig } from "../sdk";
 import { TextureBuilder } from "../arena/texture-builder";
 import { MaskEditorMediator } from "../mask-editor/mask-editor.mediator";
 
@@ -12,7 +12,7 @@ import { MaskEditorMediator } from "../mask-editor/mask-editor.mediator";
 export class LuchadorPreviewComponent implements OnInit, OnDestroy {
   @ViewChild("preview") canvas;
   // @ViewChild("debug") debug;
-  @Input() luchadorSubject: BehaviorSubject<MainLuchador>;
+  @Input() luchadorSubject: BehaviorSubject<MainGameComponent>;
 
   private engine: BABYLON.Engine;
   private scene: BABYLON.Scene;
@@ -24,7 +24,7 @@ export class LuchadorPreviewComponent implements OnInit, OnDestroy {
   dynamicTexture: BABYLON.DynamicTexture;
   context: CanvasRenderingContext2D;
   rotate: boolean = false;
-  luchador: MainLuchador;
+  luchador: MainGameComponent;
   subscription: Subscription;
   loadingTexture = false;
   current: Promise<void>;

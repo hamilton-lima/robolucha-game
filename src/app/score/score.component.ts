@@ -11,7 +11,9 @@ export class ScoreComponent implements OnInit {
   @Input() matchStateSubject: Subject<MatchState>;
   private matchState: MatchState;
 
-  constructor() { }
+  constructor() { 
+    this.matchState = <MatchState>{ scores: []};
+  }
 
   ngOnInit() {
     this.matchStateSubject.subscribe((matchState: MatchState) => {

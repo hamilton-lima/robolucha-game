@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef } from "@angular/core";
-import { MainLuchador, DefaultService, MainCode, MainConfig } from "../sdk";
+import { MainGameComponent, DefaultService, MainConfig } from "../sdk";
 import { ActivatedRoute } from "@angular/router";
 import { Behavior } from "babylonjs";
 import { BehaviorSubject } from "rxjs";
@@ -15,7 +15,7 @@ const HIDE_SUCCESS_TIMEOUT = 3000;
 export class MaskEditorComponent implements OnInit {
   successMessage: string;
   dirty = false;
-  luchador: MainLuchador;
+  luchador: MainGameComponent;
 
   constructor(
     private route: ActivatedRoute,

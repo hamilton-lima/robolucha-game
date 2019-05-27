@@ -1,4 +1,4 @@
-export interface LuchadorState {
+export interface Luchador {
   id: number;
   name: string;
   x: number;
@@ -10,11 +10,6 @@ export interface LuchadorState {
   k: number;
   d: number;
   score: number;
-}
-
-export interface Luchador {
-  state: LuchadorState;
-  name: string;
 }
 
 export interface Bullet {
