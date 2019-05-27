@@ -1,0 +1,10 @@
+<app-header></app-header>
+
+<div *ngIf="gameDefinition">
+  <app-watch-match
+    [gameDefinition]="gameDefinition"
+    [luchador]="luchador"
+    [matchID]="matchID"
+    (matchFinished)="endMatch()"
+  ></app-watch-match>
+</div>

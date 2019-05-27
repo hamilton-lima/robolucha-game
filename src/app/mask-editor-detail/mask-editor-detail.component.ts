@@ -7,7 +7,7 @@ import {
   EventEmitter,
   OnDestroy
 } from "@angular/core";
-import { MainLuchador, MainConfig } from "../sdk";
+import { MainConfig } from "../sdk";
 import { NMSColor } from "../color-picker/nmscolor";
 import { ShapeConfig } from "../shape-picker/shape-config";
 import { MaskEditorMediator } from "../mask-editor/mask-editor.mediator";

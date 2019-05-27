@@ -31,7 +31,7 @@ export class PlaygroundComponent implements OnInit, AfterViewInit {
 
     let id = 1;
     this.matchState.luchadores.forEach(luchador => {
-      luchador.state.id = id ++;
+      luchador.id = id ++;
     });
 
     this.data = JSON.stringify(this.matchState);

@@ -12,13 +12,10 @@
 
 
 export interface MainMatchScore {
-    createdAt?: string;
     deaths?: number;
-    deletedAt?: string;
     id?: number;
     kills?: number;
     luchadorID?: number;
     matchID?: number;
     score?: number;
-    updatedAt?: string;
 }

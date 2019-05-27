@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { MainLuchador, MainConfig } from "../sdk";
+import { MainConfig } from "../sdk";
 import { Subject, forkJoin } from "rxjs";
 import {
   maskEditorCategories,

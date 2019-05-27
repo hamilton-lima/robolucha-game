@@ -9,9 +9,15 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { MainCode } from './mainCode';
+import { MainConfig } from './mainConfig';
 
 
-export interface MainUser {
+export interface MainGameComponent {
+    codes?: Array<MainCode>;
+    configs?: Array<MainConfig>;
+    gameDefinition?: number;
     id?: number;
-    username?: string;
+    name?: string;
+    userID?: number;
 }

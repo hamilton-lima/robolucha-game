@@ -249,13 +249,13 @@ export class ArenaComponent implements OnInit, OnChanges {
     this.nextMatchState.luchadores.forEach((luchador: Luchador) => {
       const currentState = this.currentMatchState.luchadores.find(
         (search: Luchador) => {
-          return search.state.id === luchador.state.id;
+          return search.id === luchador.id;
         }
       );
 
       if (currentState) {
         // found update the state
-        const luchador3D = this.luchadores[luchador.state.id];
+        const luchador3D = this.luchadores[luchador.id];
 
         this.update(luchador3D, luchador);
         this.vehicleRotation(luchador3D, luchador);
@@ -263,15 +263,15 @@ export class ArenaComponent implements OnInit, OnChanges {
       } else {
         // not found add to the scene
         const position = this.calculatePosition(luchador);
-        const vehicleRotation = Helper3D.angle2radian(luchador.state.angle);
-        const gunRotation = Helper3D.angle2radian(luchador.state.gunAngle);
+        const vehicleRotation = Helper3D.angle2radian(luchador.angle);
+        const gunRotation = Helper3D.angle2radian(luchador.gunAngle);
 
         // create new luchador3D
         const newLuchador = new Luchador3D(
-          luchador.state.id,
-          luchador.state.name,
+          luchador.id,
+          luchador.name,
           this.scene,
-          this.loadMask(luchador.state.id),
+          this.loadMask(luchador.id),
           position,
           vehicleRotation,
           gunRotation,
@@ -280,7 +280,7 @@ export class ArenaComponent implements OnInit, OnChanges {
         );
 
         // save the new luchador3D
-        this.luchadores[luchador.state.id] = newLuchador;
+        this.luchadores[luchador.id] = newLuchador;
 
         // add luchador3D loaders to the list of loaders
         loaders.push(newLuchador.loader);
@@ -310,9 +310,9 @@ export class ArenaComponent implements OnInit, OnChanges {
 
   calculatePosition(luchador: Luchador): BABYLON.Vector3 {
     const result: BABYLON.Vector3 = new BABYLON.Vector3();
-    result.x = this.convertPosition(luchador.state.x) + this.HALF_LUCHADOR;
+    result.x = this.convertPosition(luchador.x) + this.HALF_LUCHADOR;
     result.y = this.LUCHADOR_DEFAULT_Y;
-    result.z = this.convertPosition(luchador.state.y) + this.HALF_LUCHADOR;
+    result.z = this.convertPosition(luchador.y) + this.HALF_LUCHADOR;
     return result;
   }
 
@@ -330,23 +330,23 @@ export class ArenaComponent implements OnInit, OnChanges {
   removeLuchadores(): any {
     this.currentMatchState.luchadores.forEach((luchador: Luchador) => {
       const found = this.nextMatchState.luchadores.find((search: Luchador) => {
-        return search.state.id === luchador.state.id;
+        return search.id === luchador.id;
       });
 
       if (!found) {
         // not found remove from the scene
-        const luchador3D = this.luchadores[luchador.state.id];
+        const luchador3D = this.luchadores[luchador.id];
         luchador3D.dispose();
-        delete this.bullets[luchador.state.id];
+        delete this.bullets[luchador.id];
       }
     });
   }
 
   update(luchador3D: Luchador3D, next: Luchador) {
-    const x = this.convertPosition(next.state.x) + this.HALF_LUCHADOR;
-    const z = this.convertPosition(next.state.y) + this.HALF_LUCHADOR;
+    const x = this.convertPosition(next.x) + this.HALF_LUCHADOR;
+    const z = this.convertPosition(next.y) + this.HALF_LUCHADOR;
     luchador3D.moveTo(x, z);
-    luchador3D.setHealth(next.state.life);
+    luchador3D.setHealth(next.life);
     luchador3D.setLabel(next.name);
   }
 
@@ -357,7 +357,7 @@ export class ArenaComponent implements OnInit, OnChanges {
   }
 
   vehicleRotation(luchador3D: Luchador3D, next: Luchador) {
-    let value = next.state.angle;
+    let value = next.angle;
     value = this.fixAngle(value);
     // * -1 to revert the direction so it matches the cartesian plane
     value = Helper3D.angle2radian(value) * -1;
@@ -365,7 +365,7 @@ export class ArenaComponent implements OnInit, OnChanges {
   }
 
   gunRotation(luchador3D: Luchador3D, next: Luchador): any {
-    let value = next.state.gunAngle;
+    let value = next.gunAngle;
     value = this.fixAngle(value);
     // * -1 to revert the direction so it matches the cartesian plane
     value = Helper3D.angle2radian(value) * -1;
