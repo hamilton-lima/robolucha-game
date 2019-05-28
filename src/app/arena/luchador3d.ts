@@ -4,6 +4,23 @@ import { Base3D } from "./base3D";
 import { MeshLoader } from "./mesh.loader";
 import { Helper3D } from "./helper3d";
 
+export interface AnimationDefition {
+  name: string;
+  from: number;
+  to: number;
+}
+
+export const characterAnimations: Array<AnimationDefition> = [
+  { name: "idle", from: 0, to: 60 },
+  { name: "run", from: 65, to: 125 },
+  { name: "fire", from: 130, to: 145 },
+  { name: "hit", from: 150, to: 165 },
+  { name: "found", from: 170, to: 230 },
+  { name: "celebrate", from: 235, to: 280 }
+];
+
+export const idlePosition = 0;
+
 export class Luchador3D extends Base3D {
   private character: BABYLON.AbstractMesh;
   private base: BABYLON.Mesh;
@@ -168,8 +185,7 @@ export class Luchador3D extends Base3D {
       self.character.id = self.getName() + ".character";
       material.then(result => (self.character.material = result));
 
-      self.animationIdle = this.scene.beginAnimation(self.character.skeleton, 0, 60, true);
-      self.animationIdle.reset();
+      self.createIdle();
     });
 
     baseLoader.then(mesh => {
@@ -184,45 +200,30 @@ export class Luchador3D extends Base3D {
     this.addLabel(name, this.LABEL_OFFSET_Y, this.OFFSET_X, labelColor);
   }
 
-  public animationIdle:BABYLON.Animatable;
+  idle: BABYLON.Animatable;
 
-  animateFrom(from, to: number) {
+  createIdle() {
+    this.idle = this.scene.beginWeightedAnimation(
+      this.character.skeleton,
+      0,
+      60,
+      1,
+      true
+    );
+  }
 
-    this.animationIdle.pause();
+  animateFrom(name: string) {
+    const animation = characterAnimations.filter(animation => {
+      return animation.name == name;
+    })[0];
 
-    // skeleton.animationPropertiesOverride = new BABYLON.AnimationPropertiesOverride();
-    // skeleton.animationPropertiesOverride.enableBlending = true;
-    // skeleton.animationPropertiesOverride.blendingSpeed = 0.05;
-    // skeleton.animationPropertiesOverride.loopMode = 1;
-    
-    let animatable = this.scene.beginAnimation(this.character.skeleton, from, to, false, 1, ()=>{
-      console.log("animation ended");
-      animatable.stop();
-      this.animationIdle.restart();
-    });
-
-    //this.character.skeleton.getAnimationRange();
-
-    // var animatable = this.scene.beginAnimation(this.character.skeleton, from, to, false, 1, function() {
-    //   console.log("Character Animation Finished");
-    // });
-
-    // var animatable = this.character.skeleton.beginAnimation("char_head_boneAnimation");
-    // console.log("animatable=", animatable);
-
-    // this.character.skeleton.bones.forEach( bone =>{
-    //   var animatable = this.scene.beginAnimation(bone, from, to, false, 1, function() {
-    //     console.log("Character Animation Finished");
-    //   });
-    //   console.log("animatable=", animatable);
-    // })
-
-    // var animatable = this.scene.beginAnimation(this.character, from, to, false, 1, function() {
-    //   console.log("Character Animation Finished");
-    // });
-
-    // console.log("animatable=", animatable);
-
+    this.scene.beginWeightedAnimation(
+      this.character.skeleton,
+      animation.from,
+      animation.to,
+      1,
+      false
+    );
   }
 
   rotateVehicle(value: number) {

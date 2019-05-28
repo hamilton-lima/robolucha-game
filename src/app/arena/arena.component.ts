@@ -40,7 +40,7 @@ export class ArenaComponent implements OnInit, OnChanges {
   @Input() debug = false;
   @Input() cameraFollowLuchador = true;
   @Input() currentLuchador: number;
-  @Input() animateSubject: Subject<number[]>;
+  @Input() animateSubject: Subject<string>;
 
   private engine: BABYLON.Engine;
   private scene: BABYLON.Scene;
@@ -103,9 +103,9 @@ export class ArenaComponent implements OnInit, OnChanges {
     });
 
     if (this.animateSubject) {
-      this.animateSubject.subscribe(pair => {
+      this.animateSubject.subscribe(name => {
         this.luchadores.forEach(luchador => {
-          luchador.animateFrom(pair[0], pair[1]);
+          luchador.animateFrom(name);
         });
       });
     }

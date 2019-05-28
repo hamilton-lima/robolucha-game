@@ -2,6 +2,7 @@ import { Component, OnInit, AfterViewInit } from "@angular/core";
 import { GameDefinition, MatchState } from "../watch-match/watch-match.model";
 import { Subject } from "rxjs";
 import defaultMatchState from "./default-match-state";
+import { characterAnimations } from "../arena/luchador3d";
 
 @Component({
   selector: "app-playground",
@@ -14,9 +15,11 @@ export class PlaygroundComponent implements OnInit, AfterViewInit {
   data: string;
   matchState: MatchState;
   cameraFollowLuchador = true;
-  animateSubject: Subject<number[]>;
+  animateSubject: Subject<string>;
   from: number = 130;
   to: number = 145;
+
+  animationNames = characterAnimations.map( animation => { return animation.name});
 
   constructor() {
     this.gameDefinition = {
@@ -27,7 +30,7 @@ export class PlaygroundComponent implements OnInit, AfterViewInit {
     };
 
     this.matchStateSubject = new Subject<MatchState>();
-    this.animateSubject = new Subject<Array<number>>();
+    this.animateSubject = new Subject<string>();
   }
 
   ngOnInit(): void {
@@ -55,7 +58,7 @@ export class PlaygroundComponent implements OnInit, AfterViewInit {
     this.cameraFollowLuchador = !this.cameraFollowLuchador;
   }
 
-  animate(){
-    this.animateSubject.next([this.from,this.to]);
+  animate(name) {
+    this.animateSubject.next(name);
   }
 }

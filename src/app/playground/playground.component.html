@@ -22,18 +22,16 @@
   </div>
 
   <div class="row">
-    <div class="col-10">
-        From: <input type="text" [(ngModel)]="from">
-        To: <input type="text" [(ngModel)]="to">
-        &nbsp;
+    <div class="col-1" *ngFor="let name of animationNames">
       <button
         type="button"
         class="btn btn-sm btn-primary"
-        (click)="animate()">
-        Animate
+        (click)="animate(name)"
+      >
+        {{ name }}
       </button>
-      <hr />
     </div>
+    <hr />
   </div>
 
   <div class="row">
