@@ -23,9 +23,25 @@
 
   <div class="row">
     <div class="col-10">
+        From: <input type="text" [(ngModel)]="from">
+        To: <input type="text" [(ngModel)]="to">
+        &nbsp;
+      <button
+        type="button"
+        class="btn btn-sm btn-primary"
+        (click)="animate()">
+        Animate
+      </button>
+      <hr />
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-10">
       <app-arena
         [gameDefinition]="gameDefinition"
         [matchStateSubject]="matchStateSubject"
+        [animateSubject]="animateSubject"
         [debug]="true"
         [cameraFollowLuchador]="cameraFollowLuchador"
         [currentLuchador]="1"
