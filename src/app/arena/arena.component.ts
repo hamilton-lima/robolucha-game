@@ -249,6 +249,13 @@ export class ArenaComponent implements OnInit, OnChanges {
         const position = this.calculateBulletPosition(bullet);
         const newBullet = new Bullet3D(this.scene, position, bullet);
         this.bullets[bullet.id] = newBullet;
+
+        // animate luchador owner of the bullet
+        const luchador3D = this.luchadores[bullet.owner];
+        if( luchador3D ){
+          luchador3D.animateFire();
+        }
+
       }
     });
   }

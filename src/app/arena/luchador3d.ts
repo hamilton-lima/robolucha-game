@@ -212,18 +212,24 @@ export class Luchador3D extends Base3D {
     );
   }
 
-  animateFrom(name: string) {
-    const animation = characterAnimations.filter(animation => {
-      return animation.name == name;
-    })[0];
+  animateFire() {
+    this.animateFrom("fire");
+  }
 
-    this.scene.beginWeightedAnimation(
-      this.character.skeleton,
-      animation.from,
-      animation.to,
-      1,
-      false
-    );
+  animateFrom(name: string) {
+    if (this.character) {
+      const animation = characterAnimations.filter(animation => {
+        return animation.name == name;
+      })[0];
+
+      this.scene.beginWeightedAnimation(
+        this.character.skeleton,
+        animation.from,
+        animation.to,
+        1,
+        false
+      );
+    }
   }
 
   rotateVehicle(value: number) {

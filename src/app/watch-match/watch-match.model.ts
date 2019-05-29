@@ -14,6 +14,7 @@ export interface Luchador {
 
 export interface Bullet {
   id: number;
+  owner: number;
   x: number;
   y: number;
   amount: number;

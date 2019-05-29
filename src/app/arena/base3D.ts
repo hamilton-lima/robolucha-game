@@ -24,15 +24,12 @@ export class Base3D {
     speed = this.speed,
     callback?: (mesh: BABYLON.Mesh) => void
   ) {
-    // console.log("animate", this.luchador.name, attribute, source, target);
 
     if (source === target) {
-      // console.log("animation values are the same skipping");
       return;
     }
 
     if (this.activeAnimations.has(attribute)) {
-      // console.log("active animation in progress for ", attribute);
       return;
     }
 
