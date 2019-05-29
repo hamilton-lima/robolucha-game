@@ -359,6 +359,10 @@ export class ArenaComponent implements OnInit, OnChanges {
   }
 
   update(luchador3D: Luchador3D, next: Luchador) {
+    if( luchador3D.getHealth() > next.life ){
+      luchador3D.animateHit();
+    }
+    
     const x = this.convertPosition(next.x) + this.HALF_LUCHADOR;
     const z = this.convertPosition(next.y) + this.HALF_LUCHADOR;
     luchador3D.moveTo(x, z);

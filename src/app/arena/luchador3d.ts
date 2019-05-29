@@ -215,6 +215,14 @@ export class Luchador3D extends Base3D {
   animateFire() {
     this.animateFrom("fire");
   }
+  
+  animateHit() {
+    this.animateFrom("hit");
+  }
+
+  animateFound() {
+    this.animateFrom("found");
+  }
 
   animateFrom(name: string) {
     if (this.character) {
@@ -250,6 +258,10 @@ export class Luchador3D extends Base3D {
 
   getName(): string {
     return "luchador" + this.id;
+  }
+
+  getHealth() {
+    return this.health;
   }
 
   setHealth(value: number) {
