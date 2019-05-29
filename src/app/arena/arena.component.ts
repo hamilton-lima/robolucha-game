@@ -40,6 +40,7 @@ export class ArenaComponent implements OnInit, OnChanges {
   @Input() debug = false;
   @Input() cameraFollowLuchador = true;
   @Input() currentLuchador: number;
+  @Input() animateSubject: Subject<string>;
 
   private engine: BABYLON.Engine;
   private scene: BABYLON.Scene;
@@ -94,12 +95,20 @@ export class ArenaComponent implements OnInit, OnChanges {
       this.gameDefinition.luchadorSize / 2
     );
     this.HALF_BULLET = this.convertPosition(this.gameDefinition.bulletSize / 2);
-    this.canvas.nativeElement.width = window.innerWidth*0.99;
+    this.canvas.nativeElement.width = window.innerWidth * 0.99;
     this.engine = new BABYLON.Engine(this.canvas.nativeElement, true);
 
     this.matchStateSubject.subscribe((matchState: MatchState) => {
       this.nextMatchState = matchState;
     });
+
+    if (this.animateSubject) {
+      this.animateSubject.subscribe(name => {
+        this.luchadores.forEach(luchador => {
+          luchador.animateFrom(name);
+        });
+      });
+    }
 
     this.createScene();
   }
@@ -240,6 +249,13 @@ export class ArenaComponent implements OnInit, OnChanges {
         const position = this.calculateBulletPosition(bullet);
         const newBullet = new Bullet3D(this.scene, position, bullet);
         this.bullets[bullet.id] = newBullet;
+
+        // animate luchador owner of the bullet
+        const luchador3D = this.luchadores[bullet.owner];
+        if( luchador3D ){
+          luchador3D.animateFire();
+        }
+
       }
     });
   }
@@ -256,6 +272,13 @@ export class ArenaComponent implements OnInit, OnChanges {
       if (currentState) {
         // found update the state
         const luchador3D = this.luchadores[luchador.id];
+        
+        if( luchador.lastOnfound > 0 ){
+          const elapsed = Math.abs(luchador.lastOnfound - currentState.lastOnfound);
+          if( elapsed > 1000){
+            luchador3D.animateFound();
+          }
+        }
 
         this.update(luchador3D, luchador);
         this.vehicleRotation(luchador3D, luchador);
@@ -343,6 +366,10 @@ export class ArenaComponent implements OnInit, OnChanges {
   }
 
   update(luchador3D: Luchador3D, next: Luchador) {
+    if( luchador3D.getHealth() > next.life ){
+      luchador3D.animateHit();
+    }
+
     const x = this.convertPosition(next.x) + this.HALF_LUCHADOR;
     const z = this.convertPosition(next.y) + this.HALF_LUCHADOR;
     luchador3D.moveTo(x, z);
@@ -373,8 +400,9 @@ export class ArenaComponent implements OnInit, OnChanges {
   }
 
   convertPosition(n: number) {
-    const result: number = n / this.gameDefinition.luchadorSize
-      * SharedConstants.LUCHADOR_MODEL_WIDTH;
+    const result: number =
+      (n / this.gameDefinition.luchadorSize) *
+      SharedConstants.LUCHADOR_MODEL_WIDTH;
 
     return result;
   }

@@ -10,10 +10,12 @@ export interface Luchador {
   k: number;
   d: number;
   score: number;
+  lastOnfound: number;
 }
 
 export interface Bullet {
   id: number;
+  owner: number;
   x: number;
   y: number;
   amount: number;

@@ -1,141 +1,33 @@
 export default {
   events: [],
-  bullets: [],
+  bullets: [
+    { id: 1033, owner: 1, x: 1851, y: 862, amount: 3 },
+    { id: 1021, owner: 3, x: 1776, y: 592, amount: 3 },
+    { id: 1038, owner: 1, x: 1991, y: 495, amount: 3 },
+    { id: 1039, owner: 2, x: 1162, y: 787, amount: 1 },
+    { id: 1040, owner: 2, x: 1292, y: 470, amount: 1 }
+  ],
   punches: [],
   luchadores: [
     {
-      state: {
-        id: -1,
-        name: "otto",
-        x: 30,
-        y: 30,
-        life: 1,
-        angle: 0,
-        gunAngle: 0,
-        fireCoolDown: 0,
-        k: 0,
-        d: 0,
-        score: 0
-      },
+      id: 1,
       name: "otto",
-      mask: {
-        background: "background.png",
-        backgroundColor: "#D79851",
-        background2: "background2_0006.png",
-        background2Color: "#F47747",
-        ornamentTop: "ornamento_cima0009.png",
-        ornamentTopColor: "#FDC647",
-        ornamentBottom: "ornamento_baixo0008.png",
-        ornamentBottomColor: "#C9A62E",
-        face: "rosto0010.png",
-        faceColor: "#C8C846",
-        mouth: "boca0001.png",
-        mouthColor: "#E75F25",
-        eye: "olho0001.png",
-        eyeColor: "#8E4980"
-      }
-    },
-    {
-      state: {
-        id: -1,
-        name: "otto(2)",
-        x: 30,
-        y: 1170,
-        life: 1,
-        angle: 270,
-        gunAngle: 0,
-        fireCoolDown: 0,
-        k: 0,
-        d: 0,
-        score: 0
-      },
-      name: "otto(2)",
-      mask: {
-        background: "background.png",
-        backgroundColor: "#D79851",
-        background2: "background2_0006.png",
-        background2Color: "#F47747",
-        ornamentTop: "ornamento_cima0009.png",
-        ornamentTopColor: "#FDC647",
-        ornamentBottom: "ornamento_baixo0008.png",
-        ornamentBottomColor: "#C9A62E",
-        face: "rosto0010.png",
-        faceColor: "#C8C846",
-        mouth: "boca0001.png",
-        mouthColor: "#E75F25",
-        eye: "olho0001.png",
-        eyeColor: "#8E4980"
-      }
-    },
-    {
-      state: {
-        id: -1,
-        name: "otto(3)",
-        x: 2370,
-        y: 1170,
-        life: 1,
-        angle: 180,
-        gunAngle: 0,
-        fireCoolDown: 0,
-        k: 0,
-        d: 0,
-        score: 0
-      },
-      name: "otto(3)",
-      mask: {
-        background: "background.png",
-        backgroundColor: "#D79851",
-        background2: "background2_0006.png",
-        background2Color: "#F47747",
-        ornamentTop: "ornamento_cima0009.png",
-        ornamentTopColor: "#FDC647",
-        ornamentBottom: "ornamento_baixo0008.png",
-        ornamentBottomColor: "#C9A62E",
-        face: "rosto0010.png",
-        faceColor: "#C8C846",
-        mouth: "boca0001.png",
-        mouthColor: "#E75F25",
-        eye: "olho0001.png",
-        eyeColor: "#8E4980"
-      }
-    },
-    {
-      state: {
-        id: -1,
-        name: "otto(4)",
-        x: 2370,
-        y: 30,
-        life: 1,
-        angle: 90,
-        gunAngle: 0,
-        fireCoolDown: 0,
-        k: 0,
-        d: 0,
-        score: 0
-      },
-      name: "otto(4)",
-      mask: {
-        background: "background.png",
-        backgroundColor: "#D79851",
-        background2: "background2_0006.png",
-        background2Color: "#F47747",
-        ornamentTop: "ornamento_cima0009.png",
-        ornamentTopColor: "#FDC647",
-        ornamentBottom: "ornamento_baixo0008.png",
-        ornamentBottomColor: "#C9A62E",
-        face: "rosto0010.png",
-        faceColor: "#C8C846",
-        mouth: "boca0001.png",
-        mouthColor: "#E75F25",
-        eye: "olho0001.png",
-        eyeColor: "#8E4980"
-      }
+      x: 2169,
+      y: 30,
+      life: 4,
+      angle: 360,
+      gunAngle: 90,
+      fireCoolDown: 2.191,
+      lastOnfound: 340753,
+      k: 1,
+      d: 0,
+      score: 365
     }
   ],
   scores: [
-    { id: -2, name: "farol", k: 2, d: 0, score: 420 },
-    { id: -1, name: "otto", k: 0, d: 0, score: 0 },
-    { id: 1, name: "Luchador1", k: 0, d: 0, score: 0 }
+    { id: 1, name: "otto", k: 1, d: 0, score: 365 },
+    { id: 2, name: "farol", k: 0, d: 1, score: 80 },
+    { id: 3, name: "El Taco Turnip Muerto", k: 0, d: 0, score: 0 }
   ],
-  clock: 599923375
+  clock: 406033
 };

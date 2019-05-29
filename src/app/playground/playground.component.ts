@@ -1,12 +1,13 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { GameDefinition, MatchState } from '../watch-match/watch-match.model';
-import { Subject } from 'rxjs';
-import defaultMatchState from './default-match-state';
+import { Component, OnInit, AfterViewInit } from "@angular/core";
+import { GameDefinition, MatchState } from "../watch-match/watch-match.model";
+import { Subject } from "rxjs";
+import defaultMatchState from "./default-match-state";
+import { characterAnimations } from "../arena/luchador3d";
 
 @Component({
-  selector: 'app-playground',
-  templateUrl: './playground.component.html',
-  styleUrls: ['./playground.component.css']
+  selector: "app-playground",
+  templateUrl: "./playground.component.html",
+  styleUrls: ["./playground.component.css"]
 })
 export class PlaygroundComponent implements OnInit, AfterViewInit {
   readonly gameDefinition: GameDefinition;
@@ -14,6 +15,11 @@ export class PlaygroundComponent implements OnInit, AfterViewInit {
   data: string;
   matchState: MatchState;
   cameraFollowLuchador = true;
+  animateSubject: Subject<string>;
+  from: number = 130;
+  to: number = 145;
+
+  animationNames = characterAnimations.map( animation => { return animation.name});
 
   constructor() {
     this.gameDefinition = {
@@ -24,6 +30,7 @@ export class PlaygroundComponent implements OnInit, AfterViewInit {
     };
 
     this.matchStateSubject = new Subject<MatchState>();
+    this.animateSubject = new Subject<string>();
   }
 
   ngOnInit(): void {
@@ -31,7 +38,7 @@ export class PlaygroundComponent implements OnInit, AfterViewInit {
 
     let id = 1;
     this.matchState.luchadores.forEach(luchador => {
-      luchador.id = id ++;
+      luchador.id = id++;
     });
 
     this.data = JSON.stringify(this.matchState);
@@ -42,12 +49,16 @@ export class PlaygroundComponent implements OnInit, AfterViewInit {
   }
 
   onChange(event) {
-    console.log('on change', event );
+    console.log("on change", event);
     this.matchState = JSON.parse(event);
     this.matchStateSubject.next(this.matchState);
   }
 
   toggleCameraFollow() {
-    this.cameraFollowLuchador = ! this.cameraFollowLuchador;
+    this.cameraFollowLuchador = !this.cameraFollowLuchador;
+  }
+
+  animate(name) {
+    this.animateSubject.next(name);
   }
 }
