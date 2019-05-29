@@ -40,11 +40,12 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { WatchPageComponent } from './watch-page/watch-page.component';
 import { FirstComponent } from './first/first.component';
+import { HomePageComponent } from './home-page/home-page.component';
 
 library.add(fas);
 
 const ROUTES: Routes = [
-  { path: "", redirectTo: "/first", pathMatch: "full" },
+  { path: "", redirectTo: "/home", pathMatch: "full" },
   {
     path: "edit",
     component: LuchadorComponent,
@@ -78,6 +79,11 @@ const ROUTES: Routes = [
   {
     path: "first",
     component: FirstComponent,
+    canActivate: [LoginActivate]
+  },
+  {
+    path: "home",
+    component: HomePageComponent,
     canActivate: [LoginActivate]
   },
   { path: "**", component: NotFoundComponent }
@@ -115,7 +121,8 @@ export function apiConfigFactory(): Configuration {
     CodeEditorPanelComponent,
     MessageComponent,
     WatchPageComponent,
-    FirstComponent
+    FirstComponent,
+    HomePageComponent
   ],
   imports: [
     BrowserModule,
