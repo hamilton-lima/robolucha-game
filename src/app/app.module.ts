@@ -46,7 +46,7 @@ library.add(fas);
 const ROUTES: Routes = [
   { path: "", redirectTo: "/first", pathMatch: "full" },
   {
-    path: "luchador",
+    path: "edit",
     component: LuchadorComponent,
     canActivate: [LoginActivate],
     canDeactivate: [CanDeactivateGuard],
