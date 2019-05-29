@@ -272,6 +272,13 @@ export class ArenaComponent implements OnInit, OnChanges {
       if (currentState) {
         // found update the state
         const luchador3D = this.luchadores[luchador.id];
+        
+        if( luchador.lastOnfound > 0 ){
+          const elapsed = Math.abs(luchador.lastOnfound - currentState.lastOnfound);
+          if( elapsed > 1000){
+            luchador3D.animateFound();
+          }
+        }
 
         this.update(luchador3D, luchador);
         this.vehicleRotation(luchador3D, luchador);
@@ -362,7 +369,7 @@ export class ArenaComponent implements OnInit, OnChanges {
     if( luchador3D.getHealth() > next.life ){
       luchador3D.animateHit();
     }
-    
+
     const x = this.convertPosition(next.x) + this.HALF_LUCHADOR;
     const z = this.convertPosition(next.y) + this.HALF_LUCHADOR;
     luchador3D.moveTo(x, z);
