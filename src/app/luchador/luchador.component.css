@@ -1,28 +1,19 @@
-.save-button {
-  margin-top: 10px;
-}
-
-.success-message {
-  width: 100%;
-}
-
-.btn-edit{
-	margin-right: 1em;
-	padding: 0.5rem 1.25rem;
+.btn-edit {
+  margin-right: 1em;
+  padding: 0.5rem 1.25rem;
 }
 
 .title-edit {
-	font-weight: 500;
-	font-size: 2.5rem;
-	outline: none;
-	border: 0px solid;
-	width: 100%;
+  font-weight: 500;
+  font-size: 2.5rem;
+  outline: none;
+  border: 0px solid;
+  width: 100%;
 }
 
 .luchador-validate {
-	width: 50%;
-	margin-bottom: 0;
-	padding: 0.5rem 1.25rem;
-	margin-left: 15%;
-
+  width: 50%;
+  margin-bottom: 0;
+  padding: 0.5rem 1.25rem;
+  margin-left: 15%;
 }
