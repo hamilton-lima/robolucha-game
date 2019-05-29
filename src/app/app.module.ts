@@ -39,13 +39,15 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { WatchPageComponent } from './watch-page/watch-page.component';
+import { FirstComponent } from './first/first.component';
+import { HomePageComponent } from './home-page/home-page.component';
 
 library.add(fas);
 
 const ROUTES: Routes = [
-  { path: "", redirectTo: "/luchador", pathMatch: "full" },
+  { path: "", redirectTo: "/home", pathMatch: "full" },
   {
-    path: "luchador",
+    path: "edit",
     component: LuchadorComponent,
     canActivate: [LoginActivate],
     canDeactivate: [CanDeactivateGuard],
@@ -73,6 +75,16 @@ const ROUTES: Routes = [
     component: WatchPageComponent,
     canActivate: [LoginActivate],
     resolve: { luchador: LuchadorResolverService }
+  },
+  {
+    path: "first",
+    component: FirstComponent,
+    canActivate: [LoginActivate]
+  },
+  {
+    path: "home",
+    component: HomePageComponent,
+    canActivate: [LoginActivate]
   },
   { path: "**", component: NotFoundComponent }
 ];
@@ -108,7 +120,9 @@ export function apiConfigFactory(): Configuration {
     ClockComponent,
     CodeEditorPanelComponent,
     MessageComponent,
-    WatchPageComponent
+    WatchPageComponent,
+    FirstComponent,
+    HomePageComponent
   ],
   imports: [
     BrowserModule,
