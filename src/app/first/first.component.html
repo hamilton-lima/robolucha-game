@@ -17,18 +17,32 @@
 
   <div class="row">
     <div class="col-10">
-      <div class="progress-bar" role="progressbar" style="width:50%">5/10</div>
+      <div class="progress">
+        <div class="progress-bar" role="progressbar" style="width:50%">5/10</div>
+      </div>
     </div>
   </div>
   <div class="row">
-      <div class="col-10">
-        <ul>
-          <li *ngFor="let tutorial of tutorials">
-            <span>{{tutorial.name}}</span><button class="btn btn-secondary">Play</button>
-          </li>
-        </ul>        
-      </div>
+    <div class="col-10">
+      <ul class="tutorial-list">
+        <li *ngFor="let tutorial of tutorials">
+          <span class="tutorial-name">{{tutorial.label}}</span> <span> - {{tutorial.description}}</span><button class="btn btn-secondary float-right" (click)=play(tutorial)>Play</button>
+        </li>
+      </ul>        
     </div>
+  </div>
   
+  <div class="row">
+    <div class="col-5">
+      <app-code-editor-panel [gameDefinition]="selectedTutorial"></app-code-editor-panel>
+    </div>
+    <div class="col-5" style="background-color:black">
+      <app-watch-match *ngIf="selectedTutorial != null"
+      [gameDefinition]="selectedTutorial"
+      [luchador]="luchador"
+    ></app-watch-match>
+    </div>
+  </div>
+
 
 </div>

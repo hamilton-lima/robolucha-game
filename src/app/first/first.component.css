@@ -1,0 +1,13 @@
+.tutorial-list{
+    margin-top: 20px;
+    list-style-type: none;
+}
+
+.tutorial-list li{
+    min-height: 50px;
+}
+
+.tutorial-name{
+    font-size: 18pt;
+}
+
