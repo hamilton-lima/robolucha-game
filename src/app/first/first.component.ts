@@ -4,9 +4,9 @@ import { GameDefinition } from '../watch-match/watch-match.model';
 import { MainGameDefinition, DefaultService } from '../sdk';
 
 @Component({
-  selector: 'app-first',
-  templateUrl: './first.component.html',
-  styleUrls: ['./first.component.css']
+  selector: "app-first",
+  templateUrl: "./first.component.html",
+  styleUrls: ["./first.component.css"]
 })
 export class FirstComponent implements OnInit {
 

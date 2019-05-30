@@ -41,13 +41,14 @@ import { fas } from '@fortawesome/free-solid-svg-icons';
 import { WatchPageComponent } from './watch-page/watch-page.component';
 import { FirstComponent } from './first/first.component';
 import { TutorialListResolverService } from "./tutorial-list-resolver.service";
+import { HomePageComponent } from './home-page/home-page.component';
 
 library.add(fas);
 
 const ROUTES: Routes = [
-  { path: "", redirectTo: "/first", pathMatch: "full", resolve: { tutorials: TutorialListResolverService}},
+  { path: "", redirectTo: "/home", pathMatch: "full" },
   {
-    path: "luchador",
+    path: "edit",
     component: LuchadorComponent,
     canActivate: [LoginActivate],
     canDeactivate: [CanDeactivateGuard],
@@ -57,6 +58,7 @@ const ROUTES: Routes = [
     path: "mask",
     component: MaskEditorComponent,
     canActivate: [LoginActivate],
+    canDeactivate: [CanDeactivateGuard],
     resolve: { luchador: LuchadorResolverService }
   },
   {
@@ -74,11 +76,18 @@ const ROUTES: Routes = [
     path: "watch/:id",
     component: WatchPageComponent,
     canActivate: [LoginActivate],
+    canDeactivate: [CanDeactivateGuard],
     resolve: { luchador: LuchadorResolverService }
   },
   {
     path: "first",
     component: FirstComponent,
+    canActivate: [LoginActivate],
+    resolve: { tutorials: TutorialListResolverService}
+  },
+  {
+    path: "home",
+    component: HomePageComponent,
     canActivate: [LoginActivate]
   },
   { path: "**", component: NotFoundComponent }
@@ -116,7 +125,8 @@ export function apiConfigFactory(): Configuration {
     CodeEditorPanelComponent,
     MessageComponent,
     WatchPageComponent,
-    FirstComponent
+    FirstComponent,
+    HomePageComponent
   ],
   imports: [
     BrowserModule,

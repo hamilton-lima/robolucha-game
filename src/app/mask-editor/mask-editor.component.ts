@@ -4,6 +4,7 @@ import { ActivatedRoute } from "@angular/router";
 import { Behavior } from "babylonjs";
 import { BehaviorSubject } from "rxjs";
 import { MaskEditorMediator } from "./mask-editor.mediator";
+import { CanComponentDeactivate } from "../can-deactivate-guard.service";
 
 const HIDE_SUCCESS_TIMEOUT = 3000;
 
@@ -12,7 +13,7 @@ const HIDE_SUCCESS_TIMEOUT = 3000;
   templateUrl: "./mask-editor.component.html",
   styleUrls: ["./mask-editor.component.css"]
 })
-export class MaskEditorComponent implements OnInit {
+export class MaskEditorComponent implements OnInit, CanComponentDeactivate {
   successMessage: string;
   dirty = false;
   luchador: MainGameComponent;
@@ -69,4 +70,14 @@ export class MaskEditorComponent implements OnInit {
     console.log("update on luchador", configs );
     this.mediator.configs.next(configs);
   }
+
+  canDeactivate() {
+    if (this.dirty) {
+      return window.confirm(
+        "You have unsaved changes. Are you sure you want to leave?"
+      );
+    }
+    return true;
+  }
+
 }

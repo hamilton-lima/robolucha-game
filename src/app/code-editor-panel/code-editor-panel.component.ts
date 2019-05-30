@@ -1,7 +1,7 @@
-import { Component, OnInit,ChangeDetectorRef,  Input } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, Input } from "@angular/core";
 import { MainCode } from "../sdk/model/mainCode";
 
-import { MainUpdateLuchadorResponse } from '../sdk/model/mainUpdateLuchadorResponse';
+import { MainUpdateLuchadorResponse } from "../sdk/model/mainUpdateLuchadorResponse";
 import { ActivatedRoute } from "@angular/router";
 
 import { DefaultService } from "../sdk/api/default.service";
@@ -10,9 +10,9 @@ import { MainLuchador } from "../sdk/model/mainLuchador";
 const HIDE_SUCCESS_TIMEOUT = 3000;
 
 @Component({
-  selector: 'app-code-editor-panel',
-  templateUrl: './code-editor-panel.component.html',
-  styleUrls: ['./code-editor-panel.component.css']
+  selector: "app-code-editor-panel",
+  templateUrl: "./code-editor-panel.component.html",
+  styleUrls: ["./code-editor-panel.component.css"]
 })
 export class CodeEditorPanelComponent implements OnInit {
   dirty: boolean;
@@ -23,11 +23,10 @@ export class CodeEditorPanelComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private api: DefaultService,
-    private cdRef: ChangeDetectorRef ) {
-    this.luchador = {}; 
+    private cdRef: ChangeDetectorRef
+  ) {
+    this.luchador = {};
   }
-
-
 
   codes = {
     onStart: <MainCode>{},
@@ -63,8 +62,6 @@ export class CodeEditorPanelComponent implements OnInit {
     });
   }
 
-  
-
   updateCode(event: string, script: string) {
     console.log("updateCode", event, script);
     this.dirty = true;
@@ -81,14 +78,6 @@ export class CodeEditorPanelComponent implements OnInit {
     this.codes[event] = code;
   }
 
-  
-  canDeactivate() {
-    if (this.dirty) {
-      return window.confirm("You have unsaved changes to your luchador code. Are you sure you want to leave?");
-    }
-    return true;
-  }
-
   refreshEditor(luchador) {
     console.log("refresh luchador", luchador);
     this.luchador = luchador;
@@ -97,20 +86,16 @@ export class CodeEditorPanelComponent implements OnInit {
     }
   }
 
-  
-
   save() {
     const remoteCall = this.api.privateLuchadorPut(this.luchador);
 
     remoteCall.subscribe(response => {
       this.successMessage = "Luchador updated";
       this.dirty = false;
-      setTimeout(() => this.successMessage = null, HIDE_SUCCESS_TIMEOUT);
+      setTimeout(() => (this.successMessage = null), HIDE_SUCCESS_TIMEOUT);
 
       this.refreshEditor(response.luchador);
-      this.cdRef.detectChanges();    
+      this.cdRef.detectChanges();
     });
   }
-
-
 }
