@@ -1,7 +1,13 @@
 <app-header></app-header>
 
 <h1>Welcome to Robolucha</h1>
-<button class="btn btn-primary float-right" (click)="router.navigate(['play'])">Skip</button>
 <div class="progress">
   <div class="progress-bar" role="progressbar" style="width:50%">5/10</div>
 </div>
+<button class="btn btn-primary float-right" (click)="router.navigate(['play'])">Skip</button>
+
+<ul>
+  <li *ngFor="let tutorial of tutorials">
+    <span>{{tutorial.name}}</span><button class="btn btn-secondary">Play</button>
+  </li>
+</ul>

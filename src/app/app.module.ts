@@ -40,11 +40,12 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { WatchPageComponent } from './watch-page/watch-page.component';
 import { FirstComponent } from './first/first.component';
+import { TutorialListResolverService } from "./tutorial-list-resolver.service";
 
 library.add(fas);
 
 const ROUTES: Routes = [
-  { path: "", redirectTo: "/first", pathMatch: "full" },
+  { path: "", redirectTo: "/first", pathMatch: "full", resolve: { tutorials: TutorialListResolverService}},
   {
     path: "luchador",
     component: LuchadorComponent,

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+import { GameDefinition } from '../watch-match/watch-match.model';
+import { MainGameDefinition, DefaultService } from '../sdk';
 
 @Component({
   selector: 'app-first',
@@ -8,7 +10,13 @@ import { Router } from '@angular/router';
 })
 export class FirstComponent implements OnInit {
 
-  constructor(private router: Router) { }
+  tutorials: Array<MainGameDefinition>
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute, 
+    private api: DefaultService) { 
+    this.tutorials = [];
+  }
 
   ngOnInit() {
     if(localStorage.getItem("hadFirst") == "true"){
@@ -16,8 +24,12 @@ export class FirstComponent implements OnInit {
     }
     else {
       localStorage.setItem("hadFirst", "true");
+      const data = this.route.snapshot.data;
+      this.tutorials = data.tutorials;
+
     }
   }
 
-  
+
+
 }
