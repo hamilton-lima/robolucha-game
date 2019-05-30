@@ -47,19 +47,32 @@
     </div>
   </div>
 
-  <hr>
-
+  <hr />
   <div class="row mb-3">
     <div class="col-12">
-      <select class="form-control" [(ngModel)]="gameDefinition" #definition="ngModel">
-        <option [ngValue]="gd" *ngFor="let gd of gameDefinitions">{{gd.label}}</option>
+      <select
+        class="form-control"
+        [(ngModel)]="gameDefinition"
+        #definition="ngModel"
+      >
+        <option [ngValue]="gd" *ngFor="let gd of gameDefinitions">{{
+          gd.label
+        }}</option>
       </select>
     </div>
   </div>
 
   <div class="row">
     <div class="col-12">
-      <app-code-editor-panel></app-code-editor-panel>
+      <ngx-spinner
+        [fullScreen]="false"
+        type="ball-newton-cradle"
+        size="medium"
+      ></ngx-spinner>
+
+      <app-code-editor-panel
+        [gameDefinition]="gameDefinition"
+      ></app-code-editor-panel>
     </div>
   </div>
 

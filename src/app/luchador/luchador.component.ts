@@ -19,6 +19,7 @@ import { debounceTime } from "rxjs/operators";
 import { CanComponentDeactivate } from "../can-deactivate-guard.service";
 import { CodeEditorPanelComponent } from "../code-editor-panel/code-editor-panel.component";
 import { MainGameDefinition } from "../sdk";
+import { NgxSpinnerService } from "ngx-spinner";
 
 const HIDE_SUCCESS_TIMEOUT = 3000;
 
@@ -52,7 +53,8 @@ export class LuchadorComponent
   constructor(
     private route: ActivatedRoute,
     private api: DefaultService,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    private spinner: NgxSpinnerService
   ) {
     this.luchador = {};
   }
@@ -63,6 +65,7 @@ export class LuchadorComponent
     this.renameErrorMessage = "";
     this.luchador = data.luchador;
     this.editedName = this.luchador.name;
+    this.spinner.show();
 
     this.api
     .privateGameDefinitionAllGet()
@@ -71,6 +74,7 @@ export class LuchadorComponent
       if( gamedefinitions.length > 0 ){
         this.gameDefinition = gamedefinitions[0];
       }
+      this.spinner.hide();
     });
 
   }

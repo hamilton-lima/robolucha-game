@@ -6,6 +6,7 @@ import { ActivatedRoute } from "@angular/router";
 
 import { DefaultService } from "../sdk/api/default.service";
 import { MainLuchador } from "../sdk/model/mainLuchador";
+import { MainGameDefinition } from "../sdk";
 
 const HIDE_SUCCESS_TIMEOUT = 3000;
 
@@ -19,6 +20,8 @@ export class CodeEditorPanelComponent implements OnInit {
   luchador: MainLuchador;
   luchadorResponse: MainUpdateLuchadorResponse;
   successMessage: string;
+  
+  @Input() gameDefinition: MainGameDefinition;
 
   constructor(
     private route: ActivatedRoute,
