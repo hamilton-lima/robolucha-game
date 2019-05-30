@@ -51,28 +51,19 @@ export class CodeEditorPanelComponent implements OnInit {
       return element.gameDefinition == this.gameDefinition.id;
     });
 
-    console.log(
-      "(1) applysuggestedCode",
-      found,
-      this.luchador,
-      this.gameDefinition
-    );
-
     if (!found) {
       this.dirty = true;
       for (var key in this.codes) {
         let suggestedCode = this.getCodeFromGameDefinition(key);
-        console.log("suggestedcode", suggestedCode);
         this.codes[key] = suggestedCode;
+      }
+      
+      this.luchador.codes = [];
+      for (var key in this.codes) {
+        this.luchador.codes.push( this.codes[key]);
       }
     }
 
-    console.log(
-      "(2) applysuggestedCode",
-      found,
-      this.luchador,
-      this.gameDefinition
-    );
   }
 
   getCodeFromGameDefinition(event: string): MainCode {
