@@ -14,6 +14,7 @@
 export interface MainCode {
     event?: string;
     exception?: string;
+    gameDefinition?: number;
     id?: number;
     script?: string;
 }
