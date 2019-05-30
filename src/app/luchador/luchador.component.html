@@ -70,7 +70,7 @@
         size="medium"
       ></ngx-spinner>
 
-      <app-code-editor-panel
+      <app-code-editor-panel *ngIf="gameDefinition"
         [gameDefinition]="gameDefinition"
       ></app-code-editor-panel>
     </div>
