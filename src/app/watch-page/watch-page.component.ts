@@ -6,6 +6,7 @@ import {
 } from "@angular/router";
 import { DefaultService, MainGameDefinition, MainGameComponent } from "../sdk";
 import { WatchMatchComponent } from "../watch-match/watch-match.component";
+import { CanComponentDeactivate } from "../can-deactivate-guard.service";
 
 @Component({
   selector: "app-watch-page",

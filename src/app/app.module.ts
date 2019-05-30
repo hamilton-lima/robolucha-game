@@ -57,6 +57,7 @@ const ROUTES: Routes = [
     path: "mask",
     component: MaskEditorComponent,
     canActivate: [LoginActivate],
+    canDeactivate: [CanDeactivateGuard],
     resolve: { luchador: LuchadorResolverService }
   },
   {
