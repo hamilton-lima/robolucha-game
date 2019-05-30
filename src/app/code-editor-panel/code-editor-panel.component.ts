@@ -78,15 +78,6 @@ export class CodeEditorPanelComponent implements OnInit {
     this.codes[event] = code;
   }
 
-  canDeactivate() {
-    if (this.dirty) {
-      return window.confirm(
-        "You have unsaved changes to your luchador code. Are you sure you want to leave?"
-      );
-    }
-    return true;
-  }
-
   refreshEditor(luchador) {
     console.log("refresh luchador", luchador);
     this.luchador = luchador;

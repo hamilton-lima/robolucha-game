@@ -74,6 +74,7 @@ const ROUTES: Routes = [
     path: "watch/:id",
     component: WatchPageComponent,
     canActivate: [LoginActivate],
+    canDeactivate: [CanDeactivateGuard],
     resolve: { luchador: LuchadorResolverService }
   },
   {

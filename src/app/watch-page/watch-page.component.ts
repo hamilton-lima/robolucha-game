@@ -1,17 +1,18 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import {
   ActivatedRouteSnapshot,
   Router,
   ActivatedRoute
 } from "@angular/router";
 import { DefaultService, MainGameDefinition, MainGameComponent } from "../sdk";
+import { WatchMatchComponent } from "../watch-match/watch-match.component";
 
 @Component({
   selector: "app-watch-page",
   templateUrl: "./watch-page.component.html",
   styleUrls: ["./watch-page.component.css"]
 })
-export class WatchPageComponent implements OnInit {
+export class WatchPageComponent implements OnInit, CanComponentDeactivate {
   constructor(
     private router: Router,
     private api: DefaultService,
@@ -21,6 +22,8 @@ export class WatchPageComponent implements OnInit {
   matchID: number;
   luchador: MainGameComponent;
   gameDefinition: MainGameDefinition;
+
+  @ViewChild(WatchMatchComponent) watchMatch: WatchMatchComponent;
 
   ngOnInit(): void {
     this.luchador = this.route.snapshot.data.luchador;
@@ -41,4 +44,14 @@ export class WatchPageComponent implements OnInit {
   endMatch() {
     this.router.navigate(["play"]);
   }
+
+  canDeactivate() {
+    if (this.watchMatch.codeEditor.dirty) {
+      return window.confirm(
+        "You have unsaved changes to your luchador code. Are you sure you want to leave?"
+      );
+    }
+    return true;
+  }
+
 }
