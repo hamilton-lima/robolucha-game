@@ -6,6 +6,7 @@ import { ActivatedRoute } from "@angular/router";
 
 import { DefaultService } from "../sdk/api/default.service";
 import { MainLuchador } from "../sdk/model/mainLuchador";
+import { MainGameDefinition } from "../sdk";
 
 const HIDE_SUCCESS_TIMEOUT = 3000;
 
@@ -19,6 +20,8 @@ export class CodeEditorPanelComponent implements OnInit {
   luchador: MainLuchador;
   luchadorResponse: MainUpdateLuchadorResponse;
   successMessage: string;
+
+  @Input() gameDefinition: MainGameDefinition;
 
   constructor(
     private route: ActivatedRoute,
@@ -41,6 +44,39 @@ export class CodeEditorPanelComponent implements OnInit {
     const data = this.route.snapshot.data;
     this.dirty = false;
     this.refreshEditor(data.luchador);
+  }
+
+  applysuggestedCode() {
+    const found = this.luchador.codes.find(element => {
+      return element.gameDefinition == this.gameDefinition.id;
+    });
+
+    if (!found) {
+      this.dirty = true;
+      for (var key in this.codes) {
+        let suggestedCode = this.getCodeFromGameDefinition(key);
+        this.codes[key] = suggestedCode;
+      }
+      
+      this.luchador.codes = [];
+      for (var key in this.codes) {
+        this.luchador.codes.push( this.codes[key]);
+      }
+    }
+
+  }
+
+  getCodeFromGameDefinition(event: string): MainCode {
+    let result: MainCode = this.gameDefinition.suggestedCodes.find(element => {
+      return element.event == event;
+    });
+
+    if (!result) {
+      result = <MainCode>{};
+    }
+
+    result.gameDefinition = this.gameDefinition.id;
+    return result;
   }
 
   getCode(event: string): MainCode {
@@ -84,6 +120,7 @@ export class CodeEditorPanelComponent implements OnInit {
     for (var key in this.codes) {
       this.codes[key] = this.getCode(key);
     }
+    this.applysuggestedCode();
   }
 
   save() {

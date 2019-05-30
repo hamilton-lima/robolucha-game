@@ -42,6 +42,7 @@ import { WatchPageComponent } from './watch-page/watch-page.component';
 import { FirstComponent } from './first/first.component';
 import { TutorialListResolverService } from "./tutorial-list-resolver.service";
 import { HomePageComponent } from './home-page/home-page.component';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 library.add(fas);
 
@@ -137,7 +138,8 @@ export function apiConfigFactory(): Configuration {
     NgbModule,
     AceEditorModule,
     BrowserAnimationsModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    NgxSpinnerModule,
   ],
   providers: [LoginActivate, AuthService, CanDeactivateGuard],
   bootstrap: [AppComponent]

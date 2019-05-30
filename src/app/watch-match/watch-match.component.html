@@ -50,7 +50,7 @@
 
   </div>
   
-  <app-code-editor-panel class="code-editor-panel"
+  <app-code-editor-panel [gameDefinition]="gameDefinition" class="code-editor-panel"
   [@slideInOut]="{value: panelStates.code, params:{inVal:'150%', outVal:0}}">
   </app-code-editor-panel>
   
