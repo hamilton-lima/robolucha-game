@@ -4,10 +4,15 @@ import {
   OnDestroy,
   Output,
   EventEmitter,
-  Input
+  Input,
+  ViewChild
 } from "@angular/core";
 import { WatchMatchService, WatchDetails } from "./watch-match.service";
-import { MainGameComponent, MainGameDefinition, MainMatch } from "../sdk/model/models";
+import {
+  MainGameComponent,
+  MainGameDefinition,
+  MainMatch
+} from "../sdk/model/models";
 import { ActivatedRoute } from "@angular/router";
 import { SharedStateService } from "../shared-state.service";
 import { Subscription, Subject } from "rxjs";
@@ -20,6 +25,8 @@ import {
   transition,
   animate
 } from "@angular/animations";
+import { CanComponentDeactivate } from "../can-deactivate-guard.service";
+import { CodeEditorPanelComponent } from "../code-editor-panel/code-editor-panel.component";
 
 @Component({
   selector: "app-watch-match",
@@ -64,7 +71,8 @@ import {
     ])
   ]
 })
-export class WatchMatchComponent implements OnInit, OnDestroy {
+export class WatchMatchComponent
+  implements OnInit, OnDestroy {
   @Input() gameDefinition: MainGameDefinition;
   @Input() luchador: MainGameComponent;
   @Input() matchID: number;
@@ -72,6 +80,8 @@ export class WatchMatchComponent implements OnInit, OnDestroy {
   @Output() matchFinished = new EventEmitter<boolean>();
   readonly matchStateSubject: Subject<MatchState>;
   readonly messageSubject: Subject<Message>;
+
+  @ViewChild(CodeEditorPanelComponent) codeEditor: CodeEditorPanelComponent;
 
   message: string;
   userMessage: Message;
@@ -88,7 +98,8 @@ export class WatchMatchComponent implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
-    private service: WatchMatchService) {
+    private service: WatchMatchService
+  ) {
     this.luchador = {};
     this.message = "N/A";
 
@@ -175,4 +186,5 @@ export class WatchMatchComponent implements OnInit, OnDestroy {
   toList(): void {
     this.matchFinished.emit(true);
   }
+
 }
