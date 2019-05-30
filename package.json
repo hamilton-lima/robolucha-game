@@ -20,6 +20,10 @@
     "@angular/platform-browser": "^6.1.0",
     "@angular/platform-browser-dynamic": "^6.1.0",
     "@angular/router": "^6.1.0",
+    "@fortawesome/angular-fontawesome": "^0.3.0",
+    "@fortawesome/fontawesome-free": "^5.8.2",
+    "@fortawesome/fontawesome-svg-core": "^1.2.18",
+    "@fortawesome/free-solid-svg-icons": "^5.8.2",
     "@ng-bootstrap/ng-bootstrap": "^4.0.1",
     "babylonjs": "^3.3.0",
     "babylonjs-gui": "^3.3.0",
@@ -28,13 +32,10 @@
     "jquery": "^3.3.1",
     "moment": "^2.24.0",
     "ng2-ace-editor": "^0.3.8",
+    "ngx-spinner": "^7.1.4",
     "rxjs": "6.0.0",
     "rxjs-compat": "6.3.3",
-    "zone.js": "~0.8.26",
-    "@fortawesome/angular-fontawesome": "^0.3.0",
-    "@fortawesome/fontawesome-free": "^5.8.2",
-    "@fortawesome/fontawesome-svg-core": "^1.2.18",
-    "@fortawesome/free-solid-svg-icons": "^5.8.2"
+    "zone.js": "~0.8.26"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.7.0",

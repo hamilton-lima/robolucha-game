@@ -18,6 +18,8 @@ import { ActivatedRoute } from "@angular/router";
 import { debounceTime } from "rxjs/operators";
 import { CanComponentDeactivate } from "../can-deactivate-guard.service";
 import { CodeEditorPanelComponent } from "../code-editor-panel/code-editor-panel.component";
+import { MainGameDefinition } from "../sdk";
+import { NgxSpinnerService } from "ngx-spinner";
 
 const HIDE_SUCCESS_TIMEOUT = 3000;
 
@@ -28,7 +30,6 @@ const HIDE_SUCCESS_TIMEOUT = 3000;
 })
 export class LuchadorComponent
   implements OnInit, AfterViewChecked, CanComponentDeactivate {
-  
   @ViewChild("titleEdit") titleEdit: ElementRef;
   @ViewChild(CodeEditorPanelComponent) codeEditor: CodeEditorPanelComponent;
 
@@ -46,10 +47,14 @@ export class LuchadorComponent
   successMessage: string;
   addingEdit: boolean;
 
+  gameDefinitions: MainGameDefinition[] = [];
+  gameDefinition: MainGameDefinition;
+
   constructor(
     private route: ActivatedRoute,
     private api: DefaultService,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    private spinner: NgxSpinnerService
   ) {
     this.luchador = {};
   }
@@ -58,10 +63,20 @@ export class LuchadorComponent
     const data = this.route.snapshot.data;
     this.editingName = false;
     this.renameErrorMessage = "";
-
     this.luchador = data.luchador;
-
     this.editedName = this.luchador.name;
+    this.spinner.show();
+
+    this.api
+    .privateGameDefinitionAllGet()
+    .subscribe((gamedefinitions: MainGameDefinition[]) => {
+      this.gameDefinitions = gamedefinitions;
+      if( gamedefinitions.length > 0 ){
+        this.gameDefinition = gamedefinitions[0];
+      }
+      this.spinner.hide();
+    });
+
   }
 
   public ngAfterViewChecked(): void {}
