@@ -23,6 +23,8 @@ export class FirstComponent implements OnInit, CanComponentDeactivate {
   gameDefinition: MainGameDefinition;
   selection = <Selection>{ value: 0, label: "N/A"};
   luchador: MainLuchador;
+  matchID = 0;
+
   @ViewChild(CodeEditorPanelComponent) codeEditor: CodeEditorPanelComponent;
 
   constructor(
@@ -84,4 +86,7 @@ export class FirstComponent implements OnInit, CanComponentDeactivate {
     return true;
   }
 
+  endMatch(){
+    console.log("end match");
+  }
 }

@@ -60,7 +60,13 @@ export class CodeEditorPanelComponent implements OnInit, OnChanges {
 
   /** Loads codes from luchador to the editor, filter by gameDefinition */
   refreshEditor() {
+    if( !  this.gameDefinition){
+      console.warn("gameDefinition not set in code-editor-panel");
+      return;
+    }
+    
     let loadedCodes = 0;
+    this.dirty = false;
 
     for (var event in this.codes) {
       // get codes from luchador for event + gamedefinition
@@ -107,6 +113,7 @@ export class CodeEditorPanelComponent implements OnInit, OnChanges {
 
   // update the internal list of codes from the editor 
   updateCode(event: string, script: string) {
+    console.log("update code", event, script);
     this.dirty = true;
     this.codes[event].script = script;
   }

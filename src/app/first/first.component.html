@@ -57,7 +57,15 @@
       ></app-code-editor-panel>
     </div>
     <div class="col-6 watch-match">
-
+        <div *ngIf="gameDefinition">
+            <app-watch-match
+              [gameDefinition]="gameDefinition"
+              [luchador]="luchador"
+              [matchID]="matchID"
+              (matchFinished)="endMatch()"
+            ></app-watch-match>
+          </div>
+        
     </div>
   </div>
 
