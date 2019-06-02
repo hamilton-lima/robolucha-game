@@ -64,7 +64,6 @@ export class FirstComponent implements OnInit, CanComponentDeactivate {
     this.selection.label = position + 1 + " of " + this.selection.total;
 
     this.gameDefinition = this.gameDefinitions[position];
-    this.codeEditor.applysuggestedCode();
   }
 
   left() {

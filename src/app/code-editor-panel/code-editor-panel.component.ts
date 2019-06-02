@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, Input } from "@angular/core";
+import { Component, OnInit, ChangeDetectorRef, Input, SimpleChanges, OnChanges } from "@angular/core";
 import { MainCode } from "../sdk/model/mainCode";
 
 import { MainUpdateLuchadorResponse } from "../sdk/model/mainUpdateLuchadorResponse";
@@ -15,8 +15,8 @@ const HIDE_SUCCESS_TIMEOUT = 3000;
   templateUrl: "./code-editor-panel.component.html",
   styleUrls: ["./code-editor-panel.component.css"]
 })
-export class CodeEditorPanelComponent implements OnInit {
-  dirty: boolean;
+export class CodeEditorPanelComponent implements OnInit, OnChanges  {
+  dirty: boolean = false;
   luchador: MainLuchador;
   luchadorResponse: MainUpdateLuchadorResponse;
   successMessage: string;
@@ -28,7 +28,8 @@ export class CodeEditorPanelComponent implements OnInit {
     private api: DefaultService,
     private cdRef: ChangeDetectorRef
   ) {
-    this.luchador = {};
+    const data = this.route.snapshot.data;
+    this.luchador = data.luchador;
   }
 
   codes = {
@@ -42,9 +43,16 @@ export class CodeEditorPanelComponent implements OnInit {
 
   ngOnInit() {
     const data = this.route.snapshot.data;
-    this.dirty = false;
+    // this.dirty = false;
     this.resetEditor();
     this.refreshEditor(data.luchador);
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    console.log("gamedefinition", changes['gameDefinition'].currentValue);
+    console.log("ngOnChanges luchador", this.luchador );
+    this.refreshEditor(this.luchador);
+    this.applysuggestedCode();
   }
 
   applysuggestedCode() {
@@ -53,7 +61,9 @@ export class CodeEditorPanelComponent implements OnInit {
     });
 
     if (!found) {
+      this.resetEditor();
       this.dirty = true;
+
       for (var key in this.codes) {
         let suggestedCode = this.getCodeFromGameDefinition(key);
         this.codes[key] = suggestedCode;
@@ -61,7 +71,7 @@ export class CodeEditorPanelComponent implements OnInit {
       
       this.luchador.codes = [];
       for (var key in this.codes) {
-        this.luchador.codes.push( this.codes[key]);
+        this.luchador.codes.push(this.codes[key]);
       }
     }
 
@@ -73,9 +83,10 @@ export class CodeEditorPanelComponent implements OnInit {
     });
 
     if (!result) {
-      result = <MainCode>{};
+      result = <MainCode>{ event: event};
     }
 
+    result.id = null;
     result.gameDefinition = this.gameDefinition.id;
     return result;
   }
@@ -84,7 +95,7 @@ export class CodeEditorPanelComponent implements OnInit {
     let result = this.findCodeByEventName(event);
 
     if (!result) {
-      result = <MainCode>{};
+      result = <MainCode>{ event: event};
     }
 
     return result;
@@ -92,7 +103,8 @@ export class CodeEditorPanelComponent implements OnInit {
 
   findCodeByEventName(event: string) {
     return this.luchador.codes.find((code: MainCode) => {
-      if (code.event == event) {
+      if (code.event == event 
+        && code.gameDefinition == this.gameDefinition.id) {
         return true;
       }
       return false;
