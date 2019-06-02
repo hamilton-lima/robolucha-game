@@ -22,7 +22,6 @@ export class CodeEditorComponent implements OnInit {
   ngOnInit() {}
 
   onEditorChange(event) {
-    console.log("onchange", event);
     this.onChange.next( event );
   }
 }

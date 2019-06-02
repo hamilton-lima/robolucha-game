@@ -85,6 +85,14 @@ export class ArenaComponent implements OnInit, OnChanges {
     this.bullets = [];
   }
 
+  fitToContainer(){
+    var canvas = this.canvas.nativeElement;
+    canvas.style.width='100%';
+    canvas.style.height='100%';
+    canvas.width  = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+  }
+
   ngOnInit() {
     if (!this.currentLuchador) {
       console.error("currentLuchador missing");
@@ -95,7 +103,9 @@ export class ArenaComponent implements OnInit, OnChanges {
       this.gameDefinition.luchadorSize / 2
     );
     this.HALF_BULLET = this.convertPosition(this.gameDefinition.bulletSize / 2);
-    this.canvas.nativeElement.width = window.innerWidth * 0.99;
+    
+    this.fitToContainer();
+    // this.canvas.nativeElement.width = window.innerWidth * 0.99;
     this.engine = new BABYLON.Engine(this.canvas.nativeElement, true);
 
     this.matchStateSubject.subscribe((matchState: MatchState) => {

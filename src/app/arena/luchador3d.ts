@@ -225,7 +225,7 @@ export class Luchador3D extends Base3D {
   }
 
   animateFrom(name: string) {
-    if (this.character) {
+    if (this.character && this.character.skeleton) {
       const animation = characterAnimations.filter(animation => {
         return animation.name == name;
       })[0];

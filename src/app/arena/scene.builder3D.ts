@@ -88,7 +88,6 @@ export class SceneBuilder {
                         i.position.y = 0;
                         i.position.z = z;
                         if (counter++ % 2 > 0) {
-                            console.log("other");
                             i.material = otherTile;
                         }
                     }

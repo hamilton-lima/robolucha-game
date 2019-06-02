@@ -1,4 +1,11 @@
-import { Component, OnInit, ChangeDetectorRef, Input } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  ChangeDetectorRef,
+  Input,
+  SimpleChanges,
+  OnChanges
+} from "@angular/core";
 import { MainCode } from "../sdk/model/mainCode";
 
 import { MainUpdateLuchadorResponse } from "../sdk/model/mainUpdateLuchadorResponse";
@@ -15,8 +22,8 @@ const HIDE_SUCCESS_TIMEOUT = 3000;
   templateUrl: "./code-editor-panel.component.html",
   styleUrls: ["./code-editor-panel.component.css"]
 })
-export class CodeEditorPanelComponent implements OnInit {
-  dirty: boolean;
+export class CodeEditorPanelComponent implements OnInit, OnChanges {
+  dirty: boolean = false;
   luchador: MainLuchador;
   luchadorResponse: MainUpdateLuchadorResponse;
   successMessage: string;
@@ -28,110 +35,110 @@ export class CodeEditorPanelComponent implements OnInit {
     private api: DefaultService,
     private cdRef: ChangeDetectorRef
   ) {
-    this.luchador = {};
+    const data = this.route.snapshot.data;
+    this.luchador = data.luchador;
   }
 
   codes = {
-    onStart: <MainCode>{},
-    onRepeat: <MainCode>{},
-    onGotDamage: <MainCode>{},
-    onFound: <MainCode>{},
-    onHitOther: <MainCode>{},
-    onHitWall: <MainCode>{}
+    onStart: <MainCode>{ event: "onStart" },
+    onRepeat: <MainCode>{ event: "onRepeat" },
+    onGotDamage: <MainCode>{ event: "onGotDamage" },
+    onFound: <MainCode>{ event: "onFound" },
+    onHitOther: <MainCode>{ event: "onHitOther" },
+    onHitWall: <MainCode>{ event: "onHitWall" }
   };
 
   ngOnInit() {
     const data = this.route.snapshot.data;
-    this.dirty = false;
-    this.refreshEditor(data.luchador);
+    this.luchador = data.luchador;
   }
 
-  applysuggestedCode() {
-    const found = this.luchador.codes.find(element => {
-      return element.gameDefinition == this.gameDefinition.id;
-    });
+  ngOnChanges(changes: SimpleChanges) {
+    this.refreshEditor();
+    this.cdRef.detectChanges();
+  }
 
-    if (!found) {
-      this.dirty = true;
+  /** Loads codes from luchador to the editor, filter by gameDefinition */
+  refreshEditor() {
+    if( !  this.gameDefinition){
+      console.warn("gameDefinition not set in code-editor-panel");
+      return;
+    }
+    
+    let loadedCodes = 0;
+    this.dirty = false;
+
+    for (var event in this.codes) {
+      // get codes from luchador for event + gamedefinition
+      let code = this.luchador.codes.find((code: MainCode) => {
+        return (
+          code.event == event && code.gameDefinition == this.gameDefinition.id
+        );
+      });
+
+      // if exists updates working codes
+      if (code) {
+        loadedCodes++;
+        this.codes[event] = code;
+      }
+    }
+
+    // no code found for current gamedefinition
+    // apply suggested codes
+    if (loadedCodes == 0) {
       for (var key in this.codes) {
         let suggestedCode = this.getCodeFromGameDefinition(key);
         this.codes[key] = suggestedCode;
       }
-      
-      this.luchador.codes = [];
-      for (var key in this.codes) {
-        this.luchador.codes.push( this.codes[key]);
-      }
-    }
 
+      this.dirty = true;
+    }
   }
 
+  // return suggested code from the current gamedefinition
+  // if event not present in the list returns empy code
   getCodeFromGameDefinition(event: string): MainCode {
     let result: MainCode = this.gameDefinition.suggestedCodes.find(element => {
       return element.event == event;
     });
 
     if (!result) {
-      result = <MainCode>{};
+      result = <MainCode>{ event: event };
     }
 
+    result.id = null;
     result.gameDefinition = this.gameDefinition.id;
     return result;
   }
 
-  getCode(event: string): MainCode {
-    let result = this.findCodeByEventName(event);
-
-    if (!result) {
-      result = <MainCode>{};
-    }
-
-    return result;
-  }
-
-  findCodeByEventName(event: string) {
-    return this.luchador.codes.find((code: MainCode) => {
-      if (code.event == event) {
-        return true;
-      }
-      return false;
-    });
-  }
-
+  // update the internal list of codes from the editor 
   updateCode(event: string, script: string) {
-    console.log("updateCode", event, script);
+    console.log("update code", event, script);
     this.dirty = true;
-
-    let code = this.findCodeByEventName(event);
-
-    if (code) {
-      code.script = script;
-    } else {
-      code = <MainCode>{ event: event, script: script };
-      this.luchador.codes.push(code);
-    }
-
-    this.codes[event] = code;
-  }
-
-  refreshEditor(luchador) {
-    console.log("refresh luchador", luchador);
-    this.luchador = luchador;
-    for (var key in this.codes) {
-      this.codes[key] = this.getCode(key);
-    }
-    this.applysuggestedCode();
+    this.codes[event].script = script;
   }
 
   save() {
-    const remoteCall = this.api.privateLuchadorPut(this.luchador);
+    // apply the changes to the luchador object
+    for (var event in this.codes) {
+      // get codes from luchador for event + gamedefinition
+      let code = this.luchador.codes.find((code: MainCode) => {
+        return (
+          code.event == event &&
+          code.gameDefinition == this.codes[event].gameDefinition
+        );
+      });
 
-    remoteCall.subscribe(response => {
+      // if exists updates the luchador with working code
+      if (code) {
+        code.script = this.codes[event].script;
+      }
+    }
+
+    this.api.privateLuchadorPut(this.luchador).subscribe(response => {
       this.successMessage = "Luchador updated";
       this.dirty = false;
       setTimeout(() => (this.successMessage = null), HIDE_SUCCESS_TIMEOUT);
-
-      this.refreshEditor(response.luchador);
       this.cdRef.detectChanges();
     });
   }
