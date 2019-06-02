@@ -43,6 +43,7 @@ export class CodeEditorPanelComponent implements OnInit {
   ngOnInit() {
     const data = this.route.snapshot.data;
     this.dirty = false;
+    this.resetEditor();
     this.refreshEditor(data.luchador);
   }
 
@@ -112,6 +113,12 @@ export class CodeEditorPanelComponent implements OnInit {
     }
 
     this.codes[event] = code;
+  }
+
+  resetEditor(){
+    for (var key in this.codes) {
+      this.codes[key] = <MainCode>{};
+    }
   }
 
   refreshEditor(luchador) {

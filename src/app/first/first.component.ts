@@ -38,7 +38,7 @@ export class FirstComponent implements OnInit, CanComponentDeactivate {
     this.luchador = data.luchador;
 
     this.api
-      .privateGameDefinitionAllGet()
+      .privateTutorialGet()
       .subscribe((gamedefinitions: MainGameDefinition[]) => {
         this.gameDefinitions = gamedefinitions;
         if (gamedefinitions.length > 0) {
@@ -64,6 +64,7 @@ export class FirstComponent implements OnInit, CanComponentDeactivate {
     this.selection.label = position + 1 + " of " + this.selection.total;
 
     this.gameDefinition = this.gameDefinitions[position];
+    this.codeEditor.applysuggestedCode();
   }
 
   left() {
