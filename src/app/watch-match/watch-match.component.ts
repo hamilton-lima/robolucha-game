@@ -31,57 +31,16 @@ import { CodeEditorPanelComponent } from "../code-editor-panel/code-editor-panel
 @Component({
   selector: "app-watch-match",
   templateUrl: "./watch-match.component.html",
-  styleUrls: ["./watch-match.component.css"],
-  animations: [
-    trigger("slideInOut", [
-      state(
-        "in",
-        style({
-          transform: "translate3d({{inVal}}, 0, 0)"
-        }),
-        { params: { inVal: 0 } }
-      ),
-      state(
-        "out",
-        style({
-          transform: "translate3d({{outVal}}, 0, 0)"
-        }),
-        { params: { outVal: "100%" } }
-      ),
-      transition("in => out", animate("400ms ease-in-out")),
-      transition("out => in", animate("400ms ease-in-out"))
-    ]),
-    trigger("slideInOutVert", [
-      state(
-        "in",
-        style({
-          transform: "translate3d(0, {{inVal}}, 0)"
-        }),
-        { params: { inVal: 0 } }
-      ),
-      state(
-        "out",
-        style({
-          transform: "translate3d(0, {{outVal}}, 0)"
-        }),
-        { params: { outVal: "100%" } }
-      ),
-      transition("in => out", animate("400ms ease-in-out")),
-      transition("out => in", animate("400ms ease-in-out"))
-    ])
-  ]
+  styleUrls: ["./watch-match.component.css"]
 })
-export class WatchMatchComponent
-  implements OnInit, OnDestroy {
+export class WatchMatchComponent implements OnInit, OnDestroy {
   @Input() gameDefinition: MainGameDefinition;
   @Input() luchador: MainGameComponent;
   @Input() matchID: number;
 
   @Output() matchFinished = new EventEmitter<boolean>();
-  readonly matchStateSubject: Subject<MatchState>;
-  readonly messageSubject: Subject<Message>;
-
-  @ViewChild(CodeEditorPanelComponent) codeEditor: CodeEditorPanelComponent;
+  @Output() matchStateSubject = new EventEmitter<MatchState>();
+  @Output() messageSubject = new EventEmitter<Message>();
 
   message: string;
   userMessage: Message;
@@ -89,22 +48,12 @@ export class WatchMatchComponent
   subscription: Subscription;
   onMessage: Subscription;
 
-  matchOver: boolean;
-
-  scoreState: string = "out";
-  codeState: string = "out";
-  messageState: string = "out";
-  panelStates = { score: "out", code: "out", message: "out" };
-
   constructor(
     private route: ActivatedRoute,
     private service: WatchMatchService
   ) {
     this.luchador = {};
     this.message = "N/A";
-
-    this.matchStateSubject = new Subject<MatchState>();
-    this.messageSubject = new Subject<Message>();
   }
 
   ngOnInit() {
@@ -126,49 +75,24 @@ export class WatchMatchComponent
 
     this.onMessage = this.service.watch(details).subscribe(message => {
       this.message = message;
-      let parsedMessage = JSON.parse(this.message);
-      parsedMessage.type = parsedMessage.type.toLowerCase();
+      const parsed = JSON.parse(this.message);
+      // parsedMessage.type = parsedMessage.type.toLowerCase();
 
-      if (parsedMessage.type == "match-state") {
-        this.matchState = parsedMessage.message;
-        this.matchStateSubject.next(this.matchState);
-        if (this.matchState.clock < 100) {
-          this.matchOver = true;
-          this.closeAllPanels();
+      if (parsed.type == "match-state") {
+        this.matchStateSubject.emit(parsed.message);
+
+        //TODO: remove magic number
+        if (parsed.message.clock < 100) {
+          this.matchFinished.emit(true);
         }
         return;
       }
 
-      if (parsedMessage.type == "message") {
-        this.userMessage = parsedMessage.message;
-        this.messageSubject.next(this.userMessage);
+      if (parsed.type == "message") {
+        this.messageSubject.emit(parsed.message);
         return;
       }
     });
-  }
-
-  closeAllPanels() {
-    this.panelStates.score = "out";
-    this.panelStates.code = "out";
-    this.panelStates.message = "out";
-  }
-
-  toggleScore() {
-    this.panelStates.score = this.panelStates.score === "out" ? "in" : "out";
-    this.panelStates.code = "out";
-    this.panelStates.message = "out";
-  }
-  toggleCode() {
-    this.panelStates.code = this.panelStates.code === "out" ? "in" : "out";
-    this.panelStates.score = "out";
-    this.panelStates.message = "out";
-  }
-
-  toggleMessages() {
-    this.panelStates.message =
-      this.panelStates.message === "out" ? "in" : "out";
-    this.panelStates.score = "out";
-    this.panelStates.code = "out";
   }
 
   ngOnDestroy(): void {
@@ -186,5 +110,4 @@ export class WatchMatchComponent
   toList(): void {
     this.matchFinished.emit(true);
   }
-
 }

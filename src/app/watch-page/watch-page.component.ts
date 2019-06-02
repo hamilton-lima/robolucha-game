@@ -7,11 +7,60 @@ import {
 import { DefaultService, MainGameDefinition, MainGameComponent } from "../sdk";
 import { WatchMatchComponent } from "../watch-match/watch-match.component";
 import { CanComponentDeactivate } from "../can-deactivate-guard.service";
+import {
+  trigger,
+  state,
+  style,
+  transition,
+  animate
+} from "@angular/animations";
+import { Subject } from "rxjs";
+import { MatchState } from "../watch-match/watch-match.model";
+import { Message } from "../message/message.model";
+import { CodeEditorPanelComponent } from "../code-editor-panel/code-editor-panel.component";
 
 @Component({
   selector: "app-watch-page",
   templateUrl: "./watch-page.component.html",
-  styleUrls: ["./watch-page.component.css"]
+  styleUrls: ["./watch-page.component.css"],
+  animations: [
+    trigger("slideInOut", [
+      state(
+        "in",
+        style({
+          transform: "translate3d({{inVal}}, 0, 0)"
+        }),
+        { params: { inVal: 0 } }
+      ),
+      state(
+        "out",
+        style({
+          transform: "translate3d({{outVal}}, 0, 0)"
+        }),
+        { params: { outVal: "100%" } }
+      ),
+      transition("in => out", animate("400ms ease-in-out")),
+      transition("out => in", animate("400ms ease-in-out"))
+    ]),
+    trigger("slideInOutVert", [
+      state(
+        "in",
+        style({
+          transform: "translate3d(0, {{inVal}}, 0)"
+        }),
+        { params: { inVal: 0 } }
+      ),
+      state(
+        "out",
+        style({
+          transform: "translate3d(0, {{outVal}}, 0)"
+        }),
+        { params: { outVal: "100%" } }
+      ),
+      transition("in => out", animate("400ms ease-in-out")),
+      transition("out => in", animate("400ms ease-in-out"))
+    ])
+  ]
 })
 export class WatchPageComponent implements OnInit, CanComponentDeactivate {
   constructor(
@@ -20,11 +69,20 @@ export class WatchPageComponent implements OnInit, CanComponentDeactivate {
     private route: ActivatedRoute
   ) {}
 
+  matchOver = false;
+
   matchID: number;
   luchador: MainGameComponent;
   gameDefinition: MainGameDefinition;
+  readonly matchStateSubject = new Subject<MatchState>();
+  readonly messageSubject = new Subject<Message>();
 
-  @ViewChild(WatchMatchComponent) watchMatch: WatchMatchComponent;
+  scoreState: string = "out";
+  codeState: string = "out";
+  messageState: string = "out";
+  panelStates = { score: "out", code: "out", message: "out" };
+
+  @ViewChild(CodeEditorPanelComponent) codeEditor: CodeEditorPanelComponent;
 
   ngOnInit(): void {
     this.luchador = this.route.snapshot.data.luchador;
@@ -43,16 +101,53 @@ export class WatchPageComponent implements OnInit, CanComponentDeactivate {
   }
 
   endMatch() {
+    this.matchOver = true;
+  }
+
+  gotoMatchList(){
     this.router.navigate(["play"]);
   }
 
   canDeactivate() {
-    if (this.watchMatch.codeEditor.dirty) {
+    if (this.codeEditor.dirty) {
       return window.confirm(
         "You have unsaved changes to your luchador code. Are you sure you want to leave?"
       );
     }
     return true;
+  }
+
+  closeAllPanels() {
+    this.panelStates.score = "out";
+    this.panelStates.code = "out";
+    this.panelStates.message = "out";
+  }
+
+  toggleScore() {
+    this.panelStates.score = this.panelStates.score === "out" ? "in" : "out";
+    this.panelStates.code = "out";
+    this.panelStates.message = "out";
+  }
+
+  toggleCode() {
+    this.panelStates.code = this.panelStates.code === "out" ? "in" : "out";
+    this.panelStates.score = "out";
+    this.panelStates.message = "out";
+  }
+
+  toggleMessages() {
+    this.panelStates.message =
+      this.panelStates.message === "out" ? "in" : "out";
+    this.panelStates.score = "out";
+    this.panelStates.code = "out";
+  }
+
+  updateState(state: MatchState) {
+    this.matchStateSubject.next(state);
+  }
+
+  updateMessage(message: Message) {
+    this.messageSubject.next(message);
   }
 
 }

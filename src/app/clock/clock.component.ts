@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import * as moment from 'moment';
 import { MatchState } from '../watch-match/watch-match.model';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-clock',
@@ -8,15 +9,19 @@ import { MatchState } from '../watch-match/watch-match.model';
   styleUrls: ['./clock.component.css']
 })
 export class ClockComponent implements OnInit {
-@Input() matchState: MatchState;
+  @Input() matchStateSubject: Subject<MatchState>;
+  private clock: number = 0;
 
   constructor() { }
 
   ngOnInit() {
+    this.matchStateSubject.subscribe((matchState: MatchState) => {
+      this.clock = matchState.clock;
+    });
   }
 
   parsedMatchTime(){
-    let duration = moment.duration(this.matchState.clock);
+    let duration = moment.duration(this.clock);
     return this.formatDuration(duration);
   }
 
