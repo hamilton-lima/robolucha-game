@@ -15,17 +15,55 @@
     </div>
   </div>
 
-  <div class="row">
+  <div *ngIf="gameDefinition" class="row">
+      <div class="col-1">
+          <button (click)="left()" class="btn btn-primary">
+            <fa-icon
+              [styles]="{ stroke: 'white', color: 'white' }"
+              [icon]="['fas', 'chevron-left']"
+            ></fa-icon>
+          </button>
+        </div>
+    
     <div class="col-10">
-      <div class="progress-bar" role="progressbar" style="width:50%">5/10</div>
+      <ngb-progressbar type="success" [value]="selection.value" height="38px"><b>{{selection.label}}</b></ngb-progressbar>
+    </div>
+
+    <div class="col-1">
+        <button (click)="right()" class="btn btn-primary">
+          <fa-icon
+            [styles]="{ stroke: 'white', color: 'white' }"
+            [icon]="['fas', 'chevron-right']"
+          ></fa-icon>
+        </button>
+      </div>
+
+  </div>
+
+  <div class="row mb-3">
+      <div class="col-1">
+        &nbsp;
+      </div>
+    <div class="col-10">
+      <h3>{{gameDefinition.label}}</h3>
+    <div>
+      {{ selection | json }}
+      </div>
+      <!-- <select
+        class="form-control"
+        [(ngModel)]="gameDefinition"
+        #definition="ngModel"
+      >
+        <option [ngValue]="gd" *ngFor="let gd of gameDefinitions">{{
+          gd.label
+        }}</option>
+      </select> -->
     </div>
   </div>
 
   <div class="row">
-      <div class="col-10">
-        <h1>Te be released soon</h1>
-      </div>
+    <div class="col-10">
+      <h1>Te be released soon</h1>
     </div>
-  
-
+  </div>
 </div>
