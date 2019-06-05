@@ -19,6 +19,9 @@ export class PlaygroundComponent implements OnInit, AfterViewInit {
   from: number = 130;
   to: number = 145;
 
+  rotating: boolean;
+  rotatingGun: boolean;
+
   animationNames = characterAnimations.map( animation => { return animation.name});
 
   constructor() {
@@ -44,6 +47,8 @@ export class PlaygroundComponent implements OnInit, AfterViewInit {
     this.data = JSON.stringify(this.matchState);
   }
 
+
+
   ngAfterViewInit(): void {
     this.onChange(this.data);
   }
@@ -60,5 +65,38 @@ export class PlaygroundComponent implements OnInit, AfterViewInit {
 
   animate(name) {
     this.animateSubject.next(name);
+  }
+  
+  toggleRotate() {
+    this.rotating = !this.rotating;
+    
+    if (this.rotating)
+      this.rotate();
+  }
+
+  toggleRotateGun() {
+      this.rotatingGun = !this.rotatingGun;
+
+      if (this.rotatingGun)
+        this.rotateGun();
+  }
+
+
+  rotate() {
+    this.matchState.luchadores.forEach(luchador => {
+      luchador.angle++;
+    })
+    if (this.rotating){
+      this.rotate();
+    }
+  }
+
+  rotateGun() {
+    this.matchState.luchadores.forEach(luchador => {
+      luchador.gunAngle++;
+    })
+    if (this.rotatingGun){
+      this.rotateGun();
+    }
   }
 }
