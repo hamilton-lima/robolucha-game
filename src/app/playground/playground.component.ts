@@ -20,7 +20,10 @@ export class PlaygroundComponent implements OnInit, AfterViewInit {
   to: number = 145;
 
   rotating: boolean;
+  rotateId: any;
+
   rotatingGun: boolean;
+  rotateGunId: any;
 
   animationNames = characterAnimations.map( animation => { return animation.name});
 
@@ -69,34 +72,42 @@ export class PlaygroundComponent implements OnInit, AfterViewInit {
   
   toggleRotate() {
     this.rotating = !this.rotating;
-    
-    if (this.rotating)
-      this.rotate();
+
+    if (this.rotating) {
+      this.rotateId = setInterval(this.rotate.bind(this), 1000/60);
+    }
+    else {
+      clearInterval(this.rotateId);
+    }
   }
 
   toggleRotateGun() {
       this.rotatingGun = !this.rotatingGun;
 
-      if (this.rotatingGun)
-        this.rotateGun();
+      if (this.rotatingGun) {
+        this.rotateGunId = setInterval(this.rotateGun.bind(this), 1000/60);
+      }
+      else{
+        clearInterval(this.rotateGunId);
+      }
+
+
   }
 
 
+
   rotate() {
+    console.log(this.matchState);
     this.matchState.luchadores.forEach(luchador => {
       luchador.angle++;
     })
-    if (this.rotating){
-      this.rotate();
-    }
+    this.matchStateSubject.next(this.matchState);
   }
 
   rotateGun() {
     this.matchState.luchadores.forEach(luchador => {
       luchador.gunAngle++;
     })
-    if (this.rotatingGun){
-      this.rotateGun();
-    }
+    this.matchStateSubject.next(this.matchState);
   }
 }

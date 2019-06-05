@@ -63,7 +63,7 @@
       <textarea
         class="json-data"
         [ngModel]="data"
-        [attr.disabled]="rotating || rotatingGun"
+        [readonly]="rotating || rotatingGun"
         (ngModelChange)="onChange($event)"
       ></textarea>
     </div>
