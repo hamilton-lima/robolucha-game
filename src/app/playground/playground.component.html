@@ -32,6 +32,20 @@
       </button>
     </div>
     <hr />
+    <div>
+      <button type="button" class="btn btn-sm" 
+      [ngClass]="{
+        'btn-primary': rotating,
+        'btn-outline-primary': !rotating
+      }"
+      (click)="toggleRotate()">Toggle Rotation</button>
+      <button type="button" class="btn btn-sm" 
+      [ngClass]="{
+        'btn-primary': rotatingGun,
+        'btn-outline-primary': !rotatingGun
+      }"
+      (click)="toggleRotateGun()">Toggle Gun Rotation</button>
+    </div>
   </div>
 
   <div class="row">
@@ -49,6 +63,7 @@
       <textarea
         class="json-data"
         [ngModel]="data"
+        [readonly]="rotating || rotatingGun"
         (ngModelChange)="onChange($event)"
       ></textarea>
     </div>
