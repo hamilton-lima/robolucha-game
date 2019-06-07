@@ -84,6 +84,7 @@ const ROUTES: Routes = [
     path: "first",
     component: FirstComponent,
     canActivate: [LoginActivate],
+    canDeactivate: [CanDeactivateGuard],
     resolve: { luchador: LuchadorResolverService }
   },
   {

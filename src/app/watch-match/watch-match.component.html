@@ -1,67 +1,8 @@
-<div class="watch-main" *ngIf="matchState">
-  <div>
-    <app-clock class="clock"
-      [matchState]="matchState"
-    ></app-clock>
-
-    <app-arena
-      [gameDefinition]="gameDefinition"
-      [matchStateSubject]="matchStateSubject"
-      [debug]="false"
-      [currentLuchador]="luchador.id"
-    ></app-arena>
-    <ul class="panel-selector float-right">
-      <li>
-        <button (click)="toggleCode()" class="btn-round">
-          <fa-icon
-            [styles]="{'stroke': 'white', 'color': 'white'}"
-            [icon]="['fas', 'edit']"
-            size="2x"
-          ></fa-icon>
-        </button>
-      </li>
-      <li>
-        <button (click)="toggleScore()" class="btn-round" >
-          <fa-icon
-           [styles]="{'stroke': 'white', 'color': 'white'}"
-            [icon]="['fas', 'trophy']"
-            size="2x"
-          ></fa-icon>
-        </button>
-      </li>
-      <li>
-        <button (click)="toggleMessages()" class="btn-round" >
-            <fa-icon
-            [styles]="{'stroke': 'white', 'color': 'white'}"
-            [icon]="['fas', 'comment']"
-
-            size="2x"
-          ></fa-icon>
-        </button>
-      </li>
-    </ul>
-
-    <div class="matchover-alert" *ngIf="matchOver">
-      <h1>This match is over!</h1>
-      <button class="btn btn-primary float-right" (click)="toList()"><span>Return to Match List</span></button>
-      <app-score [matchStateSubject]="matchStateSubject"></app-score>
-    </div>
-    
-
-  </div>
-  
-  <app-code-editor-panel [gameDefinition]="gameDefinition" class="code-editor-panel"
-  [@slideInOut]="{value: panelStates.code, params:{inVal:'150%', outVal:0}}">
-  </app-code-editor-panel>
-  
-  <app-score class="score"
-    [@slideInOut]="{value: panelStates.score, params:{inVal:'-30%', outVal:'100%'}}"
+<div class="watch-main">
+  <app-arena
+    [gameDefinition]="gameDefinition"
     [matchStateSubject]="matchStateSubject"
-  ></app-score>
-
-  <app-message class="message-panel"
-      [@slideInOutVert]="{value: panelStates.message, params:{inVal:'-120%', outVal:'100%'}}"
-      [messageSubject]="messageSubject"  
-  ></app-message>
-
+    [debug]="false"
+    [currentLuchador]="luchador.id"
+  ></app-arena>
 </div>

@@ -15,34 +15,58 @@
     </div>
   </div>
 
-  <div class="row">
+  <div *ngIf="gameDefinition" class="row">
+    <div class="col-1">
+      <button (click)="left()" class="btn btn-primary">
+        <fa-icon
+          [styles]="{ stroke: 'white', color: 'white' }"
+          [icon]="['fas', 'chevron-left']"
+        ></fa-icon>
+      </button>
+    </div>
+
     <div class="col-10">
-      <div class="progress">
-        <div class="progress-bar" role="progressbar" style="width:50%">5/10</div>
-      </div>
+      <ngb-progressbar type="success" [value]="selection.value" height="38px"
+        ><b>{{ selection.label }}</b></ngb-progressbar
+      >
     </div>
-  </div>
-  <div class="row">
-    <div class="col-10">
-      <ul class="tutorial-list">
-        <li *ngFor="let tutorial of tutorials">
-          <span class="tutorial-name">{{tutorial.label}}</span> <span> - {{tutorial.description}}</span><button class="btn btn-secondary float-right" (click)=play(tutorial)>Play</button>
-        </li>
-      </ul>        
-    </div>
-  </div>
-  
-  <div class="row">
-    <div class="col-5">
-      <app-code-editor-panel [gameDefinition]="selectedTutorial"></app-code-editor-panel>
-    </div>
-    <div class="col-5" style="background-color:black">
-      <app-watch-match *ngIf="selectedTutorial != null"
-      [gameDefinition]="selectedTutorial"
-      [luchador]="luchador"
-    ></app-watch-match>
+
+    <div class="col-1">
+      <button (click)="right()" class="btn btn-primary">
+        <fa-icon
+          [styles]="{ stroke: 'white', color: 'white' }"
+          [icon]="['fas', 'chevron-right']"
+        ></fa-icon>
+      </button>
     </div>
   </div>
 
+  <div *ngIf="gameDefinition" class="row mb-3">
+    <div class="col-1">
+      &nbsp;
+    </div>
+    <div class="col-10">
+      <h3>{{ gameDefinition.label }}</h3>
+    </div>
+  </div>
+
+  <div *ngIf="gameDefinition" class="row mb-3">
+    <div class="col-6">
+      <app-code-editor-panel
+        [gameDefinition]="gameDefinition"
+      ></app-code-editor-panel>
+    </div>
+    <div class="col-6 watch-match">
+        <div *ngIf="gameDefinition">
+            <app-watch-match
+              [gameDefinition]="gameDefinition"
+              [luchador]="luchador"
+              [matchID]="matchID"
+              (matchFinished)="endMatch()"
+            ></app-watch-match>
+          </div>
+        
+    </div>
+  </div>
 
 </div>
