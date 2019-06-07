@@ -40,7 +40,6 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { WatchPageComponent } from './watch-page/watch-page.component';
 import { FirstComponent } from './first/first.component';
-import { TutorialListResolverService } from "./tutorial-list-resolver.service";
 import { HomePageComponent } from './home-page/home-page.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
 
