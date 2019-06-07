@@ -90,10 +90,4 @@ export class FirstComponent implements OnInit, CanComponentDeactivate {
     console.log("end match");
   }
 
-  play(tutorial: MainGameDefinition){
-    this.selectedTutorial = tutorial;
-  }
-
-
-
 }
