@@ -132,6 +132,8 @@ export class CodeEditorPanelComponent implements OnInit, OnChanges {
       // if exists updates the luchador with working code
       if (code) {
         code.script = this.codes[event].script;
+      } else {
+        this.luchador.codes.push(this.codes[event]);
       }
     }
 
