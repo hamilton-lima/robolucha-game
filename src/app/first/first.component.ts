@@ -1,10 +1,11 @@
 import { Component, OnInit, ChangeDetectorRef, ViewChild } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
-import { DefaultService, MainGameDefinition } from "../sdk";
+import { DefaultService, MainGameDefinition, MainJoinMatch } from "../sdk";
 import { NgxSpinnerService } from "ngx-spinner";
 import { MainLuchador } from "../sdk/model/mainLuchador";
 import { CanComponentDeactivate } from "../can-deactivate-guard.service";
 import { CodeEditorPanelComponent } from "../code-editor-panel/code-editor-panel.component";
+import { join } from "path";
 
 export interface Selection {
   position: number;
@@ -21,7 +22,7 @@ export interface Selection {
 export class FirstComponent implements OnInit, CanComponentDeactivate {
   gameDefinitions: MainGameDefinition[];
   gameDefinition: MainGameDefinition;
-  selection = <Selection>{ value: 0, label: "N/A"};
+  selection = <Selection>{ value: 0, label: "N/A" };
   luchador: MainLuchador;
   matchID = 0;
 
@@ -62,10 +63,18 @@ export class FirstComponent implements OnInit, CanComponentDeactivate {
     }
 
     this.selection.position = position;
-    this.selection.value = Math.floor((position+1) / this.selection.total * 100);
+    this.selection.value = Math.floor(
+      ((position + 1) / this.selection.total) * 100
+    );
     this.selection.label = position + 1 + " of " + this.selection.total;
-
     this.gameDefinition = this.gameDefinitions[position];
+
+    this.api
+      .privateStartTutorialMatchNamePost(this.gameDefinition.name)
+      .subscribe((joinMatch: MainJoinMatch) => {
+        this.matchID = joinMatch.matchID;
+        console.log("join match", joinMatch);
+      });
   }
 
   left() {
@@ -86,8 +95,7 @@ export class FirstComponent implements OnInit, CanComponentDeactivate {
     return true;
   }
 
-  endMatch(){
+  endMatch() {
     console.log("end match");
   }
-
 }
