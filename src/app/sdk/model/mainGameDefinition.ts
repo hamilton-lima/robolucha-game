@@ -48,6 +48,8 @@ export interface MainGameDefinition {
     radarRadius?: number;
     recycledLuchadorEnergyRestore?: number;
     respawnCooldown?: number;
+    respawnX?: number;
+    respawnY?: number;
     restoreEnergyperSecond?: number;
     sceneComponents?: Array<MainSceneComponent>;
     sortOrder?: number;

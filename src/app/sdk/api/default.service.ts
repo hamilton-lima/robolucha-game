@@ -364,6 +364,57 @@ export class DefaultService {
     }
 
     /**
+     * update Game definition
+     * 
+     * @param request GameDefinition
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public internalGameDefinitionPut(request: MainGameDefinition, observe?: 'body', reportProgress?: boolean): Observable<MainGameDefinition>;
+    public internalGameDefinitionPut(request: MainGameDefinition, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<MainGameDefinition>>;
+    public internalGameDefinitionPut(request: MainGameDefinition, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<MainGameDefinition>>;
+    public internalGameDefinitionPut(request: MainGameDefinition, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (request === null || request === undefined) {
+            throw new Error('Required parameter request was null or undefined when calling internalGameDefinitionPut.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (ApiKeyAuth) required
+        if (this.configuration.apiKeys["Authorization"]) {
+            headers = headers.set('Authorization', this.configuration.apiKeys["Authorization"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        let httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set("Accept", httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json'
+        ];
+        let httpContentTypeSelected:string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set("Content-Type", httpContentTypeSelected);
+        }
+
+        return this.httpClient.put<MainGameDefinition>(`${this.basePath}/internal/game-definition`,
+            request,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * find Luchador by ID
      * 
      * @param request FindLuchadorWithGamedefinition
@@ -634,6 +685,52 @@ export class DefaultService {
         ];
 
         return this.httpClient.get<Array<MainGameDefinition>>(`${this.basePath}/private/game-definition-all`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * find a game definition
+     * 
+     * @param id GameDefinition id
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public privateGameDefinitionIdIdGet(id: number, observe?: 'body', reportProgress?: boolean): Observable<MainGameDefinition>;
+    public privateGameDefinitionIdIdGet(id: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<MainGameDefinition>>;
+    public privateGameDefinitionIdIdGet(id: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<MainGameDefinition>>;
+    public privateGameDefinitionIdIdGet(id: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling privateGameDefinitionIdIdGet.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (ApiKeyAuth) required
+        if (this.configuration.apiKeys["Authorization"]) {
+            headers = headers.set('Authorization', this.configuration.apiKeys["Authorization"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        let httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set("Accept", httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json'
+        ];
+
+        return this.httpClient.get<MainGameDefinition>(`${this.basePath}/private/game-definition-id/${encodeURIComponent(String(id))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -1000,6 +1097,55 @@ export class DefaultService {
 
         return this.httpClient.get<Array<MainMatch>>(`${this.basePath}/private/match`,
             {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * find one match
+     * 
+     * @param matchID int valid
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public privateMatchSingleGet(matchID?: number, observe?: 'body', reportProgress?: boolean): Observable<MainMatch>;
+    public privateMatchSingleGet(matchID?: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<MainMatch>>;
+    public privateMatchSingleGet(matchID?: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<MainMatch>>;
+    public privateMatchSingleGet(matchID?: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (matchID !== undefined) {
+            queryParameters = queryParameters.set('matchID', <any>matchID);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (ApiKeyAuth) required
+        if (this.configuration.apiKeys["Authorization"]) {
+            headers = headers.set('Authorization', this.configuration.apiKeys["Authorization"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        let httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set("Accept", httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json'
+        ];
+
+        return this.httpClient.get<MainMatch>(`${this.basePath}/private/match-single`,
+            {
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

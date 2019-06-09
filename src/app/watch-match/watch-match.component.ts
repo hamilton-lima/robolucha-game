@@ -29,6 +29,7 @@ import {
 } from "@angular/animations";
 import { CanComponentDeactivate } from "../can-deactivate-guard.service";
 import { CodeEditorPanelComponent } from "../code-editor-panel/code-editor-panel.component";
+import { ArenaComponent } from "../arena/arena.component";
 
 @Component({
   selector: "app-watch-match",
@@ -43,6 +44,8 @@ export class WatchMatchComponent implements OnInit, OnDestroy, OnChanges {
   @Output() matchFinished = new EventEmitter<boolean>();
   @Output() matchStateSubject = new EventEmitter<MatchState>();
   @Output() messageSubject = new EventEmitter<Message>();
+
+  @ViewChild(ArenaComponent) arena: ArenaComponent;
 
   message: string;
   userMessage: Message;
@@ -70,6 +73,7 @@ export class WatchMatchComponent implements OnInit, OnDestroy, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     console.log('changes', changes.matchID);
     this.readyToStart();
+    this.arena.createScene();
   }
 
   readyToStart() {
