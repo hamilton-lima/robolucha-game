@@ -5,7 +5,9 @@ import {
   Output,
   EventEmitter,
   Input,
-  ViewChild
+  ViewChild,
+  OnChanges,
+  SimpleChanges
 } from "@angular/core";
 import { WatchMatchService, WatchDetails } from "./watch-match.service";
 import {
@@ -33,7 +35,7 @@ import { CodeEditorPanelComponent } from "../code-editor-panel/code-editor-panel
   templateUrl: "./watch-match.component.html",
   styleUrls: ["./watch-match.component.css"]
 })
-export class WatchMatchComponent implements OnInit, OnDestroy {
+export class WatchMatchComponent implements OnInit, OnDestroy, OnChanges {
   @Input() gameDefinition: MainGameDefinition;
   @Input() luchador: MainGameComponent;
   @Input() matchID: number;
@@ -63,6 +65,11 @@ export class WatchMatchComponent implements OnInit, OnDestroy {
 
     console.log("watch match oninit", this.luchador);
     this.service.connect();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log('changes', changes.matchID);
+    this.readyToStart();
   }
 
   readyToStart() {
