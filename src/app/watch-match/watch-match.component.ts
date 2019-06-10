@@ -52,16 +52,16 @@ export class WatchMatchComponent implements OnInit, OnDestroy, OnChanges {
   matchState: MatchState;
   subscription: Subscription;
   onMessage: Subscription;
+  ;
 
-  constructor(
-    private route: ActivatedRoute,
-    private service: WatchMatchService
-  ) {
+  constructor(private service: WatchMatchService) {
     this.luchador = {};
     this.message = "N/A";
   }
 
   ngOnInit() {
+    // this.releaseConnection();
+
     this.subscription = this.service.ready.subscribe(() => {
       this.readyToStart();
     });
@@ -71,9 +71,11 @@ export class WatchMatchComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log('changes', changes.matchID);
-    this.readyToStart();
-    this.arena.createScene();
+    console.log("changes", changes.matchID);
+    if (changes.matchID && !changes.matchID.firstChange) {
+      this.readyToStart();
+      this.arena.createScene();
+    }
   }
 
   readyToStart() {
@@ -107,6 +109,10 @@ export class WatchMatchComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnDestroy(): void {
+    this.releaseConnection();
+  }
+
+  releaseConnection() {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
@@ -115,7 +121,9 @@ export class WatchMatchComponent implements OnInit, OnDestroy, OnChanges {
       this.onMessage.unsubscribe();
     }
 
-    this.service.close();
+    if (this.service) {
+      this.service.close();
+    }
   }
 
   toList(): void {
