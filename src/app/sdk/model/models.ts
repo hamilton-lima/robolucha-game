@@ -1,5 +1,6 @@
 export * from './mainCode';
 export * from './mainConfig';
+export * from './mainFindLuchadorWithGamedefinition';
 export * from './mainGameComponent';
 export * from './mainGameDefinition';
 export * from './mainJoinMatch';

@@ -5,7 +5,9 @@ import {
   Output,
   EventEmitter,
   Input,
-  ViewChild
+  ViewChild,
+  OnChanges,
+  SimpleChanges
 } from "@angular/core";
 import { WatchMatchService, WatchDetails } from "./watch-match.service";
 import {
@@ -27,13 +29,14 @@ import {
 } from "@angular/animations";
 import { CanComponentDeactivate } from "../can-deactivate-guard.service";
 import { CodeEditorPanelComponent } from "../code-editor-panel/code-editor-panel.component";
+import { ArenaComponent } from "../arena/arena.component";
 
 @Component({
   selector: "app-watch-match",
   templateUrl: "./watch-match.component.html",
   styleUrls: ["./watch-match.component.css"]
 })
-export class WatchMatchComponent implements OnInit, OnDestroy {
+export class WatchMatchComponent implements OnInit, OnDestroy, OnChanges {
   @Input() gameDefinition: MainGameDefinition;
   @Input() luchador: MainGameComponent;
   @Input() matchID: number;
@@ -42,27 +45,37 @@ export class WatchMatchComponent implements OnInit, OnDestroy {
   @Output() matchStateSubject = new EventEmitter<MatchState>();
   @Output() messageSubject = new EventEmitter<Message>();
 
+  @ViewChild(ArenaComponent) arena: ArenaComponent;
+
   message: string;
   userMessage: Message;
   matchState: MatchState;
   subscription: Subscription;
   onMessage: Subscription;
+  ;
 
-  constructor(
-    private route: ActivatedRoute,
-    private service: WatchMatchService
-  ) {
+  constructor(private service: WatchMatchService) {
     this.luchador = {};
     this.message = "N/A";
   }
 
   ngOnInit() {
+    // this.releaseConnection();
+
     this.subscription = this.service.ready.subscribe(() => {
       this.readyToStart();
     });
 
     console.log("watch match oninit", this.luchador);
     this.service.connect();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log("changes", changes.matchID);
+    if (changes.matchID && !changes.matchID.firstChange) {
+      this.readyToStart();
+      this.arena.createScene();
+    }
   }
 
   readyToStart() {
@@ -96,6 +109,10 @@ export class WatchMatchComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.releaseConnection();
+  }
+
+  releaseConnection() {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
@@ -104,7 +121,9 @@ export class WatchMatchComponent implements OnInit, OnDestroy {
       this.onMessage.unsubscribe();
     }
 
-    this.service.close();
+    if (this.service) {
+      this.service.close();
+    }
   }
 
   toList(): void {

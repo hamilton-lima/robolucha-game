@@ -63,26 +63,7 @@ export class ArenaComponent implements OnInit, OnChanges {
   cameraZoomLevels = [-5, 20];
 
   constructor(private builder: TextureBuilder, private api: DefaultService) {
-    this.currentMatchState = {
-      events: [],
-      bullets: [],
-      luchadores: [],
-      punches: [],
-      scores: [],
-      clock: 0
-    };
-
-    this.nextMatchState = {
-      events: [],
-      bullets: [],
-      luchadores: [],
-      punches: [],
-      scores: [],
-      clock: 0
-    };
-
-    this.luchadores = [];
-    this.bullets = [];
+    this.resetState();
   }
 
   fitToContainer(){
@@ -97,27 +78,6 @@ export class ArenaComponent implements OnInit, OnChanges {
     if (!this.currentLuchador) {
       console.error("currentLuchador missing");
       return;
-    }
-
-    this.HALF_LUCHADOR = this.convertPosition(
-      this.gameDefinition.luchadorSize / 2
-    );
-    this.HALF_BULLET = this.convertPosition(this.gameDefinition.bulletSize / 2);
-    
-    this.fitToContainer();
-    // this.canvas.nativeElement.width = window.innerWidth * 0.99;
-    this.engine = new BABYLON.Engine(this.canvas.nativeElement, true);
-
-    this.matchStateSubject.subscribe((matchState: MatchState) => {
-      this.nextMatchState = matchState;
-    });
-
-    if (this.animateSubject) {
-      this.animateSubject.subscribe(name => {
-        this.luchadores.forEach(luchador => {
-          luchador.animateFrom(name);
-        });
-      });
     }
 
     this.createScene();
@@ -161,7 +121,56 @@ export class ArenaComponent implements OnInit, OnChanges {
     localStorage.setItem(this.ROBOLUCHA_SAVED_CAMERA, savedCameraState);
   }
 
+  resetState(){
+    this.currentMatchState = {
+      events: [],
+      bullets: [],
+      luchadores: [],
+      punches: [],
+      scores: [],
+      clock: 0
+    };
+
+    this.nextMatchState = {
+      events: [],
+      bullets: [],
+      luchadores: [],
+      punches: [],
+      scores: [],
+      clock: 0
+    };
+
+    this.luchadores = [];
+    this.bullets = [];
+  }
+
   createScene(): void {
+    if( this.engine ){
+      this.engine.dispose();
+    }
+    
+    this.resetState();
+
+    this.HALF_LUCHADOR = this.convertPosition(
+      this.gameDefinition.luchadorSize / 2
+    );
+    this.HALF_BULLET = this.convertPosition(this.gameDefinition.bulletSize / 2);
+    
+    this.fitToContainer();
+    this.engine = new BABYLON.Engine(this.canvas.nativeElement, true);
+
+    this.matchStateSubject.subscribe((matchState: MatchState) => {
+      this.nextMatchState = matchState;
+    });
+
+    if (this.animateSubject) {
+      this.animateSubject.subscribe(name => {
+        this.luchadores.forEach(luchador => {
+          luchador.animateFrom(name);
+        });
+      });
+    }
+
     this.engine.displayLoadingUI();
     this.engine.loadingUIText = "Loading the arena";
 

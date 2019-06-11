@@ -87,6 +87,8 @@ export class WatchPageComponent implements OnInit, CanComponentDeactivate {
   ngOnInit(): void {
     this.luchador = this.route.snapshot.data.luchador;
     this.matchID = Number.parseInt(this.route.snapshot.paramMap.get("id"));
+    this.gameDefinition = null;
+    
     console.log("match ID", this.matchID);
     console.log("luchador", this.luchador);
 

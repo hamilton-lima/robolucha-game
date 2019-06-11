@@ -8,7 +8,7 @@ export interface WatchDetails {
 }
 
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
 export class WatchMatchService {
   private socket: WebSocket;
