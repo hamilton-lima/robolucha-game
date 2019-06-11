@@ -314,7 +314,8 @@ export class ArenaComponent implements OnInit, OnChanges {
           width,
           height,
           rotation,
-          component.type
+          component.type,
+          component.color
         );
 
         this.sceneComponents[component.id] = newComponent;
@@ -475,6 +476,7 @@ export class ArenaComponent implements OnInit, OnChanges {
     const height = this.convertPosition(component.height);
     component3D.moveTo(x, z);
     component3D.resize(width, height);
+    component3D.setColor(component.color);
   }
 
   updateBullet(bullet3D: Bullet3D, next: Bullet) {
