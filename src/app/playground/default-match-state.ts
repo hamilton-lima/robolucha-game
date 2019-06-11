@@ -15,6 +15,7 @@ export default {
     { id: 1037, owner: 2, x: 726, y: 889, amount: 1 }
   ],
   punches: [],
+  sceneComponents: [{ id: 1, x: 0, y: 0, width: 100, height: 150 }],
   luchadores: [
     {
       id: 1,
