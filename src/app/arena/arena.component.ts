@@ -14,10 +14,12 @@ import {
   GameDefinition,
   MatchState,
   Luchador,
-  Bullet
+  Bullet,
+  SceneComponent
 } from "../watch-match/watch-match.model";
 import { Bullet3D } from "./bullet3d";
 import { Helper3D } from "./helper3d";
+import { SceneComponent3D } from "./scenecomponent3D";
 import { SceneBuilder } from "./scene.builder3D";
 import { TextureBuilder } from "./texture-builder";
 import { ActivatedRoute } from "@angular/router";
@@ -48,6 +50,7 @@ export class ArenaComponent implements OnInit, OnChanges {
   private light: BABYLON.HemisphericLight;
 
   private luchadores: Array<Luchador3D>;
+  private sceneComponents: Array<SceneComponent3D>;
   private bullets: Array<Bullet3D>;
 
   private currentMatchState: MatchState;
@@ -66,11 +69,11 @@ export class ArenaComponent implements OnInit, OnChanges {
     this.resetState();
   }
 
-  fitToContainer(){
+  fitToContainer() {
     var canvas = this.canvas.nativeElement;
-    canvas.style.width='100%';
-    canvas.style.height='100%';
-    canvas.width  = canvas.offsetWidth;
+    canvas.style.width = "100%";
+    canvas.style.height = "100%";
+    canvas.width = canvas.offsetWidth;
     canvas.height = canvas.offsetHeight;
   }
 
@@ -121,11 +124,12 @@ export class ArenaComponent implements OnInit, OnChanges {
     localStorage.setItem(this.ROBOLUCHA_SAVED_CAMERA, savedCameraState);
   }
 
-  resetState(){
+  resetState() {
     this.currentMatchState = {
       events: [],
       bullets: [],
       luchadores: [],
+      sceneComponents: [],
       punches: [],
       scores: [],
       clock: 0
@@ -135,6 +139,7 @@ export class ArenaComponent implements OnInit, OnChanges {
       events: [],
       bullets: [],
       luchadores: [],
+      sceneComponents: [],
       punches: [],
       scores: [],
       clock: 0
@@ -142,20 +147,21 @@ export class ArenaComponent implements OnInit, OnChanges {
 
     this.luchadores = [];
     this.bullets = [];
+    this.sceneComponents = [];
   }
 
   createScene(): void {
-    if( this.engine ){
+    if (this.engine) {
       this.engine.dispose();
     }
-    
+
     this.resetState();
 
     this.HALF_LUCHADOR = this.convertPosition(
       this.gameDefinition.luchadorSize / 2
     );
     this.HALF_BULLET = this.convertPosition(this.gameDefinition.bulletSize / 2);
-    
+
     this.fitToContainer();
     this.engine = new BABYLON.Engine(this.canvas.nativeElement, true);
 
@@ -221,6 +227,9 @@ export class ArenaComponent implements OnInit, OnChanges {
     this.updateLuchadores();
     this.removeLuchadores();
 
+    this.updateSceneComponents();
+    this.removeSceneComponents();
+
     this.updateBullets();
     this.removeBullets();
     this.updateCamera();
@@ -271,10 +280,45 @@ export class ArenaComponent implements OnInit, OnChanges {
 
         // animate luchador owner of the bullet
         const luchador3D = this.luchadores[bullet.owner];
-        if( luchador3D ){
+        if (luchador3D) {
           luchador3D.animateFire();
         }
+      }
+    });
+  }
 
+  updateSceneComponents() {
+    this.nextMatchState.sceneComponents.forEach((component: SceneComponent) => {
+      const currentState = this.currentMatchState.sceneComponents.find(
+        (search: SceneComponent) => {
+          return search.id === component.id;
+        }
+      );
+
+      // found update the state
+      if (currentState) {
+        const scenecomponent3D = this.sceneComponents[component.id];
+        this.updateComponent(scenecomponent3D, component);
+      } else {
+        // not found add to the scene
+        const position = this.calculateComponentPosition(component);
+        const rotation = Helper3D.angle2radian(component.rotation);
+        const width = this.convertPosition(component.width);
+        const height = this.convertPosition(component.height);
+
+        // create new SceneComponent3D
+        const newComponent = new SceneComponent3D(
+          component.id,
+          this.scene,
+          position,
+          width,
+          height,
+          rotation,
+          component.type,
+          component.color
+        );
+
+        this.sceneComponents[component.id] = newComponent;
       }
     });
   }
@@ -291,10 +335,12 @@ export class ArenaComponent implements OnInit, OnChanges {
       if (currentState) {
         // found update the state
         const luchador3D = this.luchadores[luchador.id];
-        
-        if( luchador.lastOnfound > 0 ){
-          const elapsed = Math.abs(luchador.lastOnfound - currentState.lastOnfound);
-          if( elapsed > 1000){
+
+        if (luchador.lastOnfound > 0) {
+          const elapsed = Math.abs(
+            luchador.lastOnfound - currentState.lastOnfound
+          );
+          if (elapsed > 1000) {
             luchador3D.animateFound();
           }
         }
@@ -348,13 +394,22 @@ export class ArenaComponent implements OnInit, OnChanges {
     });
   }
 
-  readonly LUCHADOR_DEFAULT_Y = 0.0;
+  readonly LUCHADOR_DEFAULT_Y = 0.2;
+  readonly COMPONENT_DEFAULT_Y = 0.3;
 
   calculatePosition(luchador: Luchador): BABYLON.Vector3 {
     const result: BABYLON.Vector3 = new BABYLON.Vector3();
     result.x = this.convertPosition(luchador.x) + this.HALF_LUCHADOR;
     result.y = this.LUCHADOR_DEFAULT_Y;
     result.z = this.convertPosition(luchador.y) + this.HALF_LUCHADOR;
+    return result;
+  }
+
+  calculateComponentPosition(component: SceneComponent): BABYLON.Vector3 {
+    const result: BABYLON.Vector3 = new BABYLON.Vector3();
+    result.x = this.convertPosition(component.x) + this.convertPosition(component.width/2);
+    result.y = this.COMPONENT_DEFAULT_Y;
+    result.z = this.convertPosition(component.y) + this.convertPosition(component.height/2);
     return result;
   }
 
@@ -369,7 +424,7 @@ export class ArenaComponent implements OnInit, OnChanges {
     return result;
   }
 
-  removeLuchadores(): any {
+  removeLuchadores() {
     this.currentMatchState.luchadores.forEach((luchador: Luchador) => {
       const found = this.nextMatchState.luchadores.find((search: Luchador) => {
         return search.id === luchador.id;
@@ -384,8 +439,26 @@ export class ArenaComponent implements OnInit, OnChanges {
     });
   }
 
+  removeSceneComponents() {
+    this.currentMatchState.sceneComponents.forEach(
+      (component: SceneComponent) => {
+        const found = this.nextMatchState.sceneComponents.find(
+          (search: SceneComponent) => {
+            return search.id === component.id;
+          }
+        );
+
+        if (!found) {
+          // not found remove from the scene
+          const component3D = this.sceneComponents[component.id];
+          component3D.dispose();
+        }
+      }
+    );
+  }
+
   update(luchador3D: Luchador3D, next: Luchador) {
-    if( luchador3D.getHealth() > next.life ){
+    if (luchador3D.getHealth() > next.life) {
       luchador3D.animateHit();
     }
 
@@ -394,6 +467,16 @@ export class ArenaComponent implements OnInit, OnChanges {
     luchador3D.moveTo(x, z);
     luchador3D.setHealth(next.life);
     luchador3D.setLabel(next.name);
+  }
+
+  updateComponent(component3D: SceneComponent3D, component: SceneComponent) {
+    const x = this.convertPosition(component.x) + this.convertPosition(component.width/2);
+    const z = this.convertPosition(component.y) + this.convertPosition(component.height/2);
+    const width = this.convertPosition(component.width);
+    const height = this.convertPosition(component.height);
+    component3D.moveTo(x, z);
+    component3D.resize(width, height);
+    component3D.setColor(component.color);
   }
 
   updateBullet(bullet3D: Bullet3D, next: Bullet) {

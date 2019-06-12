@@ -8,6 +8,7 @@ export default {
     { id: 1040, owner: 2, x: 1292, y: 470, amount: 1 }
   ],
   punches: [],
+  sceneComponents: [],
   luchadores: [
     {
       id: 1,

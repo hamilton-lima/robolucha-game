@@ -5,6 +5,7 @@ export class Box3D {
   ball: BABYLON.Mesh;
 
   constructor(scene: BABYLON.Scene) {
+    
     this.ball = BABYLON.MeshBuilder.CreateBox(
       "box",
       { width: 1, height: 1 },
