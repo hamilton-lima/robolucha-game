@@ -13,6 +13,17 @@ export interface Luchador {
   lastOnfound: number;
 }
 
+export interface SceneComponent {
+  id: number;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  rotation: number;
+  type: string;
+  color: string;
+}
+
 export interface Bullet {
   id: number;
   owner: number;
@@ -34,6 +45,7 @@ export interface MatchState {
   bullets: Bullet[];
   punches: any[];
   luchadores: Luchador[];
+  sceneComponents: SceneComponent[];
   scores: Score[];
   clock: number;
 }
