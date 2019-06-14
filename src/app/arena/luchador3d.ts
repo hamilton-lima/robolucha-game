@@ -52,7 +52,8 @@ export class Luchador3D extends Base3D {
     vehicleRotationY: number,
     gunRotationY: number,
     radarAngle: number,
-    radarRadius: number
+    radarRadius: number,
+    shadowGenerator: BABYLON.ShadowGenerator
   ) {
     super();
 
@@ -182,6 +183,7 @@ export class Luchador3D extends Base3D {
     charLoader.then(mesh => {
       mesh.parent = self.turret;
       self.character = mesh;
+      shadowGenerator.addShadowCaster(mesh, true);
       self.character.id = self.getName() + ".character";
       material.then(result => (self.character.material = result));
 

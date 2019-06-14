@@ -5,7 +5,6 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { MainLuchador } from "../sdk/model/mainLuchador";
 import { CanComponentDeactivate } from "../can-deactivate-guard.service";
 import { CodeEditorPanelComponent } from "../code-editor-panel/code-editor-panel.component";
-import { join } from "path";
 
 export interface Selection {
   position: number;
