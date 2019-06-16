@@ -22,11 +22,21 @@ export class SceneComponent3D extends Base3D {
     super();
     const name = "component" + id;
 
-    this.mesh = BABYLON.MeshBuilder.CreatePlane(
-      name,
-      { width: w, height: h },
-      scene
-    );
+    if( type == "wall"){
+      this.mesh = BABYLON.MeshBuilder.CreateBox(
+        name,
+        { width: w, height: h, depth: 3 },
+        scene
+      );
+
+    } else {
+      this.mesh = BABYLON.MeshBuilder.CreatePlane(
+        name,
+        { width: w, height: h },
+        scene
+      );
+    }
+
 
     this.originalH = h;
     this.originalW = w;
