@@ -191,8 +191,11 @@ export class ArenaComponent implements OnInit, OnChanges {
       this.scene
     );
 
-    var light2 = new BABYLON.DirectionalLight("dir01", 
-      new BABYLON.Vector3(0, 1, 0), this.scene);
+    var light2 = new BABYLON.DirectionalLight(
+      "dir01",
+      new BABYLON.Vector3(0, 1, 0),
+      this.scene
+    );
     light2.position = new BABYLON.Vector3(10, 5, 5);
 
     // Shadows
@@ -407,21 +410,25 @@ export class ArenaComponent implements OnInit, OnChanges {
   }
 
   readonly LUCHADOR_DEFAULT_Y = 0.2;
-  readonly COMPONENT_DEFAULT_Y = 0.3;
+  readonly COMPONENT_DEFAULT_Y = 0.2;
 
   calculatePosition(luchador: Luchador): BABYLON.Vector3 {
     const result: BABYLON.Vector3 = new BABYLON.Vector3();
-    result.x = this.convertPosition(luchador.x) + this.HALF_LUCHADOR;
+    result.x = this.convertPosition(luchador.x);
     result.y = this.LUCHADOR_DEFAULT_Y;
-    result.z = this.convertPosition(luchador.y) + this.HALF_LUCHADOR;
+    result.z = this.convertPosition(luchador.y);
     return result;
   }
 
   calculateComponentPosition(component: SceneComponent): BABYLON.Vector3 {
     const result: BABYLON.Vector3 = new BABYLON.Vector3();
-    result.x = this.convertPosition(component.x) + this.convertPosition(component.width/2);
+    result.x =
+      this.convertPosition(component.x) +
+      this.convertPosition(component.width / 2);
     result.y = this.COMPONENT_DEFAULT_Y;
-    result.z = this.convertPosition(component.y) + this.convertPosition(component.height/2);
+    result.z =
+      this.convertPosition(component.y) +
+      this.convertPosition(component.height / 2);
     return result;
   }
 
@@ -474,16 +481,20 @@ export class ArenaComponent implements OnInit, OnChanges {
       luchador3D.animateHit();
     }
 
-    const x = this.convertPosition(next.x) + this.HALF_LUCHADOR;
-    const z = this.convertPosition(next.y) + this.HALF_LUCHADOR;
+    const x = this.convertPosition(next.x);
+    const z = this.convertPosition(next.y);
     luchador3D.moveTo(x, z);
     luchador3D.setHealth(next.life);
     luchador3D.setLabel(next.name);
   }
 
   updateComponent(component3D: SceneComponent3D, component: SceneComponent) {
-    const x = this.convertPosition(component.x) + this.convertPosition(component.width/2);
-    const z = this.convertPosition(component.y) + this.convertPosition(component.height/2);
+    const x =
+      this.convertPosition(component.x) +
+      this.convertPosition(component.width / 2);
+    const z =
+      this.convertPosition(component.y) +
+      this.convertPosition(component.height / 2);
     const width = this.convertPosition(component.width);
     const height = this.convertPosition(component.height);
     component3D.moveTo(x, z);
@@ -515,8 +526,8 @@ export class ArenaComponent implements OnInit, OnChanges {
 
   convertPosition(n: number) {
     const result: number =
-      (n / this.gameDefinition.luchadorSize) *
-      SharedConstants.LUCHADOR_MODEL_WIDTH;
+      n *
+      (SharedConstants.LUCHADOR_MODEL_WIDTH / this.gameDefinition.luchadorSize);
 
     return result;
   }

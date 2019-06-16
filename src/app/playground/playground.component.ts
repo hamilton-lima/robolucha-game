@@ -29,8 +29,8 @@ export class PlaygroundComponent implements OnInit, AfterViewInit {
 
   constructor() {
     this.gameDefinition = {
-      arenaWidth: 1200,
-      arenaHeight: 600,
+      arenaWidth: 300,
+      arenaHeight: 300,
       luchadorSize: 60,
       bulletSize: 16
     };
