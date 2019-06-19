@@ -95,6 +95,6 @@ export class FirstComponent implements OnInit, CanComponentDeactivate {
   }
 
   endMatch() {
-    console.log("end match");
+    console.log("end match!!");
   }
 }

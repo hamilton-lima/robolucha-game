@@ -1,28 +1,22 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { Subscription, Subject } from "rxjs";
-import { MatchState, GameDefinition } from "../watch-match/watch-match.model";
+import { MatchState, GameDefinition, Score } from "../watch-match/watch-match.model";
 
 @Component({
   selector: 'app-score',
   templateUrl: './score.component.html',
   styleUrls: ['./score.component.css']
 })
-export class ScoreComponent implements OnInit {
-  @Input() matchStateSubject: Subject<MatchState>;
-  private matchState: MatchState;
+export class ScoreComponent implements OnChanges {
+
+  @Input() scores: Score[];
 
   constructor() { 
-    this.matchState = <MatchState>{ scores: []};
+    this.scores = [];
   }
 
-  ngOnInit() {
-    this.matchStateSubject.subscribe((matchState: MatchState) => {
-      this.matchState = matchState;
-    });
-  }
-
-  sortedScores() {
-    return this.matchState.scores.sort(this.compareScores).reverse();
+  ngOnChanges(changes: SimpleChanges) {
+    this.scores = this.scores.sort(this.compareScores).reverse();
   }
 
   compareScores(a, b) {

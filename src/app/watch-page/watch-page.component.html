@@ -44,12 +44,12 @@
     </li>
   </ul>
 
-  <div class="matchover-alert" *ngIf="matchOver">
+  <div class="p-3 matchover-alert" *ngIf="matchOver">
     <h1>This match is over!</h1>
     <button class="btn btn-primary float-right" (click)="gotoMatchList()">
       <span>Return to Match List</span>
     </button>
-    <app-score [matchStateSubject]="matchStateSubject"></app-score>
+    <app-score [scores]="scores"></app-score>
   </div>
 
   <app-code-editor-panel *ngIf="gameDefinition"
@@ -68,7 +68,7 @@
       value: panelStates.score,
       params: { inVal: '-30%', outVal: '100%' }
     }"
-    [matchStateSubject]="matchStateSubject"
+    [scores]="scores"
   ></app-score>
 
   <app-message

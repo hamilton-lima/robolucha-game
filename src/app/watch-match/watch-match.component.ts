@@ -94,8 +94,7 @@ export class WatchMatchComponent implements OnInit, OnDestroy, OnChanges {
       if (parsed.type == "match-state") {
         this.matchStateSubject.emit(parsed.message);
 
-        //TODO: remove magic number
-        if (parsed.message.clock < 100) {
+        if (parsed.message.clock < 0) {
           this.matchFinished.emit(true);
         }
         return;

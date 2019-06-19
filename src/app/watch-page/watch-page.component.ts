@@ -15,7 +15,7 @@ import {
   animate
 } from "@angular/animations";
 import { Subject } from "rxjs";
-import { MatchState } from "../watch-match/watch-match.model";
+import { MatchState, Score } from "../watch-match/watch-match.model";
 import { Message } from "../message/message.model";
 import { CodeEditorPanelComponent } from "../code-editor-panel/code-editor-panel.component";
 
@@ -76,6 +76,7 @@ export class WatchPageComponent implements OnInit, CanComponentDeactivate {
   gameDefinition: MainGameDefinition;
   readonly matchStateSubject = new Subject<MatchState>();
   readonly messageSubject = new Subject<Message>();
+  scores: Score[] = [];
 
   scoreState: string = "out";
   codeState: string = "out";
@@ -100,6 +101,11 @@ export class WatchPageComponent implements OnInit, CanComponentDeactivate {
           console.log("gamedefinition", this.gameDefinition);
         });
     });
+
+    this.matchStateSubject.subscribe((matchState: MatchState) => {
+      this.scores = matchState.scores;
+    });
+
   }
 
   endMatch() {
