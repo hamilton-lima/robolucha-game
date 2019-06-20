@@ -13,16 +13,18 @@ import { MainCode } from './mainCode';
 
 
 export interface MainSceneComponent {
+    alpha?: number;
     blockMovement?: boolean;
     codes?: Array<MainCode>;
     colider?: boolean;
+    color?: string;
     gameDefinition?: number;
     height?: number;
     id?: number;
-    name?: string;
     respawn?: boolean;
     rotation?: number;
     showInRadar?: boolean;
+    type?: string;
     width?: number;
     x?: number;
     y?: number;

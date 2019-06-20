@@ -17,7 +17,8 @@ export class SceneComponent3D extends Base3D {
     h: number,
     rotation: number,
     type: string,
-    color: string
+    color: string,
+    alpha: number
   ) {
     super();
     const name = "component" + id;
@@ -54,6 +55,8 @@ export class SceneComponent3D extends Base3D {
 
     let boxMaterial = new BABYLON.StandardMaterial("material", scene);
     boxMaterial.diffuseColor = BABYLON.Color3.FromHexString(color);
+    boxMaterial.alpha = alpha;
+
     this.mesh.material = boxMaterial;
   }
 

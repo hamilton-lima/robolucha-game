@@ -47,7 +47,9 @@ export interface MainGameDefinition {
     radarAngle?: number;
     radarRadius?: number;
     recycledLuchadorEnergyRestore?: number;
+    respawnAngle?: number;
     respawnCooldown?: number;
+    respawnGunAngle?: number;
     respawnX?: number;
     respawnY?: number;
     restoreEnergyperSecond?: number;

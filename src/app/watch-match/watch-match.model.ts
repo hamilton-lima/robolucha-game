@@ -22,6 +22,7 @@ export interface SceneComponent {
   rotation: number;
   type: string;
   color: string;
+  alpha: number;
 }
 
 export interface Bullet {

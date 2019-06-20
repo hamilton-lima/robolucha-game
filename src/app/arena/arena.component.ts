@@ -319,7 +319,6 @@ export class ArenaComponent implements OnInit, OnChanges {
         const rotation = Helper3D.angle2radian(component.rotation);
         const width = this.convertPosition(component.width);
         const height = this.convertPosition(component.height);
-
         // create new SceneComponent3D
         const newComponent = new SceneComponent3D(
           component.id,
@@ -329,7 +328,8 @@ export class ArenaComponent implements OnInit, OnChanges {
           height,
           rotation,
           component.type,
-          component.color
+          component.color,
+          component.alpha
         );
 
         this.sceneComponents[component.id] = newComponent;
