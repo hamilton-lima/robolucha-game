@@ -1,3 +1,4 @@
+export * from './mainActiveMatch';
 export * from './mainCode';
 export * from './mainConfig';
 export * from './mainFindLuchadorWithGamedefinition';

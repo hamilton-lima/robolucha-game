@@ -20,7 +20,6 @@ import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { AceEditorModule } from "ng2-ace-editor";
 import { CodeEditorComponent } from "./code-editor/code-editor.component";
 import { LuchadorResolverService } from "./luchador-resolver.service";
-import { ListMatchesComponent } from "./list-matches/list-matches.component";
 import { WatchMatchComponent } from "./watch-match/watch-match.component";
 import { ArenaComponent } from './arena/arena.component';
 import { PlaygroundComponent } from './playground/playground.component';
@@ -39,9 +38,9 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { WatchPageComponent } from './watch-page/watch-page.component';
-import { FirstComponent } from './first/first.component';
 import { HomePageComponent } from './home-page/home-page.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { MatchCardComponent } from './play/match-card/match-card.component';
 
 library.add(fas);
 
@@ -80,13 +79,6 @@ const ROUTES: Routes = [
     resolve: { luchador: LuchadorResolverService }
   },
   {
-    path: "first",
-    component: FirstComponent,
-    canActivate: [LoginActivate],
-    canDeactivate: [CanDeactivateGuard],
-    resolve: { luchador: LuchadorResolverService }
-  },
-  {
     path: "home",
     component: HomePageComponent,
     canActivate: [LoginActivate]
@@ -111,7 +103,6 @@ export function apiConfigFactory(): Configuration {
     SetupComponent,
     LuchadorComponent,
     CodeEditorComponent,
-    ListMatchesComponent,
     WatchMatchComponent,
     ArenaComponent,
     PlaygroundComponent,
@@ -126,8 +117,8 @@ export function apiConfigFactory(): Configuration {
     CodeEditorPanelComponent,
     MessageComponent,
     WatchPageComponent,
-    FirstComponent,
-    HomePageComponent
+    HomePageComponent,
+    MatchCardComponent
   ],
   imports: [
     BrowserModule,

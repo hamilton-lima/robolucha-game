@@ -15,7 +15,7 @@ export class HomePageComponent implements OnInit {
     } else {
       const now = (new Date()).getTime().toString();
       localStorage.setItem("robolucha-last-visit", now);
-      this.router.navigate(["first"]);
+      this.router.navigate(["play"]);
     }
   }
 }

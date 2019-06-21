@@ -1,0 +1,11 @@
+
+  <div class="card">
+    <img class="card-img-top" src="{{getImageName()}}" alt="Card image cap">
+    <div class="card-body">
+      <h5 class="card-title">{{match.label}}</h5>
+      <p class="card-text">{{match.description}}<br>
+        <span *ngIf="showTimeStart()">{{ match.timeStart | date:'short'  }}</span>
+      </p>
+      <div><button class="btn btn-success" (click)="join(match)">Play</button></div>
+    </div>
+  </div>

@@ -18,6 +18,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs/Observable';
 
+import { MainActiveMatch } from '../model/mainActiveMatch';
 import { MainConfig } from '../model/mainConfig';
 import { MainFindLuchadorWithGamedefinition } from '../model/mainFindLuchadorWithGamedefinition';
 import { MainGameComponent } from '../model/mainGameComponent';
@@ -1069,9 +1070,9 @@ export class DefaultService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public privateMatchGet(observe?: 'body', reportProgress?: boolean): Observable<Array<MainMatch>>;
-    public privateMatchGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<MainMatch>>>;
-    public privateMatchGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<MainMatch>>>;
+    public privateMatchGet(observe?: 'body', reportProgress?: boolean): Observable<Array<MainActiveMatch>>;
+    public privateMatchGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<MainActiveMatch>>>;
+    public privateMatchGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<MainActiveMatch>>>;
     public privateMatchGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -1095,7 +1096,7 @@ export class DefaultService {
             'application/json'
         ];
 
-        return this.httpClient.get<Array<MainMatch>>(`${this.basePath}/private/match`,
+        return this.httpClient.get<Array<MainActiveMatch>>(`${this.basePath}/private/match`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
