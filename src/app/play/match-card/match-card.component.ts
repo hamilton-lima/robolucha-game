@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { MainMatch, MainJoinMatch } from 'src/app/sdk';
+import { MainMatch, MainJoinMatch, MainActiveMatch } from 'src/app/sdk';
 
 @Component({
   selector: 'app-match-card',
@@ -7,12 +7,19 @@ import { MainMatch, MainJoinMatch } from 'src/app/sdk';
   styleUrls: ['./match-card.component.css']
 })
 export class MatchCardComponent {
-  @Input() match: MainMatch;
-  @Output() matchSelected = new EventEmitter<MainMatch>();
+  @Input() match: MainActiveMatch;
+  @Output() matchSelected = new EventEmitter<MainActiveMatch>();
 
-  join(match: MainMatch) {
+  join(match: MainActiveMatch) {
     console.log("join match", match);
     this.matchSelected.emit(match);
   }
 
+  getImageName(){
+    return "assets/maps/" + this.match.name.toLowerCase() + ".png";
+  }
+
+  showTimeStart(){
+    return this.match.type === "multiplayer";
+  }
 }
