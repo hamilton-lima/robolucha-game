@@ -1,5 +1,11 @@
 <app-header></app-header>
-
-<div>
-    <app-list-matches (matchSelected)="watch($event)"></app-list-matches>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-3" *ngFor="let match of matches">
+      <app-match-card
+        [match]="match"
+        (matchSelected)="watch($event)"
+      ></app-match-card>
+    </div>
+  </div>
 </div>
