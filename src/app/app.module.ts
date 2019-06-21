@@ -38,7 +38,6 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { WatchPageComponent } from './watch-page/watch-page.component';
-import { FirstComponent } from './first/first.component';
 import { HomePageComponent } from './home-page/home-page.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { MatchCardComponent } from './play/match-card/match-card.component';
@@ -75,13 +74,6 @@ const ROUTES: Routes = [
   {
     path: "watch/:id",
     component: WatchPageComponent,
-    canActivate: [LoginActivate],
-    canDeactivate: [CanDeactivateGuard],
-    resolve: { luchador: LuchadorResolverService }
-  },
-  {
-    path: "first",
-    component: FirstComponent,
     canActivate: [LoginActivate],
     canDeactivate: [CanDeactivateGuard],
     resolve: { luchador: LuchadorResolverService }
@@ -125,7 +117,6 @@ export function apiConfigFactory(): Configuration {
     CodeEditorPanelComponent,
     MessageComponent,
     WatchPageComponent,
-    FirstComponent,
     HomePageComponent,
     MatchCardComponent
   ],
