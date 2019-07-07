@@ -43,6 +43,7 @@ export class ArenaComponent implements OnInit, OnChanges {
   @Input() cameraFollowLuchador = true;
   @Input() currentLuchador: number;
   @Input() animateSubject: Subject<string>;
+  @Input() messageFPS: Subject<number>;
 
   private engine: BABYLON.Engine;
   private scene: BABYLON.Scene;
@@ -176,6 +177,14 @@ export class ArenaComponent implements OnInit, OnChanges {
         this.luchadores.forEach(luchador => {
           luchador.animateFrom(name);
         });
+      });
+    }
+
+    if (this.messageFPS) {
+      this.messageFPS.subscribe(fps => {
+        console.log(
+          "FPS: messages:" + fps + ", render: " + this.engine.getFps()
+        );
       });
     }
 

@@ -12,6 +12,8 @@ import { characterAnimations } from "../arena/luchador3d";
 export class PlaygroundComponent implements OnInit, AfterViewInit {
   readonly gameDefinition: GameDefinition;
   readonly matchStateSubject: Subject<MatchState>;
+  public readonly fps: Subject<number> = new Subject();
+
   data: string;
   matchState: MatchState;
   cameraFollowLuchador = true;

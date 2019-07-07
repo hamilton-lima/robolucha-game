@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Subject } from "rxjs";
+import { Subject, timer } from "rxjs";
 import { environment } from "src/environments/environment";
 
 export interface WatchDetails {
@@ -8,13 +8,17 @@ export interface WatchDetails {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root"
 })
 export class WatchMatchService {
   private socket: WebSocket;
 
   public readonly ready: Subject<boolean> = new Subject();
   private readonly message: Subject<string> = new Subject();
+  private readonly timer = timer(1000, 1000);
+  private messages = 0;
+
+  public readonly fps: Subject<number> = new Subject();
 
   constructor() {}
 
@@ -24,6 +28,13 @@ export class WatchMatchService {
     this.socket.onopen = () => {
       this.ready.next(true);
     };
+
+    this.message.subscribe(() => this.messages++);
+
+    this.timer.subscribe(() => {
+      this.fps.next(this.messages);
+      this.messages = 0;
+    });
   }
 
   close() {
@@ -38,4 +49,5 @@ export class WatchMatchService {
     };
     return this.message;
   }
+
 }
