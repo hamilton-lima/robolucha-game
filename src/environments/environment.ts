@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  BASE_PATH:'http://local.robolucha.com',
-  PUBLISHER:'ws://local.robolucha.com/publisher'
+  BASE_PATH:'http://localhost:5000',
+  PUBLISHER:'ws://localhost:5001/ws'
 };
 
 /*

@@ -8,7 +8,11 @@ import { Component, OnInit } from '@angular/core';
 export class AuthModalMessageComponent {
 
   refresh(){
-    const url = window.location.protocol + "//" + window.location.hostname;
+    let url = window.location.protocol + "//" + window.location.hostname;
+    if( window.location.port ){
+      url = url + ":" + window.location.port;
+    }
+
     console.log("refreshing the page: ", url);
     window.location.assign(url);
   }
