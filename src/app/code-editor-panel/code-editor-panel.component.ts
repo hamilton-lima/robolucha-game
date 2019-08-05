@@ -6,14 +6,14 @@ import {
   SimpleChanges,
   OnChanges
 } from "@angular/core";
-import { MainCode } from "../sdk/model/mainCode";
+import { ModelCode } from "../sdk/model/mainCode";
 
-import { MainUpdateLuchadorResponse } from "../sdk/model/mainUpdateLuchadorResponse";
+import { ModelUpdateLuchadorResponse } from "../sdk/model/mainUpdateLuchadorResponse";
 import { ActivatedRoute } from "@angular/router";
 
 import { DefaultService } from "../sdk/api/default.service";
-import { MainLuchador } from "../sdk/model/mainLuchador";
-import { MainGameDefinition } from "../sdk";
+import { ModelLuchador } from "../sdk/model/mainLuchador";
+import { ModelGameDefinition } from "../sdk";
 
 const HIDE_SUCCESS_TIMEOUT = 3000;
 
@@ -24,11 +24,11 @@ const HIDE_SUCCESS_TIMEOUT = 3000;
 })
 export class CodeEditorPanelComponent implements OnInit, OnChanges {
   dirty: boolean = false;
-  luchador: MainLuchador;
-  luchadorResponse: MainUpdateLuchadorResponse;
+  luchador: ModelLuchador;
+  luchadorResponse: ModelUpdateLuchadorResponse;
   successMessage: string;
 
-  @Input() gameDefinition: MainGameDefinition;
+  @Input() gameDefinition: ModelGameDefinition;
 
   constructor(
     private route: ActivatedRoute,
@@ -40,12 +40,12 @@ export class CodeEditorPanelComponent implements OnInit, OnChanges {
   }
 
   codes = {
-    onStart: <MainCode>{ event: "onStart" },
-    onRepeat: <MainCode>{ event: "onRepeat" },
-    onGotDamage: <MainCode>{ event: "onGotDamage" },
-    onFound: <MainCode>{ event: "onFound" },
-    onHitOther: <MainCode>{ event: "onHitOther" },
-    onHitWall: <MainCode>{ event: "onHitWall" }
+    onStart: <ModelCode>{ event: "onStart" },
+    onRepeat: <ModelCode>{ event: "onRepeat" },
+    onGotDamage: <ModelCode>{ event: "onGotDamage" },
+    onFound: <ModelCode>{ event: "onFound" },
+    onHitOther: <ModelCode>{ event: "onHitOther" },
+    onHitWall: <ModelCode>{ event: "onHitWall" }
   };
 
   ngOnInit() {
@@ -70,7 +70,7 @@ export class CodeEditorPanelComponent implements OnInit, OnChanges {
 
     for (var event in this.codes) {
       // get codes from luchador for event + gamedefinition
-      let code = this.luchador.codes.find((code: MainCode) => {
+      let code = this.luchador.codes.find((code: ModelCode) => {
         return (
           code.event == event && code.gameDefinition == this.gameDefinition.id
         );
@@ -97,13 +97,13 @@ export class CodeEditorPanelComponent implements OnInit, OnChanges {
 
   // return suggested code from the current gamedefinition
   // if event not present in the list returns empy code
-  getCodeFromGameDefinition(event: string): MainCode {
-    let result: MainCode = this.gameDefinition.suggestedCodes.find(element => {
+  getCodeFromGameDefinition(event: string): ModelCode {
+    let result: ModelCode = this.gameDefinition.suggestedCodes.find(element => {
       return element.event == event;
     });
 
     if (!result) {
-      result = <MainCode>{ event: event };
+      result = <ModelCode>{ event: event };
     }
 
     result.id = null;
@@ -122,7 +122,7 @@ export class CodeEditorPanelComponent implements OnInit, OnChanges {
     // apply the changes to the luchador object
     for (var event in this.codes) {
       // get codes from luchador for event + gamedefinition
-      let code = this.luchador.codes.find((code: MainCode) => {
+      let code = this.luchador.codes.find((code: ModelCode) => {
         return (
           code.event == event &&
           code.gameDefinition == this.codes[event].gameDefinition

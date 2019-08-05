@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { MainLuchador } from "./sdk/model/mainLuchador";
+import { ModelLuchador } from "./sdk/model/mainLuchador";
 import {
   Resolve,
   ActivatedRouteSnapshot,
@@ -11,14 +11,14 @@ import { Observable } from "rxjs";
 @Injectable({
   providedIn: "root"
 })
-export class LuchadorResolverService implements Resolve<MainLuchador> {
-  luchador: MainLuchador;
+export class LuchadorResolverService implements Resolve<ModelLuchador> {
+  luchador: ModelLuchador;
   constructor(private api: DefaultService) {}
 
   resolve(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
-  ): Observable<MainLuchador> {
+  ): Observable<ModelLuchador> {
     return this.api.privateLuchadorGet();
   }
 }

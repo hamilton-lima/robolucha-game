@@ -11,13 +11,10 @@
  */
 
 
-export interface ModelActiveMatch {
-    description?: string;
-    duration?: number;
-    label?: string;
+export interface ModelMatchMetric {
+    fps?: number;
+    gameDefinitionID?: number;
+    id?: number;
     matchID?: number;
-    name?: string;
-    sortOrder?: number;
-    timeStart?: string;
-    type?: string;
+    players?: number;
 }

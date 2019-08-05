@@ -1,10 +1,10 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
-import { MainConfig } from "../sdk";
+import { ModelConfig } from "../sdk";
 
 @Injectable({
   providedIn: "root"
 })
 export class MaskEditorMediator {
-  configs: BehaviorSubject<MainConfig[]> = new BehaviorSubject([]);
+  configs: BehaviorSubject<ModelConfig[]> = new BehaviorSubject([]);
 }

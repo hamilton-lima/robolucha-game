@@ -7,7 +7,7 @@ import {
   EventEmitter,
   OnDestroy
 } from "@angular/core";
-import { MainConfig } from "../sdk";
+import { ModelConfig } from "../sdk";
 import { NMSColor } from "../color-picker/nmscolor";
 import { ShapeConfig } from "../shape-picker/shape-config";
 import { MaskEditorMediator } from "../mask-editor/mask-editor.mediator";
@@ -29,7 +29,7 @@ export class MaskEditorDetailComponent implements OnInit, OnDestroy {
   current = this.categories[0].id;
   
   type = EditorType;
-  configs: MainConfig[];
+  configs: ModelConfig[];
   subscription: Subscription;
 
   constructor(
@@ -60,14 +60,14 @@ export class MaskEditorDetailComponent implements OnInit, OnDestroy {
   }
 
   update(key: string, value: string) {
-    let found = this.configs.find((config: MainConfig) => {
+    let found = this.configs.find((config: ModelConfig) => {
       return config.key == key;
     });
 
     if (found) {
       found.value = value;
     } else {
-      this.configs.push(<MainConfig>{
+      this.configs.push(<ModelConfig>{
         key: key,
         value: value
       });

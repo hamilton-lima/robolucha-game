@@ -9,15 +9,14 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { ModelGameComponent } from './modelGameComponent';
 
 
-export interface ModelActiveMatch {
-    description?: string;
-    duration?: number;
-    label?: string;
-    matchID?: number;
-    name?: string;
-    sortOrder?: number;
+export interface ModelMatch {
+    gameDefinitionID?: number;
+    id?: number;
+    lastTimeAlive?: string;
+    participants?: Array<ModelGameComponent>;
+    timeEnd?: string;
     timeStart?: string;
-    type?: string;
 }

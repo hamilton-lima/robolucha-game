@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
-import { MainMatch, DefaultService, MainJoinMatch, MainActiveMatch } from "../sdk";
+import { ModelMatch, DefaultService, ModelJoinMatch, ModelActiveMatch } from "../sdk";
 
 @Component({
   selector: "app-play",
@@ -8,19 +8,19 @@ import { MainMatch, DefaultService, MainJoinMatch, MainActiveMatch } from "../sd
   styleUrls: ["./play.component.css"]
 })
 export class PlayComponent implements OnInit {
-  matches: Array<MainActiveMatch> = [];
+  matches: Array<ModelActiveMatch> = [];
 
   constructor(private api: DefaultService, private router: Router) {}
 
   ngOnInit() {
-    this.api.privateMatchGet().subscribe((matches: Array<MainActiveMatch>) => {
+    this.api.privateMatchGet().subscribe((matches: Array<ModelActiveMatch>) => {
       console.log("matches", matches);
       this.matches = matches;
     });
   }
 
   // special behavious for tutorial matches 
-  watch(match: MainActiveMatch) {
+  watch(match: ModelActiveMatch) {
     if( match.type == "multiplayer"){
       this.joinMultiplayer(match);
     }
@@ -29,18 +29,18 @@ export class PlayComponent implements OnInit {
     }
   }
 
-  joinMultiplayer(match: MainActiveMatch) {
-    const request: MainJoinMatch = { matchID: match.matchID };
-    this.api.privateJoinMatchPost(request).subscribe((match: MainMatch) => {
+  joinMultiplayer(match: ModelActiveMatch) {
+    const request: ModelJoinMatch = { matchID: match.matchID };
+    this.api.privateJoinMatchPost(request).subscribe((match: ModelMatch) => {
       console.log("joinned match", match);
       this.router.navigate(["watch", match.id]);
     });
   }
 
-  joinTutorialMatch(match: MainActiveMatch){
+  joinTutorialMatch(match: ModelActiveMatch){
     this.api
     .privateStartTutorialMatchNamePost(match.name)
-    .subscribe((joinMatch: MainJoinMatch) => {
+    .subscribe((joinMatch: ModelJoinMatch) => {
       console.log("joinned match", match);
       this.router.navigate(["watch", joinMatch.matchID]);
     });

@@ -11,7 +11,7 @@
  */
 
 
-export interface MainLoginRequest {
+export interface ModelLoginRequest {
     email?: string;
     password?: string;
 }

@@ -4,7 +4,7 @@ import {
   Router,
   ActivatedRoute
 } from "@angular/router";
-import { DefaultService, MainGameDefinition, MainGameComponent } from "../sdk";
+import { DefaultService, ModelGameDefinition, ModelGameComponent } from "../sdk";
 import { WatchMatchComponent } from "../watch-match/watch-match.component";
 import { CanComponentDeactivate } from "../can-deactivate-guard.service";
 import {
@@ -72,8 +72,8 @@ export class WatchPageComponent implements OnInit, CanComponentDeactivate {
   matchOver = false;
 
   matchID: number;
-  luchador: MainGameComponent;
-  gameDefinition: MainGameDefinition;
+  luchador: ModelGameComponent;
+  gameDefinition: ModelGameDefinition;
   readonly matchStateSubject = new Subject<MatchState>();
   readonly messageSubject = new Subject<Message>();
   scores: Score[] = [];

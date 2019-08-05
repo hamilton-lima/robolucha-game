@@ -11,7 +11,7 @@
  */
 
 
-export interface MainLoginResponse {
+export interface ModelLoginResponse {
     error?: boolean;
     uuid?: string;
 }

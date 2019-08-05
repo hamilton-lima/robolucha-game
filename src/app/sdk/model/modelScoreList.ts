@@ -9,15 +9,9 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { ModelMatchScore } from './modelMatchScore';
 
 
-export interface ModelActiveMatch {
-    description?: string;
-    duration?: number;
-    label?: string;
-    matchID?: number;
-    name?: string;
-    sortOrder?: number;
-    timeStart?: string;
-    type?: string;
+export interface ModelScoreList {
+    scores?: Array<ModelMatchScore>;
 }

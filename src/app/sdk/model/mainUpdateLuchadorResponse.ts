@@ -9,10 +9,10 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { MainGameComponent } from './mainGameComponent';
+import { ModelGameComponent } from './mainGameComponent';
 
 
-export interface MainUpdateLuchadorResponse {
+export interface ModelUpdateLuchadorResponse {
     errors?: Array<string>;
-    luchador?: MainGameComponent;
+    luchador?: ModelGameComponent;
 }

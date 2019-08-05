@@ -9,9 +9,9 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { ModelCode } from './mainCode';
-import { ModelGameComponent } from './mainGameComponent';
-import { ModelSceneComponent } from './mainSceneComponent';
+import { ModelCode } from './modelCode';
+import { ModelGameComponent } from './modelGameComponent';
+import { ModelSceneComponent } from './modelSceneComponent';
 
 
 export interface ModelGameDefinition {

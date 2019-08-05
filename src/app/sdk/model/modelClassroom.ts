@@ -9,15 +9,13 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { ModelStudent } from './modelStudent';
 
 
-export interface ModelActiveMatch {
-    description?: string;
-    duration?: number;
-    label?: string;
-    matchID?: number;
+export interface ModelClassroom {
+    accessCode?: string;
+    id?: number;
     name?: string;
-    sortOrder?: number;
-    timeStart?: string;
-    type?: string;
+    ownerID?: number;
+    students?: Array<ModelStudent>;
 }

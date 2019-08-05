@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { MainConfig } from "../sdk";
+import { ModelConfig } from "../sdk";
 import { Subject, forkJoin } from "rxjs";
 import {
   maskEditorCategories,
@@ -18,7 +18,7 @@ export class TextureBuilder {
   constructor(private luchadorConfigs: LuchadorConfigService) {}
 
   private build(
-    configs: MainConfig [],
+    configs: ModelConfig [],
     images: Array<HTMLImageElement>,
     width: number,
     height: number
@@ -71,7 +71,7 @@ export class TextureBuilder {
   private readonly maskLayers = { x: 229, y: 65 };
 
   private buildMask(
-    configs: MainConfig [],
+    configs: ModelConfig [],
     images: Array<HTMLImageElement>
   ): Promise<HTMLCanvasElement> {
     const target = this;
@@ -170,7 +170,7 @@ export class TextureBuilder {
   }
 
   private buildLayerFromColor(
-    configs: MainConfig [],
+    configs: ModelConfig [],
     images: Array<HTMLImageElement>,
     imageName: string,
     colorName: string
@@ -192,8 +192,8 @@ export class TextureBuilder {
     }
   }
 
-  private getValue(configs: MainConfig [], key: string, defaultValue: string): string {
-    let found = configs.find((config: MainConfig) => {
+  private getValue(configs: ModelConfig [], key: string, defaultValue: string): string {
+    let found = configs.find((config: ModelConfig) => {
       return config.key == key;
     });
 
@@ -229,7 +229,7 @@ export class TextureBuilder {
   }
 
   public loadDynamicTexture(
-    configs: MainConfig [],
+    configs: ModelConfig [],
     scene: BABYLON.Scene
   ): Promise<BABYLON.StandardMaterial> {
     const self = this;
@@ -288,7 +288,7 @@ export class TextureBuilder {
 
   /** Finds all shape image names and create the Loader for each one */
   private addImagesFromShapes(
-    configs: MainConfig [],
+    configs: ModelConfig [],
     images2Load: Array<Subject<HTMLImageElement>>,
     categories: Array<CategoryOptions>
   ) {

@@ -10,15 +10,15 @@ import {
 import { HttpResponse } from "@angular/common/http";
 import { Observable } from "rxjs/Observable";
 import { DefaultService } from "../sdk/api/default.service";
-import { MainLuchador } from "../sdk/model/mainLuchador";
-import { MainCode } from "../sdk/model/mainCode";
+import { ModelLuchador } from "../sdk/model/mainLuchador";
+import { ModelCode } from "../sdk/model/mainCode";
 
-import { MainUpdateLuchadorResponse } from "../sdk/model/mainUpdateLuchadorResponse";
+import { ModelUpdateLuchadorResponse } from "../sdk/model/mainUpdateLuchadorResponse";
 import { ActivatedRoute } from "@angular/router";
 import { debounceTime } from "rxjs/operators";
 import { CanComponentDeactivate } from "../can-deactivate-guard.service";
 import { CodeEditorPanelComponent } from "../code-editor-panel/code-editor-panel.component";
-import { MainGameDefinition } from "../sdk";
+import { ModelGameDefinition } from "../sdk";
 import { NgxSpinnerService } from "ngx-spinner";
 
 const HIDE_SUCCESS_TIMEOUT = 3000;
@@ -38,8 +38,8 @@ export class LuchadorComponent
     this.nameForm = content;
   }
 
-  luchador: MainLuchador;
-  luchadorResponse: MainUpdateLuchadorResponse;
+  luchador: ModelLuchador;
+  luchadorResponse: ModelUpdateLuchadorResponse;
   renameErrorMessage: string;
   displayErrorMessage: boolean;
   editingName: boolean;
@@ -47,8 +47,8 @@ export class LuchadorComponent
   successMessage: string;
   addingEdit: boolean;
 
-  gameDefinitions: MainGameDefinition[] = [];
-  gameDefinition: MainGameDefinition;
+  gameDefinitions: ModelGameDefinition[] = [];
+  gameDefinition: ModelGameDefinition;
 
   constructor(
     private route: ActivatedRoute,
@@ -69,7 +69,7 @@ export class LuchadorComponent
 
     this.api
     .privateGameDefinitionAllGet()
-    .subscribe((gamedefinitions: MainGameDefinition[]) => {
+    .subscribe((gamedefinitions: ModelGameDefinition[]) => {
       this.gameDefinitions = gamedefinitions;
       if( gamedefinitions.length > 0 ){
         this.gameDefinition = gamedefinitions[0];
