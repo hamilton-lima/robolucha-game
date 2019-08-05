@@ -18,19 +18,21 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs/Observable';
 
-import { MainActiveMatch } from '../model/mainActiveMatch';
-import { MainConfig } from '../model/mainConfig';
-import { MainFindLuchadorWithGamedefinition } from '../model/mainFindLuchadorWithGamedefinition';
-import { MainGameComponent } from '../model/mainGameComponent';
-import { MainGameDefinition } from '../model/mainGameDefinition';
-import { MainJoinMatch } from '../model/mainJoinMatch';
-import { MainMatch } from '../model/mainMatch';
-import { MainMatchParticipant } from '../model/mainMatchParticipant';
-import { MainMatchScore } from '../model/mainMatchScore';
-import { MainScoreList } from '../model/mainScoreList';
-import { MainUpdateLuchadorResponse } from '../model/mainUpdateLuchadorResponse';
-import { MainUser } from '../model/mainUser';
-import { MainUserSetting } from '../model/mainUserSetting';
+import { ModelActiveMatch } from '../model/modelActiveMatch';
+import { ModelClassroom } from '../model/modelClassroom';
+import { ModelConfig } from '../model/modelConfig';
+import { ModelFindLuchadorWithGamedefinition } from '../model/modelFindLuchadorWithGamedefinition';
+import { ModelGameComponent } from '../model/modelGameComponent';
+import { ModelGameDefinition } from '../model/modelGameDefinition';
+import { ModelJoinMatch } from '../model/modelJoinMatch';
+import { ModelMatch } from '../model/modelMatch';
+import { ModelMatchMetric } from '../model/modelMatchMetric';
+import { ModelMatchParticipant } from '../model/modelMatchParticipant';
+import { ModelMatchScore } from '../model/modelMatchScore';
+import { ModelScoreList } from '../model/modelScoreList';
+import { ModelUpdateLuchadorResponse } from '../model/modelUpdateLuchadorResponse';
+import { ModelUser } from '../model/modelUser';
+import { ModelUserSetting } from '../model/modelUserSetting';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -75,10 +77,10 @@ export class DefaultService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public internalAddMatchScoresPost(request: MainScoreList, observe?: 'body', reportProgress?: boolean): Observable<MainMatchScore>;
-    public internalAddMatchScoresPost(request: MainScoreList, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<MainMatchScore>>;
-    public internalAddMatchScoresPost(request: MainScoreList, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<MainMatchScore>>;
-    public internalAddMatchScoresPost(request: MainScoreList, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public internalAddMatchScoresPost(request: ModelScoreList, observe?: 'body', reportProgress?: boolean): Observable<ModelMatchScore>;
+    public internalAddMatchScoresPost(request: ModelScoreList, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ModelMatchScore>>;
+    public internalAddMatchScoresPost(request: ModelScoreList, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ModelMatchScore>>;
+    public internalAddMatchScoresPost(request: ModelScoreList, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (request === null || request === undefined) {
             throw new Error('Required parameter request was null or undefined when calling internalAddMatchScoresPost.');
         }
@@ -108,7 +110,7 @@ export class DefaultService {
             headers = headers.set("Content-Type", httpContentTypeSelected);
         }
 
-        return this.httpClient.post<MainMatchScore>(`${this.basePath}/internal/add-match-scores`,
+        return this.httpClient.post<ModelMatchScore>(`${this.basePath}/internal/add-match-scores`,
             request,
             {
                 withCredentials: this.configuration.withCredentials,
@@ -126,10 +128,10 @@ export class DefaultService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public internalEndMatchPut(request: MainMatch, observe?: 'body', reportProgress?: boolean): Observable<MainMatch>;
-    public internalEndMatchPut(request: MainMatch, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<MainMatch>>;
-    public internalEndMatchPut(request: MainMatch, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<MainMatch>>;
-    public internalEndMatchPut(request: MainMatch, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public internalEndMatchPut(request: ModelMatch, observe?: 'body', reportProgress?: boolean): Observable<ModelMatch>;
+    public internalEndMatchPut(request: ModelMatch, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ModelMatch>>;
+    public internalEndMatchPut(request: ModelMatch, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ModelMatch>>;
+    public internalEndMatchPut(request: ModelMatch, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (request === null || request === undefined) {
             throw new Error('Required parameter request was null or undefined when calling internalEndMatchPut.');
         }
@@ -159,7 +161,7 @@ export class DefaultService {
             headers = headers.set("Content-Type", httpContentTypeSelected);
         }
 
-        return this.httpClient.put<MainMatch>(`${this.basePath}/internal/end-match`,
+        return this.httpClient.put<ModelMatch>(`${this.basePath}/internal/end-match`,
             request,
             {
                 withCredentials: this.configuration.withCredentials,
@@ -177,10 +179,10 @@ export class DefaultService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public internalGameComponentPost(request: MainGameComponent, observe?: 'body', reportProgress?: boolean): Observable<MainGameComponent>;
-    public internalGameComponentPost(request: MainGameComponent, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<MainGameComponent>>;
-    public internalGameComponentPost(request: MainGameComponent, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<MainGameComponent>>;
-    public internalGameComponentPost(request: MainGameComponent, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public internalGameComponentPost(request: ModelGameComponent, observe?: 'body', reportProgress?: boolean): Observable<ModelGameComponent>;
+    public internalGameComponentPost(request: ModelGameComponent, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ModelGameComponent>>;
+    public internalGameComponentPost(request: ModelGameComponent, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ModelGameComponent>>;
+    public internalGameComponentPost(request: ModelGameComponent, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (request === null || request === undefined) {
             throw new Error('Required parameter request was null or undefined when calling internalGameComponentPost.');
         }
@@ -210,7 +212,7 @@ export class DefaultService {
             headers = headers.set("Content-Type", httpContentTypeSelected);
         }
 
-        return this.httpClient.post<MainGameComponent>(`${this.basePath}/internal/game-component`,
+        return this.httpClient.post<ModelGameComponent>(`${this.basePath}/internal/game-component`,
             request,
             {
                 withCredentials: this.configuration.withCredentials,
@@ -228,9 +230,9 @@ export class DefaultService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public internalGameDefinitionIdIdGet(id: number, observe?: 'body', reportProgress?: boolean): Observable<MainGameDefinition>;
-    public internalGameDefinitionIdIdGet(id: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<MainGameDefinition>>;
-    public internalGameDefinitionIdIdGet(id: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<MainGameDefinition>>;
+    public internalGameDefinitionIdIdGet(id: number, observe?: 'body', reportProgress?: boolean): Observable<ModelGameDefinition>;
+    public internalGameDefinitionIdIdGet(id: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ModelGameDefinition>>;
+    public internalGameDefinitionIdIdGet(id: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ModelGameDefinition>>;
     public internalGameDefinitionIdIdGet(id: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling internalGameDefinitionIdIdGet.');
@@ -257,7 +259,7 @@ export class DefaultService {
             'application/json'
         ];
 
-        return this.httpClient.get<MainGameDefinition>(`${this.basePath}/internal/game-definition-id/${encodeURIComponent(String(id))}`,
+        return this.httpClient.get<ModelGameDefinition>(`${this.basePath}/internal/game-definition-id/${encodeURIComponent(String(id))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -274,9 +276,9 @@ export class DefaultService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public internalGameDefinitionNameGet(name: string, observe?: 'body', reportProgress?: boolean): Observable<MainGameDefinition>;
-    public internalGameDefinitionNameGet(name: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<MainGameDefinition>>;
-    public internalGameDefinitionNameGet(name: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<MainGameDefinition>>;
+    public internalGameDefinitionNameGet(name: string, observe?: 'body', reportProgress?: boolean): Observable<ModelGameDefinition>;
+    public internalGameDefinitionNameGet(name: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ModelGameDefinition>>;
+    public internalGameDefinitionNameGet(name: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ModelGameDefinition>>;
     public internalGameDefinitionNameGet(name: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (name === null || name === undefined) {
             throw new Error('Required parameter name was null or undefined when calling internalGameDefinitionNameGet.');
@@ -303,7 +305,7 @@ export class DefaultService {
             'application/json'
         ];
 
-        return this.httpClient.get<MainGameDefinition>(`${this.basePath}/internal/game-definition/${encodeURIComponent(String(name))}`,
+        return this.httpClient.get<ModelGameDefinition>(`${this.basePath}/internal/game-definition/${encodeURIComponent(String(name))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -320,10 +322,10 @@ export class DefaultService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public internalGameDefinitionPost(request: MainGameDefinition, observe?: 'body', reportProgress?: boolean): Observable<MainGameDefinition>;
-    public internalGameDefinitionPost(request: MainGameDefinition, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<MainGameDefinition>>;
-    public internalGameDefinitionPost(request: MainGameDefinition, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<MainGameDefinition>>;
-    public internalGameDefinitionPost(request: MainGameDefinition, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public internalGameDefinitionPost(request: ModelGameDefinition, observe?: 'body', reportProgress?: boolean): Observable<ModelGameDefinition>;
+    public internalGameDefinitionPost(request: ModelGameDefinition, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ModelGameDefinition>>;
+    public internalGameDefinitionPost(request: ModelGameDefinition, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ModelGameDefinition>>;
+    public internalGameDefinitionPost(request: ModelGameDefinition, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (request === null || request === undefined) {
             throw new Error('Required parameter request was null or undefined when calling internalGameDefinitionPost.');
         }
@@ -353,7 +355,7 @@ export class DefaultService {
             headers = headers.set("Content-Type", httpContentTypeSelected);
         }
 
-        return this.httpClient.post<MainGameDefinition>(`${this.basePath}/internal/game-definition`,
+        return this.httpClient.post<ModelGameDefinition>(`${this.basePath}/internal/game-definition`,
             request,
             {
                 withCredentials: this.configuration.withCredentials,
@@ -371,10 +373,10 @@ export class DefaultService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public internalGameDefinitionPut(request: MainGameDefinition, observe?: 'body', reportProgress?: boolean): Observable<MainGameDefinition>;
-    public internalGameDefinitionPut(request: MainGameDefinition, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<MainGameDefinition>>;
-    public internalGameDefinitionPut(request: MainGameDefinition, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<MainGameDefinition>>;
-    public internalGameDefinitionPut(request: MainGameDefinition, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public internalGameDefinitionPut(request: ModelGameDefinition, observe?: 'body', reportProgress?: boolean): Observable<ModelGameDefinition>;
+    public internalGameDefinitionPut(request: ModelGameDefinition, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ModelGameDefinition>>;
+    public internalGameDefinitionPut(request: ModelGameDefinition, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ModelGameDefinition>>;
+    public internalGameDefinitionPut(request: ModelGameDefinition, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (request === null || request === undefined) {
             throw new Error('Required parameter request was null or undefined when calling internalGameDefinitionPut.');
         }
@@ -404,8 +406,55 @@ export class DefaultService {
             headers = headers.set("Content-Type", httpContentTypeSelected);
         }
 
-        return this.httpClient.put<MainGameDefinition>(`${this.basePath}/internal/game-definition`,
+        return this.httpClient.put<ModelGameDefinition>(`${this.basePath}/internal/game-definition`,
             request,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * join a classroom
+     * 
+     * @param accessCode classroom access code
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public internalJoinClassroomAccessCodePost(accessCode: string, observe?: 'body', reportProgress?: boolean): Observable<ModelClassroom>;
+    public internalJoinClassroomAccessCodePost(accessCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ModelClassroom>>;
+    public internalJoinClassroomAccessCodePost(accessCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ModelClassroom>>;
+    public internalJoinClassroomAccessCodePost(accessCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (accessCode === null || accessCode === undefined) {
+            throw new Error('Required parameter accessCode was null or undefined when calling internalJoinClassroomAccessCodePost.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (ApiKeyAuth) required
+        if (this.configuration.apiKeys["Authorization"]) {
+            headers = headers.set('Authorization', this.configuration.apiKeys["Authorization"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        let httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set("Accept", httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json'
+        ];
+
+        return this.httpClient.post<ModelClassroom>(`${this.basePath}/internal/join-classroom/${encodeURIComponent(String(accessCode))}`,
+            null,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -422,10 +471,10 @@ export class DefaultService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public internalLuchadorPost(request: MainFindLuchadorWithGamedefinition, observe?: 'body', reportProgress?: boolean): Observable<MainGameComponent>;
-    public internalLuchadorPost(request: MainFindLuchadorWithGamedefinition, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<MainGameComponent>>;
-    public internalLuchadorPost(request: MainFindLuchadorWithGamedefinition, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<MainGameComponent>>;
-    public internalLuchadorPost(request: MainFindLuchadorWithGamedefinition, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public internalLuchadorPost(request: ModelFindLuchadorWithGamedefinition, observe?: 'body', reportProgress?: boolean): Observable<ModelGameComponent>;
+    public internalLuchadorPost(request: ModelFindLuchadorWithGamedefinition, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ModelGameComponent>>;
+    public internalLuchadorPost(request: ModelFindLuchadorWithGamedefinition, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ModelGameComponent>>;
+    public internalLuchadorPost(request: ModelFindLuchadorWithGamedefinition, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (request === null || request === undefined) {
             throw new Error('Required parameter request was null or undefined when calling internalLuchadorPost.');
         }
@@ -455,7 +504,58 @@ export class DefaultService {
             headers = headers.set("Content-Type", httpContentTypeSelected);
         }
 
-        return this.httpClient.post<MainGameComponent>(`${this.basePath}/internal/luchador`,
+        return this.httpClient.post<ModelGameComponent>(`${this.basePath}/internal/luchador`,
+            request,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * saves a match metric
+     * 
+     * @param request MatchMetric
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public internalMatchMetricPost(request: ModelMatchMetric, observe?: 'body', reportProgress?: boolean): Observable<string>;
+    public internalMatchMetricPost(request: ModelMatchMetric, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
+    public internalMatchMetricPost(request: ModelMatchMetric, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
+    public internalMatchMetricPost(request: ModelMatchMetric, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (request === null || request === undefined) {
+            throw new Error('Required parameter request was null or undefined when calling internalMatchMetricPost.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (ApiKeyAuth) required
+        if (this.configuration.apiKeys["Authorization"]) {
+            headers = headers.set('Authorization', this.configuration.apiKeys["Authorization"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        let httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set("Accept", httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json'
+        ];
+        let httpContentTypeSelected:string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set("Content-Type", httpContentTypeSelected);
+        }
+
+        return this.httpClient.post<string>(`${this.basePath}/internal/match-metric`,
             request,
             {
                 withCredentials: this.configuration.withCredentials,
@@ -473,10 +573,10 @@ export class DefaultService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public internalMatchParticipantPost(request: MainMatchParticipant, observe?: 'body', reportProgress?: boolean): Observable<MainMatchParticipant>;
-    public internalMatchParticipantPost(request: MainMatchParticipant, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<MainMatchParticipant>>;
-    public internalMatchParticipantPost(request: MainMatchParticipant, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<MainMatchParticipant>>;
-    public internalMatchParticipantPost(request: MainMatchParticipant, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public internalMatchParticipantPost(request: ModelMatchParticipant, observe?: 'body', reportProgress?: boolean): Observable<ModelMatchParticipant>;
+    public internalMatchParticipantPost(request: ModelMatchParticipant, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ModelMatchParticipant>>;
+    public internalMatchParticipantPost(request: ModelMatchParticipant, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ModelMatchParticipant>>;
+    public internalMatchParticipantPost(request: ModelMatchParticipant, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (request === null || request === undefined) {
             throw new Error('Required parameter request was null or undefined when calling internalMatchParticipantPost.');
         }
@@ -506,7 +606,7 @@ export class DefaultService {
             headers = headers.set("Content-Type", httpContentTypeSelected);
         }
 
-        return this.httpClient.post<MainMatchParticipant>(`${this.basePath}/internal/match-participant`,
+        return this.httpClient.post<ModelMatchParticipant>(`${this.basePath}/internal/match-participant`,
             request,
             {
                 withCredentials: this.configuration.withCredentials,
@@ -524,9 +624,9 @@ export class DefaultService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public internalMatchSingleGet(matchID?: number, observe?: 'body', reportProgress?: boolean): Observable<MainMatch>;
-    public internalMatchSingleGet(matchID?: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<MainMatch>>;
-    public internalMatchSingleGet(matchID?: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<MainMatch>>;
+    public internalMatchSingleGet(matchID?: number, observe?: 'body', reportProgress?: boolean): Observable<ModelMatch>;
+    public internalMatchSingleGet(matchID?: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ModelMatch>>;
+    public internalMatchSingleGet(matchID?: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ModelMatch>>;
     public internalMatchSingleGet(matchID?: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
@@ -555,7 +655,7 @@ export class DefaultService {
             'application/json'
         ];
 
-        return this.httpClient.get<MainMatch>(`${this.basePath}/internal/match-single`,
+        return this.httpClient.get<ModelMatch>(`${this.basePath}/internal/match-single`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -613,9 +713,9 @@ export class DefaultService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public internalStartMatchNamePost(name: string, observe?: 'body', reportProgress?: boolean): Observable<MainMatch>;
-    public internalStartMatchNamePost(name: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<MainMatch>>;
-    public internalStartMatchNamePost(name: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<MainMatch>>;
+    public internalStartMatchNamePost(name: string, observe?: 'body', reportProgress?: boolean): Observable<ModelMatch>;
+    public internalStartMatchNamePost(name: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ModelMatch>>;
+    public internalStartMatchNamePost(name: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ModelMatch>>;
     public internalStartMatchNamePost(name: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (name === null || name === undefined) {
             throw new Error('Required parameter name was null or undefined when calling internalStartMatchNamePost.');
@@ -642,8 +742,101 @@ export class DefaultService {
             'application/json'
         ];
 
-        return this.httpClient.post<MainMatch>(`${this.basePath}/internal/start-match/${encodeURIComponent(String(name))}`,
+        return this.httpClient.post<ModelMatch>(`${this.basePath}/internal/start-match/${encodeURIComponent(String(name))}`,
             null,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * find all Classroom
+     * 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public privateClassroomGet(observe?: 'body', reportProgress?: boolean): Observable<Array<ModelClassroom>>;
+    public privateClassroomGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<ModelClassroom>>>;
+    public privateClassroomGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<ModelClassroom>>>;
+    public privateClassroomGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // authentication (ApiKeyAuth) required
+        if (this.configuration.apiKeys["Authorization"]) {
+            headers = headers.set('Authorization', this.configuration.apiKeys["Authorization"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        let httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set("Accept", httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json'
+        ];
+
+        return this.httpClient.get<Array<ModelClassroom>>(`${this.basePath}/private/classroom`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * add a Classroom
+     * 
+     * @param request Classroom
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public privateClassroomPost(request: ModelClassroom, observe?: 'body', reportProgress?: boolean): Observable<ModelClassroom>;
+    public privateClassroomPost(request: ModelClassroom, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ModelClassroom>>;
+    public privateClassroomPost(request: ModelClassroom, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ModelClassroom>>;
+    public privateClassroomPost(request: ModelClassroom, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (request === null || request === undefined) {
+            throw new Error('Required parameter request was null or undefined when calling privateClassroomPost.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (ApiKeyAuth) required
+        if (this.configuration.apiKeys["Authorization"]) {
+            headers = headers.set('Authorization', this.configuration.apiKeys["Authorization"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        let httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set("Accept", httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json'
+        ];
+        let httpContentTypeSelected:string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set("Content-Type", httpContentTypeSelected);
+        }
+
+        return this.httpClient.post<ModelClassroom>(`${this.basePath}/private/classroom`,
+            request,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -659,9 +852,9 @@ export class DefaultService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public privateGameDefinitionAllGet(observe?: 'body', reportProgress?: boolean): Observable<Array<MainGameDefinition>>;
-    public privateGameDefinitionAllGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<MainGameDefinition>>>;
-    public privateGameDefinitionAllGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<MainGameDefinition>>>;
+    public privateGameDefinitionAllGet(observe?: 'body', reportProgress?: boolean): Observable<Array<ModelGameDefinition>>;
+    public privateGameDefinitionAllGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<ModelGameDefinition>>>;
+    public privateGameDefinitionAllGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<ModelGameDefinition>>>;
     public privateGameDefinitionAllGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -685,7 +878,7 @@ export class DefaultService {
             'application/json'
         ];
 
-        return this.httpClient.get<Array<MainGameDefinition>>(`${this.basePath}/private/game-definition-all`,
+        return this.httpClient.get<Array<ModelGameDefinition>>(`${this.basePath}/private/game-definition-all`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -702,9 +895,9 @@ export class DefaultService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public privateGameDefinitionIdIdGet(id: number, observe?: 'body', reportProgress?: boolean): Observable<MainGameDefinition>;
-    public privateGameDefinitionIdIdGet(id: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<MainGameDefinition>>;
-    public privateGameDefinitionIdIdGet(id: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<MainGameDefinition>>;
+    public privateGameDefinitionIdIdGet(id: number, observe?: 'body', reportProgress?: boolean): Observable<ModelGameDefinition>;
+    public privateGameDefinitionIdIdGet(id: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ModelGameDefinition>>;
+    public privateGameDefinitionIdIdGet(id: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ModelGameDefinition>>;
     public privateGameDefinitionIdIdGet(id: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling privateGameDefinitionIdIdGet.');
@@ -731,7 +924,7 @@ export class DefaultService {
             'application/json'
         ];
 
-        return this.httpClient.get<MainGameDefinition>(`${this.basePath}/private/game-definition-id/${encodeURIComponent(String(id))}`,
+        return this.httpClient.get<ModelGameDefinition>(`${this.basePath}/private/game-definition-id/${encodeURIComponent(String(id))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -747,9 +940,9 @@ export class DefaultService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public privateGetUserGet(observe?: 'body', reportProgress?: boolean): Observable<MainUser>;
-    public privateGetUserGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<MainUser>>;
-    public privateGetUserGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<MainUser>>;
+    public privateGetUserGet(observe?: 'body', reportProgress?: boolean): Observable<ModelUser>;
+    public privateGetUserGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ModelUser>>;
+    public privateGetUserGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ModelUser>>;
     public privateGetUserGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -773,7 +966,7 @@ export class DefaultService {
             'application/json'
         ];
 
-        return this.httpClient.get<MainUser>(`${this.basePath}/private/get-user`,
+        return this.httpClient.get<ModelUser>(`${this.basePath}/private/get-user`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -790,10 +983,10 @@ export class DefaultService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public privateJoinMatchPost(request: MainJoinMatch, observe?: 'body', reportProgress?: boolean): Observable<MainMatch>;
-    public privateJoinMatchPost(request: MainJoinMatch, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<MainMatch>>;
-    public privateJoinMatchPost(request: MainJoinMatch, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<MainMatch>>;
-    public privateJoinMatchPost(request: MainJoinMatch, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public privateJoinMatchPost(request: ModelJoinMatch, observe?: 'body', reportProgress?: boolean): Observable<ModelMatch>;
+    public privateJoinMatchPost(request: ModelJoinMatch, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ModelMatch>>;
+    public privateJoinMatchPost(request: ModelJoinMatch, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ModelMatch>>;
+    public privateJoinMatchPost(request: ModelJoinMatch, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (request === null || request === undefined) {
             throw new Error('Required parameter request was null or undefined when calling privateJoinMatchPost.');
         }
@@ -823,7 +1016,7 @@ export class DefaultService {
             headers = headers.set("Content-Type", httpContentTypeSelected);
         }
 
-        return this.httpClient.post<MainMatch>(`${this.basePath}/private/join-match`,
+        return this.httpClient.post<ModelMatch>(`${this.basePath}/private/join-match`,
             request,
             {
                 withCredentials: this.configuration.withCredentials,
@@ -840,9 +1033,9 @@ export class DefaultService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public privateLuchadorGet(observe?: 'body', reportProgress?: boolean): Observable<MainGameComponent>;
-    public privateLuchadorGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<MainGameComponent>>;
-    public privateLuchadorGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<MainGameComponent>>;
+    public privateLuchadorGet(observe?: 'body', reportProgress?: boolean): Observable<ModelGameComponent>;
+    public privateLuchadorGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ModelGameComponent>>;
+    public privateLuchadorGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ModelGameComponent>>;
     public privateLuchadorGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -866,7 +1059,7 @@ export class DefaultService {
             'application/json'
         ];
 
-        return this.httpClient.get<MainGameComponent>(`${this.basePath}/private/luchador`,
+        return this.httpClient.get<ModelGameComponent>(`${this.basePath}/private/luchador`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -883,10 +1076,10 @@ export class DefaultService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public privateLuchadorPut(request: MainGameComponent, observe?: 'body', reportProgress?: boolean): Observable<MainUpdateLuchadorResponse>;
-    public privateLuchadorPut(request: MainGameComponent, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<MainUpdateLuchadorResponse>>;
-    public privateLuchadorPut(request: MainGameComponent, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<MainUpdateLuchadorResponse>>;
-    public privateLuchadorPut(request: MainGameComponent, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public privateLuchadorPut(request: ModelGameComponent, observe?: 'body', reportProgress?: boolean): Observable<ModelUpdateLuchadorResponse>;
+    public privateLuchadorPut(request: ModelGameComponent, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ModelUpdateLuchadorResponse>>;
+    public privateLuchadorPut(request: ModelGameComponent, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ModelUpdateLuchadorResponse>>;
+    public privateLuchadorPut(request: ModelGameComponent, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (request === null || request === undefined) {
             throw new Error('Required parameter request was null or undefined when calling privateLuchadorPut.');
         }
@@ -916,7 +1109,7 @@ export class DefaultService {
             headers = headers.set("Content-Type", httpContentTypeSelected);
         }
 
-        return this.httpClient.put<MainUpdateLuchadorResponse>(`${this.basePath}/private/luchador`,
+        return this.httpClient.put<ModelUpdateLuchadorResponse>(`${this.basePath}/private/luchador`,
             request,
             {
                 withCredentials: this.configuration.withCredentials,
@@ -934,9 +1127,9 @@ export class DefaultService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public privateMaskConfigIdGet(id: number, observe?: 'body', reportProgress?: boolean): Observable<Array<MainConfig>>;
-    public privateMaskConfigIdGet(id: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<MainConfig>>>;
-    public privateMaskConfigIdGet(id: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<MainConfig>>>;
+    public privateMaskConfigIdGet(id: number, observe?: 'body', reportProgress?: boolean): Observable<Array<ModelConfig>>;
+    public privateMaskConfigIdGet(id: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<ModelConfig>>>;
+    public privateMaskConfigIdGet(id: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<ModelConfig>>>;
     public privateMaskConfigIdGet(id: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling privateMaskConfigIdGet.');
@@ -963,7 +1156,7 @@ export class DefaultService {
             'application/json'
         ];
 
-        return this.httpClient.get<Array<MainConfig>>(`${this.basePath}/private/mask-config/${encodeURIComponent(String(id))}`,
+        return this.httpClient.get<Array<ModelConfig>>(`${this.basePath}/private/mask-config/${encodeURIComponent(String(id))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -979,9 +1172,9 @@ export class DefaultService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public privateMaskRandomGet(observe?: 'body', reportProgress?: boolean): Observable<Array<MainConfig>>;
-    public privateMaskRandomGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<MainConfig>>>;
-    public privateMaskRandomGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<MainConfig>>>;
+    public privateMaskRandomGet(observe?: 'body', reportProgress?: boolean): Observable<Array<ModelConfig>>;
+    public privateMaskRandomGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<ModelConfig>>>;
+    public privateMaskRandomGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<ModelConfig>>>;
     public privateMaskRandomGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -1005,7 +1198,7 @@ export class DefaultService {
             'application/json'
         ];
 
-        return this.httpClient.get<Array<MainConfig>>(`${this.basePath}/private/mask-random`,
+        return this.httpClient.get<Array<ModelConfig>>(`${this.basePath}/private/mask-random`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -1022,9 +1215,9 @@ export class DefaultService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public privateMatchConfigGet(matchID?: number, observe?: 'body', reportProgress?: boolean): Observable<Array<MainGameComponent>>;
-    public privateMatchConfigGet(matchID?: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<MainGameComponent>>>;
-    public privateMatchConfigGet(matchID?: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<MainGameComponent>>>;
+    public privateMatchConfigGet(matchID?: number, observe?: 'body', reportProgress?: boolean): Observable<Array<ModelGameComponent>>;
+    public privateMatchConfigGet(matchID?: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<ModelGameComponent>>>;
+    public privateMatchConfigGet(matchID?: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<ModelGameComponent>>>;
     public privateMatchConfigGet(matchID?: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
@@ -1053,7 +1246,7 @@ export class DefaultService {
             'application/json'
         ];
 
-        return this.httpClient.get<Array<MainGameComponent>>(`${this.basePath}/private/match-config`,
+        return this.httpClient.get<Array<ModelGameComponent>>(`${this.basePath}/private/match-config`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -1070,9 +1263,9 @@ export class DefaultService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public privateMatchGet(observe?: 'body', reportProgress?: boolean): Observable<Array<MainActiveMatch>>;
-    public privateMatchGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<MainActiveMatch>>>;
-    public privateMatchGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<MainActiveMatch>>>;
+    public privateMatchGet(observe?: 'body', reportProgress?: boolean): Observable<Array<ModelActiveMatch>>;
+    public privateMatchGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<ModelActiveMatch>>>;
+    public privateMatchGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<ModelActiveMatch>>>;
     public privateMatchGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -1096,7 +1289,7 @@ export class DefaultService {
             'application/json'
         ];
 
-        return this.httpClient.get<Array<MainActiveMatch>>(`${this.basePath}/private/match`,
+        return this.httpClient.get<Array<ModelActiveMatch>>(`${this.basePath}/private/match`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -1113,9 +1306,9 @@ export class DefaultService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public privateMatchSingleGet(matchID?: number, observe?: 'body', reportProgress?: boolean): Observable<MainMatch>;
-    public privateMatchSingleGet(matchID?: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<MainMatch>>;
-    public privateMatchSingleGet(matchID?: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<MainMatch>>;
+    public privateMatchSingleGet(matchID?: number, observe?: 'body', reportProgress?: boolean): Observable<ModelMatch>;
+    public privateMatchSingleGet(matchID?: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ModelMatch>>;
+    public privateMatchSingleGet(matchID?: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ModelMatch>>;
     public privateMatchSingleGet(matchID?: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
@@ -1144,7 +1337,7 @@ export class DefaultService {
             'application/json'
         ];
 
-        return this.httpClient.get<MainMatch>(`${this.basePath}/private/match-single`,
+        return this.httpClient.get<ModelMatch>(`${this.basePath}/private/match-single`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -1162,9 +1355,9 @@ export class DefaultService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public privateStartTutorialMatchNamePost(name: string, observe?: 'body', reportProgress?: boolean): Observable<MainJoinMatch>;
-    public privateStartTutorialMatchNamePost(name: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<MainJoinMatch>>;
-    public privateStartTutorialMatchNamePost(name: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<MainJoinMatch>>;
+    public privateStartTutorialMatchNamePost(name: string, observe?: 'body', reportProgress?: boolean): Observable<ModelJoinMatch>;
+    public privateStartTutorialMatchNamePost(name: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ModelJoinMatch>>;
+    public privateStartTutorialMatchNamePost(name: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ModelJoinMatch>>;
     public privateStartTutorialMatchNamePost(name: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (name === null || name === undefined) {
             throw new Error('Required parameter name was null or undefined when calling privateStartTutorialMatchNamePost.');
@@ -1191,7 +1384,7 @@ export class DefaultService {
             'application/json'
         ];
 
-        return this.httpClient.post<MainJoinMatch>(`${this.basePath}/private/start-tutorial-match/${encodeURIComponent(String(name))}`,
+        return this.httpClient.post<ModelJoinMatch>(`${this.basePath}/private/start-tutorial-match/${encodeURIComponent(String(name))}`,
             null,
             {
                 withCredentials: this.configuration.withCredentials,
@@ -1208,9 +1401,9 @@ export class DefaultService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public privateTutorialGet(observe?: 'body', reportProgress?: boolean): Observable<Array<MainGameDefinition>>;
-    public privateTutorialGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<MainGameDefinition>>>;
-    public privateTutorialGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<MainGameDefinition>>>;
+    public privateTutorialGet(observe?: 'body', reportProgress?: boolean): Observable<Array<ModelGameDefinition>>;
+    public privateTutorialGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<ModelGameDefinition>>>;
+    public privateTutorialGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<ModelGameDefinition>>>;
     public privateTutorialGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -1234,7 +1427,7 @@ export class DefaultService {
             'application/json'
         ];
 
-        return this.httpClient.get<Array<MainGameDefinition>>(`${this.basePath}/private/tutorial`,
+        return this.httpClient.get<Array<ModelGameDefinition>>(`${this.basePath}/private/tutorial`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -1250,9 +1443,9 @@ export class DefaultService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public privateUserSettingGet(observe?: 'body', reportProgress?: boolean): Observable<MainUserSetting>;
-    public privateUserSettingGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<MainUserSetting>>;
-    public privateUserSettingGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<MainUserSetting>>;
+    public privateUserSettingGet(observe?: 'body', reportProgress?: boolean): Observable<ModelUserSetting>;
+    public privateUserSettingGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ModelUserSetting>>;
+    public privateUserSettingGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ModelUserSetting>>;
     public privateUserSettingGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -1276,7 +1469,7 @@ export class DefaultService {
             'application/json'
         ];
 
-        return this.httpClient.get<MainUserSetting>(`${this.basePath}/private/user/setting`,
+        return this.httpClient.get<ModelUserSetting>(`${this.basePath}/private/user/setting`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -1293,10 +1486,10 @@ export class DefaultService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public privateUserSettingPut(request: MainUserSetting, observe?: 'body', reportProgress?: boolean): Observable<MainUserSetting>;
-    public privateUserSettingPut(request: MainUserSetting, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<MainUserSetting>>;
-    public privateUserSettingPut(request: MainUserSetting, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<MainUserSetting>>;
-    public privateUserSettingPut(request: MainUserSetting, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public privateUserSettingPut(request: ModelUserSetting, observe?: 'body', reportProgress?: boolean): Observable<ModelUserSetting>;
+    public privateUserSettingPut(request: ModelUserSetting, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ModelUserSetting>>;
+    public privateUserSettingPut(request: ModelUserSetting, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ModelUserSetting>>;
+    public privateUserSettingPut(request: ModelUserSetting, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (request === null || request === undefined) {
             throw new Error('Required parameter request was null or undefined when calling privateUserSettingPut.');
         }
@@ -1326,7 +1519,7 @@ export class DefaultService {
             headers = headers.set("Content-Type", httpContentTypeSelected);
         }
 
-        return this.httpClient.put<MainUserSetting>(`${this.basePath}/private/user/setting`,
+        return this.httpClient.put<ModelUserSetting>(`${this.basePath}/private/user/setting`,
             request,
             {
                 withCredentials: this.configuration.withCredentials,

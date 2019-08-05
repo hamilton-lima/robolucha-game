@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { MainMatch, MainJoinMatch, MainActiveMatch } from 'src/app/sdk';
+import { ModelMatch, ModelJoinMatch, ModelActiveMatch } from 'src/app/sdk';
 
 @Component({
   selector: 'app-match-card',
@@ -7,10 +7,10 @@ import { MainMatch, MainJoinMatch, MainActiveMatch } from 'src/app/sdk';
   styleUrls: ['./match-card.component.css']
 })
 export class MatchCardComponent {
-  @Input() match: MainActiveMatch;
-  @Output() matchSelected = new EventEmitter<MainActiveMatch>();
+  @Input() match: ModelActiveMatch;
+  @Output() matchSelected = new EventEmitter<ModelActiveMatch>();
 
-  join(match: MainActiveMatch) {
+  join(match: ModelActiveMatch) {
     console.log("join match", match);
     this.matchSelected.emit(match);
   }

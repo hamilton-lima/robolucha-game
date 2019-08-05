@@ -9,13 +9,13 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { MainCode } from './mainCode';
-import { MainConfig } from './mainConfig';
+import { ModelCode } from './mainCode';
+import { ModelConfig } from './mainConfig';
 
 
-export interface MainLuchador {
-    codes?: Array<MainCode>;
-    configs?: Array<MainConfig>;
+export interface ModelLuchador {
+    codes?: Array<ModelCode>;
+    configs?: Array<ModelConfig>;
     createdAt?: string;
     deletedAt?: string;
     id?: number;

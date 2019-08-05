@@ -11,9 +11,9 @@ import {
 } from "@angular/core";
 import { WatchMatchService, WatchDetails } from "./watch-match.service";
 import {
-  MainGameComponent,
-  MainGameDefinition,
-  MainMatch
+  ModelGameComponent,
+  ModelGameDefinition,
+  ModelMatch
 } from "../sdk/model/models";
 import { ActivatedRoute } from "@angular/router";
 import { SharedStateService } from "../shared-state.service";
@@ -37,8 +37,8 @@ import { ArenaComponent } from "../arena/arena.component";
   styleUrls: ["./watch-match.component.css"]
 })
 export class WatchMatchComponent implements OnInit, OnDestroy, OnChanges {
-  @Input() gameDefinition: MainGameDefinition;
-  @Input() luchador: MainGameComponent;
+  @Input() gameDefinition: ModelGameDefinition;
+  @Input() luchador: ModelGameComponent;
   @Input() matchID: number;
 
   @Output() matchFinished = new EventEmitter<boolean>();

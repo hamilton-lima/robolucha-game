@@ -9,9 +9,9 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { MainMatchScore } from './mainMatchScore';
+import { ModelMatchScore } from './mainMatchScore';
 
 
-export interface MainScoreList {
-    scores?: Array<MainMatchScore>;
+export interface ModelScoreList {
+    scores?: Array<ModelMatchScore>;
 }

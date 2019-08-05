@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef } from "@angular/core";
-import { MainGameComponent, DefaultService, MainConfig } from "../sdk";
+import { ModelGameComponent, DefaultService, ModelConfig } from "../sdk";
 import { ActivatedRoute } from "@angular/router";
 import { Behavior } from "babylonjs";
 import { BehaviorSubject } from "rxjs";
@@ -16,7 +16,7 @@ const HIDE_SUCCESS_TIMEOUT = 3000;
 export class MaskEditorComponent implements OnInit, CanComponentDeactivate {
   successMessage: string;
   dirty = false;
-  luchador: MainGameComponent;
+  luchador: ModelGameComponent;
 
   constructor(
     private route: ActivatedRoute,
@@ -34,7 +34,7 @@ export class MaskEditorComponent implements OnInit, CanComponentDeactivate {
     this.luchador = data.luchador;
   }
 
-  refreshEditor(configs: MainConfig[]) {
+  refreshEditor(configs: ModelConfig[]) {
     console.log("refresh luchador", configs);
     this.mediator.configs.next(configs);
     this.dirty = false;
@@ -65,7 +65,7 @@ export class MaskEditorComponent implements OnInit, CanComponentDeactivate {
     }
   }
 
-  onUpdate(configs: MainConfig []) {
+  onUpdate(configs: ModelConfig []) {
     this.dirty = true;
     console.log("update on luchador", configs );
     this.mediator.configs.next(configs);

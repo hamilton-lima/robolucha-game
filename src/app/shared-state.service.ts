@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { MainMatch, MainGameDefinition } from "./sdk/model/models";
+import { ModelMatch, ModelGameDefinition } from "./sdk/model/models";
 import { Subject } from "rxjs";
 import { DefaultService } from "./sdk";
 
@@ -7,15 +7,15 @@ import { DefaultService } from "./sdk";
   providedIn: "root"
 })
 export class SharedStateService {
-  match: Subject<MainMatch> = new Subject();
-  gameDefinition: Subject<MainGameDefinition> = new Subject();
+  match: Subject<ModelMatch> = new Subject();
+  gameDefinition: Subject<ModelGameDefinition> = new Subject();
 
   constructor(private api: DefaultService) {}
 
-  setCurrentMatch(match: MainMatch): any {
+  setCurrentMatch(match: ModelMatch): any {
     this.api
       .privateGameDefinitionIdIdGet(match.gameDefinitionID)
-      .subscribe((gameDefinition: MainGameDefinition) => {
+      .subscribe((gameDefinition: ModelGameDefinition) => {
         console.log("gamedefinition from the server", gameDefinition);
         this.gameDefinition.next(gameDefinition);
         this.match.next(match);

@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, Input, OnDestroy } from "@angular/core";
 import { BehaviorSubject, Subscription } from "rxjs";
-import { MainGameComponent, MainConfig } from "../sdk";
+import { ModelGameComponent, ModelConfig } from "../sdk";
 import { TextureBuilder } from "../arena/texture-builder";
 import { MaskEditorMediator } from "../mask-editor/mask-editor.mediator";
 
@@ -12,7 +12,7 @@ import { MaskEditorMediator } from "../mask-editor/mask-editor.mediator";
 export class LuchadorPreviewComponent implements OnInit, OnDestroy {
   @ViewChild("preview") canvas;
   // @ViewChild("debug") debug;
-  @Input() luchadorSubject: BehaviorSubject<MainGameComponent>;
+  @Input() luchadorSubject: BehaviorSubject<ModelGameComponent>;
 
   private engine: BABYLON.Engine;
   private scene: BABYLON.Scene;
@@ -24,7 +24,7 @@ export class LuchadorPreviewComponent implements OnInit, OnDestroy {
   dynamicTexture: BABYLON.DynamicTexture;
   context: CanvasRenderingContext2D;
   rotate: boolean = false;
-  luchador: MainGameComponent;
+  luchador: ModelGameComponent;
   subscription: Subscription;
   loadingTexture = false;
   current: Promise<void>;
@@ -38,7 +38,7 @@ export class LuchadorPreviewComponent implements OnInit, OnDestroy {
     const self = this;
     this.engine = new BABYLON.Engine(this.canvas.nativeElement, true);
     this.subscription = this.mediator.configs.subscribe(
-      (configs: MainConfig[]) => {
+      (configs: ModelConfig[]) => {
         if (self.character) {
           self.builder
             .loadDynamicTexture(configs, self.scene)
@@ -60,7 +60,7 @@ export class LuchadorPreviewComponent implements OnInit, OnDestroy {
     }
   }
 
-  createScene(configs: MainConfig[]): Promise<void> {
+  createScene(configs: ModelConfig[]): Promise<void> {
     const self = this;
     return new Promise(function(resolve, reject) {
       const lightPosition = new BABYLON.Vector3(0, 10, -10);
@@ -91,7 +91,7 @@ export class LuchadorPreviewComponent implements OnInit, OnDestroy {
     });
   }
 
-  loadModel(self, configs: MainConfig[], resolve) {
+  loadModel(self, configs: ModelConfig[], resolve) {
     BABYLON.SceneLoader.ImportMesh(
       "",
       "assets/",

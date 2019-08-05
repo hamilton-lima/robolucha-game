@@ -11,13 +11,7 @@
  */
 
 
-export interface ModelActiveMatch {
-    description?: string;
-    duration?: number;
-    label?: string;
-    matchID?: number;
-    name?: string;
-    sortOrder?: number;
-    timeStart?: string;
-    type?: string;
+export interface ModelStudent {
+    id?: number;
+    userID?: number;
 }
