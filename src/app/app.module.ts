@@ -43,6 +43,10 @@ import { MatchCardComponent } from "./play/match-card/match-card.component";
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { HttpConfigInterceptor } from "./interceptor/httpconfig.interceptor";
 import { AuthModalMessageComponent } from './interceptor/auth-modal-message/auth-modal-message.component';
+import { MainComponent } from "./pages/main/main.component";
+import { PagesModule } from "./pages/pages.module";
+import { ListPublicGamesComponent } from "./pages/list-public-games/list-public-games.component";
+import { ListClassroomGamesComponent } from "./pages/list-classroom-games/list-classroom-games.component";
 
 library.add(fas);
 
@@ -81,9 +85,22 @@ const ROUTES: Routes = [
     resolve: { luchador: LuchadorResolverService }
   },
   {
+    path: "public",
+    component: ListPublicGamesComponent,
+    canActivate: [LoginActivate],
+    resolve: { luchador: LuchadorResolverService }
+  },  
+  {
+    path: "classroom",
+    component: ListClassroomGamesComponent,
+    canActivate: [LoginActivate],
+    resolve: { luchador: LuchadorResolverService }
+  },  
+  {
     path: "home",
-    component: HomePageComponent,
-    canActivate: [LoginActivate]
+    component: MainComponent,
+    canActivate: [LoginActivate],
+    resolve: { luchador: LuchadorResolverService }
   },
   { path: "**", component: NotFoundComponent }
 ];
@@ -121,7 +138,7 @@ export function apiConfigFactory(): Configuration {
     WatchPageComponent,
     HomePageComponent,
     MatchCardComponent,
-    AuthModalMessageComponent
+    AuthModalMessageComponent,
   ],
   imports: [
     BrowserModule,
@@ -133,7 +150,8 @@ export function apiConfigFactory(): Configuration {
     AceEditorModule,
     BrowserAnimationsModule,
     FontAwesomeModule,
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    PagesModule
   ],
   providers: [
     LoginActivate,

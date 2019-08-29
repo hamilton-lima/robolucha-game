@@ -1,4 +1,5 @@
 export * from './modelActiveMatch';
+export * from './modelAvailableMatch';
 export * from './modelClassroom';
 export * from './modelCode';
 export * from './modelConfig';

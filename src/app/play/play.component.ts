@@ -38,11 +38,11 @@ export class PlayComponent implements OnInit {
   }
 
   joinTutorialMatch(match: ModelActiveMatch){
-    this.api
-    .privateStartTutorialMatchNamePost(match.name)
-    .subscribe((joinMatch: ModelJoinMatch) => {
-      console.log("joinned match", match);
-      this.router.navigate(["watch", joinMatch.matchID]);
-    });
+    // this.api
+    // .privateStartTutorialMatchNamePost(match.name)
+    // .subscribe((joinMatch: ModelJoinMatch) => {
+    //   console.log("joinned match", match);
+    //   this.router.navigate(["watch", joinMatch.matchID]);
+    // });
   }
 }
