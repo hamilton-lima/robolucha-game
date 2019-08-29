@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { DefaultService, ModelActiveMatch } from 'src/app/sdk';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-list-public-games',
@@ -7,9 +9,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ListPublicGamesComponent implements OnInit {
 
-  constructor() { }
+  matches: Array<ModelActiveMatch> = [];
+
+  constructor(private api: DefaultService, private router: Router) {}
 
   ngOnInit() {
+    this.api.privateAvailableMatchPublicGet().subscribe((matches: Array<ModelActiveMatch>) => {
+      console.log("matches", matches);
+      this.matches = matches;
+    });
   }
 
 }
