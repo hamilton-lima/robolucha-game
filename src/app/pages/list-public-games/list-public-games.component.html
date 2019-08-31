@@ -1,2 +1,15 @@
 <h1>Matches</h1>
-{{ matches | json }}
+
+<div class="container">
+        <div class="row">
+            <div *ngFor="let match of matches" class="card classroomCard">
+                <div class="card-body">
+                    <h5 class="card-title">{{ match.name }}</h5>
+                    <button (click)="play(match.id)" class="big-button round" mat-raised-button>Play</button>
+                </div>
+            </div>
+            <div *ngIf="matches.length <= 0">
+                <h4>There are no matches available</h4>
+            </div>
+        </div>
+    </div>
