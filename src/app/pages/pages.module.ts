@@ -10,6 +10,8 @@ import { RoundButtonComponent } from "./shared/round-button/round-button.compone
 import { MatIconRegistry } from "@angular/material";
 import { DomSanitizer } from "@angular/platform-browser";
 import { HomeButtonComponent } from './shared/home-button/home-button.component';
+import { HeaderComponent } from './shared/header/header.component';
+import { GameCardComponent } from './shared/game-card/game-card.component';
 
 @NgModule({
   imports: [
@@ -23,7 +25,9 @@ import { HomeButtonComponent } from './shared/home-button/home-button.component'
     ListPublicGamesComponent,
     ListClassroomGamesComponent,
     RoundButtonComponent,
-    HomeButtonComponent
+    HomeButtonComponent,
+    HeaderComponent,
+    GameCardComponent
   ]
 })
 export class PagesModule {

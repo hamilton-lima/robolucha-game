@@ -1,10 +1,6 @@
 <div class="container">
   <div class="row">
-    <mat-toolbar color="none" class="game-toollbar">
-      <app-home-button></app-home-button>
-      <span class="spacer"></span>
-      <span>Public Matches</span>
-    </mat-toolbar>
+    <app-header>Public arenas</app-header>
   </div>
 
   <div class="row">
@@ -12,39 +8,11 @@
       class="col-sm-12 col-md-6 col-lg-4 game-card"
       *ngFor="let match of matches"
     >
-      <mat-card>
-        <mat-card-header>
-          <div mat-card-avatar class="example-header-image"></div>
-          <mat-card-title>{{ match.name }}</mat-card-title>
-          <mat-card-subtitle>Dog Breed</mat-card-subtitle>
-        </mat-card-header>
-        <img
-          mat-card-image
-          src="https://material.angular.io/assets/img/examples/shiba2.jpg"
-          alt="Photo of a Shiba Inu"
-        />
-        <mat-card-content>
-          <p>
-            The Shiba Inu is the smallest of the six original and distinct spitz
-            breeds of dog from Japan. A small, agile dog that copes very well
-            with mountainous terrain, the Shiba Inu was originally bred for
-            hunting.
-          </p>
-        </mat-card-content>
-        <mat-card-actions>
-          <button
-            (click)="play(match.id)"
-            class="big-button round"
-            mat-raised-button
-          >
-            PLAY
-          </button>
-        </mat-card-actions>
-      </mat-card>
+      <app-game-card [match]="match" (onplay)="play($event)"></app-game-card>
+    </div>
+
+    <div *ngIf="matches.length <= 0">
+      <h4>There are no matches available</h4>
     </div>
   </div>
-</div>
-
-<div *ngIf="matches.length <= 0">
-  <h4>There are no matches available</h4>
 </div>

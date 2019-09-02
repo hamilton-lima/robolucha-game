@@ -1,0 +1,26 @@
+<mat-card>
+    <mat-card-header>
+      <div mat-card-avatar>
+          <mat-icon svgIcon="{{getIconName(match)}}"></mat-icon>
+      </div>
+      <mat-card-title>{{ match.gameDefinition.label }}</mat-card-title>
+      <mat-card-subtitle>{{ match.gameDefinition.type }}</mat-card-subtitle>
+    </mat-card-header>
+    <img
+      mat-card-image
+      src="{{getImageName(match)}}"
+      alt="{{ match.gameDefinition.label }} description image"
+    />
+    <mat-card-content>
+      <p>{{ match.gameDefinition.description }}</p>
+    </mat-card-content>
+    <mat-card-actions>
+      <button
+        (click)="play(match.id)"
+        class="big-button round"
+        mat-raised-button
+      >
+        PLAY
+      </button>
+    </mat-card-actions>
+  </mat-card>

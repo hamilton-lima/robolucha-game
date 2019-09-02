@@ -1,5 +1,10 @@
 import { Component, OnInit } from "@angular/core";
-import { DefaultService, ModelActiveMatch, ModelAvailableMatch, ModelMatch } from "src/app/sdk";
+import {
+  DefaultService,
+  ModelActiveMatch,
+  ModelAvailableMatch,
+  ModelMatch
+} from "src/app/sdk";
 import { Router } from "@angular/router";
 
 @Component({
@@ -8,14 +13,14 @@ import { Router } from "@angular/router";
   styleUrls: ["./list-public-games.component.css"]
 })
 export class ListPublicGamesComponent implements OnInit {
-  matches: Array<ModelActiveMatch> = [];
+  matches: Array<ModelAvailableMatch> = [];
 
   constructor(private api: DefaultService, private router: Router) {}
 
   ngOnInit() {
     this.api
       .privateAvailableMatchPublicGet()
-      .subscribe((matches: Array<ModelActiveMatch>) => {
+      .subscribe((matches: Array<ModelAvailableMatch>) => {
         console.log("matches", matches);
         this.matches = matches;
       });
@@ -23,10 +28,11 @@ export class ListPublicGamesComponent implements OnInit {
 
   play(matchID: number) {
     console.log("play", matchID);
-    const request: ModelAvailableMatch = {  };
     this.api.privatePlayIdPost(matchID).subscribe((match: ModelMatch) => {
       console.log("joinned match", match);
       this.router.navigate(["watch", match.id]);
-    }); 
+    });
   }
+
+
 }
