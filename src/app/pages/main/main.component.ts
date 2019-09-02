@@ -36,4 +36,8 @@ export class MainComponent implements OnInit {
   help() {
     window.location.href = "http://docs.robolucha.com";
   }
+
+  roundClick(){
+    console.log('click');
+  }
 }

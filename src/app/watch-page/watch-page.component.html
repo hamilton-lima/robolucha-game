@@ -1,5 +1,3 @@
-<app-header></app-header>
-
 <div class="watch-main">
   <app-clock class="clock" [matchStateSubject]="matchStateSubject"></app-clock>
 
@@ -46,8 +44,8 @@
 
   <div class="p-3 matchover-alert" *ngIf="matchOver">
     <h1>This match is over!</h1>
-    <button class="btn btn-primary float-right" (click)="gotoMatchList()">
-      <span>Return to Match List</span>
+    <button class="btn btn-primary float-right" (click)="goBack()">
+      <span>Back to the ist</span>
     </button>
     <app-score [scores]="scores"></app-score>
   </div>

@@ -4,7 +4,11 @@ import {
   Router,
   ActivatedRoute
 } from "@angular/router";
-import { DefaultService, ModelGameDefinition, ModelGameComponent } from "../sdk";
+import {
+  DefaultService,
+  ModelGameDefinition,
+  ModelGameComponent
+} from "../sdk";
 import { WatchMatchComponent } from "../watch-match/watch-match.component";
 import { CanComponentDeactivate } from "../can-deactivate-guard.service";
 import {
@@ -63,11 +67,7 @@ import { CodeEditorPanelComponent } from "../code-editor-panel/code-editor-panel
   ]
 })
 export class WatchPageComponent implements OnInit, CanComponentDeactivate {
-  constructor(
-    private router: Router,
-    private api: DefaultService,
-    private route: ActivatedRoute
-  ) {}
+  constructor(private api: DefaultService, private route: ActivatedRoute) {}
 
   matchOver = false;
 
@@ -89,7 +89,7 @@ export class WatchPageComponent implements OnInit, CanComponentDeactivate {
     this.luchador = this.route.snapshot.data.luchador;
     this.matchID = Number.parseInt(this.route.snapshot.paramMap.get("id"));
     this.gameDefinition = null;
-    
+
     console.log("match ID", this.matchID);
     console.log("luchador", this.luchador);
 
@@ -105,15 +105,14 @@ export class WatchPageComponent implements OnInit, CanComponentDeactivate {
     this.matchStateSubject.subscribe((matchState: MatchState) => {
       this.scores = matchState.scores;
     });
-
   }
 
   endMatch() {
     this.matchOver = true;
   }
 
-  gotoMatchList(){
-    this.router.navigate(["play"]);
+  goBack() {
+    window.history.back();
   }
 
   canDeactivate() {
@@ -157,5 +156,4 @@ export class WatchPageComponent implements OnInit, CanComponentDeactivate {
   updateMessage(message: Message) {
     this.messageSubject.next(message);
   }
-
 }
