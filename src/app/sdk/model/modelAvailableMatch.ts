@@ -9,10 +9,12 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { ModelGameDefinition } from './modelGameDefinition';
 
 
 export interface ModelAvailableMatch {
     classroomID?: number;
+    gameDefinition?: ModelGameDefinition;
     gameDefinitionID?: number;
     id?: number;
     name?: string;
