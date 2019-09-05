@@ -23,13 +23,13 @@ export class HttpConfigInterceptor implements HttpInterceptor {
     
   ): Observable<HttpEvent<any>> {
 
-    console.log('Intercept', request);
+    // console.log('Intercept', request);
 
     return next.handle(request).pipe(
         map((event: HttpEvent<any>) => {
-            if (event instanceof HttpResponse) {
-                console.log('HTTP response: ', event);
-            }
+            // if (event instanceof HttpResponse) {
+            //     console.log('HTTP response: ', event);
+            // }
             return event;
         }),
         catchError((error: HttpErrorResponse) => {
@@ -39,7 +39,7 @@ export class HttpConfigInterceptor implements HttpInterceptor {
                 status: error.status
             };
             this.modalService.open(AuthModalMessageComponent, {centered: true});
-            console.log('HTTP ERROR response: ', data);
+            // console.log('HTTP ERROR response: ', data);
             return throwError(error);
         }));
 

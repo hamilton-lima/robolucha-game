@@ -1,0 +1,21 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Join Classroom</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <mat-form-field>
+      <input
+        [(ngModel)]="code"
+        matInput
+        placeholder="Classroom code"
+        value=""
+      />
+    </mat-form-field>
+  </mat-card-content>
+  <mat-card-actions>
+    <button (click)="join()" mat-raised-button>
+      JOIN
+    </button>
+  </mat-card-actions>
+</mat-card>

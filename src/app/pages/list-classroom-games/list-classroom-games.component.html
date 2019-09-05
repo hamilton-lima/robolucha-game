@@ -1,3 +1,37 @@
-<p>
-  list-classroom-games works!
-</p>
+<div class="container">
+  <div class="row">
+    <app-header>{{ title }}</app-header>
+  </div>
+
+  <div *ngIf="!classrooms.length" class="row">
+    <div class="col-sm-12 col-md-6">
+      <app-join-classroom
+        (onJoin)="onJoin($event)"
+        class="join-classroom"
+      ></app-join-classroom>
+    </div>
+  </div>
+
+  <div *ngIf="classrooms.length" class="row">
+    <div
+      class="col-sm-12 col-md-6 col-lg-4 game-card"
+      *ngFor="let match of matches"
+    >
+      <app-game-card [match]="match" (onplay)="play($event)"></app-game-card>
+    </div>
+
+    <div *ngIf="matches.length <= 0">
+      <h4>There are no matches available</h4>
+    </div>
+  </div>
+</div>
+
+<ng-template #joinSucess>
+  <h2 matDialogTitle>Congratulations</h2>
+  <p matDialogContent>
+    You joined classrom <em>{{ classroom.name }}</em>
+  </p>
+  <mat-dialog-actions align="center">
+    <button mat-raised-button matDialogClose>Dismiss</button>
+  </mat-dialog-actions>
+</ng-template>

@@ -9,14 +9,17 @@ import { ListClassroomGamesComponent } from "./list-classroom-games/list-classro
 import { RoundButtonComponent } from "./shared/round-button/round-button.component";
 import { MatIconRegistry } from "@angular/material";
 import { DomSanitizer } from "@angular/platform-browser";
-import { HomeButtonComponent } from './shared/home-button/home-button.component';
-import { HeaderComponent } from './shared/header/header.component';
-import { GameCardComponent } from './shared/game-card/game-card.component';
+import { HomeButtonComponent } from "./shared/home-button/home-button.component";
+import { HeaderComponent } from "./shared/header/header.component";
+import { GameCardComponent } from "./shared/game-card/game-card.component";
+import { JoinClassroomComponent } from "./list-classroom-games/join-classroom/join-classroom.component";
+import { FormsModule } from "@angular/forms";
 
 @NgModule({
   imports: [
     CommonModule,
     BrowserAnimationsModule,
+    FormsModule,
     RouterModule,
     MaterialAllComponentsModule
   ],
@@ -27,14 +30,14 @@ import { GameCardComponent } from './shared/game-card/game-card.component';
     RoundButtonComponent,
     HomeButtonComponent,
     HeaderComponent,
-    GameCardComponent
+    GameCardComponent,
+    JoinClassroomComponent
   ]
 })
 export class PagesModule {
   constructor(matIconRegistry: MatIconRegistry, domSanitizer: DomSanitizer) {
-    console.log('register icons');
     matIconRegistry.addSvgIconSet(
       domSanitizer.bypassSecurityTrustResourceUrl("./assets/mdi.svg")
-    ); 
+    );
   }
 }
