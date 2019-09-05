@@ -1,9 +1,0 @@
-<img
-  class="shape-block"
-  [ngClass]="{
-    selected: isCurrent(image)
-  }"
-  *ngFor="let image of getImages()"
-  src="{{ getImageSrc(image) }}"
-  (click)="selectShape(image)"
-/>

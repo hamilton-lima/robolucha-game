@@ -1,0 +1,35 @@
+<div class="container">
+  <div class="row">
+    <app-header>Customize</app-header>
+  </div>
+  <div class="row">
+    <div class="col-8">
+      <h1>{{ luchador.name }}</h1>
+    </div>
+    <div class="col-4">
+      <button class="btn btn-success align-bottom pull-left" (click)="random()">
+        Random Mask
+      </button>
+      &nbsp;
+      <button
+        *ngIf="dirty"
+        class="btn btn-primary align-bottom"
+        (click)="save()"
+      >
+        Save
+      </button>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-6">
+      <app-mask-editor-detail
+        (onChange)="onUpdate($event)"
+      ></app-mask-editor-detail>
+    </div>
+
+    <div class="col-6">
+      <app-luchador-preview></app-luchador-preview>
+    </div>
+  </div>
+</div>

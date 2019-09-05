@@ -23,6 +23,26 @@ a.mat-menu-item > mat-icon {
 }
 
 /* fixes shadow on mat-raised buttons at the toolbar */
-.mat-toolbar-single-row{
+.mat-toolbar-single-row {
   height: 65px !important;
+}
+
+/*TODO replace with theme colors*/
+.snack-bar-error {
+  background-color: #dc3545;
+  /* background-color: mat-color($warn); */
+}
+
+.snack-bar-warning {
+  background-color: #ffc107;
+  /* background-color: mat-color($dark-warn); */
+}
+
+.snack-bar-info {
+  background-color: #17a2b8;
+  /* background-color: mat-color($accent); */
+}
+
+.mat-button-wrapper {
+  color: black !important;
 }

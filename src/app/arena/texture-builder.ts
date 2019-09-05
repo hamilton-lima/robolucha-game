@@ -1,12 +1,9 @@
 import { Injectable } from "@angular/core";
 import { ModelConfig } from "../sdk";
 import { Subject, forkJoin } from "rxjs";
-import {
-  maskEditorCategories,
-  CategoryOptions,
-  EditorType
-} from "../mask-editor/mask-editor-category.model";
-import { LuchadorConfigService } from "../mask-editor-detail/luchador-config.service";
+
+import { LuchadorConfigService } from "../pages/mask-editor/mask-editor-detail/luchador-config.service";
+import { maskEditorCategories, CategoryOptions, EditorType } from "../pages/mask-editor/mask-editor-category.model";
 
 const TEXTURE_WIDTH = 512;
 const TEXTURE_HEIGHT = 512;

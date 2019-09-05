@@ -21,11 +21,6 @@ import { LuchadorResolverService } from "./luchador-resolver.service";
 import { WatchMatchComponent } from "./watch-match/watch-match.component";
 import { ArenaComponent } from "./arena/arena.component";
 import { PlaygroundComponent } from "./playground/playground.component";
-import { MaskEditorComponent } from "./mask-editor/mask-editor.component";
-import { LuchadorPreviewComponent } from "./luchador-preview/luchador-preview.component";
-import { MaskEditorDetailComponent } from "./mask-editor-detail/mask-editor-detail.component";
-import { ColorPickerComponent } from "./color-picker/color-picker.component";
-import { ShapePickerComponent } from "./shape-picker/shape-picker.component";
 import { PlayComponent } from "./play/play.component";
 import { CanDeactivateGuard } from "./can-deactivate-guard.service";
 import { MessageComponent } from "./message/message.component";
@@ -46,6 +41,7 @@ import { MainComponent } from "./pages/main/main.component";
 import { PagesModule } from "./pages/pages.module";
 import { ListPublicGamesComponent } from "./pages/list-public-games/list-public-games.component";
 import { ListClassroomGamesComponent } from "./pages/list-classroom-games/list-classroom-games.component";
+import { MaskEditorComponent } from "./pages/mask-editor/mask-editor.component";
 
 library.add(fas);
 
@@ -123,11 +119,6 @@ export function apiConfigFactory(): Configuration {
     WatchMatchComponent,
     ArenaComponent,
     PlaygroundComponent,
-    MaskEditorComponent,
-    LuchadorPreviewComponent,
-    MaskEditorDetailComponent,
-    ColorPickerComponent,
-    ShapePickerComponent,
     PlayComponent,
     ScoreComponent,
     ClockComponent,

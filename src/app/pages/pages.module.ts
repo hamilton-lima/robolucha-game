@@ -14,6 +14,12 @@ import { HeaderComponent } from "./shared/header/header.component";
 import { GameCardComponent } from "./shared/game-card/game-card.component";
 import { JoinClassroomComponent } from "./list-classroom-games/join-classroom/join-classroom.component";
 import { FormsModule } from "@angular/forms";
+import { MaskEditorComponent } from "./mask-editor/mask-editor.component";
+import { LuchadorPreviewComponent } from "./mask-editor/luchador-preview/luchador-preview.component";
+import { MaskEditorDetailComponent } from "./mask-editor/mask-editor-detail/mask-editor-detail.component";
+import { ColorPickerComponent } from "./mask-editor/color-picker/color-picker.component";
+import { ShapePickerComponent } from "./mask-editor/shape-picker/shape-picker.component";
+import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 
 @NgModule({
   imports: [
@@ -21,7 +27,8 @@ import { FormsModule } from "@angular/forms";
     BrowserAnimationsModule,
     FormsModule,
     RouterModule,
-    MaterialAllComponentsModule
+    MaterialAllComponentsModule,
+    NgbModule
   ],
   declarations: [
     MainComponent,
@@ -31,7 +38,12 @@ import { FormsModule } from "@angular/forms";
     HomeButtonComponent,
     HeaderComponent,
     GameCardComponent,
-    JoinClassroomComponent
+    JoinClassroomComponent,
+    MaskEditorComponent,
+    LuchadorPreviewComponent,
+    MaskEditorDetailComponent,
+    ColorPickerComponent,
+    ShapePickerComponent
   ]
 })
 export class PagesModule {

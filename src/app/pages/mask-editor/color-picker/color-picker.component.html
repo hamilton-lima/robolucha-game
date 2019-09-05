@@ -1,0 +1,12 @@
+<span
+  *ngFor="let item of colors"
+  (click)="selectColor(item.color)"
+  class="color-block"
+  [ngClass]="{
+    selected: isCurrent(item.color)
+  }"
+  [ngStyle]="{ 'background-color': item.color }"
+  placement="top"
+  container="body"
+  ngbTooltip="{{ item.name + ' (' + item.color + ')' }}"
+></span>
