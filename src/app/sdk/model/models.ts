@@ -16,4 +16,5 @@ export * from './modelScoreList';
 export * from './modelStudent';
 export * from './modelUpdateLuchadorResponse';
 export * from './modelUser';
+export * from './modelUserDetails';
 export * from './modelUserSetting';

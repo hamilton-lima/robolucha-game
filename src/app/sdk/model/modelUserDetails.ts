@@ -10,10 +10,10 @@
  * Do not edit the class manually.
  */
 import { ModelClassroom } from './modelClassroom';
+import { ModelUser } from './modelUser';
 
 
-export interface ModelStudent {
+export interface ModelUserDetails {
     classrooms?: Array<ModelClassroom>;
-    id?: number;
-    userID?: number;
+    user?: ModelUser;
 }

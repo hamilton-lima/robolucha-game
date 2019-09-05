@@ -32,7 +32,7 @@ import { ModelMatchParticipant } from '../model/modelMatchParticipant';
 import { ModelMatchScore } from '../model/modelMatchScore';
 import { ModelScoreList } from '../model/modelScoreList';
 import { ModelUpdateLuchadorResponse } from '../model/modelUpdateLuchadorResponse';
-import { ModelUser } from '../model/modelUser';
+import { ModelUserDetails } from '../model/modelUserDetails';
 import { ModelUserSetting } from '../model/modelUserSetting';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -419,53 +419,6 @@ export class DefaultService {
     }
 
     /**
-     * join a classroom
-     * 
-     * @param accessCode classroom access code
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public internalJoinClassroomAccessCodePost(accessCode: string, observe?: 'body', reportProgress?: boolean): Observable<ModelClassroom>;
-    public internalJoinClassroomAccessCodePost(accessCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ModelClassroom>>;
-    public internalJoinClassroomAccessCodePost(accessCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ModelClassroom>>;
-    public internalJoinClassroomAccessCodePost(accessCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-        if (accessCode === null || accessCode === undefined) {
-            throw new Error('Required parameter accessCode was null or undefined when calling internalJoinClassroomAccessCodePost.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // authentication (ApiKeyAuth) required
-        if (this.configuration.apiKeys["Authorization"]) {
-            headers = headers.set('Authorization', this.configuration.apiKeys["Authorization"]);
-        }
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        let httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set("Accept", httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-            'application/json'
-        ];
-
-        return this.httpClient.post<ModelClassroom>(`${this.basePath}/internal/join-classroom/${encodeURIComponent(String(accessCode))}`,
-            null,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
      * find Luchador by ID
      * 
      * @param request FindLuchadorWithGamedefinition
@@ -714,9 +667,9 @@ export class DefaultService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public privateAvailableMatchClassroomIdGet(id: number, observe?: 'body', reportProgress?: boolean): Observable<ModelAvailableMatch>;
-    public privateAvailableMatchClassroomIdGet(id: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ModelAvailableMatch>>;
-    public privateAvailableMatchClassroomIdGet(id: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ModelAvailableMatch>>;
+    public privateAvailableMatchClassroomIdGet(id: number, observe?: 'body', reportProgress?: boolean): Observable<Array<ModelAvailableMatch>>;
+    public privateAvailableMatchClassroomIdGet(id: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<ModelAvailableMatch>>>;
+    public privateAvailableMatchClassroomIdGet(id: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<ModelAvailableMatch>>>;
     public privateAvailableMatchClassroomIdGet(id: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling privateAvailableMatchClassroomIdGet.');
@@ -743,7 +696,7 @@ export class DefaultService {
             'application/json'
         ];
 
-        return this.httpClient.get<ModelAvailableMatch>(`${this.basePath}/private/available-match-classroom/${encodeURIComponent(String(id))}`,
+        return this.httpClient.get<Array<ModelAvailableMatch>>(`${this.basePath}/private/available-match-classroom/${encodeURIComponent(String(id))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -982,9 +935,9 @@ export class DefaultService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public privateGetUserGet(observe?: 'body', reportProgress?: boolean): Observable<ModelUser>;
-    public privateGetUserGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ModelUser>>;
-    public privateGetUserGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ModelUser>>;
+    public privateGetUserGet(observe?: 'body', reportProgress?: boolean): Observable<ModelUserDetails>;
+    public privateGetUserGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ModelUserDetails>>;
+    public privateGetUserGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ModelUserDetails>>;
     public privateGetUserGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -1008,7 +961,54 @@ export class DefaultService {
             'application/json'
         ];
 
-        return this.httpClient.get<ModelUser>(`${this.basePath}/private/get-user`,
+        return this.httpClient.get<ModelUserDetails>(`${this.basePath}/private/get-user`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * join a classroom
+     * 
+     * @param accessCode classroom access code
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public privateJoinClassroomAccessCodePost(accessCode: string, observe?: 'body', reportProgress?: boolean): Observable<ModelClassroom>;
+    public privateJoinClassroomAccessCodePost(accessCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ModelClassroom>>;
+    public privateJoinClassroomAccessCodePost(accessCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ModelClassroom>>;
+    public privateJoinClassroomAccessCodePost(accessCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (accessCode === null || accessCode === undefined) {
+            throw new Error('Required parameter accessCode was null or undefined when calling privateJoinClassroomAccessCodePost.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (ApiKeyAuth) required
+        if (this.configuration.apiKeys["Authorization"]) {
+            headers = headers.set('Authorization', this.configuration.apiKeys["Authorization"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        let httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set("Accept", httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json'
+        ];
+
+        return this.httpClient.post<ModelClassroom>(`${this.basePath}/private/join-classroom/${encodeURIComponent(String(accessCode))}`,
+            null,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
