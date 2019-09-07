@@ -16,7 +16,7 @@ export class MeshLoader {
           animationGroups: BABYLON.AnimationGroup[];
         }) => {
 
-          console.log('MeshLoader', fileName, meshName, value);
+          // console.log('MeshLoader', fileName, meshName, value);
           let result: BABYLON.AbstractMesh;
           value.meshes.forEach(mesh => {
             if (mesh.name === meshName) {

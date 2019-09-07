@@ -45,18 +45,18 @@ export class SceneBuilder {
         this.scene
       );
 
-      console.log("ground dimensions", groundWidth, groundHeight);
+      // console.log("ground dimensions", groundWidth, groundHeight);
 
       this.ground.position.x = -5; // groundWidth / 2 * -1;
       this.ground.position.z = -5; // groundHeight / 2 * -1;
       this.ground.position.y = -0.1;
 
-      console.log(
-        "ground dimensions",
-        groundWidth,
-        groundHeight,
-        this.ground.position
-      );
+      // console.log(
+      //   "ground dimensions",
+      //   groundWidth,
+      //   groundHeight,
+      //   this.ground.position
+      // );
 
       const material = new BABYLON.StandardMaterial(
         "ground-material",

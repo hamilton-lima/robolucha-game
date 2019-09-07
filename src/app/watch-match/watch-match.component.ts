@@ -66,7 +66,7 @@ export class WatchMatchComponent implements OnInit, OnDestroy, OnChanges {
       this.readyToStart();
     });
 
-    console.log("watch match oninit", this.luchador);
+    // console.log("watch match oninit", this.luchador);
     this.service.connect();
   }
 

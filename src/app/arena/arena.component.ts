@@ -182,9 +182,9 @@ export class ArenaComponent implements OnInit, OnChanges {
 
     if (this.messageFPS) {
       this.messageFPS.subscribe(fps => {
-        console.log(
-          "FPS: messages:" + fps + ", render: " + this.engine.getFps()
-        );
+        // console.log(
+        //   "FPS: messages:" + fps + ", render: " + this.engine.getFps()
+        // );
       });
     }
 

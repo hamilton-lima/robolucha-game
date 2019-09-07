@@ -31,7 +31,7 @@ export class ListClassroomGamesComponent implements OnInit {
 
   ngOnInit() {
     this.authService.isLoggedIn().subscribe((userDetails: ModelUserDetails) => {
-      console.log("user", userDetails);
+      // console.log("user", userDetails);
       this.classrooms = userDetails.classrooms;
       this.updateTitle();
       this.loadMatches();
@@ -39,7 +39,7 @@ export class ListClassroomGamesComponent implements OnInit {
   }
 
   onJoin(classroom: ModelClassroom) {
-    console.log("show dialog", this.joinSucess);
+    // console.log("show dialog", this.joinSucess);
     this.classroom = classroom;
     this.dialog.open(this.joinSucess);
     this.authService.isLoggedIn().subscribe((userDetails: ModelUserDetails) => {
@@ -55,7 +55,7 @@ export class ListClassroomGamesComponent implements OnInit {
       this.api
         .privateAvailableMatchClassroomIdGet(id)
         .subscribe((matches: Array<ModelAvailableMatch>) => {
-          console.log("matches", matches);
+          // console.log("matches", matches);
           this.matches = matches;
         });
     }
@@ -71,9 +71,9 @@ export class ListClassroomGamesComponent implements OnInit {
   }
 
   play(matchID: number) {
-    console.log("play", matchID);
+    // console.log("play", matchID);
     this.api.privatePlayIdPost(matchID).subscribe((match: ModelMatch) => {
-      console.log("joinned match", match);
+      // console.log("joinned match", match);
       this.router.navigate(["watch", match.id]);
     });
   }

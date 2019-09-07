@@ -26,11 +26,11 @@ export class JoinClassroomComponent implements OnInit {
   ngOnInit() {}
 
   join() {
-    console.log("join classroom", this.code);
+    // console.log("join classroom", this.code);
     this.api
       .privateJoinClassroomAccessCodePost(this.code)
       .subscribe((classroom: ModelClassroom) => {
-        console.log("joined", classroom);
+        // console.log("joined", classroom);
         if (classroom == null) {
           this.alert.warning(
             "INVALID Code, please check with your teacher.",
