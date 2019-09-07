@@ -98,10 +98,10 @@ export class LuchadorPreviewComponent implements OnInit, OnDestroy {
       "robolucha_char03.babylon",
       self.scene,
       function(newMeshes) {
-        console.log("[Luchador Preview] imported meshes luchador", newMeshes);
+        // console.log("[Luchador Preview] imported meshes luchador", newMeshes);
 
         newMeshes.forEach(mesh => {
-          console.log("[Luchador3D] mesh.name", mesh.name);
+          // console.log("[Luchador3D] mesh.name", mesh.name);
           if (mesh.name == "robolucha_retopo") {
             mesh.visibility = 0;
             self.character = mesh;
@@ -131,7 +131,7 @@ export class LuchadorPreviewComponent implements OnInit, OnDestroy {
       this.scene.render();
       if (this.character && this.rotate) {
         this.character.rotation.z += -0.03;
-        console.log("rotation ", this.character.rotation.z);
+        // console.log("rotation ", this.character.rotation.z);
       }
     });
   }

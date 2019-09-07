@@ -35,7 +35,7 @@ export class MaskEditorDetailComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    console.log("mask editor detail luchador", this.configs);
+    // console.log("mask editor detail luchador", this.configs);
     this.subscription = this.mediator.configs.subscribe(configs => {
       this.configs = configs;
     });
@@ -49,7 +49,7 @@ export class MaskEditorDetailComponent implements OnInit, OnDestroy {
 
   setCurrent(id: string) {
     this.current = id;
-    console.log("current", this.current);
+    // console.log("current", this.current);
   }
 
   isCurrent(id: string): boolean {

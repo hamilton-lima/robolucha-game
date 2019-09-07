@@ -13,7 +13,7 @@ export class AuthModalMessageComponent {
       url = url + ":" + window.location.port;
     }
 
-    // console.log("refreshing the page: ", url);
+    // // console.log("refreshing the page: ", url);
     window.location.assign(url);
   }
 }

@@ -90,15 +90,15 @@ export class WatchPageComponent implements OnInit, CanComponentDeactivate {
     this.matchID = Number.parseInt(this.route.snapshot.paramMap.get("id"));
     this.gameDefinition = null;
 
-    console.log("match ID", this.matchID);
-    console.log("luchador", this.luchador);
+    // console.log("match ID", this.matchID);
+    // console.log("luchador", this.luchador);
 
     this.api.privateMatchSingleGet(this.matchID).subscribe(match => {
       this.api
         .privateGameDefinitionIdIdGet(match.gameDefinitionID)
         .subscribe(gameDefinition => {
           this.gameDefinition = gameDefinition;
-          console.log("gamedefinition", this.gameDefinition);
+          // console.log("gamedefinition", this.gameDefinition);
         });
     });
 

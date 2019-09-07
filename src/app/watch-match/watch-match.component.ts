@@ -66,12 +66,12 @@ export class WatchMatchComponent implements OnInit, OnDestroy, OnChanges {
       this.readyToStart();
     });
 
-    // console.log("watch match oninit", this.luchador);
+    // // console.log("watch match oninit", this.luchador);
     this.service.connect();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log("changes", changes.matchID);
+    // console.log("changes", changes.matchID);
     if (changes.matchID && !changes.matchID.firstChange) {
       this.readyToStart();
       this.arena.createScene();
@@ -84,7 +84,7 @@ export class WatchMatchComponent implements OnInit, OnDestroy, OnChanges {
       matchID: this.matchID
     };
 
-    console.log("watch details", details);
+    // console.log("watch details", details);
 
     this.onMessage = this.service.watch(details).subscribe(message => {
       this.message = message;

@@ -16,7 +16,7 @@ export class RoundButtonComponent implements OnInit {
   ngOnInit() {}
 
   click() {
-    console.log("click inner round button");
+    // console.log("click inner round button");
     this.onclick.next("");
   }
 }

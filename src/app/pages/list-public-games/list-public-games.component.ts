@@ -21,15 +21,15 @@ export class ListPublicGamesComponent implements OnInit {
     this.api
       .privateAvailableMatchPublicGet()
       .subscribe((matches: Array<ModelAvailableMatch>) => {
-        console.log("matches", matches);
+        // console.log("matches", matches);
         this.matches = matches;
       });
   }
 
   play(matchID: number) {
-    console.log("play", matchID);
+    // console.log("play", matchID);
     this.api.privatePlayIdPost(matchID).subscribe((match: ModelMatch) => {
-      console.log("joinned match", match);
+      // console.log("joinned match", match);
       this.router.navigate(["watch", match.id]);
     });
   }

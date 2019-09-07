@@ -16,7 +16,7 @@ export class SharedStateService {
     this.api
       .privateGameDefinitionIdIdGet(match.gameDefinitionID)
       .subscribe((gameDefinition: ModelGameDefinition) => {
-        console.log("gamedefinition from the server", gameDefinition);
+        // console.log("gamedefinition from the server", gameDefinition);
         this.gameDefinition.next(gameDefinition);
         this.match.next(match);
       });

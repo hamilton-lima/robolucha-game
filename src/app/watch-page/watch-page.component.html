@@ -12,8 +12,12 @@
     ></app-watch-match>
   </div>
 
-  <ul class="panel-selector float-right">
-    <li>
+  <div class="panel-selector">
+    <div class="panel-selector-item">
+      <app-home-button></app-home-button>
+    </div>
+
+    <div class="panel-selector-item">
       <button (click)="toggleCode()" class="btn-round">
         <fa-icon
           [styles]="{ stroke: 'white', color: 'white' }"
@@ -21,8 +25,9 @@
           size="2x"
         ></fa-icon>
       </button>
-    </li>
-    <li>
+    </div>
+    
+    <div class="panel-selector-item">
       <button (click)="toggleScore()" class="btn-round">
         <fa-icon
           [styles]="{ stroke: 'white', color: 'white' }"
@@ -30,8 +35,9 @@
           size="2x"
         ></fa-icon>
       </button>
-    </li>
-    <li>
+    </div>
+    
+    <div class="panel-selector-item">
       <button (click)="toggleMessages()" class="btn-round">
         <fa-icon
           [styles]="{ stroke: 'white', color: 'white' }"
@@ -39,8 +45,8 @@
           size="2x"
         ></fa-icon>
       </button>
-    </li>
-  </ul>
+    </div>
+  </div>
 
   <div class="p-3 matchover-alert" *ngIf="matchOver">
     <h1>This match is over!</h1>
@@ -50,7 +56,8 @@
     <app-score [scores]="scores"></app-score>
   </div>
 
-  <app-code-editor-panel *ngIf="gameDefinition"
+  <app-code-editor-panel
+    *ngIf="gameDefinition"
     [gameDefinition]="gameDefinition"
     class="code-editor-panel"
     [@slideInOut]="{

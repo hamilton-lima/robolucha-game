@@ -38,6 +38,6 @@ export class MainComponent implements OnInit {
   }
 
   roundClick(){
-    console.log('click');
+    // console.log('click');
   }
 }

@@ -14,7 +14,7 @@
   position: absolute;
   left: 50%;
   right: 50%;
-  top: 10%;
+  top: 0%;
 }
 
 .code-editor-panel {
@@ -46,11 +46,16 @@
 }
 
 .panel-selector {
-  list-style: none;
   position: fixed;
-  right: 1%;
-  top: 10%;
+  bottom: 0%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
   z-index: 10000;
+}
+
+.panel-selector-item{
+  margin-left: 15px;
 }
 
 .matchover-alert {

@@ -59,7 +59,7 @@ export class PlaygroundComponent implements OnInit, AfterViewInit {
   }
 
   onChange(event) {
-    console.log("on change", event);
+    // console.log("on change", event);
     this.matchState = JSON.parse(event);
     this.matchStateSubject.next(this.matchState);
   }
@@ -99,7 +99,7 @@ export class PlaygroundComponent implements OnInit, AfterViewInit {
 
 
   rotate() {
-    console.log(this.matchState);
+    // console.log(this.matchState);
     this.matchState.luchadores.forEach(luchador => {
       luchador.angle++;
     })

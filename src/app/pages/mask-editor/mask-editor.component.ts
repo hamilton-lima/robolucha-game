@@ -31,13 +31,13 @@ export class MaskEditorComponent implements OnInit, CanComponentDeactivate {
 
   ngOnInit() {
     const data = this.route.snapshot.data;
-    console.log('configs on maskeditor', data.luchador.configs);
+    // console.log('configs on maskeditor', data.luchador.configs);
     this.refreshEditor(data.luchador.configs);
     this.luchador = data.luchador;
   }
 
   refreshEditor(configs: ModelConfig[]) {
-    console.log("refresh luchador", configs);
+    // console.log("refresh luchador", configs);
     this.mediator.configs.next(configs);
     this.dirty = false;
   }
@@ -67,7 +67,7 @@ export class MaskEditorComponent implements OnInit, CanComponentDeactivate {
 
   onUpdate(configs: ModelConfig []) {
     this.dirty = true;
-    console.log("update on luchador", configs );
+    // console.log("update on luchador", configs );
     this.mediator.configs.next(configs);
   }
 

@@ -23,7 +23,7 @@ export class WatchMatchService {
   constructor() {}
 
   connect() {
-    console.log("connect to the publisher", environment.PUBLISHER);
+    // console.log("connect to the publisher", environment.PUBLISHER);
     this.socket = new WebSocket(environment.PUBLISHER);
     this.socket.onopen = () => {
       this.ready.next(true);

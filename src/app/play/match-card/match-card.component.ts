@@ -11,7 +11,7 @@ export class MatchCardComponent {
   @Output() matchSelected = new EventEmitter<ModelActiveMatch>();
 
   join(match: ModelActiveMatch) {
-    console.log("join match", match);
+    // console.log("join match", match);
     this.matchSelected.emit(match);
   }
 

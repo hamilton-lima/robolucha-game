@@ -182,7 +182,7 @@ export class ArenaComponent implements OnInit, OnChanges {
 
     if (this.messageFPS) {
       this.messageFPS.subscribe(fps => {
-        // console.log(
+        // // console.log(
         //   "FPS: messages:" + fps + ", render: " + this.engine.getFps()
         // );
       });
@@ -214,7 +214,7 @@ export class ArenaComponent implements OnInit, OnChanges {
 
     const builder = new SceneBuilder(this.scene, this.gameDefinition);
     Promise.all([this.updateLuchadores(), builder.build()]).then(() => {
-      console.log("finished loading");
+      // console.log("finished loading");
       this.engine.hideLoadingUI();
       this.render();
     });
@@ -407,11 +407,11 @@ export class ArenaComponent implements OnInit, OnChanges {
     return new Promise<BABYLON.StandardMaterial>((resolve, reject) => {
       // read the mask from the API
       this.api.privateMaskConfigIdGet(id).subscribe(configs => {
-        // console.log("mask config loaded", id, configs);
+        // // console.log("mask config loaded", id, configs);
 
         // build the material using dynamic texture
         this.builder.loadDynamicTexture(configs, this.scene).then(material => {
-          // console.log("dynamic texture loaded loaded", id, material);
+          // // console.log("dynamic texture loaded loaded", id, material);
           resolve(material);
         });
       });

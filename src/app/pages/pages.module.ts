@@ -44,7 +44,8 @@ import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
     MaskEditorDetailComponent,
     ColorPickerComponent,
     ShapePickerComponent
-  ]
+  ],
+  exports: [HomeButtonComponent]
 })
 export class PagesModule {
   constructor(matIconRegistry: MatIconRegistry, domSanitizer: DomSanitizer) {

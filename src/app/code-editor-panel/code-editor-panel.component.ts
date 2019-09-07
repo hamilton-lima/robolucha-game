@@ -113,7 +113,7 @@ export class CodeEditorPanelComponent implements OnInit, OnChanges {
 
   // update the internal list of codes from the editor 
   updateCode(event: string, script: string) {
-    console.log("update code", event, script);
+    // console.log("update code", event, script);
     this.dirty = true;
     this.codes[event].script = script;
   }

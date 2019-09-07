@@ -21,7 +21,7 @@ export class Scene3D {
       "arena_02.babylon",
       scene,
       function(newMeshes, particleSystems) {
-        // console.log("[Scene3D] imported scene", newMeshes);
+        // // console.log("[Scene3D] imported scene", newMeshes);
 
         newMeshes.forEach(mesh => {
           mesh.parent = self.parent;
@@ -35,10 +35,10 @@ export class Scene3D {
       "scene_room.babylon",
       scene,
       function(newMeshes, particleSystems) {
-        // console.log("[Scene3D] imported room", newMeshes);
+        // // console.log("[Scene3D] imported room", newMeshes);
 
         newMeshes.forEach(mesh => {
-          // console.log("[Scene3D] imported room", mesh.name);
+          // // console.log("[Scene3D] imported room", mesh.name);
           mesh.parent = self.parent;
           if (mesh.name == "scene_room") {
             mesh.material = self.material;

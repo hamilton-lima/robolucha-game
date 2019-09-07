@@ -127,7 +127,7 @@ export class TextureBuilder {
           Promise.all(promises)
             .then(tintedLayers => {
               const context = canvas.getContext("2d");
-              // console.log("drawing layers", tintedLayers, target.maskLayers);
+              // // console.log("drawing layers", tintedLayers, target.maskLayers);
               tintedLayers.forEach(layer => {
                 context.drawImage(
                   layer,
@@ -179,7 +179,7 @@ export class TextureBuilder {
       return image.name == imageName;
     });
 
-    // console.log("buildLayerFromColor", imageName, image, colorName, color);
+    // // console.log("buildLayerFromColor", imageName, image, colorName, color);
 
     if (image) {
       return target.tint(image, color);
@@ -266,7 +266,7 @@ export class TextureBuilder {
       let sequence = forkJoin(images2Load);
 
       sequence.subscribe((images: Array<HTMLImageElement>) => {
-        // console.log("all images loaded", images.map(image => image.name));
+        // // console.log("all images loaded", images.map(image => image.name));
 
         if (configs) {
           self.build(configs, images, TEXTURE_WIDTH, TEXTURE_HEIGHT).then(

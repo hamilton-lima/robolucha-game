@@ -19,7 +19,7 @@ export class GameCardComponent implements OnInit {
   }
 
   getIconName(match: ModelAvailableMatch) {
-    console.log("match.gameDefinition.type", match.gameDefinition.type);
+    // console.log("match.gameDefinition.type", match.gameDefinition.type);
 
     if (match.gameDefinition.type === "multiplayer") {
       return "human-greeting";
@@ -29,7 +29,7 @@ export class GameCardComponent implements OnInit {
   }
 
   play(matchID: number) {
-    console.log("play", matchID);
+    // console.log("play", matchID);
     this.onplay.emit(matchID);
   }
 }

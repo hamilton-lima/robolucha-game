@@ -14,7 +14,7 @@ export class PlayComponent implements OnInit {
 
   ngOnInit() {
     this.api.privateMatchGet().subscribe((matches: Array<ModelActiveMatch>) => {
-      console.log("matches", matches);
+      // console.log("matches", matches);
       this.matches = matches;
     });
   }
@@ -32,7 +32,7 @@ export class PlayComponent implements OnInit {
   joinMultiplayer(match: ModelActiveMatch) {
     const request: ModelJoinMatch = { matchID: match.matchID };
     this.api.privateJoinMatchPost(request).subscribe((match: ModelMatch) => {
-      console.log("joinned match", match);
+      // console.log("joinned match", match);
       this.router.navigate(["watch", match.id]);
     });
   }
@@ -41,7 +41,7 @@ export class PlayComponent implements OnInit {
     // this.api
     // .privateStartTutorialMatchNamePost(match.name)
     // .subscribe((joinMatch: ModelJoinMatch) => {
-    //   console.log("joinned match", match);
+    //   // console.log("joinned match", match);
     //   this.router.navigate(["watch", joinMatch.matchID]);
     // });
   }

@@ -91,7 +91,7 @@ export class Base3D {
     this.advancedTexture.dispose();
     // TODO: add Fadeout effect to remove elements from the scene
     // this.animate("visibility", 1, 0, this.speed, (mesh: BABYLON.Mesh) => {
-    //   console.log("trying to remove the bullet");
+    //   // console.log("trying to remove the bullet");
     // mesh.dispose();
     // });
   }
