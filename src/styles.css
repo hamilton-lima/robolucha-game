@@ -56,3 +56,7 @@ a.mat-menu-item > mat-icon {
 body, span, div, button {
   font-family: "Baloo", sans-serif;
 }
+
+.ace_editor,.ace_editor * {
+  font-family: Monaco,Menlo,"Ubuntu Mono",Consolas,source-code-pro,monospace;
+} 
