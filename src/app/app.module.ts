@@ -42,6 +42,7 @@ import { PagesModule } from "./pages/pages.module";
 import { ListPublicGamesComponent } from "./pages/list-public-games/list-public-games.component";
 import { ListClassroomGamesComponent } from "./pages/list-classroom-games/list-classroom-games.component";
 import { MaskEditorComponent } from "./pages/mask-editor/mask-editor.component";
+import { MaterialAllComponentsModule } from "./pages/material-all-components-module";
 
 library.add(fas);
 
@@ -140,7 +141,8 @@ export function apiConfigFactory(): Configuration {
     BrowserAnimationsModule,
     FontAwesomeModule,
     NgxSpinnerModule,
-    PagesModule
+    PagesModule,
+    MaterialAllComponentsModule
   ],
   providers: [
     LoginActivate,

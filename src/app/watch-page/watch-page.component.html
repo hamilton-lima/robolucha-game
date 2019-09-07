@@ -18,34 +18,29 @@
     </div>
 
     <div class="panel-selector-item">
-      <button (click)="toggleCode()" class="btn-round">
-        <fa-icon
-          [styles]="{ stroke: 'white', color: 'white' }"
-          [icon]="['fas', 'edit']"
-          size="2x"
-        ></fa-icon>
-      </button>
+        <app-round-button 
+          [color]="'primary'" 
+          [icon]="'pencil'" 
+          (onclick)="toggleCode()">
+        </app-round-button>
+    </div>    
+    
+    <div class="panel-selector-item">
+        <app-round-button 
+          [color]="'primary'" 
+          [icon]="'trophy'" 
+          (onclick)="toggleScore()">
+        </app-round-button>
     </div>
     
     <div class="panel-selector-item">
-      <button (click)="toggleScore()" class="btn-round">
-        <fa-icon
-          [styles]="{ stroke: 'white', color: 'white' }"
-          [icon]="['fas', 'trophy']"
-          size="2x"
-        ></fa-icon>
-      </button>
+        <app-round-button 
+          [color]="'primary'" 
+          [icon]="'message-text-outline'" 
+          (onclick)="toggleMessages()">
+        </app-round-button>
     </div>
-    
-    <div class="panel-selector-item">
-      <button (click)="toggleMessages()" class="btn-round">
-        <fa-icon
-          [styles]="{ stroke: 'white', color: 'white' }"
-          [icon]="['fas', 'comment']"
-          size="2x"
-        ></fa-icon>
-      </button>
-    </div>
+
   </div>
 
   <div class="p-3 matchover-alert" *ngIf="matchOver">
@@ -80,7 +75,7 @@
     class="message-panel"
     [@slideInOutVert]="{
       value: panelStates.message,
-      params: { inVal: '-120%', outVal: '100%' }
+      params: { inVal: '-130%', outVal: '100%' }
     }"
     [messageSubject]="messageSubject"
   ></app-message>
