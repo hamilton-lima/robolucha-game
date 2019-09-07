@@ -20,12 +20,12 @@
 .code-editor-panel {
   position: fixed;
   left: -65%;
-  top: 20%;
+  top: 10%;
   right: auto;
   bottom: 0;
-  width: 55%;
+  width: 60%;
   min-width: 250px;
-  height: 68%;
+  height: 45%;
   z-index: 9999;
   background-color: whitesmoke;
 }
@@ -37,7 +37,7 @@
   margin: 0 auto;
   top: 100%;
   bottom: 0;
-  width: 55%;
+  width: 60%;
   min-width: 250px;
   height: 68%;
   z-index: 9999;
