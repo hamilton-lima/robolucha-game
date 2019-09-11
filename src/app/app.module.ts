@@ -36,13 +36,16 @@ import { NgxSpinnerModule } from "ngx-spinner";
 import { MatchCardComponent } from "./play/match-card/match-card.component";
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { HttpConfigInterceptor } from "./interceptor/httpconfig.interceptor";
-import { AuthModalMessageComponent } from './interceptor/auth-modal-message/auth-modal-message.component';
+import { AuthModalMessageComponent } from "./interceptor/auth-modal-message/auth-modal-message.component";
 import { MainComponent } from "./pages/main/main.component";
 import { PagesModule } from "./pages/pages.module";
 import { ListPublicGamesComponent } from "./pages/list-public-games/list-public-games.component";
 import { ListClassroomGamesComponent } from "./pages/list-classroom-games/list-classroom-games.component";
 import { MaskEditorComponent } from "./pages/mask-editor/mask-editor.component";
 import { MaterialAllComponentsModule } from "./pages/material-all-components-module";
+import { MainDashboardComponent } from "./dashboard/main-dashboard/main-dashboard.component";
+import { LoginActivateDashboard } from "./login.activate.dashboard.service";
+import { DashboardModule } from "./dashboard/dashboard.module";
 
 library.add(fas);
 
@@ -85,18 +88,23 @@ const ROUTES: Routes = [
     component: ListPublicGamesComponent,
     canActivate: [LoginActivate],
     resolve: { luchador: LuchadorResolverService }
-  },  
+  },
   {
     path: "classroom",
     component: ListClassroomGamesComponent,
     canActivate: [LoginActivate],
     resolve: { luchador: LuchadorResolverService }
-  },  
+  },
   {
     path: "home",
     component: MainComponent,
     canActivate: [LoginActivate],
     resolve: { luchador: LuchadorResolverService }
+  },
+  {
+    path: "dashboard",
+    component: MainDashboardComponent,
+    canActivate: [LoginActivateDashboard]
   },
   { path: "**", component: NotFoundComponent }
 ];
@@ -128,7 +136,7 @@ export function apiConfigFactory(): Configuration {
     WatchPageComponent,
     HomePageComponent,
     MatchCardComponent,
-    AuthModalMessageComponent,
+    AuthModalMessageComponent
   ],
   imports: [
     BrowserModule,
@@ -142,17 +150,17 @@ export function apiConfigFactory(): Configuration {
     FontAwesomeModule,
     NgxSpinnerModule,
     PagesModule,
+    DashboardModule,
     MaterialAllComponentsModule
   ],
   providers: [
     LoginActivate,
+    LoginActivateDashboard,
     AuthService,
     CanDeactivateGuard,
     { provide: HTTP_INTERCEPTORS, useClass: HttpConfigInterceptor, multi: true }
   ],
   bootstrap: [AppComponent],
-  entryComponents: [
-    AuthModalMessageComponent
-  ]
+  entryComponents: [AuthModalMessageComponent]
 })
 export class AppModule {}

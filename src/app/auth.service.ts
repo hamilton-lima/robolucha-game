@@ -15,4 +15,8 @@ export class AuthService {
     return this.api.privateGetUserGet();
   }
 
+  isLoggedInDashboard(){
+    return this.api.dashboardGetUserGet();
+  }
+
 }

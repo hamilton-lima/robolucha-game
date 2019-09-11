@@ -72,6 +72,141 @@ export class DefaultService {
 
 
     /**
+     * find all Classroom
+     * 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public dashboardClassroomGet(observe?: 'body', reportProgress?: boolean): Observable<Array<ModelClassroom>>;
+    public dashboardClassroomGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<ModelClassroom>>>;
+    public dashboardClassroomGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<ModelClassroom>>>;
+    public dashboardClassroomGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // authentication (ApiKeyAuth) required
+        if (this.configuration.apiKeys["Authorization"]) {
+            headers = headers.set('Authorization', this.configuration.apiKeys["Authorization"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        let httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set("Accept", httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json'
+        ];
+
+        return this.httpClient.get<Array<ModelClassroom>>(`${this.basePath}/dashboard/classroom`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * add a Classroom
+     * 
+     * @param request Classroom
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public dashboardClassroomPost(request: ModelClassroom, observe?: 'body', reportProgress?: boolean): Observable<ModelClassroom>;
+    public dashboardClassroomPost(request: ModelClassroom, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ModelClassroom>>;
+    public dashboardClassroomPost(request: ModelClassroom, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ModelClassroom>>;
+    public dashboardClassroomPost(request: ModelClassroom, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (request === null || request === undefined) {
+            throw new Error('Required parameter request was null or undefined when calling dashboardClassroomPost.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (ApiKeyAuth) required
+        if (this.configuration.apiKeys["Authorization"]) {
+            headers = headers.set('Authorization', this.configuration.apiKeys["Authorization"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        let httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set("Accept", httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json'
+        ];
+        let httpContentTypeSelected:string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set("Content-Type", httpContentTypeSelected);
+        }
+
+        return this.httpClient.post<ModelClassroom>(`${this.basePath}/dashboard/classroom`,
+            request,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * find The current user information
+     * 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public dashboardGetUserGet(observe?: 'body', reportProgress?: boolean): Observable<ModelUserDetails>;
+    public dashboardGetUserGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ModelUserDetails>>;
+    public dashboardGetUserGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ModelUserDetails>>;
+    public dashboardGetUserGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // authentication (ApiKeyAuth) required
+        if (this.configuration.apiKeys["Authorization"]) {
+            headers = headers.set('Authorization', this.configuration.apiKeys["Authorization"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        let httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set("Accept", httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json'
+        ];
+
+        return this.httpClient.get<ModelUserDetails>(`${this.basePath}/dashboard/get-user`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * saves a match score
      * 
      * @param request ScoreList
@@ -739,99 +874,6 @@ export class DefaultService {
         ];
 
         return this.httpClient.get<Array<ModelAvailableMatch>>(`${this.basePath}/private/available-match-public`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * find all Classroom
-     * 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public privateClassroomGet(observe?: 'body', reportProgress?: boolean): Observable<Array<ModelClassroom>>;
-    public privateClassroomGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<ModelClassroom>>>;
-    public privateClassroomGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<ModelClassroom>>>;
-    public privateClassroomGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        let headers = this.defaultHeaders;
-
-        // authentication (ApiKeyAuth) required
-        if (this.configuration.apiKeys["Authorization"]) {
-            headers = headers.set('Authorization', this.configuration.apiKeys["Authorization"]);
-        }
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        let httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set("Accept", httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-            'application/json'
-        ];
-
-        return this.httpClient.get<Array<ModelClassroom>>(`${this.basePath}/private/classroom`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * add a Classroom
-     * 
-     * @param request Classroom
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public privateClassroomPost(request: ModelClassroom, observe?: 'body', reportProgress?: boolean): Observable<ModelClassroom>;
-    public privateClassroomPost(request: ModelClassroom, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ModelClassroom>>;
-    public privateClassroomPost(request: ModelClassroom, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ModelClassroom>>;
-    public privateClassroomPost(request: ModelClassroom, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-        if (request === null || request === undefined) {
-            throw new Error('Required parameter request was null or undefined when calling privateClassroomPost.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // authentication (ApiKeyAuth) required
-        if (this.configuration.apiKeys["Authorization"]) {
-            headers = headers.set('Authorization', this.configuration.apiKeys["Authorization"]);
-        }
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        let httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set("Accept", httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-            'application/json'
-        ];
-        let httpContentTypeSelected:string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set("Content-Type", httpContentTypeSelected);
-        }
-
-        return this.httpClient.post<ModelClassroom>(`${this.basePath}/private/classroom`,
-            request,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

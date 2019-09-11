@@ -53,7 +53,7 @@ a.mat-menu-item > mat-icon {
   font-weight: 300;
 }
 
-body, span, div, button {
+.game-container, span, div, button {
   font-family: "Baloo", sans-serif;
 }
 
