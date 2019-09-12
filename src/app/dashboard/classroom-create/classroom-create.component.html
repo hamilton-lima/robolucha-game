@@ -1,3 +1,32 @@
-<p>
-  classroom-create works!
-</p>
+<div style="margin-top:1em;" class="container">
+  <div class="row">
+    <h1 class="col-md-9">Create a new classroom</h1>
+  </div>
+</div>
+<div class="container">
+  <form (submit)="createClassroom($event)">
+    <div class="form-group">
+      <label for="classroomName">Classroom name</label>
+      <input
+        class="form-control col-md-3"
+        type="text"
+        name="classroomName"
+        required
+        minlength="3"
+        maxlength="40"
+      />
+    </div>
+    <button
+      type="submit"
+      class="btn btn-success float-left align-bottom btn-edit"
+    >
+      Save
+    </button>
+    <button
+      routerLink="/classrooms"
+      class="btn btn-secondary float-left align-bottom btn-edit"
+    >
+      Cancel
+    </button>
+  </form>
+</div>

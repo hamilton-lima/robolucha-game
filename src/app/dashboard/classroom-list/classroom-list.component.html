@@ -1,3 +1,19 @@
-<p>
-  classroom-list works!
-</p>
+<div style="margin-top:1em;" class="container">
+  <div class="row">
+      <h1  class="col-md-11" >Classrooms</h1>
+      <button class="btn btn-primary float-right col-md-1" routerLink="../classroom-create">New</button>
+  </div>
+</div>
+<div class="container">
+  <div class="row">
+      <div *ngFor="let classroom of classrooms" class="card classroomCard">
+          <div class="card-body">
+              <h5 class="card-title">{{classroom.name}}</h5>
+              <p class="card-text">Access Code: {{classroom.accessCode}}</p>
+          </div>
+      </div>
+      <div *ngIf="classrooms.length <= 0">
+          <h4>There are no classrooms</h4>
+      </div>
+  </div>
+</div>

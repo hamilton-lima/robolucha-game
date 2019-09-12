@@ -46,6 +46,8 @@ import { MaterialAllComponentsModule } from "./pages/material-all-components-mod
 import { MainDashboardComponent } from "./dashboard/main-dashboard/main-dashboard.component";
 import { LoginActivateDashboard } from "./login.activate.dashboard.service";
 import { DashboardModule } from "./dashboard/dashboard.module";
+import { ClassroomListComponent } from "./dashboard/classroom-list/classroom-list.component";
+import { ClassroomCreateComponent } from "./dashboard/classroom-create/classroom-create.component";
 
 library.add(fas);
 
@@ -103,8 +105,13 @@ const ROUTES: Routes = [
   },
   {
     path: "dashboard",
+    canActivate: [LoginActivateDashboard],
     component: MainDashboardComponent,
-    canActivate: [LoginActivateDashboard]
+    children: [
+      { path: "classrooms", component: ClassroomListComponent },
+      { path: "classroom-create", component: ClassroomCreateComponent },
+      { path: "", redirectTo: "classrooms", pathMatch: "full" }
+    ]
   },
   { path: "**", component: NotFoundComponent }
 ];
