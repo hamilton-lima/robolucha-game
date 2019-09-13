@@ -6,6 +6,7 @@ import { MainDashboardComponent } from './main-dashboard/main-dashboard.componen
 import { RouterModule } from '@angular/router';
 import { ClassroomCardComponent } from './shared/classroom-card/classroom-card.component';
 import { MaterialAllComponentsModule } from '../material-all-components-module';
+import { DashboardHeaderComponent } from './shared/dashboard-header/dashboard-header.component';
 
 @NgModule({
   imports: [
@@ -13,6 +14,6 @@ import { MaterialAllComponentsModule } from '../material-all-components-module';
     RouterModule,
     MaterialAllComponentsModule
   ],
-  declarations: [ClassroomListComponent, ClassroomCreateComponent, MainDashboardComponent, ClassroomCardComponent]
+  declarations: [ClassroomListComponent, ClassroomCreateComponent, MainDashboardComponent, ClassroomCardComponent, DashboardHeaderComponent]
 })
 export class DashboardModule { }

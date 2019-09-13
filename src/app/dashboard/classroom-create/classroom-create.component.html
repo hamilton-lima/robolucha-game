@@ -1,25 +1,33 @@
-<div style="margin-top:1em;" class="container">
-  <div class="row">
-    <h1 class="col-md-9">Create a new classroom</h1>
-  </div>
-</div>
 <div class="container">
-  <form (submit)="createClassroom($event)">
-    <div class="form-group">
-      <label for="classroomName">Classroom name</label>
-      <input
-        class="form-control col-md-3"
-        type="text"
-        name="classroomName"
-        required
-        minlength="3"
-        maxlength="40"
-      />
-    </div>
-    <button type="submit" mat-raised-button>SAVE</button>
 
-    <button routerLink="/dashboard/classrooms" mat-raised-button>
-      CANCEL
-    </button>
-  </form>
+  <div class="row">
+    <div class="col-md-9 pt-4 pb-4">
+      <h1>Create a new classroom</h1>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-9">
+      <form (submit)="createClassroom($event)">
+        <div class="form-group">
+          <label for="classroomName">Classroom name</label>
+          <input
+            class="form-control col-md-3"
+            type="text"
+            name="classroomName"
+            required
+            minlength="3"
+            maxlength="40"
+          />
+        </div>
+        <div>
+            <button type="submit" mat-raised-button>SAVE</button>
+
+            <button class="ml-2" routerLink="/dashboard/classrooms" mat-raised-button>
+              CANCEL
+            </button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
