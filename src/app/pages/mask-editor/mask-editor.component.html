@@ -1,35 +1,30 @@
-<div class="container">
-  <div class="row">
-    <app-header>Customize</app-header>
-  </div>
-  <div class="row">
-    <div class="col-8">
-      <h1>{{ luchador.name }}</h1>
+<app-game-background>
+  <div class="container">
+    <div class="row">
+      <app-header>Customize</app-header>
     </div>
-    <div class="col-4">
-      <button class="btn btn-success align-bottom pull-left" (click)="random()">
-        Random Mask
-      </button>
-      &nbsp;
-      <button
-        *ngIf="dirty"
-        class="btn btn-primary align-bottom"
-        (click)="save()"
-      >
-        Save
-      </button>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-6">
-      <app-mask-editor-detail
-        (onChange)="onUpdate($event)"
-      ></app-mask-editor-detail>
+    <div class="row">
+      <div class="col-8">
+        <h1>{{ luchador.name }}</h1>
+      </div>
+      <div class="col-4 text-right">
+        <button *ngIf="dirty" class="mr-2" (click)="save()" mat-raised-button>
+          SAVE
+        </button>
+        <button (click)="random()" mat-raised-button>RANDOM</button>
+      </div>
     </div>
 
-    <div class="col-6">
-      <app-luchador-preview></app-luchador-preview>
+    <div class="row">
+      <div class="col-6 text-left">
+        <app-mask-editor-detail
+          (onChange)="onUpdate($event)"
+        ></app-mask-editor-detail>
+      </div>
+
+      <div class="col-6 text-right">
+        <app-luchador-preview></app-luchador-preview>
+      </div>
     </div>
   </div>
-</div>
+</app-game-background>
