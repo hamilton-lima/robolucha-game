@@ -6,7 +6,6 @@ import { ModelGameComponent } from "src/app/sdk/model/mainGameComponent";
 @Component({
   selector: "app-main",
   templateUrl: "./main.component.html",
-  encapsulation: ViewEncapsulation.None,
   styleUrls: ["./main.component.css"]
 })
 export class MainComponent implements OnInit {

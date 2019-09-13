@@ -20,6 +20,8 @@ import { MaskEditorDetailComponent } from "./mask-editor/mask-editor-detail/mask
 import { ColorPickerComponent } from "./mask-editor/color-picker/color-picker.component";
 import { ShapePickerComponent } from "./mask-editor/shape-picker/shape-picker.component";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
+import { GameBackgroundComponent } from './shared/game-background/game-background.component';
+import { BigButtonComponent } from './shared/big-button/big-button.component';
 
 @NgModule({
   imports: [
@@ -43,7 +45,9 @@ import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
     LuchadorPreviewComponent,
     MaskEditorDetailComponent,
     ColorPickerComponent,
-    ShapePickerComponent
+    ShapePickerComponent,
+    GameBackgroundComponent,
+    BigButtonComponent
   ],
   exports: [HomeButtonComponent, RoundButtonComponent]
 })

@@ -1,21 +1,37 @@
-<div id="main-container">
-  <div class="top">
-    <div>
-      <h1 id="title">{{ luchador.name }}</h1>
-      <div id="center-image">
-        <img src="/assets/pages/luchador1.png" />
+<app-game-background>
+  <div class="container">
+    <div class="row pt-4">
+      <div class="col-10">
+        <h1 id="title">{{ luchador.name }}</h1>
+      </div>
+      <div class="col-2">
+        <button routerLink="/dashboard" mat-raised-button>DASHBOARD</button>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12">
+        <div id="center-image">
+          <img src="/assets/pages/luchador1.png" />
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12">
+        <app-big-button (click)="customize()">
+          Customize
+        </app-big-button>
+        <app-big-button (click)="publicArena()">
+          Public Arenas
+        </app-big-button>
+        <app-big-button (click)="classroomArena()">
+          Classroom Arenas
+        </app-big-button>
+        <app-big-button (click)="help()">
+          Help
+        </app-big-button>
       </div>
     </div>
   </div>
-
-  <div class="bottom">
-    <div>
-      <button (click)="customize()" class="big-button round" mat-raised-button>Customize</button>
-      <button (click)="publicArena()" class="big-button round" mat-raised-button>Public Arenas</button>
-      <button (click)="classroomArena()" class="big-button round" mat-raised-button>
-        Classroom Arenas
-      </button>
-      <button (click)="help()" class="big-button round" mat-raised-button>Help</button>
-    </div>
-  </div>
-</div>
+</app-game-background>
