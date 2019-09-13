@@ -1,18 +1,20 @@
-<div class="container game-container">
-  <div class="row">
-    <app-header>Public arenas</app-header>
-  </div>
-
-  <div class="row">
-    <div
-      class="col-sm-12 col-md-6 col-lg-4 game-card"
-      *ngFor="let match of matches"
-    >
-      <app-game-card [match]="match" (onplay)="play($event)"></app-game-card>
+<app-game-background>
+  <div class="container">
+    <div class="row">
+      <app-header>Public arenas</app-header>
     </div>
 
-    <div *ngIf="matches.length <= 0">
-      <h4>There are no matches available</h4>
+    <div class="row">
+      <app-game-card
+        class="col-sm-12 col-md-6 col-lg-4 mb-4"
+        *ngFor="let match of matches"
+        [match]="match"
+        (onplay)="play($event)"
+      ></app-game-card>
+
+      <div *ngIf="matches.length <= 0">
+        <h4>There are no matches available</h4>
+      </div>
     </div>
   </div>
-</div>
+</app-game-background>

@@ -7,6 +7,9 @@ button,
 .mat-icon-button,
 .mat-mini-fab,
 .mat-raised-button,
-.mat-stroked-button {
-  font-family: "Baloo", sans-serif ;
+.mat-stroked-button,
+.mat-card-content,
+.mat-card-header .mat-card-title,
+.mat-card-subtitle {
+  font-family: "Baloo", sans-serif;
 }

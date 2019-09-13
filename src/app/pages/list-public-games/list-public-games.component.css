@@ -1,8 +1,2 @@
-.game-card {
-  margin-bottom: 20px;
-}
+@import 'src/styles/game.css';
 
-.game-toollbar {
-    margin-top: 5px;
-    margin-bottom: 10px;
-}
