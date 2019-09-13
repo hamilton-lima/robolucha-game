@@ -8,7 +8,7 @@
         <h1>{{ luchador.name }}</h1>
       </div>
       <div class="col-4 text-right">
-        <button *ngIf="dirty" class="mr-2" (click)="save()" mat-raised-button>
+        <button color="accent" *ngIf="dirty" class="mr-2" (click)="save()" mat-raised-button>
           SAVE
         </button>
         <button (click)="random()" mat-raised-button>RANDOM</button>
