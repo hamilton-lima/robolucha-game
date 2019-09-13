@@ -1,11 +1,7 @@
+@import 'src/styles/game.css';
+
 #background {
   height: 100vh;
   width: 100vw;
   background-image: url("/assets/pages/email-pattern.png");
-}
-
-span,
-div,
-button {
-  font-family: "Baloo", sans-serif;
 }
