@@ -1,12 +1,5 @@
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
-html,
-body {
-  height: 100%;
-  background-image: url("/assets/pages/email-pattern.png");
-  width: 100%;
-}
-
 /* https://dev.materialdesignicons.com/getting-started/angular */
 
 button.mat-menu-item {
@@ -53,10 +46,20 @@ a.mat-menu-item > mat-icon {
   font-weight: 300;
 }
 
-.game-container, span, div, button {
-  font-family: "Baloo", sans-serif;
+@font-face {
+  font-family: "Ubuntu";
+  src: url(/assets/fonts/ubuntu-regular.ttf) format("truetype");
+  font-weight: 300;
 }
 
-.ace_editor,.ace_editor * {
-  font-family: Monaco,Menlo,"Ubuntu Mono",Consolas,source-code-pro,monospace;
-} 
+.ace_editor,
+.ace_editor * {
+  font-family: Monaco, Menlo, "Ubuntu Mono", Consolas, source-code-pro,
+    monospace;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+}

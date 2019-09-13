@@ -42,7 +42,7 @@ import { PagesModule } from "./pages/pages.module";
 import { ListPublicGamesComponent } from "./pages/list-public-games/list-public-games.component";
 import { ListClassroomGamesComponent } from "./pages/list-classroom-games/list-classroom-games.component";
 import { MaskEditorComponent } from "./pages/mask-editor/mask-editor.component";
-import { MaterialAllComponentsModule } from "./pages/material-all-components-module";
+import { MaterialAllComponentsModule } from "./material-all-components-module";
 import { MainDashboardComponent } from "./dashboard/main-dashboard/main-dashboard.component";
 import { LoginActivateDashboard } from "./login.activate.dashboard.service";
 import { DashboardModule } from "./dashboard/dashboard.module";

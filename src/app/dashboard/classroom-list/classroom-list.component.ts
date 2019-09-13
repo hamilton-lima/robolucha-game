@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { DefaultService } from "src/app/sdk";
 import { ModelClassroom } from "src/app/sdk/model/modelClassroom";
+import { Router } from "@angular/router";
 
 
 @Component({
@@ -9,7 +10,7 @@ import { ModelClassroom } from "src/app/sdk/model/modelClassroom";
   styleUrls: ["./classroom-list.component.scss"]
 })
 export class ClassroomListComponent implements OnInit {
-  constructor(private api: DefaultService) {}
+  constructor(private api: DefaultService, private router: Router) {}
 
   classrooms: ModelClassroom[] = [];
 
@@ -21,5 +22,9 @@ export class ClassroomListComponent implements OnInit {
     this.api.dashboardClassroomGet().subscribe(response => {
       this.classrooms = response;
     });
+  }
+
+  create(){
+    this.router.navigate(["/dashboard/classroom-create"])
   }
 }

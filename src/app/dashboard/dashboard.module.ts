@@ -4,12 +4,15 @@ import { ClassroomListComponent } from './classroom-list/classroom-list.componen
 import { ClassroomCreateComponent } from './classroom-create/classroom-create.component';
 import { MainDashboardComponent } from './main-dashboard/main-dashboard.component';
 import { RouterModule } from '@angular/router';
+import { ClassroomCardComponent } from './shared/classroom-card/classroom-card.component';
+import { MaterialAllComponentsModule } from '../material-all-components-module';
 
 @NgModule({
   imports: [
     CommonModule,
-    RouterModule
+    RouterModule,
+    MaterialAllComponentsModule
   ],
-  declarations: [ClassroomListComponent, ClassroomCreateComponent, MainDashboardComponent]
+  declarations: [ClassroomListComponent, ClassroomCreateComponent, MainDashboardComponent, ClassroomCardComponent]
 })
 export class DashboardModule { }
