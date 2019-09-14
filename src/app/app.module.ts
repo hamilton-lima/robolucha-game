@@ -143,7 +143,7 @@ export function apiConfigFactory(): Configuration {
     WatchPageComponent,
     HomePageComponent,
     MatchCardComponent,
-    AuthModalMessageComponent
+    AuthModalMessageComponent,
   ],
   imports: [
     BrowserModule,

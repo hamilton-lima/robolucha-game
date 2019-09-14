@@ -15,5 +15,6 @@ import { ModelUser } from './modelUser';
 
 export interface ModelUserDetails {
     classrooms?: Array<ModelClassroom>;
+    roles?: Array<string>;
     user?: ModelUser;
 }

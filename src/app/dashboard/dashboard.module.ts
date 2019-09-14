@@ -7,12 +7,14 @@ import { RouterModule } from '@angular/router';
 import { ClassroomCardComponent } from './shared/classroom-card/classroom-card.component';
 import { MaterialAllComponentsModule } from '../material-all-components-module';
 import { DashboardHeaderComponent } from './shared/dashboard-header/dashboard-header.component';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   imports: [
     CommonModule,
     RouterModule,
-    MaterialAllComponentsModule
+    MaterialAllComponentsModule,
+    SharedModule
   ],
   declarations: [ClassroomListComponent, ClassroomCreateComponent, MainDashboardComponent, ClassroomCardComponent, DashboardHeaderComponent]
 })

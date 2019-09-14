@@ -4,9 +4,11 @@
       <div class="col-10">
         <h1 id="title">{{ luchador.name }}</h1>
       </div>
-      <div class="col-2">
-        <button routerLink="/dashboard" mat-raised-button>DASHBOARD</button>
-      </div>
+      <app-role-guard role="dashboard_user">
+        <div class="col-2">
+          <button routerLink="/dashboard" mat-raised-button>DASHBOARD</button>
+        </div>
+      </app-role-guard>
     </div>
 
     <div class="row">

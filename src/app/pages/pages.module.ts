@@ -22,6 +22,7 @@ import { ShapePickerComponent } from "./mask-editor/shape-picker/shape-picker.co
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { GameBackgroundComponent } from './shared/game-background/game-background.component';
 import { BigButtonComponent } from './shared/big-button/big-button.component';
+import { SharedModule } from "../shared/shared.module";
 
 @NgModule({
   imports: [
@@ -30,7 +31,8 @@ import { BigButtonComponent } from './shared/big-button/big-button.component';
     FormsModule,
     RouterModule,
     MaterialAllComponentsModule,
-    NgbModule
+    NgbModule,
+    SharedModule
   ],
   declarations: [
     MainComponent,
