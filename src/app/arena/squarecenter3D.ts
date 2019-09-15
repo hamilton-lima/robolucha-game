@@ -6,11 +6,11 @@ export class SquareCenter3D {
 
   scene: BABYLON.Scene;
   material: BABYLON.StandardMaterial;
-  loading: Promise<BABYLON.AbstractMesh>;
+  loading: Promise<BABYLON.AbstractMesh[]>;
 
   public constructor(scene: BABYLON.Scene) {
     this.scene = scene;
-    this.loading = MeshLoader.load(
+    this.loading = MeshLoader.loadAllMeshes(
       scene,
       "dummy/3DTile_squareCenter_land_Dummytest01.babylon",
       "3DTile_squareCenter_land",

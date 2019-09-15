@@ -209,9 +209,10 @@ export class SceneBuilder {
       const groundWidth = this.convertPosition(this.gameDefinition.arenaWidth);
       const square = new SquareCenter3D(this.scene);
 
-      Promise.all([square.loading])
-      .then(meshes => {
-        console.log('square meshes', meshes);
+      square.loading.then(meshes => {
+        meshes.forEach( mesh =>{
+          console.log('square > ', mesh.name, mesh.position );
+        });
         resolve();
       });
 

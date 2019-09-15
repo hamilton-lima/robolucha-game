@@ -19,14 +19,13 @@ export class MeshLoader {
     return new Promise<BABYLON.AbstractMesh>((resolve, reject) => {
       this.loadAllMeshes(scene, fileName, meshName, visible).then(
         (meshes: BABYLON.AbstractMesh[]) => {
-          // // console.log('MeshLoader', fileName, meshName, value);
           let result: BABYLON.AbstractMesh;
           meshes.forEach(mesh => {
-            console.log("mesh", mesh.name);
             if (mesh.name === meshName) {
               result = mesh;
             }
           });
+
           if (result) {
             result.isVisible = visible;
             resolve(result);
