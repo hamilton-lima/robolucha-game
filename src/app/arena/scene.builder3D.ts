@@ -7,6 +7,7 @@ import { Wall3D } from "./wall3D";
 import { Helper3D } from "./helper3d";
 import { GameDefinition } from "../watch-match/watch-match.model";
 import { SharedConstants } from "./shared.constants";
+import { SquareCenter3D } from "./squarecenter3D";
 
 export class SceneBuilder {
   ground: BABYLON.Mesh;
@@ -206,18 +207,14 @@ export class SceneBuilder {
   addExtras() {
     return new Promise<void>((resolve, reject) => {
       const groundWidth = this.convertPosition(this.gameDefinition.arenaWidth);
-      const single = new Single3D(this.scene);
-      const square = new Square3D(this.scene);
+      const square = new SquareCenter3D(this.scene);
 
-      const randomizer = new Random3D(single.loading);
-      const randomizerSquare = new Random3D(square.loading);
-
-      Promise.all([
-        randomizer.add(-6, groundWidth, -6, -10, 40),
-        randomizerSquare.add(-6, groundWidth, -6, -10, 20)
-      ]).then(() => {
+      Promise.all([square.loading])
+      .then(meshes => {
+        console.log('square meshes', meshes);
         resolve();
       });
+
     });
   }
 
