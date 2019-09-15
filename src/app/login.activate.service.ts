@@ -9,14 +9,17 @@ import {
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 
-@Injectable()
-export class LoginActivate implements CanActivate {
-  constructor(private authService: AuthService, private router: Router) {}
+export abstract class BaseActivate implements CanActivate {
+  constructor(private router: Router) {}
+
+  abstract getAuthService();
+
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean> | Promise<boolean> | boolean {
-    return this.authService.isLoggedIn().pipe(
+    
+    return this.getAuthService().pipe(
       map(user => {
         console.log('user', user);
         const result = user ? true : false;
@@ -26,5 +29,27 @@ export class LoginActivate implements CanActivate {
         return result;
       })
     );
+  }
+}
+
+@Injectable()
+export class LoginActivate extends BaseActivate implements CanActivate {
+  constructor(private authService: AuthService, router: Router){
+    super(router);
+  }  
+
+  getAuthService(){
+    return this.authService.isLoggedIn();
+  }
+}
+
+@Injectable()
+export class LoginDashboardActivate extends BaseActivate implements CanActivate {
+  constructor(private authService: AuthService, router: Router){
+    super(router);
+  }  
+
+  getAuthService(){
+    return this.authService.isLoggedInDashboard();
   }
 }

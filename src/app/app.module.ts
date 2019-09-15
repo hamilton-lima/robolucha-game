@@ -5,7 +5,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 import { AppComponent } from "./app.component";
 import { BodyComponent } from "./body/body.component";
-import { LoginActivate } from "./login.activate.service";
+import { LoginActivate, LoginDashboardActivate } from "./login.activate.service";
 import { NotFoundComponent } from "./not-found/not-found.component";
 import { AuthService } from "./auth.service";
 import { SetupComponent } from "./setup/setup.component";
@@ -44,7 +44,6 @@ import { ListClassroomGamesComponent } from "./pages/list-classroom-games/list-c
 import { MaskEditorComponent } from "./pages/mask-editor/mask-editor.component";
 import { MaterialAllComponentsModule } from "./material-all-components-module";
 import { MainDashboardComponent } from "./dashboard/main-dashboard/main-dashboard.component";
-import { LoginActivateDashboard } from "./login.activate.dashboard.service";
 import { DashboardModule } from "./dashboard/dashboard.module";
 import { ClassroomListComponent } from "./dashboard/classroom-list/classroom-list.component";
 import { ClassroomCreateComponent } from "./dashboard/classroom-create/classroom-create.component";
@@ -105,7 +104,7 @@ const ROUTES: Routes = [
   },
   {
     path: "dashboard",
-    canActivate: [LoginActivateDashboard],
+    canActivate: [LoginDashboardActivate],
     component: MainDashboardComponent,
     children: [
       { path: "classrooms", component: ClassroomListComponent },
@@ -162,7 +161,7 @@ export function apiConfigFactory(): Configuration {
   ],
   providers: [
     LoginActivate,
-    LoginActivateDashboard,
+    LoginDashboardActivate,
     AuthService,
     CanDeactivateGuard,
     { provide: HTTP_INTERCEPTORS, useClass: HttpConfigInterceptor, multi: true }

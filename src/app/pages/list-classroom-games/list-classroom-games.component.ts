@@ -31,7 +31,6 @@ export class ListClassroomGamesComponent implements OnInit {
 
   ngOnInit() {
     this.authService.isLoggedIn().subscribe((userDetails: ModelUserDetails) => {
-      // // console.log("user", userDetails);
       this.classrooms = userDetails.classrooms;
       this.updateTitle();
       this.loadMatches();
