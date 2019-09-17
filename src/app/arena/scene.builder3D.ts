@@ -7,7 +7,7 @@ import { Wall3D } from "./wall3D";
 import { Helper3D } from "./helper3d";
 import { GameDefinition } from "../watch-match/watch-match.model";
 import { SharedConstants } from "./shared.constants";
-import { SquareCenter3D } from "./squarecenter3D";
+import { TilesLoader } from "./tiles.loader";
 
 export class SceneBuilder {
   ground: BABYLON.Mesh;
@@ -113,8 +113,7 @@ export class SceneBuilder {
       const square = new Square3D(this.scene);
       const wall = new Single3D(this.scene);
 
-      Promise.all([wall.loading, square.loading])
-      .then(meshes => {
+      Promise.all([wall.loading, square.loading]).then(meshes => {
         const wall = meshes[0];
         const square = meshes[1];
 
@@ -123,68 +122,68 @@ export class SceneBuilder {
 
         // bottom
         for (let x = 0; x < width; x += meshWidth) {
-            const iTop = wall.clone("bottom-wall-" + x , null);
-            iTop.position.x = x;
-            iTop.position.y = 0;
-            iTop.position.z = 0;
-            iTop.isVisible = true;
-        }  
+          const iTop = wall.clone("bottom-wall-" + x, null);
+          iTop.position.x = x;
+          iTop.position.y = 0;
+          iTop.position.z = 0;
+          iTop.isVisible = true;
+        }
 
         // top
         for (let x = 0; x < width; x += meshWidth) {
-            const iTop = wall.clone("top-wall-" + x , null);
-            iTop.position.x = x;
-            iTop.position.y = 0;
-            iTop.position.z = height + meshHeight;
-            iTop.isVisible = true;
-        }  
+          const iTop = wall.clone("top-wall-" + x, null);
+          iTop.position.x = x;
+          iTop.position.y = 0;
+          iTop.position.z = height + meshHeight;
+          iTop.isVisible = true;
+        }
 
         // left
         let lastZ = 0;
         for (let z = 0; z <= height + meshHeight; z += meshHeight) {
-            const iTop = wall.clone("left-wall-" + z , null);
-            iTop.position.x = -meshWidth;
-            iTop.position.y = 0;
-            iTop.position.z = z;
-            iTop.isVisible = true;
+          const iTop = wall.clone("left-wall-" + z, null);
+          iTop.position.x = -meshWidth;
+          iTop.position.y = 0;
+          iTop.position.z = z;
+          iTop.isVisible = true;
 
-            const iTop2 = wall.clone("left2-wall-" + z , null);
-            iTop2.position.x = - 2*meshWidth;
-            iTop2.position.y = 0;
-            iTop2.position.z = z;
-            iTop2.isVisible = true;
+          const iTop2 = wall.clone("left2-wall-" + z, null);
+          iTop2.position.x = -2 * meshWidth;
+          iTop2.position.y = 0;
+          iTop2.position.z = z;
+          iTop2.isVisible = true;
 
-            lastZ = z;
-        }  
+          lastZ = z;
+        }
 
         const topLeft = wall.clone("top-left-wall", null);
-        topLeft.position.x = - meshWidth;
+        topLeft.position.x = -meshWidth;
         topLeft.position.y = 0;
         topLeft.position.z = lastZ + meshHeight;
         topLeft.isVisible = true;
 
         const topLeft2 = wall.clone("top-left-wall", null);
-        topLeft2.position.x = - 2 *meshWidth;
+        topLeft2.position.x = -2 * meshWidth;
         topLeft2.position.y = 0;
         topLeft2.position.z = lastZ + meshHeight;
         topLeft2.isVisible = true;
 
         // right
         for (let z = 0; z <= height + meshHeight; z += meshHeight) {
-            const iTop = wall.clone("left-wall-" + z , null);
-            iTop.position.x = width;
-            iTop.position.y = 0;
-            iTop.position.z = z;
-            iTop.isVisible = true;
+          const iTop = wall.clone("left-wall-" + z, null);
+          iTop.position.x = width;
+          iTop.position.y = 0;
+          iTop.position.z = z;
+          iTop.isVisible = true;
 
-            const iTop2 = wall.clone("left2-wall-" + z , null);
-            iTop2.position.x = width + meshWidth;
-            iTop2.position.y = 0;
-            iTop2.position.z = z;
-            iTop2.isVisible = true;
+          const iTop2 = wall.clone("left2-wall-" + z, null);
+          iTop2.position.x = width + meshWidth;
+          iTop2.position.y = 0;
+          iTop2.position.z = z;
+          iTop2.isVisible = true;
 
-            lastZ = z;
-        }  
+          lastZ = z;
+        }
 
         const topRight = wall.clone("top-left-wall", null);
         topRight.position.x = width;
@@ -203,19 +202,31 @@ export class SceneBuilder {
     });
   }
 
-
   addExtras() {
     return new Promise<void>((resolve, reject) => {
       const groundWidth = this.convertPosition(this.gameDefinition.arenaWidth);
-      const square = new SquareCenter3D(this.scene);
+      const tiles = new TilesLoader(this.scene);
 
-      square.loading.then(meshes => {
-        meshes.forEach( mesh =>{
-          console.log('square > ', mesh.name, mesh.position );
-        });
+      tiles.loading.then(loaded => {
+        console.log('>>> loaded', loaded);
         resolve();
       });
 
+      // .then(meshes => {
+      //   meshes.forEach( mesh =>{
+      //     console.log('square > ', mesh.name, mesh.position, mesh.getBoundingInfo() );
+      //     const dimensions = mesh.getBoundingInfo().boundingBox.extendSize;
+
+      //     // this height to hide the radar
+      //     mesh.position.y = 0.2
+
+      //     // when calculating the new positions use the same shift to the
+      //     // marker meshes
+      //     mesh.position.x = - dimensions.x;
+      //     mesh.position.z = dimensions.z;
+      //   });
+      //   resolve();
+      // });
     });
   }
 

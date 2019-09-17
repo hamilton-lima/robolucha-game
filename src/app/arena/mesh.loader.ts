@@ -52,6 +52,9 @@ export class MeshLoader {
           skeletons: BABYLON.Skeleton[];
           animationGroups: BABYLON.AnimationGroup[];
         }) => {
+          value.meshes.forEach(mesh => {
+            mesh.isVisible = visible;
+          });
           resolve(value.meshes);
         }
       );
