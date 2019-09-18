@@ -89,8 +89,8 @@ export class TilesLoader {
     const radius = center.getBoundingInfo().boundingSphere.radius;
     const circunference = radius * 2;
     return <BABYLON.Vector3>{
-      x: 30,
-      z: 30
+      x: 10,
+      z: 10
     };
     // const dimensions = center.getBoundingInfo().boundingBox.extendSize;
     // return dimensions;

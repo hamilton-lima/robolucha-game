@@ -9,7 +9,7 @@ export class Box3D {
     
     this.ball = BABYLON.MeshBuilder.CreateBox(
       "box",
-      { width: 10, height: 22.5 },
+      { width: 10, height: 10 },
       scene
     );
 
@@ -17,7 +17,7 @@ export class Box3D {
     boxMaterial.diffuseColor = BABYLON.Color3.FromHexString("#FF0000");
     this.ball.material = boxMaterial;
     this.ball.position.x = 5;
-    this.ball.position.z = 11.25;
+    this.ball.position.z = 5;
     this.ball.isVisible = true;
     this.ball.rotation.x = Helper3D.angle2radian(90);
   }

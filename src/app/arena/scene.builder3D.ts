@@ -11,6 +11,12 @@ import { TilesLoader } from "./tiles.loader";
 import { count } from "rxjs/operators";
 import { Box3D } from "./box3d";
 
+export interface ICenterTilesInfo {
+  start: BABYLON.Vector3;
+  centerTilesHorizontal: number;
+  centerTilesVertical: number;
+}
+
 export class SceneBuilder {
   ground: BABYLON.Mesh;
 
@@ -215,70 +221,62 @@ export class SceneBuilder {
         this.positionCenterTiles(tiles);
         resolve();
       });
-
-      // .then(meshes => {
-      //   meshes.forEach( mesh =>{
-      //     console.log('square > ', mesh.name, mesh.position, mesh.getBoundingInfo() );
-      //     const dimensions = mesh.getBoundingInfo().boundingBox.extendSize;
-
-      //     // this height to hide the radar
-      //     mesh.position.y = 0.2
-
-      //     // when calculating the new positions use the same shift to the
-      //     // marker meshes
-      //     mesh.position.x = - dimensions.x;
-      //     mesh.position.z = dimensions.z;
-      //   });
-      //   resolve();
-      // });
     });
   }
-  positionCenterTiles(tiles: TilesLoader) {
-    const dimension = tiles.getTileDimension();
+
+  getCenterTileInfo(dimension: BABYLON.Vector3): ICenterTilesInfo {
     const arenaWidth = this.convertPosition(this.gameDefinition.arenaWidth);
     const arenaHeight = this.convertPosition(this.gameDefinition.arenaHeight);
 
     console.log("arena dimensions converted to 3D", arenaWidth, arenaHeight);
     console.log("dimensions", dimension);
 
-    const countWidth = Math.floor(arenaWidth / dimension.x) + 1;
-    const countHeight = Math.floor(arenaHeight / dimension.z) + 1;
-    console.log("count", countWidth, countHeight);
+    const centerTilesHorizontal = Math.floor(arenaWidth / dimension.x) + 1;
+    const centerTilesVertical = Math.floor(arenaHeight / dimension.z) + 1;
+    console.log("count", centerTilesHorizontal, centerTilesVertical);
 
-    const x = ((countWidth * dimension.x) - arenaWidth) / 2;
-    const z = ((countHeight * dimension.z) - arenaHeight) / 2;
+    const xShift = (centerTilesHorizontal * dimension.x - arenaWidth) / 2;
+    const zShift = (centerTilesVertical * dimension.z - arenaHeight) / 2;
 
     const alignX = dimension.x / 2;
     const alignZ = dimension.z / 2;
 
     let start = <BABYLON.Vector3>{
-      x: alignX - x,
-      z: alignZ - z,
+      x: alignX - xShift,
+      z: alignZ - zShift,
       y: 0.2
     };
 
+    let result = <ICenterTilesInfo>{
+      start: start,
+      centerTilesHorizontal: centerTilesHorizontal,
+      centerTilesVertical: centerTilesVertical
+    };
+
+    return result;
+  }
+
+  positionCenterTiles(tiles: TilesLoader) {
+    const dimension = tiles.getTileDimension();
+    const centerTileInfo = this.getCenterTileInfo(dimension);
     const center = tiles.getMesh("center");
-    const iTop = center.clone("center-start-", null);
-    iTop.position.x = start.x;
-    iTop.position.y = start.y;
-    iTop.position.z = start.z;
-    iTop.isVisible = true;
+    
+    let x = centerTileInfo.start.x;
+    const y = centerTileInfo.start.y;
 
-    // for (let z = 0; z <= height + meshHeight; z += meshHeight) {
-    //   const iTop = wall.clone("left-wall-" + z, null);
-    //   iTop.position.x = width;
-    //   iTop.position.y = 0;
-    //   iTop.position.z = z;
-    //   iTop.isVisible = true;
+    for (let xn = 0; xn <= centerTileInfo.centerTilesHorizontal; xn++) {
+      let z = centerTileInfo.start.z;
 
-    //   const iTop2 = wall.clone("left2-wall-" + z, null);
-    //   iTop2.position.x = width + meshWidth;
-    //   iTop2.position.y = 0;
-    //   iTop2.position.z = z;
-    //   iTop2.isVisible = true;
-
-    //   lastZ = z;
-    // }
+      for (let zn = 0; zn <= centerTileInfo.centerTilesVertical; zn++) {
+        let clonedCenterTile = center.clone("center-clone-", null);
+        clonedCenterTile.position.x = x;
+        clonedCenterTile.position.y = y;
+        clonedCenterTile.position.z = z;
+        clonedCenterTile.isVisible = true;
+        z = z + dimension.z;
+      }
+      x = x + dimension.x;
+    }
   }
 
   convertPosition(n: number) {
