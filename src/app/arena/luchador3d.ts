@@ -96,7 +96,7 @@ export class Luchador3D extends Base3D {
     );
     this.radarDisc.parent = this.turret;
     this.radarDisc.material = this.radarMaterial;
-    this.radarDisc.position.y = -0.1;
+    this.radarDisc.position.y = 0.1;
     this.radarDisc.rotation.x = Helper3D.angle2radian(90);
     this.radarDisc.rotation.y = Helper3D.angle2radian(radarAngle / 2);
     // this.radarDisc.renderingGroupId = 1; //this is for testing and should be removed.

@@ -1,4 +1,5 @@
 import * as BABYLON from "babylonjs";
+import { Helper3D } from "./helper3d";
 
 // Create a red box to be used as reference in the arena
 export class Box3D {
@@ -8,12 +9,16 @@ export class Box3D {
     
     this.ball = BABYLON.MeshBuilder.CreateBox(
       "box",
-      { width: 1, height: 1 },
+      { width: 10, height: 22.5 },
       scene
     );
 
     let boxMaterial = new BABYLON.StandardMaterial("material", scene);
     boxMaterial.diffuseColor = BABYLON.Color3.FromHexString("#FF0000");
     this.ball.material = boxMaterial;
+    this.ball.position.x = 5;
+    this.ball.position.z = 11.25;
+    this.ball.isVisible = true;
+    this.ball.rotation.x = Helper3D.angle2radian(90);
   }
 }

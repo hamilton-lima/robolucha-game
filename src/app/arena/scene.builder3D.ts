@@ -8,6 +8,8 @@ import { Helper3D } from "./helper3d";
 import { GameDefinition } from "../watch-match/watch-match.model";
 import { SharedConstants } from "./shared.constants";
 import { TilesLoader } from "./tiles.loader";
+import { count } from "rxjs/operators";
+import { Box3D } from "./box3d";
 
 export class SceneBuilder {
   ground: BABYLON.Mesh;
@@ -20,7 +22,7 @@ export class SceneBuilder {
   // TODO: load lights from camera_and_light.babylon
   build() {
     return Promise.all([
-      this.createBaseLayer(),
+      // this.createBaseLayer(),
       this.composeGround(),
       this.composeWalls(),
       this.addExtras()
@@ -70,6 +72,8 @@ export class SceneBuilder {
   }
 
   composeGround() {
+    const box = new Box3D(this.scene);
+
     return new Promise<void>((resolve, reject) => {
       const groundWidth = this.convertPosition(this.gameDefinition.arenaWidth);
       const groundHeight = this.convertPosition(
@@ -205,10 +209,10 @@ export class SceneBuilder {
   addExtras() {
     return new Promise<void>((resolve, reject) => {
       const groundWidth = this.convertPosition(this.gameDefinition.arenaWidth);
-      const tiles = new TilesLoader(this.scene);
+      const tiles: TilesLoader = new TilesLoader(this.scene);
 
       tiles.loading.then(loaded => {
-        console.log('>>> loaded', loaded);
+        this.positionCenterTiles(tiles);
         resolve();
       });
 
@@ -228,6 +232,53 @@ export class SceneBuilder {
       //   resolve();
       // });
     });
+  }
+  positionCenterTiles(tiles: TilesLoader) {
+    const dimension = tiles.getTileDimension();
+    const arenaWidth = this.convertPosition(this.gameDefinition.arenaWidth);
+    const arenaHeight = this.convertPosition(this.gameDefinition.arenaHeight);
+
+    console.log("arena dimensions converted to 3D", arenaWidth, arenaHeight);
+    console.log("dimensions", dimension);
+
+    const countWidth = Math.floor(arenaWidth / dimension.x) + 1;
+    const countHeight = Math.floor(arenaHeight / dimension.z) + 1;
+    console.log("count", countWidth, countHeight);
+
+    const x = ((countWidth * dimension.x) - arenaWidth) / 2;
+    const z = ((countHeight * dimension.z) - arenaHeight) / 2;
+
+    const alignX = dimension.x / 2;
+    const alignZ = dimension.z / 2;
+
+    let start = <BABYLON.Vector3>{
+      x: alignX - x,
+      z: alignZ - z,
+      y: 0.2
+    };
+
+    const center = tiles.getMesh("center");
+    const iTop = center.clone("center-start-", null);
+    iTop.position.x = start.x;
+    iTop.position.y = start.y;
+    iTop.position.z = start.z;
+    iTop.isVisible = true;
+
+    // for (let z = 0; z <= height + meshHeight; z += meshHeight) {
+    //   const iTop = wall.clone("left-wall-" + z, null);
+    //   iTop.position.x = width;
+    //   iTop.position.y = 0;
+    //   iTop.position.z = z;
+    //   iTop.isVisible = true;
+
+    //   const iTop2 = wall.clone("left2-wall-" + z, null);
+    //   iTop2.position.x = width + meshWidth;
+    //   iTop2.position.y = 0;
+    //   iTop2.position.z = z;
+    //   iTop2.isVisible = true;
+
+    //   lastZ = z;
+    // }
   }
 
   convertPosition(n: number) {
