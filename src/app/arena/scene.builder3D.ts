@@ -223,6 +223,7 @@ export class SceneBuilder {
         this.positionCenterTiles(dimension, centerTileInfo, center);
         this.addCorners(tiles, centerTileInfo, dimension);
         this.addHorizontalTiles(tiles, centerTileInfo, dimension);
+        this.addVerticalTiles(tiles, centerTileInfo, dimension);
         resolve();
       });
     });
@@ -232,7 +233,7 @@ export class SceneBuilder {
     tiles: TilesLoader,
     info: ICenterTilesInfo,
     tileDimension: BABYLON.Vector3
-    ) {
+  ) {
     const north = tiles.getMesh("north");
     const south = tiles.getMesh("south");
 
@@ -255,6 +256,36 @@ export class SceneBuilder {
       southCloned.isVisible = true;
 
       x = x + tileDimension.x;
+    }
+  }
+
+  addVerticalTiles(
+    tiles: TilesLoader,
+    info: ICenterTilesInfo,
+    tileDimension: BABYLON.Vector3
+  ) {
+    const west = tiles.getMesh("west");
+    const east = tiles.getMesh("east");
+
+    const x = info.start.x - tileDimension.x;
+    const xEast = info.start.x + info.centerTilesHorizontal * tileDimension.x;
+    const y = info.start.y;
+    let z = info.start.z;
+
+    for (let zn = 0; zn < info.centerTilesVertical; zn++) {
+      let westCloned = west.clone("west-clone-", null);
+      westCloned.position.x = x;
+      westCloned.position.y = y;
+      westCloned.position.z = z;
+      westCloned.isVisible = true;
+
+      let eastCloned = east.clone("east-clone-", null);
+      eastCloned.position.x = xEast;
+      eastCloned.position.y = y;
+      eastCloned.position.z = z;
+      eastCloned.isVisible = true;
+
+      z = z + tileDimension.z;
     }
   }
 
