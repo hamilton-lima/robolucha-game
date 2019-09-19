@@ -222,9 +222,40 @@ export class SceneBuilder {
 
         this.positionCenterTiles(dimension, centerTileInfo, center);
         this.addCorners(tiles, centerTileInfo, dimension);
+        this.addHorizontalTiles(tiles, centerTileInfo, dimension);
         resolve();
       });
     });
+  }
+
+  addHorizontalTiles(
+    tiles: TilesLoader,
+    info: ICenterTilesInfo,
+    tileDimension: BABYLON.Vector3
+    ) {
+    const north = tiles.getMesh("north");
+    const south = tiles.getMesh("south");
+
+    let x = info.start.x;
+    const y = info.start.y;
+    const z = info.start.z - tileDimension.z;
+    const zTop = info.start.z + info.centerTilesVertical * tileDimension.z;
+
+    for (let xn = 0; xn < info.centerTilesHorizontal; xn++) {
+      let northCloned = north.clone("north-clone-", null);
+      northCloned.position.x = x;
+      northCloned.position.y = y;
+      northCloned.position.z = zTop;
+      northCloned.isVisible = true;
+
+      let southCloned = south.clone("south-clone-", null);
+      southCloned.position.x = x;
+      southCloned.position.y = y;
+      southCloned.position.z = z;
+      southCloned.isVisible = true;
+
+      x = x + tileDimension.x;
+    }
   }
 
   addCorners(
@@ -254,7 +285,8 @@ export class SceneBuilder {
     northEast.isVisible = true;
 
     const southEast = tiles.getMesh("south-east");
-    southEast.position.x = info.start.x + info.centerTilesHorizontal * tileDimension.x;
+    southEast.position.x =
+      info.start.x + info.centerTilesHorizontal * tileDimension.x;
     southEast.position.y = info.start.y;
     southEast.position.z = info.start.z - tileDimension.z;
     southEast.isVisible = true;

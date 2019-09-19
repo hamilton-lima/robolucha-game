@@ -80,21 +80,16 @@ export class TilesLoader {
     this.loading = Promise.all(promises);
   }
 
-  // var vectorsWorld = player.getBoundingInfo().boundingBox.vectorsWorld;
-  // summits of the bounding boxvar d = vectorsWorld[1].subtract(vectorsWorld[0]).length; // distance between summit 0 and summit 1
   getTileDimension(): BABYLON.Vector3 {
-    let center = this.getMesh("center");
+    return this.getTileDimensionByTileName("center");
+  }
+
+  getTileDimensionByTileName(name:string): BABYLON.Vector3 {
+    let center = this.getMesh(name);
     console.log("center", center.getBoundingInfo());
     const box = center.getBoundingInfo().boundingBox;
     const size = box.maximum.subtract(box.minimum);
     return size;
-    // const circunference = radius * 2;
-    // return <BABYLON.Vector3>{
-    //   x: 10,
-    //   z: 10
-    // };
-    // const dimensions = center.getBoundingInfo().boundingBox.extendSize;
-    // return dimensions;
   }
 
   getMesh(name: string): BABYLON.AbstractMesh {
