@@ -28,58 +28,55 @@ export class SceneBuilder {
   // TODO: load lights from camera_and_light.babylon
   build() {
     return Promise.all([
-      // this.createBaseLayer(),
       this.composeGround(),
       this.composeWalls(),
       this.addExtras()
     ]);
   }
 
-  createBaseLayer() {
-    return new Promise<void>((resolve, reject) => {
-      const multiplier = 10;
-      const groundWidth =
-        this.convertPosition(
-          this.gameDefinition.arenaWidth + this.gameDefinition.luchadorSize
-        ) * multiplier;
+  // createBaseLayer() {
+  //   return new Promise<void>((resolve, reject) => {
+  //     const multiplier = 10;
+  //     const groundWidth =
+  //       this.convertPosition(
+  //         this.gameDefinition.arenaWidth + this.gameDefinition.luchadorSize
+  //       ) * multiplier;
 
-      const groundHeight =
-        this.convertPosition(
-          this.gameDefinition.arenaHeight + this.gameDefinition.luchadorSize
-        ) * multiplier;
+  //     const groundHeight =
+  //       this.convertPosition(
+  //         this.gameDefinition.arenaHeight + this.gameDefinition.luchadorSize
+  //       ) * multiplier;
 
-      this.ground = BABYLON.MeshBuilder.CreateGround(
-        "ground1",
-        { width: groundWidth, height: groundHeight, subdivisions: 16 },
-        this.scene
-      );
+  //     this.ground = BABYLON.MeshBuilder.CreateGround(
+  //       "ground1",
+  //       { width: groundWidth, height: groundHeight, subdivisions: 16 },
+  //       this.scene
+  //     );
 
-      // // console.log("ground dimensions", groundWidth, groundHeight);
+  //     // // console.log("ground dimensions", groundWidth, groundHeight);
 
-      this.ground.position.x = -5; // groundWidth / 2 * -1;
-      this.ground.position.z = -5; // groundHeight / 2 * -1;
-      this.ground.position.y = -0.1;
+  //     this.ground.position.x = -5; // groundWidth / 2 * -1;
+  //     this.ground.position.z = -5; // groundHeight / 2 * -1;
+  //     this.ground.position.y = -0.1;
 
-      // // console.log(
-      //   "ground dimensions",
-      //   groundWidth,
-      //   groundHeight,
-      //   this.ground.position
-      // );
+  //     // // console.log(
+  //     //   "ground dimensions",
+  //     //   groundWidth,
+  //     //   groundHeight,
+  //     //   this.ground.position
+  //     // );
 
-      const material = new BABYLON.StandardMaterial(
-        "ground-material",
-        this.scene
-      );
-      material.diffuseColor = BABYLON.Color3.FromHexString("#619FD7"); // BABYLON.Color3.Random();
-      this.ground.material = material;
-      resolve();
-    });
-  }
+  //     const material = new BABYLON.StandardMaterial(
+  //       "ground-material",
+  //       this.scene
+  //     );
+  //     material.diffuseColor = BABYLON.Color3.FromHexString("#619FD7"); // BABYLON.Color3.Random();
+  //     this.ground.material = material;
+  //     resolve();
+  //   });
+  // }
 
   composeGround() {
-    const box = new Box3D(this.scene);
-
     return new Promise<void>((resolve, reject) => {
       const groundWidth = this.convertPosition(this.gameDefinition.arenaWidth);
       const groundHeight = this.convertPosition(
@@ -120,12 +117,10 @@ export class SceneBuilder {
     return new Promise<void>((resolve, reject) => {
       const width = this.convertPosition(this.gameDefinition.arenaWidth);
       const height = this.convertPosition(this.gameDefinition.arenaHeight);
-      const square = new Square3D(this.scene);
       const wall = new Single3D(this.scene);
 
-      Promise.all([wall.loading, square.loading]).then(meshes => {
-        const wall = meshes[0];
-        const square = meshes[1];
+      wall.loading.then(mesh => {
+        const wall = mesh;
 
         const meshWidth = 0.5;
         const meshHeight = 1.15;
@@ -214,37 +209,92 @@ export class SceneBuilder {
 
   addExtras() {
     return new Promise<void>((resolve, reject) => {
-      const groundWidth = this.convertPosition(this.gameDefinition.arenaWidth);
       const tiles: TilesLoader = new TilesLoader(this.scene);
+      const wall = new Single3D(this.scene);
 
-      tiles.loading.then(loaded => {
-        this.positionCenterTiles(tiles);
+      Promise.all([tiles, wall.loading]).then(loaded => {
+        const dimension = tiles.getTileDimension();
+        const centerTileInfo = this.getCenterTileInfo(
+          dimension,
+          wall.getDimension()
+        );
+        const center = tiles.getMesh("center");
+
+        this.positionCenterTiles(dimension, centerTileInfo, center);
+        this.addCorners(tiles, centerTileInfo, dimension);
         resolve();
       });
     });
   }
 
-  getCenterTileInfo(dimension: BABYLON.Vector3): ICenterTilesInfo {
-    const arenaWidth = this.convertPosition(this.gameDefinition.arenaWidth);
-    const arenaHeight = this.convertPosition(this.gameDefinition.arenaHeight);
+  addCorners(
+    tiles: TilesLoader,
+    info: ICenterTilesInfo,
+    tileDimension: BABYLON.Vector3
+  ) {
+    const southWest = tiles.getMesh("south-west");
+    southWest.position.x = info.start.x - tileDimension.x;
+    southWest.position.y = info.start.y;
+    southWest.position.z = info.start.z - tileDimension.z;
+    southWest.isVisible = true;
+
+    const northWest = tiles.getMesh("north-west");
+    northWest.position.x = info.start.x - tileDimension.x;
+    northWest.position.y = info.start.y;
+    northWest.position.z =
+      info.start.z + info.centerTilesVertical * tileDimension.z;
+    northWest.isVisible = true;
+
+    const northEast = tiles.getMesh("north-east");
+    northEast.position.x =
+      info.start.x + info.centerTilesHorizontal * tileDimension.x;
+    northEast.position.y = info.start.y;
+    northEast.position.z =
+      info.start.z + info.centerTilesVertical * tileDimension.z;
+    northEast.isVisible = true;
+
+    const southEast = tiles.getMesh("south-east");
+    southEast.position.x = info.start.x + info.centerTilesHorizontal * tileDimension.x;
+    southEast.position.y = info.start.y;
+    southEast.position.z = info.start.z - tileDimension.z;
+    southEast.isVisible = true;
+  }
+
+  getCenterTileInfo(
+    tileDimension: BABYLON.Vector3,
+    wallDimension: BABYLON.Vector3
+  ): ICenterTilesInfo {
+    const xWalls = wallDimension.x * 2;
+    const zWalls = wallDimension.z * 2;
+
+    const arenaWidth =
+      this.convertPosition(this.gameDefinition.arenaWidth) + xWalls;
+    const arenaHeight =
+      this.convertPosition(this.gameDefinition.arenaHeight) + zWalls;
 
     console.log("arena dimensions converted to 3D", arenaWidth, arenaHeight);
-    console.log("dimensions", dimension);
+    console.log("dimensions", tileDimension);
 
-    const centerTilesHorizontal = Math.floor(arenaWidth / dimension.x) + 1;
-    const centerTilesVertical = Math.floor(arenaHeight / dimension.z) + 1;
+    const centerTilesHorizontal = Math.floor(arenaWidth / tileDimension.x) + 1;
+    const centerTilesVertical = Math.floor(arenaHeight / tileDimension.z) + 1;
     console.log("count", centerTilesHorizontal, centerTilesVertical);
 
-    const xShift = (centerTilesHorizontal * dimension.x - arenaWidth) / 2;
-    const zShift = (centerTilesVertical * dimension.z - arenaHeight) / 2;
+    const xShift = (centerTilesHorizontal * tileDimension.x - arenaWidth) / 2;
+    const zShift = (centerTilesVertical * tileDimension.z - arenaHeight) / 2;
 
-    const alignX = dimension.x / 2;
-    const alignZ = dimension.z / 2;
+    const alignX = tileDimension.x / 2;
+    const alignZ = tileDimension.z / 2;
+
+    // let start = <BABYLON.Vector3>{
+    //   x: alignX - xShift,
+    //   z: (alignZ + zShift) * -1,
+    //   y: 0.0
+    // };
 
     let start = <BABYLON.Vector3>{
       x: alignX - xShift,
       z: alignZ - zShift,
-      y: 0.2
+      y: 0.0
     };
 
     let result = <ICenterTilesInfo>{
@@ -256,18 +306,19 @@ export class SceneBuilder {
     return result;
   }
 
-  positionCenterTiles(tiles: TilesLoader) {
-    const dimension = tiles.getTileDimension();
-    const centerTileInfo = this.getCenterTileInfo(dimension);
-    const center = tiles.getMesh("center");
-    
+  positionCenterTiles(
+    dimension: BABYLON.Vector3,
+    centerTileInfo: ICenterTilesInfo,
+    center: BABYLON.AbstractMesh
+  ) {
     let x = centerTileInfo.start.x;
     const y = centerTileInfo.start.y;
 
-    for (let xn = 0; xn <= centerTileInfo.centerTilesHorizontal; xn++) {
+    for (let xn = 0; xn < centerTileInfo.centerTilesHorizontal; xn++) {
       let z = centerTileInfo.start.z;
 
-      for (let zn = 0; zn <= centerTileInfo.centerTilesVertical; zn++) {
+      for (let zn = 0; zn < centerTileInfo.centerTilesVertical; zn++) {
+        console.log("center-clone", xn, zn);
         let clonedCenterTile = center.clone("center-clone-", null);
         clonedCenterTile.position.x = x;
         clonedCenterTile.position.y = y;
