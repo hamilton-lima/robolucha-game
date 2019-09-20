@@ -10,6 +10,7 @@ import { SharedConstants } from "./shared.constants";
 import { TilesLoader } from "./tiles.loader";
 import { count } from "rxjs/operators";
 import { Box3D } from "./box3d";
+import { TreesLoader } from "./trees.loader";
 
 export interface ICenterTilesInfo {
   start: BABYLON.Vector3;
@@ -210,11 +211,12 @@ export class SceneBuilder {
   addExtras() {
     return new Promise<void>((resolve, reject) => {
       const tiles: TilesLoader = new TilesLoader(this.scene);
+      const trees: TreesLoader = new TreesLoader(this.scene);
       const wall = new Single3D(this.scene);
-      
-      Promise.all([tiles.loading, wall.loading]).then(loaded => {
-        console.log("loaded ", loaded);
-        
+
+      Promise.all([tiles.loading, wall.loading, trees.loading]).then(loaded => {
+        // console.log("loaded ", loaded);
+
         const dimension = tiles.getTileDimension();
         const centerTileInfo = this.getCenterTileInfo(
           dimension,
@@ -232,20 +234,35 @@ export class SceneBuilder {
           spawnPositions
         );
         this.addVerticalTiles(tiles, centerTileInfo, dimension, spawnPositions);
-        this.drawTrees(spawnPositions);
+        this.drawTrees(spawnPositions, trees);
         resolve();
       });
     });
   }
 
-  drawTrees(spawnPositions: BABYLON.Vector3[]) {
-    const template = new Box3D(this.scene);
+  drawTrees(spawnPositions: BABYLON.Vector3[], treesLoader: TreesLoader) {
+    const trees: Array<BABYLON.AbstractMesh> = [];
+    trees.push(treesLoader.getMesh("coconut"));
+    trees.push(treesLoader.getMesh("oak"));
+    trees.push(treesLoader.getMesh("pine"));
+    let pos = 0;
+
     spawnPositions.forEach(point => {
-      const tree = template.ball.clone("clone-box", null);
-      tree.position.x = point.x;
-      tree.position.y = point.y;
-      tree.position.z = point.z;
-      tree.isVisible = true;
+      const showTree = Math.random() > 0.25;
+
+      if (showTree) {
+        const tree = trees[pos++].clone("clone-tree", null);
+        tree.position.x = point.x;
+        tree.position.y = point.y;
+        tree.position.z = point.z;
+        tree.scaling.y = 0.6 + 0.4 * Math.random();
+        tree.rotation.y = Helper3D.angle2radian(360 * Math.random());
+        tree.isVisible = true;
+
+        if (pos >= trees.length) {
+          pos = 0;
+        }
+      }
     });
   }
 
@@ -416,12 +433,12 @@ export class SceneBuilder {
     const arenaHeight =
       this.convertPosition(this.gameDefinition.arenaHeight) + zWalls;
 
-    console.log("arena dimensions converted to 3D", arenaWidth, arenaHeight);
-    console.log("dimensions", tileDimension);
+    // console.log("arena dimensions converted to 3D", arenaWidth, arenaHeight);
+    // console.log("dimensions", tileDimension);
 
     const centerTilesHorizontal = Math.floor(arenaWidth / tileDimension.x) + 1;
     const centerTilesVertical = Math.floor(arenaHeight / tileDimension.z) + 1;
-    console.log("count", centerTilesHorizontal, centerTilesVertical);
+    // console.log("count", centerTilesHorizontal, centerTilesVertical);
 
     const xShift = (centerTilesHorizontal * tileDimension.x - arenaWidth) / 2;
     const zShift = (centerTilesVertical * tileDimension.z - arenaHeight) / 2;
@@ -462,7 +479,7 @@ export class SceneBuilder {
       let z = centerTileInfo.start.z;
 
       for (let zn = 0; zn < centerTileInfo.centerTilesVertical; zn++) {
-        console.log("center-clone", xn, zn);
+        // console.log("center-clone", xn, zn);
         let clonedCenterTile = center.clone("center-clone-", null);
         clonedCenterTile.position.x = x;
         clonedCenterTile.position.y = y;

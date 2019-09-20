@@ -27,7 +27,9 @@ export class PlaygroundComponent implements OnInit, AfterViewInit {
   rotatingGun: boolean;
   rotateGunId: any;
 
-  animationNames = characterAnimations.map( animation => { return animation.name});
+  animationNames = characterAnimations.map(animation => {
+    return animation.name;
+  });
 
   constructor() {
     this.gameDefinition = {
@@ -52,8 +54,6 @@ export class PlaygroundComponent implements OnInit, AfterViewInit {
     this.data = JSON.stringify(this.matchState);
   }
 
-
-
   ngAfterViewInit(): void {
     this.onChange(this.data);
   }
@@ -71,45 +71,39 @@ export class PlaygroundComponent implements OnInit, AfterViewInit {
   animate(name) {
     this.animateSubject.next(name);
   }
-  
+
   toggleRotate() {
     this.rotating = !this.rotating;
 
     if (this.rotating) {
-      this.rotateId = setInterval(this.rotate.bind(this), 1000/60);
-    }
-    else {
+      this.rotateId = setInterval(this.rotate.bind(this), 1000 / 60);
+    } else {
       clearInterval(this.rotateId);
     }
   }
 
   toggleRotateGun() {
-      this.rotatingGun = !this.rotatingGun;
+    this.rotatingGun = !this.rotatingGun;
 
-      if (this.rotatingGun) {
-        this.rotateGunId = setInterval(this.rotateGun.bind(this), 1000/60);
-      }
-      else{
-        clearInterval(this.rotateGunId);
-      }
-
-
+    if (this.rotatingGun) {
+      this.rotateGunId = setInterval(this.rotateGun.bind(this), 1000 / 60);
+    } else {
+      clearInterval(this.rotateGunId);
+    }
   }
-
-
 
   rotate() {
     // console.log(this.matchState);
     this.matchState.luchadores.forEach(luchador => {
       luchador.angle++;
-    })
+    });
     this.matchStateSubject.next(this.matchState);
   }
 
   rotateGun() {
     this.matchState.luchadores.forEach(luchador => {
       luchador.gunAngle++;
-    })
+    });
     this.matchStateSubject.next(this.matchState);
   }
 }
