@@ -1,3 +1,47 @@
-<app-role-guard role="dashboard_user">
-  <router-outlet></router-outlet>
-</app-role-guard>
+<mat-sidenav-container fullscreen>
+  <mat-sidenav #sidenav="matSidenav" class="app-sidenav">
+    <mat-toolbar>
+      <span>Links</span>
+      <span class="toolbar-spacer"></span>
+      <button mat-icon-button (click)="sidenav.close()">
+        <mat-icon svgIcon="chevron-left" matListIcon></mat-icon>
+      </button>
+    </mat-toolbar>
+
+    <mat-nav-list>
+      <a mat-list-item href="http://docs.robolucha.com" target="_blank">
+        <h2 matLine>
+          <mat-icon svgIcon="help-circle-outline"></mat-icon> Help
+        </h2>
+      </a>
+      <a mat-list-item routerLink="/home" target="_blank">
+        <h2 matLine>
+          <mat-icon svgIcon="play-circle-outline"></mat-icon> Play
+        </h2>
+      </a>
+      <mat-divider></mat-divider>
+      <!-- <h2 matSubheader>Docs</h2> -->
+
+      <a mat-list-item routerLink="/dashboard/classrooms" target="_blank">
+        <h2 matLine>Classrooms</h2>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <mat-toolbar color="primary" class="mat-elevation-z3">
+      <button mat-icon-button (click)="sidenav.toggle()">
+        <mat-icon svgIcon="menu"></mat-icon>
+      </button>
+      <span class="ml-2">Robolucha dashboard</span>
+    </mat-toolbar>
+
+    <div class="app-content">
+      <app-role-guard role="dashboard_user">
+        <router-outlet></router-outlet>
+      </app-role-guard>
+    </div>
+    <br />
+    <br />
+  </mat-sidenav-content>
+</mat-sidenav-container>
