@@ -2,6 +2,8 @@ import * as BABYLON from "babylonjs";
 import { MeshLoader } from "./mesh.loader";
 
 export class TilesLoader {
+  readonly spawnPropsPreffix = "props_";
+
   readonly tiles = [
     {
       name: "east",
@@ -71,6 +73,7 @@ export class TilesLoader {
         // the list includes the mesh to be rendered and dummy meshes
         // that defines respawn position
         this.meshes[tile.name] = loadedMeshes;
+        console.log("this.meshes", this.meshes);
         return tile.name;
       });
 
@@ -84,7 +87,7 @@ export class TilesLoader {
     return this.getTileDimensionByTileName("center");
   }
 
-  getTileDimensionByTileName(name:string): BABYLON.Vector3 {
+  getTileDimensionByTileName(name: string): BABYLON.Vector3 {
     let center = this.getMesh(name);
     console.log("center", center.getBoundingInfo());
     const box = center.getBoundingInfo().boundingBox;
@@ -102,7 +105,27 @@ export class TilesLoader {
 
     this.meshes[name].forEach(mesh => {
       if (mesh.name == tile.meshName) {
-        result = mesh;
+        result = mesh.clone();
+      }
+    });
+
+    return result;
+  }
+
+  getSpawnPositions(name: string): Array<BABYLON.Vector3> {
+    let result: Array<BABYLON.Vector3> = [];
+
+    const tile = this.tiles.find(tile => {
+      return tile.name == name;
+    });
+
+    this.meshes[name].forEach((mesh: BABYLON.AbstractMesh) => {
+      console.log("mesh name", name, mesh.name);
+      if (
+        mesh.name != tile.meshName &&
+        mesh.name.startsWith(this.spawnPropsPreffix)
+      ) {
+        result.push(mesh.position.clone());
       }
     });
 

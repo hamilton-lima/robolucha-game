@@ -211,31 +211,55 @@ export class SceneBuilder {
     return new Promise<void>((resolve, reject) => {
       const tiles: TilesLoader = new TilesLoader(this.scene);
       const wall = new Single3D(this.scene);
-
-      Promise.all([tiles, wall.loading]).then(loaded => {
+      
+      Promise.all([tiles.loading, wall.loading]).then(loaded => {
+        console.log("loaded ", loaded);
+        
         const dimension = tiles.getTileDimension();
         const centerTileInfo = this.getCenterTileInfo(
           dimension,
           wall.getDimension()
         );
         const center = tiles.getMesh("center");
+        let spawnPositions: Array<BABYLON.Vector3> = [];
 
         this.positionCenterTiles(dimension, centerTileInfo, center);
-        this.addCorners(tiles, centerTileInfo, dimension);
-        this.addHorizontalTiles(tiles, centerTileInfo, dimension);
-        this.addVerticalTiles(tiles, centerTileInfo, dimension);
+        this.addCorners(tiles, centerTileInfo, dimension, spawnPositions);
+        this.addHorizontalTiles(
+          tiles,
+          centerTileInfo,
+          dimension,
+          spawnPositions
+        );
+        this.addVerticalTiles(tiles, centerTileInfo, dimension, spawnPositions);
+        this.drawTrees(spawnPositions);
         resolve();
       });
+    });
+  }
+
+  drawTrees(spawnPositions: BABYLON.Vector3[]) {
+    const template = new Box3D(this.scene);
+    spawnPositions.forEach(point => {
+      const tree = template.ball.clone("clone-box", null);
+      tree.position.x = point.x;
+      tree.position.y = point.y;
+      tree.position.z = point.z;
+      tree.isVisible = true;
     });
   }
 
   addHorizontalTiles(
     tiles: TilesLoader,
     info: ICenterTilesInfo,
-    tileDimension: BABYLON.Vector3
+    tileDimension: BABYLON.Vector3,
+    spawnPositions: Array<BABYLON.Vector3>
   ) {
     const north = tiles.getMesh("north");
     const south = tiles.getMesh("south");
+
+    const northSpawnPoints = tiles.getSpawnPositions("north");
+    const southSpawnPoints = tiles.getSpawnPositions("south");
 
     let x = info.start.x;
     const y = info.start.y;
@@ -249,11 +273,23 @@ export class SceneBuilder {
       northCloned.position.z = zTop;
       northCloned.isVisible = true;
 
+      this.addSpawnPoints(
+        spawnPositions,
+        northSpawnPoints,
+        northCloned.position
+      );
+
       let southCloned = south.clone("south-clone-", null);
       southCloned.position.x = x;
       southCloned.position.y = y;
       southCloned.position.z = z;
       southCloned.isVisible = true;
+
+      this.addSpawnPoints(
+        spawnPositions,
+        southSpawnPoints,
+        southCloned.position
+      );
 
       x = x + tileDimension.x;
     }
@@ -262,10 +298,14 @@ export class SceneBuilder {
   addVerticalTiles(
     tiles: TilesLoader,
     info: ICenterTilesInfo,
-    tileDimension: BABYLON.Vector3
+    tileDimension: BABYLON.Vector3,
+    spawnPositions: Array<BABYLON.Vector3>
   ) {
     const west = tiles.getMesh("west");
     const east = tiles.getMesh("east");
+
+    const westSpawnPoints = tiles.getSpawnPositions("west");
+    const eastSpawnPoints = tiles.getSpawnPositions("east");
 
     const x = info.start.x - tileDimension.x;
     const xEast = info.start.x + info.centerTilesHorizontal * tileDimension.x;
@@ -279,11 +319,15 @@ export class SceneBuilder {
       westCloned.position.z = z;
       westCloned.isVisible = true;
 
+      this.addSpawnPoints(spawnPositions, westSpawnPoints, westCloned.position);
+
       let eastCloned = east.clone("east-clone-", null);
       eastCloned.position.x = xEast;
       eastCloned.position.y = y;
       eastCloned.position.z = z;
       eastCloned.isVisible = true;
+
+      this.addSpawnPoints(spawnPositions, eastSpawnPoints, eastCloned.position);
 
       z = z + tileDimension.z;
     }
@@ -292,7 +336,8 @@ export class SceneBuilder {
   addCorners(
     tiles: TilesLoader,
     info: ICenterTilesInfo,
-    tileDimension: BABYLON.Vector3
+    tileDimension: BABYLON.Vector3,
+    spawnPositions: Array<BABYLON.Vector3>
   ) {
     const southWest = tiles.getMesh("south-west");
     southWest.position.x = info.start.x - tileDimension.x;
@@ -300,12 +345,24 @@ export class SceneBuilder {
     southWest.position.z = info.start.z - tileDimension.z;
     southWest.isVisible = true;
 
+    this.addSpawnPoints(
+      spawnPositions,
+      tiles.getSpawnPositions("south-west"),
+      southWest.position
+    );
+
     const northWest = tiles.getMesh("north-west");
     northWest.position.x = info.start.x - tileDimension.x;
     northWest.position.y = info.start.y;
     northWest.position.z =
       info.start.z + info.centerTilesVertical * tileDimension.z;
     northWest.isVisible = true;
+
+    this.addSpawnPoints(
+      spawnPositions,
+      tiles.getSpawnPositions("north-west"),
+      northWest.position
+    );
 
     const northEast = tiles.getMesh("north-east");
     northEast.position.x =
@@ -315,12 +372,36 @@ export class SceneBuilder {
       info.start.z + info.centerTilesVertical * tileDimension.z;
     northEast.isVisible = true;
 
+    this.addSpawnPoints(
+      spawnPositions,
+      tiles.getSpawnPositions("north-east"),
+      northEast.position
+    );
+
     const southEast = tiles.getMesh("south-east");
     southEast.position.x =
       info.start.x + info.centerTilesHorizontal * tileDimension.x;
     southEast.position.y = info.start.y;
     southEast.position.z = info.start.z - tileDimension.z;
     southEast.isVisible = true;
+
+    this.addSpawnPoints(
+      spawnPositions,
+      tiles.getSpawnPositions("south-east"),
+      southEast.position
+    );
+  }
+
+  // adds input points to the result list transforming with the
+  // position that is the source tile position.
+  addSpawnPoints(
+    spawnPositions: BABYLON.Vector3[],
+    input: BABYLON.Vector3[],
+    position: BABYLON.Vector3
+  ) {
+    input.forEach(point => {
+      spawnPositions.push(point.add(position));
+    });
   }
 
   getCenterTileInfo(
