@@ -103,11 +103,20 @@ export class TilesLoader {
       return tile.name == name;
     });
 
+    if( tile == null){
+      console.error("tile name not found", name);
+      return result;
+    }
+
     this.meshes[name].forEach(mesh => {
       if (mesh.name == tile.meshName) {
         result = mesh.clone();
       }
     });
+
+    if( result == null){
+      console.error("mesh name not found in tile", name, tile.meshName);
+    }
 
     return result;
   }
