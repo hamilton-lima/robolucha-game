@@ -1,7 +1,6 @@
 @import 'src/styles/game.css';
 
 #background {
-  height: 100vh;
-  width: 100vw;
-  background-image: url("/assets/pages/email-pattern.png");
+  background-image: url("/assets/pages/bg_512x512.png");
+  background-repeat: repeat;
 }
