@@ -25,6 +25,6 @@ export class ClassroomListComponent implements OnInit {
   }
 
   create(){
-    this.router.navigate(["/dashboard/classroom-create"])
+    this.router.navigate(["/admin/classroom-create"])
   }
 }

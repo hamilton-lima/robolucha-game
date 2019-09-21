@@ -20,7 +20,7 @@ export class ClassroomCreateComponent implements OnInit {
     const classroom: ModelClassroom = { name: name };
     
     this.api.dashboardClassroomPost(classroom).subscribe(response => {
-      this.router.navigate(["/dashboard/classrooms"])
+      this.router.navigate(["/admin/classrooms"])
     });
   }
 

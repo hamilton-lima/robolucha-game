@@ -103,7 +103,7 @@ const ROUTES: Routes = [
     resolve: { luchador: LuchadorResolverService }
   },
   {
-    path: "dashboard",
+    path: "admin",
     canActivate: [LoginDashboardActivate],
     component: MainDashboardComponent,
     children: [
