@@ -3,7 +3,9 @@ body {
   background-image: none;
 }
 
-span, div, button {
+span,
+div,
+button {
   font-family: "Ubuntu", sans-serif;
 }
 
@@ -22,6 +24,9 @@ md-icon {
 
 button.mat-icon-button {
   line-height: 24px !important;
+}
+
+.mat-icon {
   margin-bottom: 4px;
 }
 
