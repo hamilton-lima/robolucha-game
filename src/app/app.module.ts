@@ -47,6 +47,8 @@ import { MainDashboardComponent } from "./dashboard/main-dashboard/main-dashboar
 import { DashboardModule } from "./dashboard/dashboard.module";
 import { ClassroomListComponent } from "./dashboard/classroom-list/classroom-list.component";
 import { ClassroomCreateComponent } from "./dashboard/classroom-create/classroom-create.component";
+import { Angulartics2Module } from 'angulartics2';
+import { Angulartics2GoogleAnalytics } from 'angulartics2/ga';
 
 library.add(fas);
 
@@ -157,7 +159,8 @@ export function apiConfigFactory(): Configuration {
     NgxSpinnerModule,
     PagesModule,
     DashboardModule,
-    MaterialAllComponentsModule
+    MaterialAllComponentsModule,
+    Angulartics2Module.forRoot(),
   ],
   providers: [
     LoginActivate,

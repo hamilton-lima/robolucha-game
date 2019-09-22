@@ -27,6 +27,7 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.18",
     "@fortawesome/free-solid-svg-icons": "^5.8.2",
     "@ng-bootstrap/ng-bootstrap": "^4.0.1",
+    "angulartics2": "^7.5.2",
     "babylonjs": "^3.3.0",
     "babylonjs-gui": "^3.3.0",
     "bootstrap": "^4.1.3",
