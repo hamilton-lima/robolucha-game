@@ -20,31 +20,15 @@ md-icon {
   height: auto;
 }
 
-button.mat-menu-item {
+button.mat-icon-button {
   line-height: 24px !important;
-}
-
-a.mat-menu-item > mat-icon {
-  margin-bottom: 14px;
+  margin-bottom: 4px;
 }
 
 .mat-icon svg {
   height: 24px;
   width: 24px;
 }
-
-// a.mat-menu-item > mat-icon {
-//   margin-bottom: 14px;
-// }
-
-// .mat-icon svg {
-//   height: 24px;
-//   width: 24px;
-// }
-
-// .toolbar-icon {
-//   padding: 0 14px;
-// }
 
 .toolbar-spacer {
   flex: 1 1 auto;
