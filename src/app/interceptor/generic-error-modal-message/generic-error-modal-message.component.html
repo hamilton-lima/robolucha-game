@@ -1,0 +1,14 @@
+<div class="container m-3">
+  <h3>Ops! something wrong happened when talking to our servers</h3>
+
+  <div class="row">
+    <div class="col small mr-3">
+      {{ error | json }}
+    </div>
+  </div>
+  <div class="mt-4 row">
+    <div class="col">
+      <button class="button btn-primary" (click)="goBack()">Go back</button>
+    </div>
+  </div>
+</div>

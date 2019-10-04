@@ -50,6 +50,7 @@ import { ClassroomCreateComponent } from "./dashboard/classroom-create/classroom
 import { Angulartics2Module } from 'angulartics2';
 import { Angulartics2GoogleAnalytics } from 'angulartics2/ga';
 import { StudentListComponent } from "./dashboard/student-list/student-list.component";
+import { GenericErrorModalMessageComponent } from './interceptor/generic-error-modal-message/generic-error-modal-message.component';
 
 library.add(fas);
 
@@ -147,6 +148,7 @@ export function apiConfigFactory(): Configuration {
     HomePageComponent,
     MatchCardComponent,
     AuthModalMessageComponent,
+    GenericErrorModalMessageComponent,
   ],
   imports: [
     BrowserModule,
@@ -172,6 +174,6 @@ export function apiConfigFactory(): Configuration {
     { provide: HTTP_INTERCEPTORS, useClass: HttpConfigInterceptor, multi: true }
   ],
   bootstrap: [AppComponent],
-  entryComponents: [AuthModalMessageComponent]
+  entryComponents: [AuthModalMessageComponent, GenericErrorModalMessageComponent]
 })
 export class AppModule {}
