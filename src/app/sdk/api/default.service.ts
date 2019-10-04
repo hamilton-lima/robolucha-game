@@ -31,6 +31,7 @@ import { ModelMatchMetric } from '../model/modelMatchMetric';
 import { ModelMatchParticipant } from '../model/modelMatchParticipant';
 import { ModelMatchScore } from '../model/modelMatchScore';
 import { ModelScoreList } from '../model/modelScoreList';
+import { ModelStudentResponse } from '../model/modelStudentResponse';
 import { ModelUpdateLuchadorResponse } from '../model/modelUpdateLuchadorResponse';
 import { ModelUserDetails } from '../model/modelUserDetails';
 import { ModelUserSetting } from '../model/modelUserSetting';
@@ -155,6 +156,52 @@ export class DefaultService {
 
         return this.httpClient.post<ModelClassroom>(`${this.basePath}/dashboard/classroom`,
             request,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * find all Classroom students
+     * 
+     * @param id Classroom id
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public dashboardClassroomStudentsIdGet(id: number, observe?: 'body', reportProgress?: boolean): Observable<Array<ModelStudentResponse>>;
+    public dashboardClassroomStudentsIdGet(id: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<ModelStudentResponse>>>;
+    public dashboardClassroomStudentsIdGet(id: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<ModelStudentResponse>>>;
+    public dashboardClassroomStudentsIdGet(id: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling dashboardClassroomStudentsIdGet.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (ApiKeyAuth) required
+        if (this.configuration.apiKeys["Authorization"]) {
+            headers = headers.set('Authorization', this.configuration.apiKeys["Authorization"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        let httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set("Accept", httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json'
+        ];
+
+        return this.httpClient.get<Array<ModelStudentResponse>>(`${this.basePath}/dashboard/classroom/students/${encodeURIComponent(String(id))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

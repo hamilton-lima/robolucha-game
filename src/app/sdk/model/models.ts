@@ -14,6 +14,7 @@ export * from './modelMatchScore';
 export * from './modelSceneComponent';
 export * from './modelScoreList';
 export * from './modelStudent';
+export * from './modelStudentResponse';
 export * from './modelUpdateLuchadorResponse';
 export * from './modelUser';
 export * from './modelUserDetails';
