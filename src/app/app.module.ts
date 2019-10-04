@@ -49,6 +49,7 @@ import { ClassroomListComponent } from "./dashboard/classroom-list/classroom-lis
 import { ClassroomCreateComponent } from "./dashboard/classroom-create/classroom-create.component";
 import { Angulartics2Module } from 'angulartics2';
 import { Angulartics2GoogleAnalytics } from 'angulartics2/ga';
+import { StudentListComponent } from "./dashboard/student-list/student-list.component";
 
 library.add(fas);
 
@@ -111,6 +112,7 @@ const ROUTES: Routes = [
     children: [
       { path: "classrooms", component: ClassroomListComponent },
       { path: "classroom-create", component: ClassroomCreateComponent },
+      { path: "classroom-students/:id", component: StudentListComponent },
       { path: "", redirectTo: "classrooms", pathMatch: "full" }
     ]
   },

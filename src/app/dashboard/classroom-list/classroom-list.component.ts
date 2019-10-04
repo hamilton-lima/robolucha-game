@@ -27,4 +27,8 @@ export class ClassroomListComponent implements OnInit {
   create(){
     this.router.navigate(["/dashboard/classroom-create"])
   }
+
+  listStudents(id){
+      this.router.navigate(["/dashboard/classroom-students/", id]);
+  }
 }

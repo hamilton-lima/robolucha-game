@@ -8,6 +8,7 @@ import { ClassroomCardComponent } from './shared/classroom-card/classroom-card.c
 import { MaterialAllComponentsModule } from '../material-all-components-module';
 import { DashboardHeaderComponent } from './shared/dashboard-header/dashboard-header.component';
 import { SharedModule } from '../shared/shared.module';
+import { StudentListComponent } from './student-list/student-list.component';
 
 @NgModule({
   imports: [
@@ -16,6 +17,6 @@ import { SharedModule } from '../shared/shared.module';
     MaterialAllComponentsModule,
     SharedModule
   ],
-  declarations: [ClassroomListComponent, ClassroomCreateComponent, MainDashboardComponent, ClassroomCardComponent, DashboardHeaderComponent]
+  declarations: [ClassroomListComponent, ClassroomCreateComponent, MainDashboardComponent, ClassroomCardComponent, DashboardHeaderComponent, StudentListComponent]
 })
 export class DashboardModule { }

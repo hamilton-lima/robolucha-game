@@ -1,22 +1,19 @@
 <div class="container">
   <div class="row pt-4 pb-4">
-    <div class="col-md-8">
-      <h1>Classrooms</h1>
-    </div>
-    <div class="col-md-4 text-right">
-      <button (click)="create()" mat-raised-button>NEW</button>
+    <div class="col-md-12">
+      <h1>Students of {{classroomID}}</h1>
     </div>
   </div>
 
   <div class="row">
-    <app-classroom-card
+    <!-- <app-classroom-card
       (click)="listStudents(classroom.id)"
       class="classroom-card"
       *ngFor="let classroom of classrooms"
       [classroom]="classroom"
     ></app-classroom-card>
     <div *ngIf="classrooms.length <= 0">
-      <h4>There are no classrooms</h4>
-    </div>
+      <h4>There are no students</h4>
+    </div> -->
   </div>
 </div>
