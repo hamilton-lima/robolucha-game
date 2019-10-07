@@ -6,11 +6,35 @@
   </div>
 
   <div class="row">
-    <div *ngFor="let student of students">
-      {{ student | json }}
-    </div>
-    <div *ngIf="students.length <= 0">
-      <h4>There are no students</h4>
+    <div class="col-md-12">
+      <table
+        id="students-list"
+        *ngIf="students.length > 0"
+        mat-table
+        [dataSource]="students"
+        class="mat-elevation-z8"
+      >
+        <!-- Name Column -->
+        <ng-container matColumnDef="username">
+            <th mat-header-cell *matHeaderCellDef>Username</th>
+            <td mat-cell *matCellDef="let element">{{ element.username }}</td>
+          </ng-container>
+
+          <!-- Actions Column -->
+        <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
+            <td mat-cell *matCellDef="let element">
+                <button (click)="something(element)" class="m-1" mat-raised-button>Something</button> 
+            </td>
+          </ng-container>
+    
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+
+      <div *ngIf="students.length <= 0">
+        <h5>There are no students assigned to this classroom</h5>
+      </div>
     </div>
   </div>
 </div>

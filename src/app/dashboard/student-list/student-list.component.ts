@@ -10,6 +10,7 @@ import { DefaultService, ModelStudentResponse } from "src/app/sdk";
 export class StudentListComponent implements OnInit {
   classroomID: number;
   students: ModelStudentResponse[] = [];
+  displayedColumns = ["username", "actions"];
 
   constructor(private api: DefaultService, private route: ActivatedRoute) {}
 
@@ -20,5 +21,9 @@ export class StudentListComponent implements OnInit {
       .subscribe(response => {
         this.students = response;
       });
+  }
+
+  something(student: ModelStudentResponse){
+    console.log("student", student);
   }
 }
