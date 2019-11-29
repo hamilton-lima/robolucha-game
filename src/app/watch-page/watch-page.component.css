@@ -6,7 +6,6 @@
 }
 
 .watch-main {
-  margin-top: -29px;
 }
 
 .clock {
@@ -15,6 +14,7 @@
   left: 50%;
   right: 50%;
   top: 0%;
+  background-color: whitesmoke;
 }
 
 .code-editor-panel {

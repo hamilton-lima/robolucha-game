@@ -73,11 +73,11 @@ export class ArenaComponent implements OnInit, OnChanges {
   }
 
   fitToContainer() {
-    var canvas = this.canvas.nativeElement;
-    canvas.style.width = "100%";
-    canvas.style.height = "100%";
-    canvas.width = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
+    // var canvas = this.canvas.nativeElement;
+    // canvas.style.width = "100%";
+    // canvas.style.height = "100%";
+    // canvas.width = canvas.offsetWidth;
+    // canvas.height = canvas.offsetHeight;
   }
 
   ngOnInit() {
