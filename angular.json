@@ -24,6 +24,7 @@
             ],
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.css",
+              "node_modules/shepherd.js/dist/css/shepherd.css",
               "src/styles.css",
               "src/theme.scss"
             ],

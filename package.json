@@ -39,6 +39,7 @@
     "ngx-spinner": "^7.1.4",
     "rxjs": "6.0.0",
     "rxjs-compat": "6.3.3",
+    "shepherd.js": "^6.0.2",
     "zone.js": "~0.8.26"
   },
   "devDependencies": {
