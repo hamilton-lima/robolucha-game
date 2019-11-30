@@ -1,2 +1,32 @@
-@import 'src/styles/game.css';
+@import "src/styles/game.css";
 
+.mat-card {
+  border-radius: 16px;
+}
+
+.mat-card > .mat-card-actions {
+  text-align: center;
+  margin-bottom: 0px;
+  padding-bottom: 0;
+}
+
+.mat-card-image:first-child {
+  margin-top: -60px;
+  margin-bottom: -50px;
+}
+
+#play {
+  margin-bottom: 20px;
+}
+
+#title {
+  font-size: 150%;
+}
+
+#type {
+  color: #b2b3b3;
+}
+
+#description {
+  color: #b2b3b3;
+}

@@ -36,10 +36,6 @@ a.mat-menu-item > mat-icon {
   /* background-color: mat-color($accent); */
 }
 
-.mat-button-wrapper {
-  color: black !important;
-}
-
 @font-face {
   font-family: "Baloo";
   src: url(/assets/fonts/baloo-regular.ttf) format("truetype");

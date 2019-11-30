@@ -1,3 +1,8 @@
-<button class="big-button round" mat-raised-button>
+<button
+  color="primary"
+  class="big-button round"
+  mat-raised-button
+  [style.min-width]="minWidth"
+>
   <ng-content></ng-content>
 </button>
