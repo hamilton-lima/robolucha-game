@@ -10,7 +10,7 @@ COPY . /usr/src/app
 
 ENV PATH /usr/src/app/node_modules/.bin:$PATH
 # RUN ng build --prod --source-map=false
-RUN node ./node_modules/@angular/cli/bin/ng build --prod 
+RUN node ./node_modules/@angular/cli/bin/ng build --max_old_space_size=4096 --prod 
 
 # base image
 FROM nginx:alpine
