@@ -9,7 +9,7 @@ RUN npm install
 COPY . /usr/src/app
 
 ENV PATH /usr/src/app/node_modules/.bin:$PATH
-RUN node ./node_modules/@angular/cli/bin/ng build --max_old_space_size=4096 --configuration=development
+RUN node --max_old_space_size=4096 ./node_modules/@angular/cli/bin/ng build --configuration=development
 
 # base image
 FROM nginx:alpine
