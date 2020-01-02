@@ -16,4 +16,4 @@ RUN node ./node_modules/@angular/cli/bin/ng build --prod
 FROM nginx:alpine
 COPY --from=builder /usr/src/app/dist/www /usr/share/nginx/html
 RUN ls -alh /usr/share/nginx/html
-COPY docker/production/nginx.conf /etc/nginx/nginx.conf
+COPY nginx.conf /etc/nginx/nginx.conf
