@@ -14,7 +14,7 @@ export const dashboardUser = "dashboard_user";
 })
 export class RoleGuardComponent implements OnInit {
   @Input() role: string;
-  private authorized = false;
+  authorized = false;
 
   constructor(private authService: AuthService) {}
 

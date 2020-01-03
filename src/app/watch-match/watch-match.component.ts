@@ -52,11 +52,12 @@ export class WatchMatchComponent implements OnInit, OnDestroy, OnChanges {
   matchState: MatchState;
   subscription: Subscription;
   onMessage: Subscription;
-  ;
+  fps: Subject<number>;
 
   constructor(private service: WatchMatchService) {
     this.luchador = {};
     this.message = "N/A";
+    this.fps = service.fps;
   }
 
   ngOnInit() {
