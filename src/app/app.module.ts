@@ -47,8 +47,6 @@ import { MainDashboardComponent } from "./dashboard/main-dashboard/main-dashboar
 import { DashboardModule } from "./dashboard/dashboard.module";
 import { ClassroomListComponent } from "./dashboard/classroom-list/classroom-list.component";
 import { ClassroomCreateComponent } from "./dashboard/classroom-create/classroom-create.component";
-import { Angulartics2Module } from 'angulartics2';
-import { Angulartics2GoogleAnalytics } from 'angulartics2/ga';
 import { StudentListComponent } from "./dashboard/student-list/student-list.component";
 import { GenericErrorModalMessageComponent } from './interceptor/generic-error-modal-message/generic-error-modal-message.component';
 
@@ -164,7 +162,6 @@ export function apiConfigFactory(): Configuration {
     PagesModule,
     DashboardModule,
     MaterialAllComponentsModule,
-    Angulartics2Module.forRoot(),
   ],
   providers: [
     LoginActivate,
