@@ -12,7 +12,8 @@
 
 
 export interface ModelUserSetting {
+    firstLogin?: boolean;
+    firstMatch?: boolean;
     id?: number;
-    lastOption?: string;
     userID?: number;
 }

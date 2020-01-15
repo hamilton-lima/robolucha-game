@@ -11,11 +11,8 @@
  */
 
 
-export interface ModelCode {
-    event?: string;
-    exception?: string;
-    gameDefinition?: number;
-    id?: number;
-    script?: string;
-    version?: number;
+export interface ModelPageEventRequest {
+    action?: string;
+    componentID?: string;
+    page?: string;
 }

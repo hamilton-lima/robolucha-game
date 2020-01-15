@@ -10,10 +10,12 @@
  * Do not edit the class manually.
  */
 import { ModelGameComponent } from './modelGameComponent';
+import { ModelGameDefinition } from './modelGameDefinition';
 
 
 export interface ModelMatch {
     availableMatchID?: number;
+    gameDefinition?: ModelGameDefinition;
     gameDefinitionID?: number;
     id?: number;
     lastTimeAlive?: string;

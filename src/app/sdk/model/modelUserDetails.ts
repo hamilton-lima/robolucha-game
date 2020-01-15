@@ -11,10 +11,12 @@
  */
 import { ModelClassroom } from './modelClassroom';
 import { ModelUser } from './modelUser';
+import { ModelUserSetting } from './modelUserSetting';
 
 
 export interface ModelUserDetails {
     classrooms?: Array<ModelClassroom>;
     roles?: Array<string>;
+    settings?: ModelUserSetting;
     user?: ModelUser;
 }

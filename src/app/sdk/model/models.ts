@@ -11,6 +11,7 @@ export * from './modelMatch';
 export * from './modelMatchMetric';
 export * from './modelMatchParticipant';
 export * from './modelMatchScore';
+export * from './modelPageEventRequest';
 export * from './modelSceneComponent';
 export * from './modelScoreList';
 export * from './modelStudent';
