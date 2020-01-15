@@ -29,24 +29,24 @@ export class HttpConfigInterceptor implements HttpInterceptor {
 
     return next.handle(request).pipe(
         map((event: HttpEvent<any>) => {
-            // if (event instanceof HttpResponse) {
-            //     // console.log('HTTP response: ', event);
-            // }
             return event;
         }),
+        
         catchError((error: HttpErrorResponse) => {
             let data = {};
             data = {
                 reason: error && error.error && error.error.reason ? error.error.reason : '',
                 status: error.status
             };
+            
             if( error.status == 403 ){
               this.modalService.open(AuthModalMessageComponent, {centered: true});
             } else {
               this.modalService.open(GenericErrorModalMessageComponent, {centered: true});
               this.errorService.addError(error);
             }
-            // // console.log('HTTP ERROR response: ', data);
+            
+            console.log('HTTP ERROR response: ', data);
             return throwError(error);
         }));
 
