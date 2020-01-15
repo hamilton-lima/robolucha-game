@@ -40,6 +40,7 @@ export class EventsService {
   ) {
     const self = this;
     router.events.subscribe((event: RouterEvent) => {
+      console.log("event", event);
       if (event instanceof NavigationStart) {
         self.saveNavigation(event.url);
       }
