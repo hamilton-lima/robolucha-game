@@ -14,6 +14,12 @@
   z-index: 2;
 }
 
+@media only screen and (max-width: 1026px) {
+  #right-image {
+      display: none;
+  }
+}
+
 #top-row{
   position: fixed;
   top: 0;
@@ -33,4 +39,3 @@
   margin-bottom: 20px;
   z-index: 100;
 }
-
