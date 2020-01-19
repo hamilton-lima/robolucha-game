@@ -14,6 +14,7 @@ import { ActivatedRoute } from "@angular/router";
 import { DefaultService } from "../sdk/api/default.service";
 import { ModelLuchador } from "../sdk/model/mainLuchador";
 import { ModelGameDefinition } from "../sdk";
+import { EventsService } from "../shared/events.service";
 
 const HIDE_SUCCESS_TIMEOUT = 3000;
 
@@ -27,15 +28,19 @@ export class CodeEditorPanelComponent implements OnInit, OnChanges {
   luchador: ModelLuchador;
   luchadorResponse: ModelUpdateLuchadorResponse;
   successMessage: string;
+  page:string;
 
   @Input() gameDefinition: ModelGameDefinition;
 
   constructor(
     private route: ActivatedRoute,
     private api: DefaultService,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    private events: EventsService
   ) {
     const data = this.route.snapshot.data;
+    this.page = this.route.snapshot.url.join("/");
+
     this.luchador = data.luchador;
   }
 
