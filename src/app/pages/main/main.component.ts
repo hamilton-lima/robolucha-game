@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { DefaultService } from "src/app/sdk";
 import { ModelGameComponent } from "src/app/sdk/model/mainGameComponent";
 import { ShepherdNewService, ITourStep } from "src/app/shepherd-new.service";
+import { EventsService } from "src/app/shared/events.service";
 
 @Component({
   selector: "app-main",
@@ -11,16 +12,19 @@ import { ShepherdNewService, ITourStep } from "src/app/shepherd-new.service";
 })
 export class MainComponent implements OnInit {
   luchador: ModelGameComponent;
+  page: string;
 
   constructor(
     private router: Router,
     private api: DefaultService,
     private route: ActivatedRoute,
-    private shepherd: ShepherdNewService
+    private shepherd: ShepherdNewService,
+    private events: EventsService
   ) {}
 
   ngOnInit() {
     this.luchador = this.route.snapshot.data.luchador;
+    this.page = this.route.snapshot.url.join("/");
   }
 
   readonly steps: ITourStep[] = [
@@ -47,18 +51,22 @@ export class MainComponent implements OnInit {
   }
 
   customize() {
+    this.events.click(this.page, "customize");
     this.router.navigate(["mask"]);
   }
 
   publicArena() {
+    this.events.click(this.page, "public-arena");
     this.router.navigate(["public"]);
   }
 
   classroomArena() {
+    this.events.click(this.page, "classroom-arena");
     this.router.navigate(["classroom"]);
   }
 
   help() {
+    this.events.click(this.page, "help");
     window.location.href = "http://docs.robolucha.com";
   }
 

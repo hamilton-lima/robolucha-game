@@ -7,6 +7,16 @@ import { AuthService } from "../auth.service";
   providedIn: "root"
 })
 export class EventsService {
+  click(page:string, componentID: string){
+    const event: ModelPageEventRequest = {
+      action: "click",
+      page: page,
+      componentID: componentID
+    };
+
+    this.save(event);
+  }
+
   emit(page:string, action: string, componentID: string){
     const event: ModelPageEventRequest = {
       action: action,
@@ -29,7 +39,6 @@ export class EventsService {
 
   save(request: ModelPageEventRequest) {
     this.api.privatePageEventsPost(request).subscribe(response => {
-      console.log("event sent to server", request);
     });
   }
 
@@ -40,7 +49,6 @@ export class EventsService {
   ) {
     const self = this;
     router.events.subscribe((event: RouterEvent) => {
-      console.log("event", event);
       if (event instanceof NavigationStart) {
         self.saveNavigation(event.url);
       }
