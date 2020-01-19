@@ -65,6 +65,11 @@ export class MainComponent implements OnInit {
     this.router.navigate(["classroom"]);
   }
 
+  dashboard() {
+    this.events.click(this.page, "classroom-arena");
+    this.router.navigate(["dashboard"]);
+  }
+
   help() {
     this.events.click(this.page, "help");
     window.location.href = "http://docs.robolucha.com";

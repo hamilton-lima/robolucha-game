@@ -6,7 +6,7 @@
       </div>
       <app-role-guard role="dashboard_user">
         <div class="col-2">
-          <button id="dashboard-button" routerLink="/dashboard" mat-raised-button>DASHBOARD</button>
+          <button id="dashboard-button" (click)="dashboard()" mat-raised-button>DASHBOARD</button>
         </div>
       </app-role-guard>
     </div>
