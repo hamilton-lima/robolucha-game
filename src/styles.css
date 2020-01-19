@@ -63,3 +63,8 @@ body {
 .shepherd-target-marker{
   display: none;
 }
+
+.container{
+  margin-left: 0;
+  margin-right: 0;
+}
