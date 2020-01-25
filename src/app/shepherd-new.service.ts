@@ -53,13 +53,18 @@ export class ShepherdNewService {
     let counter = 1;
     steps.forEach((step: ITourStep) => {
       const stepString = "(" + counter + "/" + steps.length + ")";
-      counter ++;
+
+      let buttons = [];
+      if( counter > 1){
+        buttons.push(this.backButton);
+      }
+      buttons.push(this.nextButton)
 
       const tourStep = <Shepherd.Step.StepOptions>{
         title: step.title + " " + stepString,
         text: step.text,
         attachTo: step.attachTo,
-        buttons: [this.backButton, this.nextButton],
+        buttons: buttons,
       };
 
       if (step.offset) {
@@ -67,6 +72,8 @@ export class ShepherdNewService {
       }
 
       tour.addStep(tourStep);
+      counter ++;
+
     });
 
     tour.start();
