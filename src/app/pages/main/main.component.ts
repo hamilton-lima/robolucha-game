@@ -49,8 +49,13 @@ export class MainComponent implements OnInit {
   ];
 
   ngAfterViewInit() {
-    console.log("current user", this.userService.getUser());
-    this.shepherd.show(this.steps);
+    const user = this.userService.getUser();
+
+    if (!user.settings.visitedMainPage) {
+      user.settings.visitedMainPage = true;
+      this.userService.updateSettings(user.settings);
+      this.shepherd.show(this.steps);
+    }
   }
 
   customize() {
