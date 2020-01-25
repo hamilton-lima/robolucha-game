@@ -22,13 +22,10 @@ export class RoleGuardComponent implements OnInit {
     console.log("init", this.role);
 
     this.authService.isLoggedIn().subscribe((user: ModelUserDetails) => {
-      console.log("detailes", user);
-
       const found = user.roles.find((search: string) => {
         return search === this.role;
       });
 
-      console.log("found", found);
       if (found) {
         this.authorized = true;
       } else {
