@@ -12,8 +12,9 @@
 
 
 export interface ModelUserSetting {
-    firstLogin?: boolean;
-    firstMatch?: boolean;
     id?: number;
+    playedTutorial?: boolean;
     userID?: number;
+    visitedMainPage?: boolean;
+    visitedMaskPage?: boolean;
 }
