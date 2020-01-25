@@ -4,6 +4,7 @@ import { DefaultService } from "src/app/sdk";
 import { ModelGameComponent } from "src/app/sdk/model/mainGameComponent";
 import { ShepherdNewService, ITourStep } from "src/app/shepherd-new.service";
 import { EventsService } from "src/app/shared/events.service";
+import { UserService } from "src/app/shared/user.service";
 
 @Component({
   selector: "app-main",
@@ -19,7 +20,8 @@ export class MainComponent implements OnInit {
     private api: DefaultService,
     private route: ActivatedRoute,
     private shepherd: ShepherdNewService,
-    private events: EventsService
+    private events: EventsService,
+    private userService: UserService
   ) {}
 
   ngOnInit() {
@@ -47,6 +49,7 @@ export class MainComponent implements OnInit {
   ];
 
   ngAfterViewInit() {
+    console.log("current user", this.userService.getUser());
     this.shepherd.show(this.steps);
   }
 
