@@ -17,16 +17,23 @@ export class UserService {
     return this.user;
   }
 
+  onSuccess = () => {};
+
+  onError = error => {
+    console.error("Error updating user settings", error);
+  };
+
   updateSettings(settings: ModelUserSetting) {
     this.user.settings = settings;
-    return this.api.privateUserSettingPut(settings);
+    this.api
+      .privateUserSettingPut(settings)
+      .subscribe(this.onSuccess, this.onError);
   }
 
   resetAllSettings() {
     this.user.settings.playedTutorial = false;
     this.user.settings.visitedMainPage = false;
     this.user.settings.visitedMaskPage = false;
-    return this.updateSettings(this.user.settings);
+    return this.api.privateUserSettingPut(this.user.settings);
   }
-
 }
