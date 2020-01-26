@@ -18,14 +18,15 @@ export class UserService {
   }
 
   updateSettings(settings: ModelUserSetting) {
-    this.api.privateUserSettingPut(settings).subscribe(
-      response => {
-        console.log("response", response);
-      },
-      error => {
-        console.log("error", error);
-      }
-    );
     this.user.settings = settings;
+    return this.api.privateUserSettingPut(settings);
   }
+
+  resetAllSettings() {
+    this.user.settings.playedTutorial = false;
+    this.user.settings.visitedMainPage = false;
+    this.user.settings.visitedMaskPage = false;
+    return this.updateSettings(this.user.settings);
+  }
+
 }

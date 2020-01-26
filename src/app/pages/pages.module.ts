@@ -23,6 +23,7 @@ import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { GameBackgroundComponent } from './shared/game-background/game-background.component';
 import { BigButtonComponent } from './shared/big-button/big-button.component';
 import { SharedModule } from "../shared/shared.module";
+import { HelpComponent } from './help/help.component';
 
 @NgModule({
   imports: [
@@ -49,7 +50,8 @@ import { SharedModule } from "../shared/shared.module";
     ColorPickerComponent,
     ShapePickerComponent,
     GameBackgroundComponent,
-    BigButtonComponent
+    BigButtonComponent,
+    HelpComponent
   ],
   exports: [HomeButtonComponent, RoundButtonComponent]
 })

@@ -49,6 +49,7 @@ import { ClassroomListComponent } from "./dashboard/classroom-list/classroom-lis
 import { ClassroomCreateComponent } from "./dashboard/classroom-create/classroom-create.component";
 import { StudentListComponent } from "./dashboard/student-list/student-list.component";
 import { GenericErrorModalMessageComponent } from './interceptor/generic-error-modal-message/generic-error-modal-message.component';
+import { HelpComponent } from "./pages/help/help.component";
 
 library.add(fas);
 
@@ -95,6 +96,12 @@ const ROUTES: Routes = [
   {
     path: "classroom",
     component: ListClassroomGamesComponent,
+    canActivate: [LoginActivate],
+    resolve: { luchador: LuchadorResolverService }
+  },
+  {
+    path: "help",
+    component: HelpComponent,
     canActivate: [LoginActivate],
     resolve: { luchador: LuchadorResolverService }
   },

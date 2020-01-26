@@ -1,0 +1,29 @@
+<app-game-background>
+  <div class="container">
+    <div class="row">
+      <app-header>Help</app-header>
+    </div>
+
+    <div class="row">
+      <a href="http://docs.robolucha.com" target="_blank"
+        >Online documentation</a
+      >
+    </div>
+    <div class="row">
+      Version: TBD
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <hr>
+        <p>
+          Some pages display contextual help the first time you load it, click
+          here to reset and show all contextual help messages again.
+        </p>
+        <button (click)="resetContextualMessages()" mat-raised-button>
+          Reset context help
+        </button>
+      </div>
+      <div class="col-10"></div>
+    </div>
+  </div>
+</app-game-background>

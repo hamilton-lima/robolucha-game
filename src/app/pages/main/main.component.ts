@@ -80,7 +80,7 @@ export class MainComponent implements OnInit {
 
   help() {
     this.events.click(this.page, "help");
-    window.location.href = "http://docs.robolucha.com";
+    this.router.navigate(["help"]);
   }
 
   roundClick() {
