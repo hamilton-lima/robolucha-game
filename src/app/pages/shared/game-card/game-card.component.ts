@@ -8,6 +8,8 @@ import { ModelAvailableMatch } from "src/app/sdk";
 })
 export class GameCardComponent implements OnInit {
   @Input() match: ModelAvailableMatch;
+  @Input() componentId: string;
+  
   @Output() onplay = new EventEmitter<number>();
 
   constructor() {}
