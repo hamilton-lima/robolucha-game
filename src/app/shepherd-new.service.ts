@@ -55,40 +55,46 @@ export class ShepherdNewService {
     });
   }
 
-  show(steps: ITourStep[]) {
+  show(steps: ITourStep[]): Shepherd.Tour {
     const tour = this.buildTour();
     let counter = 1;
     steps.forEach((step: ITourStep) => {
       let stepString = "";
 
       let buttons = [];
-      if( steps.length == 1){
+      if (steps.length == 1) {
         buttons.push(this.closeButton);
       } else {
         stepString = "(" + counter + "/" + steps.length + ")";
 
-        if( counter > 1){
+        if (counter > 1) {
           buttons.push(this.backButton);
         }
-        buttons.push(this.nextButton)
+        buttons.push(this.nextButton);
       }
 
       const tourStep = <Shepherd.Step.StepOptions>{
         title: step.title + " " + stepString,
         text: step.text,
         attachTo: step.attachTo,
-        buttons: buttons,
+        buttons: buttons
       };
 
       if (step.offset) {
-        tourStep.tetherOptions = {offset: step.offset};
+        tourStep.tetherOptions = { offset: step.offset };
       }
 
       tour.addStep(tourStep);
-      counter ++;
-
+      counter++;
     });
 
     tour.start();
+    return tour;
   }
+
+  done(tour: Shepherd.Tour) {
+    console.log("tour", tour);
+    tour.complete();
+  }
+  
 }

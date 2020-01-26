@@ -9,6 +9,7 @@ import { Router } from "@angular/router";
 import { ITourStep, ShepherdNewService } from "src/app/shepherd-new.service";
 import { UserService } from "src/app/shared/user.service";
 import { timer } from 'rxjs';
+import Shepherd from "shepherd.js";
 
 @Component({
   selector: "app-list-public-games",
@@ -17,6 +18,7 @@ import { timer } from 'rxjs';
 })
 export class ListPublicGamesComponent implements OnInit {
   matches: Array<ModelAvailableMatch> = [];
+  tour: Shepherd.Tour;
 
   constructor(
     private api: DefaultService,
@@ -50,11 +52,13 @@ export class ListPublicGamesComponent implements OnInit {
     const user = this.userService.getUser();
 
     if (!user.settings.playedTutorial) {
-      this.shepherd.show(this.steps);
+      this.tour = this.shepherd.show(this.steps);
     }
   }
 
   play(matchID: number) {
+    this.shepherd.done(this.tour);
+
     this.api.privatePlayIdPost(matchID).subscribe((match: ModelMatch) => {
       this.router.navigate(["watch", match.id]);
     });
