@@ -6,6 +6,10 @@ import { MaskEditorMediator } from "./mask-editor.mediator";
 import { CanComponentDeactivate } from "src/app/can-deactivate-guard.service";
 import { ModelGameComponent, DefaultService, ModelConfig } from "src/app/sdk";
 import { AlertService } from "../alert.service";
+import Shepherd from "shepherd.js";
+import { ShepherdNewService, ITourStep } from "src/app/shepherd-new.service";
+import { EventsService } from "src/app/shared/events.service";
+import { UserService } from "src/app/shared/user.service";
 
 const HIDE_SUCCESS_TIMEOUT = 3000;
 
@@ -18,13 +22,17 @@ export class MaskEditorComponent implements OnInit, CanComponentDeactivate {
   successMessage: string;
   dirty = false;
   luchador: ModelGameComponent;
+  tour: Shepherd.Tour;
 
   constructor(
     private route: ActivatedRoute,
     private api: DefaultService,
     private cdRef: ChangeDetectorRef,
     private mediator: MaskEditorMediator,
-    private alert: AlertService
+    private alert: AlertService,
+    private shepherd: ShepherdNewService,
+    private events: EventsService,
+    private userService: UserService
   ) {
     this.luchador = {};
   }
@@ -34,6 +42,29 @@ export class MaskEditorComponent implements OnInit, CanComponentDeactivate {
     // console.log('configs on maskeditor', data.luchador.configs);
     this.refreshEditor(data.luchador.configs);
     this.luchador = data.luchador;
+  }
+
+  readonly steps: ITourStep[] = [
+    {
+      title: "I am feeling lucky",
+      text: "Click here to generate a random appearance of your luchador",
+      attachTo: { element: "#random-mask", on: "left" }
+    },
+    {
+      title: "Select what part of the mask to change",
+      text: "Click here to make it yours!",
+      attachTo: { element: "#mask-editor-categories-selector", on: "right" }
+    }
+  ];
+
+  ngAfterViewInit() {
+    const user = this.userService.getUser();
+
+    if (!user.settings.visitedMaskPage) {
+      user.settings.visitedMaskPage = true;
+      this.userService.updateSettings(user.settings);
+      this.tour = this.shepherd.show(this.steps);
+    }
   }
 
   refreshEditor(configs: ModelConfig[]) {
