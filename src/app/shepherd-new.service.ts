@@ -70,7 +70,12 @@ export class ShepherdNewService {
         if (counter > 1) {
           buttons.push(this.backButton);
         }
-        buttons.push(this.nextButton);
+        
+        if ( counter < steps.length){
+          buttons.push(this.nextButton);
+        } else {
+          buttons.push(this.closeButton);
+        }
       }
 
       const tourStep = <Shepherd.Step.StepOptions>{
