@@ -31,20 +31,20 @@ export class MainComponent implements OnInit {
 
   readonly steps: ITourStep[] = [
     {
-      title: "Your luchador name",
-      text: "We created a new name for your luchador",
-      attachTo: { element: "#luchador-name", on: "bottom" },
-      offset: "0 20px"
-    },
-    {
-      title: "Change your mask",
-      text: "Use this option to change how your mask look",
-      attachTo: { element: "#customize-button", on: "top" }
-    },
-    {
       title: "Play on-line",
       text: "Play here!",
       attachTo: { element: "#public-arena-button", on: "top" }
+    },
+    {
+      title: "Customize your character",
+      text: "Use this option to change how your mask look like",
+      attachTo: { element: "#customize-button", on: "top" }
+    },
+    {
+      title: "Your luchador name",
+      text: "We created a new name for your character",
+      attachTo: { element: "#luchador-name", on: "bottom" },
+      offset: "0 20px"
     }
   ];
 
