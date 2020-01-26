@@ -15,6 +15,7 @@
 
     <div *ngIf="classrooms.length" class="row">
       <app-game-card
+        id="{{match.name}}"
         class="col-sm-12 col-md-6 col-lg-4 mb-4"
         *ngFor="let match of matches"
         [match]="match"
