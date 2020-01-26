@@ -32,6 +32,13 @@ export class ShepherdNewService {
     text: "Next"
   };
 
+  readonly closeButton = {
+    action() {
+      return this.next();
+    },
+    text: "Close"
+  };
+
   private buildTour() {
     return new Shepherd.Tour({
       useModalOverlay: true,
@@ -52,13 +59,19 @@ export class ShepherdNewService {
     const tour = this.buildTour();
     let counter = 1;
     steps.forEach((step: ITourStep) => {
-      const stepString = "(" + counter + "/" + steps.length + ")";
+      let stepString = "";
 
       let buttons = [];
-      if( counter > 1){
-        buttons.push(this.backButton);
+      if( steps.length == 1){
+        buttons.push(this.closeButton);
+      } else {
+        stepString = "(" + counter + "/" + steps.length + ")";
+
+        if( counter > 1){
+          buttons.push(this.backButton);
+        }
+        buttons.push(this.nextButton)
       }
-      buttons.push(this.nextButton)
 
       const tourStep = <Shepherd.Step.StepOptions>{
         title: step.title + " " + stepString,
