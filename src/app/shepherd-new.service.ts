@@ -93,8 +93,8 @@ export class ShepherdNewService {
   }
 
   done(tour: Shepherd.Tour) {
-    console.log("tour", tour);
-    tour.complete();
+    if (tour) {
+      tour.complete();
+    }
   }
-  
 }

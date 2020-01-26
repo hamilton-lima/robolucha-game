@@ -5,6 +5,7 @@ import { ModelGameComponent } from "src/app/sdk/model/mainGameComponent";
 import { ShepherdNewService, ITourStep } from "src/app/shepherd-new.service";
 import { EventsService } from "src/app/shared/events.service";
 import { UserService } from "src/app/shared/user.service";
+import Shepherd from "shepherd.js";
 
 @Component({
   selector: "app-main",
@@ -14,6 +15,7 @@ import { UserService } from "src/app/shared/user.service";
 export class MainComponent implements OnInit {
   luchador: ModelGameComponent;
   page: string;
+  tour: Shepherd.Tour;
 
   constructor(
     private router: Router,
@@ -54,31 +56,36 @@ export class MainComponent implements OnInit {
     if (!user.settings.visitedMainPage) {
       user.settings.visitedMainPage = true;
       this.userService.updateSettings(user.settings);
-      this.shepherd.show(this.steps);
+      this.tour = this.shepherd.show(this.steps);
     }
   }
 
   customize() {
+    this.shepherd.done(this.tour);
     this.events.click(this.page, "customize");
     this.router.navigate(["mask"]);
   }
 
   publicArena() {
+    this.shepherd.done(this.tour);
     this.events.click(this.page, "public-arena");
     this.router.navigate(["public"]);
   }
 
   classroomArena() {
+    this.shepherd.done(this.tour);
     this.events.click(this.page, "classroom-arena");
     this.router.navigate(["classroom"]);
   }
 
   dashboard() {
+    this.shepherd.done(this.tour);
     this.events.click(this.page, "classroom-arena");
     this.router.navigate(["dashboard"]);
   }
 
   help() {
+    this.shepherd.done(this.tour);
     this.events.click(this.page, "help");
     this.router.navigate(["help"]);
   }
