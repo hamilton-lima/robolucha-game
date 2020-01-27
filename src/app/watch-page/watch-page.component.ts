@@ -22,6 +22,10 @@ import { Subject } from "rxjs";
 import { MatchState, Score } from "../watch-match/watch-match.model";
 import { Message } from "../message/message.model";
 import { CodeEditorPanelComponent } from "../code-editor-panel/code-editor-panel.component";
+import { ShepherdNewService, ITourStep } from "../shepherd-new.service";
+import { EventsService } from "../shared/events.service";
+import { UserService } from "../shared/user.service";
+import Shepherd from "shepherd.js";
 
 @Component({
   selector: "app-watch-page",
@@ -67,9 +71,18 @@ import { CodeEditorPanelComponent } from "../code-editor-panel/code-editor-panel
   ]
 })
 export class WatchPageComponent implements OnInit, CanComponentDeactivate {
-  constructor(private api: DefaultService, private route: ActivatedRoute) {}
+  
+  constructor(
+    private api: DefaultService,
+    private route: ActivatedRoute,
+    private shepherd: ShepherdNewService,
+    private events: EventsService,
+    private userService: UserService
+  ) {}
 
   matchOver = false;
+  page: string;
+  tour: Shepherd.Tour;
 
   matchID: number;
   luchador: ModelGameComponent;
@@ -85,7 +98,55 @@ export class WatchPageComponent implements OnInit, CanComponentDeactivate {
 
   @ViewChild(CodeEditorPanelComponent) codeEditor: CodeEditorPanelComponent;
 
+  readonly steps: ITourStep[] = [
+    {
+      title: "Know your luchador",
+      text:
+        "<img src=\"assets/help/luchador.jpg\"><br>This is your luchador, you control them by writing instructions, know as CODE",
+      attachTo: { element: "#selector-luchador", on: "top" }
+    },
+    {
+      title: "Move to the green",
+      text:
+        "When in a tutorial your objective is move your character to the GREEN area",
+      attachTo: { element: "#selector-green-area", on: "top" }
+    },
+    {
+      title: "Editting some code",
+      text: "Click here to edit your luchador code",
+      attachTo: { element: "#button-edit-code", on: "top" },
+      offset: "0 20px"
+    },
+    {
+      title: "What is going on here?",
+      text:
+        '<strong>move(10)</strong> is your first instruction to your luchador,<br>'+
+        '<strong>"move"</strong> is the action that your luchador will do <strong>10</strong>'+
+        ' is the intensity of the action, click save to send the code to the luchador',
+      attachTo: { element: ".ace-content", on: "left" },
+      offset: "0 20px"
+    },
+    {
+      title: "Let's see some action",
+      text: 'click save to send the code to the luchador',
+      attachTo: { element: "#button-code-editor-save", on: "top" },
+      offset: "0 20px"
+    }
+  ];
+
+  ngAfterViewInit() {
+    console.log("after view init");
+    const user = this.userService.getUser();
+
+    if (!user.settings.playedTutorial) {
+      user.settings.playedTutorial = true;
+      this.userService.updateSettings(user.settings);
+      this.tour = this.shepherd.show(this.steps);
+    }
+  }
+
   ngOnInit(): void {
+    this.page = this.route.snapshot.url.join("/");
     this.luchador = this.route.snapshot.data.luchador;
     this.matchID = Number.parseInt(this.route.snapshot.paramMap.get("id"));
     this.gameDefinition = null;
