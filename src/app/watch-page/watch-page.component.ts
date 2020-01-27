@@ -122,7 +122,7 @@ export class WatchPageComponent implements OnInit, CanComponentDeactivate {
       text:
         '<strong>move(10)</strong> is your first instruction to your luchador,<br>'+
         '<strong>"move"</strong> is the action that your luchador will do <strong>10</strong>'+
-        ' is the intensity of the action, click save to send the code to the luchador',
+        ' is the intensity of the action',
       attachTo: { element: ".ace-content", on: "left" },
       offset: "0 20px"
     },
