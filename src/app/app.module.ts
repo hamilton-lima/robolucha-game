@@ -50,6 +50,7 @@ import { ClassroomCreateComponent } from "./dashboard/classroom-create/classroom
 import { StudentListComponent } from "./dashboard/student-list/student-list.component";
 import { GenericErrorModalMessageComponent } from './interceptor/generic-error-modal-message/generic-error-modal-message.component';
 import { HelpComponent } from "./pages/help/help.component";
+import { EndTutorialGuardService } from "./end-tutorial-guard.service";
 
 library.add(fas);
 
@@ -84,7 +85,7 @@ const ROUTES: Routes = [
     path: "watch/:id",
     component: WatchPageComponent,
     canActivate: [LoginActivate],
-    canDeactivate: [CanDeactivateGuard],
+    canDeactivate: [CanDeactivateGuard, EndTutorialGuardService],
     resolve: { luchador: LuchadorResolverService }
   },
   {

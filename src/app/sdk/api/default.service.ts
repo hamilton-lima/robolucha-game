@@ -1160,6 +1160,49 @@ export class DefaultService {
     }
 
     /**
+     * Sends message to end active tutorial matches
+     * 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public privateLeaveTutorialMatchPost(observe?: 'body', reportProgress?: boolean): Observable<string>;
+    public privateLeaveTutorialMatchPost(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
+    public privateLeaveTutorialMatchPost(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
+    public privateLeaveTutorialMatchPost(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // authentication (ApiKeyAuth) required
+        if (this.configuration.apiKeys["Authorization"]) {
+            headers = headers.set('Authorization', this.configuration.apiKeys["Authorization"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        let httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set("Accept", httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json'
+        ];
+
+        return this.httpClient.post<string>(`${this.basePath}/private/leave-tutorial-match`,
+            null,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * find or create Luchador for the current user
      * 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
