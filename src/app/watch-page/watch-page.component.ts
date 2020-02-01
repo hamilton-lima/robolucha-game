@@ -71,7 +71,6 @@ import Shepherd from "shepherd.js";
   ]
 })
 export class WatchPageComponent implements OnInit, CanComponentDeactivate {
-  
   constructor(
     private api: DefaultService,
     private route: ActivatedRoute,
@@ -102,7 +101,7 @@ export class WatchPageComponent implements OnInit, CanComponentDeactivate {
     {
       title: "Know your luchador",
       text:
-        "<img src=\"assets/help/luchador.jpg\"><br>This is your luchador, you control them by writing instructions, know as CODE",
+        '<img src="assets/help/luchador.jpg"><br>This is your luchador, you control them by writing instructions, know as CODE',
       attachTo: { element: "#selector-luchador", on: "top" }
     },
     {
@@ -120,15 +119,15 @@ export class WatchPageComponent implements OnInit, CanComponentDeactivate {
     {
       title: "What is going on here?",
       text:
-        '<strong>move(10)</strong> is your first instruction to your luchador,<br>'+
-        '<strong>"move"</strong> is the action that your luchador will do <strong>10</strong>'+
-        ' is the intensity of the action',
+        "<strong>move(10)</strong> is your first instruction to your luchador,<br>" +
+        '<strong>"move"</strong> is the action that your luchador will do <strong>10</strong>' +
+        " is the intensity of the action",
       attachTo: { element: ".ace-content", on: "left" },
       offset: "0 20px"
     },
     {
       title: "Let's see some action",
-      text: 'click save to send the code to the luchador',
+      text: "click save to send the code to the luchador",
       attachTo: { element: "#button-code-editor-save", on: "top" },
       offset: "0 20px"
     }
@@ -173,7 +172,16 @@ export class WatchPageComponent implements OnInit, CanComponentDeactivate {
   }
 
   goBack() {
+    this.events.click(this.page, "match-is-over-goback");
     window.history.back();
+  }
+
+  goHome() {
+    this.events.click(this.page, "home");
+  }
+
+  closeTour() {
+    this.shepherd.done(this.tour);
   }
 
   canDeactivate() {
@@ -195,12 +203,24 @@ export class WatchPageComponent implements OnInit, CanComponentDeactivate {
     this.panelStates.score = this.panelStates.score === "out" ? "in" : "out";
     this.panelStates.code = "out";
     this.panelStates.message = "out";
+
+    if (this.panelStates.score == "in") {
+      this.events.click(this.page, "score.show");
+    } else {
+      this.events.click(this.page, "score.hide");
+    }
   }
 
   toggleCode() {
     this.panelStates.code = this.panelStates.code === "out" ? "in" : "out";
     this.panelStates.score = "out";
     this.panelStates.message = "out";
+
+    if (this.panelStates.score == "in") {
+      this.events.click(this.page, "code.show");
+    } else {
+      this.events.click(this.page, "code.hide");
+    }
   }
 
   toggleMessages() {
@@ -208,6 +228,12 @@ export class WatchPageComponent implements OnInit, CanComponentDeactivate {
       this.panelStates.message === "out" ? "in" : "out";
     this.panelStates.score = "out";
     this.panelStates.code = "out";
+
+    if (this.panelStates.score == "in") {
+      this.events.click(this.page, "messages.show");
+    } else {
+      this.events.click(this.page, "messages.hide");
+    }
   }
 
   updateState(state: MatchState) {

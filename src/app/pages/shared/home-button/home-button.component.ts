@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, EventEmitter, Output } from "@angular/core";
 import { Router } from "@angular/router";
 
 @Component({
@@ -7,10 +7,12 @@ import { Router } from "@angular/router";
   styleUrls: ["./home-button.component.css"]
 })
 export class HomeButtonComponent implements OnInit {
+  @Output() onClick = new EventEmitter<string>();
   constructor(private router: Router) {}
   ngOnInit() {}
 
   onclick() {
+    this.onClick.emit();
     this.router.navigate(["home"]);
   }
 }
