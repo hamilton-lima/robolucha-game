@@ -18,30 +18,32 @@
     </div>
 
     <div class="panel-selector-item">
-        <app-round-button 
-          id="button-edit-code"
-          [color]="'primary'" 
-          [icon]="'pencil'" 
-          (onclick)="toggleCode()">
-        </app-round-button>
-    </div>    
-    
-    <div class="panel-selector-item">
-        <app-round-button 
-          [color]="'primary'" 
-          [icon]="'trophy'" 
-          (onclick)="toggleScore()">
-        </app-round-button>
-    </div>
-    
-    <div class="panel-selector-item">
-        <app-round-button 
-          [color]="'primary'" 
-          [icon]="'message-text-outline'" 
-          (onclick)="toggleMessages()">
-        </app-round-button>
+      <app-round-button
+        id="button-edit-code"
+        [color]="'primary'"
+        [icon]="'pencil'"
+        (onclick)="toggleCode()"
+      >
+      </app-round-button>
     </div>
 
+    <div *ngIf="displayScore" class="panel-selector-item">
+      <app-round-button
+        [color]="'primary'"
+        [icon]="'trophy'"
+        (onclick)="toggleScore()"
+      >
+      </app-round-button>
+    </div>
+
+    <div class="panel-selector-item">
+      <app-round-button
+        [color]="'primary'"
+        [icon]="'message-text-outline'"
+        (onclick)="toggleMessages()"
+      >
+      </app-round-button>
+    </div>
   </div>
 
   <div class="p-3 matchover-alert" *ngIf="matchOver">
@@ -55,6 +57,7 @@
   <app-code-editor-panel
     *ngIf="gameDefinition"
     [gameDefinition]="gameDefinition"
+    (onSave)="onCodeSave()"
     class="code-editor-panel"
     [@slideInOut]="{
       value: panelStates.code,
@@ -64,6 +67,7 @@
   </app-code-editor-panel>
 
   <app-score
+    *ngIf="displayScore"
     class="score"
     [@slideInOut]="{
       value: panelStates.score,

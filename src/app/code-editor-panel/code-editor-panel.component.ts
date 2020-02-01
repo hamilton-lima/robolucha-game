@@ -4,7 +4,9 @@ import {
   ChangeDetectorRef,
   Input,
   SimpleChanges,
-  OnChanges
+  OnChanges,
+  EventEmitter,
+  Output
 } from "@angular/core";
 import { ModelCode } from "../sdk/model/mainCode";
 
@@ -31,6 +33,7 @@ export class CodeEditorPanelComponent implements OnInit, OnChanges {
   page:string;
 
   @Input() gameDefinition: ModelGameDefinition;
+  @Output() onSave = new EventEmitter<string>();
 
   constructor(
     private route: ActivatedRoute,
@@ -147,6 +150,7 @@ export class CodeEditorPanelComponent implements OnInit, OnChanges {
       this.dirty = false;
       setTimeout(() => (this.successMessage = null), HIDE_SUCCESS_TIMEOUT);
       this.cdRef.detectChanges();
+      this.onSave.emit();
     });
   }
 }

@@ -80,6 +80,7 @@ export class WatchPageComponent implements OnInit, CanComponentDeactivate {
   ) {}
 
   matchOver = false;
+  displayScore = false;
   page: string;
   tour: Shepherd.Tour;
 
@@ -150,15 +151,16 @@ export class WatchPageComponent implements OnInit, CanComponentDeactivate {
     this.matchID = Number.parseInt(this.route.snapshot.paramMap.get("id"));
     this.gameDefinition = null;
 
-    // console.log("match ID", this.matchID);
-    // console.log("luchador", this.luchador);
-
     this.api.privateMatchSingleGet(this.matchID).subscribe(match => {
       this.api
         .privateGameDefinitionIdIdGet(match.gameDefinitionID)
         .subscribe(gameDefinition => {
           this.gameDefinition = gameDefinition;
-          // console.log("gamedefinition", this.gameDefinition);
+          
+          // only display score if is not tutorial
+          if( gameDefinition.type !== "tutorial"){
+            this.displayScore = true;
+          }
         });
     });
 
@@ -242,5 +244,12 @@ export class WatchPageComponent implements OnInit, CanComponentDeactivate {
 
   updateMessage(message: Message) {
     this.messageSubject.next(message);
+  }
+
+  onCodeSave() {
+    this.panelStates.code = "out";
+    this.panelStates.score = "out";
+    this.panelStates.message = "out";
+    this.events.click(this.page, "code.save");
   }
 }
