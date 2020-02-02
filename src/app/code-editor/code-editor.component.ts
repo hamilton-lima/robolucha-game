@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 import "brace/theme/solarized_dark";
+import "brace/theme/solarized_light";
 import "brace/mode/lua";
 
 @Component({
