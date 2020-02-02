@@ -11,9 +11,9 @@ export class EndTutorialGuardService
   constructor(private api: DefaultService) {}
 
   canDeactivate(component: CanComponentDeactivate) {
-    // this.api
-    //   .privateLeaveTutorialMatchPost()
-    //   .subscribe(response => console.log(response));
+    this.api
+      .privateLeaveTutorialMatchPost()
+      .subscribe(response => console.log(response));
     return true;
   }
 }
