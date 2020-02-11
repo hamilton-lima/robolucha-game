@@ -62,17 +62,17 @@
   </ngb-tab>
 </ngb-tabset>
 
-<ngb-alert
-  class="success-message"
+<!-- <ngb-alert
+  class="success-message float-right"
   *ngIf="successMessage"
   type="success"
   (close)="successMessage = null"
   >{{ successMessage }}</ngb-alert
->
+> -->
 <button
   id="button-code-editor-save"
-  *ngIf="dirty"
-  class="btn btn-primary float-right align-bottom"
+  [disabled]="!dirty"
+  class="btn btn-primary align-bottom"
   (click)="save()"
 >
   Save

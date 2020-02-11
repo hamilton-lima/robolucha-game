@@ -17,8 +17,8 @@ import { DefaultService } from "../sdk/api/default.service";
 import { ModelLuchador } from "../sdk/model/mainLuchador";
 import { ModelGameDefinition } from "../sdk";
 import { EventsService } from "../shared/events.service";
+import { AlertService } from "../pages/alert.service";
 
-const HIDE_SUCCESS_TIMEOUT = 3000;
 
 @Component({
   selector: "app-code-editor-panel",
@@ -39,7 +39,8 @@ export class CodeEditorPanelComponent implements OnInit, OnChanges {
     private route: ActivatedRoute,
     private api: DefaultService,
     private cdRef: ChangeDetectorRef,
-    private events: EventsService
+    private events: EventsService,
+    private alert: AlertService
   ) {
     const data = this.route.snapshot.data;
     this.page = this.route.snapshot.url.join("/");
@@ -146,9 +147,8 @@ export class CodeEditorPanelComponent implements OnInit, OnChanges {
     }
 
     this.api.privateLuchadorPut(this.luchador).subscribe(response => {
-      this.successMessage = "Luchador updated";
+      this.alert.infoTop("Luchador updated","DISMISS")
       this.dirty = false;
-      setTimeout(() => (this.successMessage = null), HIDE_SUCCESS_TIMEOUT);
       this.cdRef.detectChanges();
       this.onSave.emit();
     });

@@ -8,13 +8,25 @@ export class AlertService {
   static readonly INFO = "snack-bar-info";
   static readonly WARNING = "snack-bar-warning";
   static readonly ERROR = "snack-bar-error";
+  static readonly DURATION = 5000;
 
   constructor(public snackBar: MatSnackBar) {}
 
   private base(message: string, action: string, className: string) {
     this.snackBar.open(message, action, {
-      duration: 5000,
+      duration: AlertService.DURATION,
       panelClass: className
+    });
+  }
+
+// verticalPosition: 'top' | 'bottom'
+// horizontalPosition: 'start' | 'center' | 'end' | 'left' | 'right'
+  infoTop(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: AlertService.DURATION,
+      verticalPosition: "top",
+      horizontalPosition: "left",
+      panelClass: AlertService.INFO
     });
   }
 
