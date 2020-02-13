@@ -49,6 +49,8 @@
 
   <div class="row">
     <div class="col-10">
+      <app-clock class="clock" [matchStateSubject]="matchStateSubject"></app-clock>
+
       <app-arena
         [gameDefinition]="gameDefinition"
         [matchStateSubject]="matchStateSubject"

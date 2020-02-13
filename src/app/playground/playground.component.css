@@ -1,6 +1,14 @@
-.json-data{
-    width: 800px;
-    height: 600px;
-    font-family: "monospace";
-    font-size: 12px;
+.json-data {
+  width: 800px;
+  height: 600px;
+  font-family: "monospace";
+  font-size: 12px;
+}
+
+.clock {
+  z-index: 3;
+  position: absolute;
+  left: 50%;
+  right: 50%;
+  top: 0%;
 }

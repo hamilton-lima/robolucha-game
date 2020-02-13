@@ -10,6 +10,7 @@ import { Subject } from 'rxjs';
 })
 export class ClockComponent implements OnInit {
   @Input() matchStateSubject: Subject<MatchState>;
+  @Input() icon: string = "clock-outline";
   private clock: number = 0;
 
   constructor() { }
