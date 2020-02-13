@@ -10,11 +10,12 @@
 }
 
 .clock-text {
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding-left: 20px;
-  padding-right: 20px;
-  background-color: aliceblue;
+  font-weight: bold;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 15px;
+  padding-right: 15px;
+  background-color: rgba(255, 255, 255, 0.5);
   -moz-border-radius-bottomright: 10px;
   -webkit-border-bottom-right-radius: 10px;
   border-bottom-right-radius: 10px;
@@ -24,8 +25,9 @@
 }
 
 .clock-icon {
-  padding: 10px;
-  background-color: aquamarine;
+  padding: 5px;
+  font-weight: bold;
+  background-color: rgba(0, 255, 0, 0.5);
   -moz-border-radius-bottomleft: 10px;
   -webkit-border-bottom-left-radius: 10px;
   border-bottom-left-radius: 10px;
