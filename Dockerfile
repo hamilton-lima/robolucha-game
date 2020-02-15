@@ -1,5 +1,5 @@
 # prepare builder
-FROM node as builder
+FROM docker:19.03.5-dind as builder
 
 RUN mkdir /usr/src/app
 COPY package.json /usr/src/app
