@@ -1,5 +1,5 @@
 # prepare builder
-FROM node:latest as builder
+FROM node:13.8.0 as builder
 
 RUN mkdir -p /usr/src/app
 COPY package.json /usr/src/app
