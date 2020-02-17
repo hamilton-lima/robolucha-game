@@ -1,6 +1,6 @@
-image: docker:19.03.5-dind
+image: docker:stable
 services:
-  - docker:dind
+  - docker:19.03.5-dind
 
 variables:
   NAME: robolucha/game:latest
