@@ -90,6 +90,12 @@ export class MainComponent implements OnInit {
     this.router.navigate(["help"]);
   }
 
+  forum() {
+    this.shepherd.done(this.tour);
+    this.events.click(this.page, "forum");
+    window.open("https://forum.robolucha.com", "robolucha-forum");
+  }
+
   roundClick() {
     // console.log('click');
   }

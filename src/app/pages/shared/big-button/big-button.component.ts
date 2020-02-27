@@ -8,6 +8,14 @@ import { Component, OnInit, Input } from '@angular/core';
 export class BigButtonComponent implements OnInit {
 
   @Input() minWidth;
+  innerColor = "primary";
+
+  @Input("themeColor")
+  set setInnerColor(color: string) {
+    console.log("inner color updated", color);
+    this.innerColor = color;
+  }
+
   constructor() { }
 
   ngOnInit() {  }
