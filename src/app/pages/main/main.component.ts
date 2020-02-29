@@ -87,7 +87,8 @@ export class MainComponent implements OnInit {
   help() {
     this.shepherd.done(this.tour);
     this.events.click(this.page, "help");
-    this.router.navigate(["help"]);
+    window.open("https://docs.robolucha.com", "robolucha-docs");
+    // this.router.navigate(["help"]);
   }
 
   forum() {
