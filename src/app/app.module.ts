@@ -123,7 +123,7 @@ const ROUTES: Routes = [
       { path: "", redirectTo: "classrooms", pathMatch: "full" }
     ]
   },
-  { path: "**", component: NotFoundComponent }
+  { path: "**", redirectTo: "/home" }
 ];
 
 export function apiConfigFactory(): Configuration {
