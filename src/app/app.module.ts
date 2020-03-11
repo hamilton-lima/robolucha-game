@@ -51,6 +51,7 @@ import { StudentListComponent } from "./dashboard/student-list/student-list.comp
 import { GenericErrorModalMessageComponent } from './interceptor/generic-error-modal-message/generic-error-modal-message.component';
 import { HelpComponent } from "./pages/help/help.component";
 import { EndTutorialGuardService } from "./end-tutorial-guard.service";
+import { MarkDownComponent } from './mark-down/mark-down.component';
 
 library.add(fas);
 
@@ -155,6 +156,7 @@ export function apiConfigFactory(): Configuration {
     MatchCardComponent,
     AuthModalMessageComponent,
     GenericErrorModalMessageComponent,
+    MarkDownComponent,
   ],
   imports: [
     BrowserModule,
