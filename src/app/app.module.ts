@@ -49,7 +49,7 @@ import { ClassroomListComponent } from "./dashboard/classroom-list/classroom-lis
 import { ClassroomCreateComponent } from "./dashboard/classroom-create/classroom-create.component";
 import { StudentListComponent } from "./dashboard/student-list/student-list.component";
 import { GenericErrorModalMessageComponent } from './interceptor/generic-error-modal-message/generic-error-modal-message.component';
-import { HelpComponent } from "./pages/help/help.component";
+import { AboutComponent } from "./pages/about/about.component";
 import { EndTutorialGuardService } from "./end-tutorial-guard.service";
 import { MarkDownComponent } from './mark-down/mark-down.component';
 
@@ -102,8 +102,8 @@ const ROUTES: Routes = [
     resolve: { luchador: LuchadorResolverService }
   },
   {
-    path: "help",
-    component: HelpComponent,
+    path: "about",
+    component: AboutComponent,
     canActivate: [LoginActivate],
     resolve: { luchador: LuchadorResolverService }
   },
