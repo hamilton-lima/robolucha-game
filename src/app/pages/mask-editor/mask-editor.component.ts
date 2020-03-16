@@ -23,6 +23,7 @@ export class MaskEditorComponent implements OnInit, CanComponentDeactivate {
   dirty = false;
   luchador: ModelGameComponent;
   tour: Shepherd.Tour;
+  page: string;
 
   constructor(
     private route: ActivatedRoute,
@@ -38,6 +39,8 @@ export class MaskEditorComponent implements OnInit, CanComponentDeactivate {
   }
 
   ngOnInit() {
+    this.page = this.route.snapshot.url.join("/");
+
     const data = this.route.snapshot.data;
     // console.log('configs on maskeditor', data.luchador.configs);
     this.refreshEditor(data.luchador.configs);
@@ -73,7 +76,9 @@ export class MaskEditorComponent implements OnInit, CanComponentDeactivate {
     this.dirty = false;
   }
 
-  random(){
+  random() {
+    this.events.click(this.page, "random");
+
     this.api.privateMaskRandomGet().subscribe(configs => {
       this.luchador.configs = configs;
       this.refreshEditor(this.luchador.configs);
@@ -83,20 +88,22 @@ export class MaskEditorComponent implements OnInit, CanComponentDeactivate {
   }
 
   save() {
+    this.events.click(this.page, "save");
+
     let configs = this.mediator.configs.value;
-    if( configs.length > 0 ){
+    if (configs.length > 0) {
       this.luchador.configs = configs;
       const remoteCall = this.api.privateLuchadorPut(this.luchador);
 
       remoteCall.subscribe(response => {
-        this.alert.info("Luchador updated","DISMISS");
+        this.alert.info("Luchador updated", "DISMISS");
         this.refreshEditor(response.luchador.configs);
         this.cdRef.detectChanges();
       });
     }
   }
 
-  onUpdate(configs: ModelConfig []) {
+  onUpdate(configs: ModelConfig[]) {
     this.dirty = true;
     // console.log("update on luchador", configs );
     this.mediator.configs.next(configs);
@@ -104,11 +111,12 @@ export class MaskEditorComponent implements OnInit, CanComponentDeactivate {
 
   canDeactivate() {
     if (this.dirty) {
+      this.events.click(this.page, "try-to-leave-without-save");
+
       return window.confirm(
         "You have unsaved changes. Are you sure you want to leave?"
       );
     }
     return true;
   }
-
 }
