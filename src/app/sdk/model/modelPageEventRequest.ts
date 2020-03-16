@@ -12,6 +12,8 @@
 
 
 export interface ModelPageEventRequest {
+    appName?: string;
+    appVersion?: string;
     action?: string;
     componentID?: string;
     page?: string;
