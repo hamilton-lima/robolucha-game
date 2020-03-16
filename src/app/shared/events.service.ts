@@ -2,6 +2,9 @@ import { Injectable } from "@angular/core";
 import { DefaultService, ModelPageEventRequest } from "../sdk";
 import { Router, NavigationStart, RouterEvent } from "@angular/router";
 import { AuthService } from "../auth.service";
+import { VERSION } from "src/app/version";
+
+const AppName = "robolucha-game";
 
 @Injectable({
   providedIn: "root"
@@ -11,7 +14,9 @@ export class EventsService {
     const event: ModelPageEventRequest = {
       action: "click",
       page: page,
-      componentID: componentID
+      componentID: componentID,
+      appName: AppName,
+      appVersion: VERSION
     };
 
     this.save(event);
@@ -21,7 +26,9 @@ export class EventsService {
     const event: ModelPageEventRequest = {
       action: action,
       page: page,
-      componentID: componentID
+      componentID: componentID,
+      appName: AppName,
+      appVersion: VERSION
     };
 
     this.save(event);
@@ -31,7 +38,9 @@ export class EventsService {
     const pageEvent: ModelPageEventRequest = {
       action: "open",
       page: url,
-      componentID: ""
+      componentID: "",
+      appName: AppName,
+      appVersion: VERSION
     };
 
     this.save(pageEvent);
