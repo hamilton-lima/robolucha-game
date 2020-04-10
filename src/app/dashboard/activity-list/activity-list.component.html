@@ -1,0 +1,21 @@
+<div class="container">
+  <div class="row pt-4 pb-4">
+    <div class="col-md-8">
+      <h1>Activities</h1>
+    </div>
+    <div class="col-md-4 text-right">
+      <button (click)="create()" mat-raised-button>NEW</button>
+    </div>
+  </div>
+
+  <div class="row">
+    <app-activity-card
+      class="activity-card"
+      *ngFor="let activity of activities"
+      [activity]="activity"
+    ></app-activity-card>
+    <div *ngIf="activities.length <= 0">
+      <h4>There are no activities</h4>
+    </div>
+  </div>
+</div>

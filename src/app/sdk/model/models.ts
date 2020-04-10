@@ -1,4 +1,5 @@
 export * from './modelActiveMatch';
+export * from './modelActivity';
 export * from './modelAvailableMatch';
 export * from './modelClassroom';
 export * from './modelCode';
@@ -14,6 +15,7 @@ export * from './modelMatchScore';
 export * from './modelPageEventRequest';
 export * from './modelSceneComponent';
 export * from './modelScoreList';
+export * from './modelSkill';
 export * from './modelStudent';
 export * from './modelStudentResponse';
 export * from './modelUpdateLuchadorResponse';

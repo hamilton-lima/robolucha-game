@@ -14,7 +14,7 @@
           <mat-icon svgIcon="help-circle-outline"></mat-icon> Help
         </h2>
       </a>
-      <a mat-list-item routerLink="/home" target="_blank">
+      <a mat-list-item (click)="home()">
         <h2 matLine>
           <mat-icon svgIcon="play-circle-outline"></mat-icon> Play
         </h2>
@@ -22,9 +22,13 @@
       <mat-divider></mat-divider>
       <!-- <h2 matSubheader>Docs</h2> -->
 
-      <a mat-list-item routerLink="/dashboard/classrooms" target="_blank">
+      <a mat-list-item (click)="classrooms()">
         <h2 matLine>Classrooms</h2>
       </a>
+      <a mat-list-item (click)="activities()">
+        <h2 matLine>Activities</h2>
+      </a>
+
     </mat-nav-list>
   </mat-sidenav>
 
