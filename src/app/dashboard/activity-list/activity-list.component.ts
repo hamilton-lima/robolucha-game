@@ -18,7 +18,7 @@ export class ActivityListComponent implements OnInit {
   }
 
   listActivities() {
-    this.api.privateActivityGet().subscribe(response => {
+    this.api.dashboardActivityGet().subscribe(response => {
       this.activities = response;
     });
   }

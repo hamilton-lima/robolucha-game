@@ -16,9 +16,6 @@ import { ModelSkill } from './modelSkill';
 export interface ModelActivity {
     description?: string;
     gameDefinition?: ModelGameDefinition;
-    /**
-     * GradingSystemID  uint            `json:\"gradingSystemID\"` GradingSystem    GradingSystem   `json:\"gradingSystem\"`
-     */
     gameDefinitionID?: number;
     id?: number;
     name?: string;
