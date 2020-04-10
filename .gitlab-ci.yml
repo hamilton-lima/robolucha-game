@@ -11,7 +11,6 @@ variables:
 build:
   stage: build
   script:
-    - ./node_modules/.bin/handlebars package.json < src/app/version.hbs > src/app/version.ts
     - docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD} ${DOCKER_SERVER}
     - docker build -t ${CONTAINER_IMAGE} . 
     - docker tag ${CONTAINER_IMAGE} ${CONTAINER_IMAGE}

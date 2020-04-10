@@ -7,6 +7,7 @@ WORKDIR /usr/src/app
 RUN npm install
 
 COPY . /usr/src/app
+RUN ./node_modules/.bin/handlebars package.json < src/app/version.hbs > src/app/version.ts
 
 ENV PATH /usr/src/app/node_modules/.bin:$PATH
 # RUN ng build --prod --source-map=false
