@@ -8,6 +8,7 @@ import { Component, OnInit, Input } from '@angular/core';
 export class BigButtonComponent implements OnInit {
 
   @Input() minWidth;
+  @Input() disabled: boolean = false;
   innerColor = "primary";
 
   @Input("themeColor")
