@@ -35,9 +35,11 @@ export interface ModelGameDefinition {
     maxFireAmount?: number;
     maxFireCooldown?: number;
     maxFireDamage?: number;
+    maxLevel?: number;
     maxParticipants?: number;
     minFireAmount?: number;
     minFireDamage?: number;
+    minLevel?: number;
     minParticipants?: number;
     moveSpeed?: number;
     name?: string;
@@ -59,4 +61,5 @@ export interface ModelGameDefinition {
     turnGunSpeed?: number;
     turnSpeed?: number;
     type?: string;
+    unblockLevel?: number;
 }

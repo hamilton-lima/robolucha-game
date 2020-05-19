@@ -21,4 +21,5 @@ export * from './modelStudentResponse';
 export * from './modelUpdateLuchadorResponse';
 export * from './modelUser';
 export * from './modelUserDetails';
+export * from './modelUserLevel';
 export * from './modelUserSetting';

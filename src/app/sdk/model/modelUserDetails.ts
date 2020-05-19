@@ -11,11 +11,13 @@
  */
 import { ModelClassroom } from './modelClassroom';
 import { ModelUser } from './modelUser';
+import { ModelUserLevel } from './modelUserLevel';
 import { ModelUserSetting } from './modelUserSetting';
 
 
 export interface ModelUserDetails {
     classrooms?: Array<ModelClassroom>;
+    level?: ModelUserLevel;
     roles?: Array<string>;
     settings?: ModelUserSetting;
     user?: ModelUser;
