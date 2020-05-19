@@ -5,15 +5,16 @@ import {
   ModelUserDetails,
   ModelAvailableMatch,
   ModelMatch,
-  DefaultService
+  DefaultService,
 } from "src/app/sdk";
 import { MatDialog } from "@angular/material";
 import { Router } from "@angular/router";
+import { LevelControlService } from "../level-control.service";
 
 @Component({
   selector: "app-list-classroom-games",
   templateUrl: "./list-classroom-games.component.html",
-  styleUrls: ["./list-classroom-games.component.css"]
+  styleUrls: ["./list-classroom-games.component.css"],
 })
 export class ListClassroomGamesComponent implements OnInit {
   @ViewChild("joinSucess") joinSucess: TemplateRef<any>;
@@ -21,19 +22,22 @@ export class ListClassroomGamesComponent implements OnInit {
   classrooms: ModelClassroom[] = [];
   matches: Array<ModelAvailableMatch> = [];
   title: string = "";
+  userDetails: ModelUserDetails;
 
   constructor(
     private api: DefaultService,
     private authService: AuthService,
     private dialog: MatDialog,
-    private router: Router
+    private router: Router,
+    private level: LevelControlService
   ) {}
 
   ngOnInit() {
     this.authService.isLoggedIn().subscribe((userDetails: ModelUserDetails) => {
+      this.userDetails = userDetails;
       this.classrooms = userDetails.classrooms;
       this.updateTitle();
-      this.loadMatches();
+      this.loadMatches(userDetails);
     });
   }
 
@@ -42,26 +46,28 @@ export class ListClassroomGamesComponent implements OnInit {
     this.classroom = classroom;
     this.dialog.open(this.joinSucess);
     this.authService.isLoggedIn().subscribe((userDetails: ModelUserDetails) => {
+      this.userDetails = userDetails;
       this.classrooms = userDetails.classrooms;
       this.updateTitle();
-      this.loadMatches();
+      this.loadMatches(userDetails);
     });
   }
 
-  loadMatches() {
+  loadMatches(userDetails: ModelUserDetails) {
     if (this.classrooms.length > 0) {
       const id = this.classrooms[0].id;
       this.api
         .privateAvailableMatchClassroomIdGet(id)
         .subscribe((matches: Array<ModelAvailableMatch>) => {
-          // // console.log("matches", matches);
-          this.matches = matches;
+          this.matches = matches.filter((match) =>
+            this.level.showAvailableMatch(userDetails, match.gameDefinition)
+          );
         });
     }
   }
 
-  updateTitle(){
-    if( this.classrooms.length == 0 ){
+  updateTitle() {
+    if (this.classrooms.length == 0) {
       this.title = "Please join a classroom";
     } else {
       const classroom = this.classrooms[0];
@@ -70,9 +76,7 @@ export class ListClassroomGamesComponent implements OnInit {
   }
 
   play(matchID: number) {
-    // // console.log("play", matchID);
     this.api.privatePlayIdPost(matchID).subscribe((match: ModelMatch) => {
-      // // console.log("joinned match", match);
       this.router.navigate(["watch", match.id]);
     });
   }

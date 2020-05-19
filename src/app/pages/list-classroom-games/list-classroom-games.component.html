@@ -19,6 +19,7 @@
         class="col-sm-12 col-md-6 col-lg-4 mb-4"
         *ngFor="let match of matches"
         [match]="match"
+        [userDetails]="userDetails"
         (onplay)="play($event)"
       ></app-game-card>
 

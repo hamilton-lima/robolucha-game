@@ -3,40 +3,48 @@ import {
   DefaultService,
   ModelActiveMatch,
   ModelAvailableMatch,
-  ModelMatch
+  ModelMatch,
+  ModelUserDetails,
 } from "src/app/sdk";
 import { Router } from "@angular/router";
 import { ITourStep, ShepherdNewService } from "src/app/shepherd-new.service";
 import { UserService } from "src/app/shared/user.service";
-import { timer } from 'rxjs';
+import { timer } from "rxjs";
 import Shepherd from "shepherd.js";
+import { LevelControlService } from "../level-control.service";
 
 @Component({
   selector: "app-list-public-games",
   templateUrl: "./list-public-games.component.html",
-  styleUrls: ["./list-public-games.component.css"]
+  styleUrls: ["./list-public-games.component.css"],
 })
 export class ListPublicGamesComponent implements OnInit {
   matches: Array<ModelAvailableMatch> = [];
   tour: Shepherd.Tour;
+  userDetails: ModelUserDetails;
 
   constructor(
     private api: DefaultService,
     private router: Router,
     private shepherd: ShepherdNewService,
-    private userService: UserService
+    private userService: UserService,
+    private level: LevelControlService
   ) {}
 
   ngOnInit() {
+    this.userDetails = this.userService.getUser();
+
     this.api
       .privateAvailableMatchPublicGet()
       .subscribe((matches: Array<ModelAvailableMatch>) => {
-        this.matches = matches;
+        this.matches = matches.filter((match) =>
+          this.level.showAvailableMatch(this.userDetails, match.gameDefinition)
+        );
       });
 
-      // Dynamic ids were not update to DOM, 
-      // forcing this wait before triggering shepperd
-      timer(200).subscribe(x => this.displayContextualHelp());
+    // Dynamic ids were not update to DOM,
+    // forcing this wait before triggering shepperd
+    timer(200).subscribe((x) => this.displayContextualHelp());
   }
 
   readonly steps: ITourStep[] = [
@@ -44,8 +52,8 @@ export class ListPublicGamesComponent implements OnInit {
       title: "First time here, tutorial time",
       text:
         'If this is your first time here we suggest you start playing "Move1" tutorial',
-      attachTo: { element: "#move1", on: "bottom" }
-    }
+      attachTo: { element: "#move1", on: "bottom" },
+    },
   ];
 
   displayContextualHelp() {
