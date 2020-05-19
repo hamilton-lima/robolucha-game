@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, EventEmitter, Output } from "@angular/core";
-import { ModelAvailableMatch } from "src/app/sdk";
+import { ModelAvailableMatch, ModelUserDetails } from "src/app/sdk";
+import { LevelControlService } from "../../level-control.service";
 
 @Component({
   selector: "app-game-card",
@@ -9,15 +10,20 @@ import { ModelAvailableMatch } from "src/app/sdk";
 export class GameCardComponent implements OnInit {
   @Input() match: ModelAvailableMatch;
   @Input() componentId: string;
+  @Input() userDetails: ModelUserDetails;
   
   @Output() onplay = new EventEmitter<number>();
 
-  constructor() {}
+  constructor(private level: LevelControlService) {}
 
   ngOnInit() {}
 
   getImageName(match: ModelAvailableMatch) {
     return "assets/maps/" + match.name.toLowerCase() + ".png";
+  }
+
+  canPlay(){
+    return this.level.canPlay(this.userDetails, this.match.gameDefinition);
   }
 
   getIconName(match: ModelAvailableMatch) {
