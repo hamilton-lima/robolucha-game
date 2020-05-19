@@ -13,10 +13,10 @@
     <p id="description">{{ match.gameDefinition.description }}</p>
   </mat-card-content>
   <mat-card-actions>
-    <app-big-button *ngIf="!canPlay(match)" [disabled]="true" [minWidth]="'90%'" id="play">
+    <app-big-button *ngIf="!canPlay()" [disabled]="true" [minWidth]="'90%'" id="play">
       <span><mat-icon svgIcon="lock"></mat-icon></span>
     </app-big-button>
-    <app-big-button *ngIf="canPlay(match)" [minWidth]="'90%'" (click)="play(match.id)" id="play">
+    <app-big-button *ngIf="canPlay()" [minWidth]="'90%'" (click)="play(match.id)" id="play">
       <span>PLAY</span>
     </app-big-button>
   </mat-card-actions>
