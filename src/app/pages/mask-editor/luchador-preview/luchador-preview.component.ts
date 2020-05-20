@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Input, OnDestroy } from "@angular/core";
+import { Component, OnInit, ViewChild, Input, OnDestroy, HostListener } from "@angular/core";
 import { BehaviorSubject, Subscription } from "rxjs";
 import { TextureBuilder } from "../../../arena/texture-builder";
 import { MaskEditorMediator } from "../mask-editor.mediator";
@@ -10,8 +10,8 @@ import { ModelGameComponent, ModelConfig } from "src/app/sdk";
   styleUrls: ["./luchador-preview.component.css"]
 })
 export class LuchadorPreviewComponent implements OnInit, OnDestroy {
+
   @ViewChild("preview") canvas;
-  // @ViewChild("debug") debug;
   @Input() luchadorSubject: BehaviorSubject<ModelGameComponent>;
 
   private engine: BABYLON.Engine;
@@ -20,10 +20,11 @@ export class LuchadorPreviewComponent implements OnInit, OnDestroy {
   private light: BABYLON.Light;
   private character: BABYLON.AbstractMesh;
 
+  readonly ROTATION_SPEED = 0.5;
+
   material: BABYLON.StandardMaterial;
   dynamicTexture: BABYLON.DynamicTexture;
   context: CanvasRenderingContext2D;
-  rotate: boolean = false;
   luchador: ModelGameComponent;
   subscription: Subscription;
   loadingTexture = false;
@@ -86,7 +87,7 @@ export class LuchadorPreviewComponent implements OnInit, OnDestroy {
       // // target the camera to scene origin
       self.camera.setTarget(BABYLON.Vector3.Zero());
       // // attach the camera to the canvas
-      self.camera.attachControl(self.canvas.nativeElement, false);
+      // self.camera.attachControl(self.canvas.nativeElement, false);
       self.loadModel(self, configs, resolve);
     });
   }
@@ -98,15 +99,13 @@ export class LuchadorPreviewComponent implements OnInit, OnDestroy {
       "robolucha_char03.babylon",
       self.scene,
       function(newMeshes) {
-        // console.log("[Luchador Preview] imported meshes luchador", newMeshes);
 
         newMeshes.forEach(mesh => {
-          // console.log("[Luchador3D] mesh.name", mesh.name);
           if (mesh.name == "robolucha_retopo") {
             mesh.visibility = 0;
             self.character = mesh;
             self.character.position = BABYLON.Vector3.Zero();
-            self.character.position.y = -2;
+            self.character.position.y = -2.3;
             self.character.rotation.z = 1;
 
             let material = new BABYLON.StandardMaterial("material", self.scene);
@@ -129,10 +128,6 @@ export class LuchadorPreviewComponent implements OnInit, OnDestroy {
   render(): void {
     this.engine.runRenderLoop(() => {
       this.scene.render();
-      if (this.character && this.rotate) {
-        this.character.rotation.z += -0.03;
-        // console.log("rotation ", this.character.rotation.z);
-      }
     });
   }
 
@@ -140,4 +135,30 @@ export class LuchadorPreviewComponent implements OnInit, OnDestroy {
   angle2radian(angle: number): number {
     return angle * this.ANGLE2RADIAN;
   }
+
+  rotateLeft(){
+    if (this.character) {
+      this.character.rotation.z += (this.ROTATION_SPEED * -1);
+    }
+  }
+
+  rotateRight(){
+    if (this.character) {
+      this.character.rotation.z += this.ROTATION_SPEED;
+    }
+  }
+
+  @HostListener('window:keydown', ['$event'])
+  keyEvent(event: KeyboardEvent) {
+
+    if( event.code == "ArrowLeft"){
+      this.rotateLeft();
+    }
+
+    if( event.code == "ArrowRight"){
+      this.rotateRight();
+    }
+
+  }
+
 }
