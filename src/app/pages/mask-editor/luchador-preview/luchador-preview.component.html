@@ -1,4 +1,20 @@
-<div>
-        <canvas #preview width="400" height="400" id="renderCanvas"></canvas>
-        <!-- <canvas #debug width="512" height="512" id="debugCanvas"></canvas> -->
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <canvas #preview width="400" height="400" id="renderCanvas"></canvas>
+      <!-- <canvas #debug width="512" height="512" id="debugCanvas"></canvas> -->
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-6 text-center">
+      <button mat-raised-button id="rotate-left" (click)="rotateLeft()">
+        <span><mat-icon svgIcon="chevron-left"></mat-icon></span>
+      </button>
+    </div>
+    <div class="col-6 float-center">
+      <button mat-raised-button id="rotate-right" (click)="rotateRight()">
+        <span><mat-icon svgIcon="chevron-right"></mat-icon></span>
+      </button>
+    </div>
+  </div>
 </div>
