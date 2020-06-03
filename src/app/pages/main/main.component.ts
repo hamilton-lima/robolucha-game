@@ -6,6 +6,7 @@ import { ShepherdNewService, ITourStep } from "src/app/shepherd-new.service";
 import { EventsService } from "src/app/shared/events.service";
 import { UserService } from "src/app/shared/user.service";
 import Shepherd from "shepherd.js";
+import { LevelGroupService } from "src/app/level-group.service";
 
 @Component({
   selector: "app-main",
@@ -23,7 +24,8 @@ export class MainComponent implements OnInit {
     private route: ActivatedRoute,
     private shepherd: ShepherdNewService,
     private events: EventsService,
-    private userService: UserService
+    private userService: UserService,
+    private level: LevelGroupService
   ) {}
 
   ngOnInit() {
@@ -58,6 +60,7 @@ export class MainComponent implements OnInit {
       this.userService.updateSettings(user.settings);
       this.tour = this.shepherd.show(this.steps);
     }
+
   }
 
   customize() {
