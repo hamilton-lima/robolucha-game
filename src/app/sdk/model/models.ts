@@ -8,6 +8,7 @@ export * from './modelFindLuchadorWithGamedefinition';
 export * from './modelGameComponent';
 export * from './modelGameDefinition';
 export * from './modelJoinMatch';
+export * from './modelLevelGroup';
 export * from './modelMatch';
 export * from './modelMatchMetric';
 export * from './modelMatchParticipant';
