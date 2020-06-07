@@ -11,7 +11,7 @@ export class GameCardComponent implements OnInit {
   @Input() match: ModelAvailableMatch;
   @Input() componentId: string;
   @Input() userDetails: ModelUserDetails;
-  
+
   @Output() onplay = new EventEmitter<number>();
 
   constructor(private level: LevelControlService) {}
@@ -20,6 +20,10 @@ export class GameCardComponent implements OnInit {
 
   getImageName(match: ModelAvailableMatch) {
     return "assets/maps/" + match.name.toLowerCase() + ".png";
+  }
+
+  imageErrorHandler(event){
+    event.target.src = "assets/maps/image-not-found.png";
   }
 
   canPlay(){
