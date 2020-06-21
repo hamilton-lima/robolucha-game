@@ -6,8 +6,9 @@
         <div>
           <img width="280" height="300" src="assets/pages/robolucha-play.gif" class="clickable"
             (click)="playMultiplayer()">
-          <div class="title-main clickable" (click)="playMultiplayer()">
-            <span>PLAY</span>
+          <div class="title-main-container clickable" (click)="playMultiplayer()">
+            <span class="title-main">PLAY</span><br>
+            <span class="subtitle-main">{{ multiplayerMatch.gameDefinition.label }}</span>
           </div>
         </div>
       </div>
@@ -16,8 +17,8 @@
         <div>
           <img width="280" height="300" src="assets/pages/robolucha-personalize.gif" class="clickable"
             (click)="customize()">
-          <div class="title-main clickable" (click)="customize()">
-            <span>PERSONALIZE</span>
+          <div class="title-main-container clickable" (click)="customize()">
+            <span class="title-main">PERSONALIZE</span>
           </div>
         </div>
       </div>

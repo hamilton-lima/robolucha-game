@@ -4,14 +4,21 @@
   cursor: pointer;
 }
 
-.title-main{ 
+.title-main-container{ 
   position: absolute;
   bottom: 0px;
   background-color: rgba(0, 0, 0, 0.2);
-  color: white;
-  font-size: x-large;
   width: 280px;
   padding-left:20px;
+}
+
+.title-main{ 
+  color: white;
+  font-size: x-large;
+}
+
+.subtitle-main{ 
+  color: darkslategray;
 }
 
 #learn-title{
