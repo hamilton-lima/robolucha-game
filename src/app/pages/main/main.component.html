@@ -1,48 +1,42 @@
 <app-game-background>
-  <!-- Keep this here as reminder of existing bug of alignment when adding container 
-    <div class="container"> -->
-  <div id="top-row" class="row pt-4">
-    <div class="col-10">
-      <h1 id="luchador-name">Hi, {{ luchador.name }}</h1>
-    </div>
-    <app-role-guard role="dashboard_user">
+  <div class="container">
+    <div id="top-row" class="row pt-4">
+      <div class="col-4">
+        <div>
+          <img src="assets/pages/robolucha-play.gif">
+          <div class="title-main">
+            <span>PLAY</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-4">
+        <div>
+          <img width="280" height="300" class="clickable" src="assets/pages/robolucha-personalize.gif"
+            (click)="customize()">
+            <div class="title-main clickable" (click)="customize()">
+              <span>PERSONALIZE</span>
+            </div>
+        </div>
+      </div>
+
       <div class="col-2">
-        <button id="dashboard-button" (click)="dashboard()" mat-raised-button>
-          DASHBOARD
-        </button>
-      </div>
-    </app-role-guard>
-  </div>
+        <div class="row pt-4">
+          <div class="col-12">
+            <app-big-button id="help-button" (click)="help()">
+              Help
+            </app-big-button>
+          </div>
+        </div>
 
-  <div class="row">
-    <div class="col-12">
-      <div id="left-image">
-        <img src="/assets/pages/luch_front_800x700.png" />
-      </div>
-      <div id="right-image">
-        <img src="/assets/pages/luch_back_512x512.png" />
+        <div class="row pt-4">
+          <div class="col-12">
+            <app-big-button id="forum-button" (click)="forum()">
+              Forum
+            </app-big-button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-
-  <div id="bottom-buttons" class="row">
-    <div class="col-12">
-      <app-big-button id="customize-button" (click)="customize()">
-        Customize
-      </app-big-button>
-      <app-big-button id="public-arena-button" (click)="publicArena()">
-        Public Arenas
-      </app-big-button>
-      <app-big-button id="classroom-arena-button" (click)="classroomArena()">
-        Classroom Arenas
-      </app-big-button>
-      <app-big-button id="help-button" (click)="help()">
-        Help
-      </app-big-button>
-      <app-big-button [themeColor]="'accent'" id="forum-button" (click)="forum()">
-        Forum
-      </app-big-button>
-    </div>
-  </div>
-  <!-- </div> -->
 </app-game-background>

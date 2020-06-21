@@ -1,5 +1,19 @@
 @import 'src/styles/game.css';
 
+.clickable{
+  cursor: pointer;
+}
+
+.title-main{ 
+  position: absolute;
+  bottom: 0px;
+  background-color: rgba(0, 0, 0, 0.1);
+  color: white;
+  font-size: x-large;
+  width: 280px;
+  padding-left:20px;
+}
+
 #left-image {
   position: fixed;
   left: 0%;
