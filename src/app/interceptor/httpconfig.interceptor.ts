@@ -42,7 +42,7 @@ export class HttpConfigInterceptor implements HttpInterceptor {
             if( error.status == 403 ){
               this.modalService.open(AuthModalMessageComponent, {centered: true});
             } else {
-              this.modalService.open(GenericErrorModalMessageComponent, {centered: true});
+              this.modalService.open(AuthModalMessageComponent, {centered: true});
               this.errorService.addError(error);
             }
             
