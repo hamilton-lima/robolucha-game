@@ -12,6 +12,8 @@ export class AuthModalMessageComponent {
     if( window.location.port ){
       url = url + ":" + window.location.port;
     }
+    
+    url = url + "/index.html";
 
     // // console.log("refreshing the page: ", url);
     window.location.assign(url);
