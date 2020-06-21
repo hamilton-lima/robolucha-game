@@ -30,7 +30,6 @@ import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { fas } from "@fortawesome/free-solid-svg-icons";
 import { WatchPageComponent } from "./watch-page/watch-page.component";
-import { HomePageComponent } from "./home-page/home-page.component";
 import { NgxSpinnerModule } from "ngx-spinner";
 import { MatchCardComponent } from "./play/match-card/match-card.component";
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
@@ -152,7 +151,6 @@ export function apiConfigFactory(): Configuration {
     CodeEditorPanelComponent,
     MessageComponent,
     WatchPageComponent,
-    HomePageComponent,
     MatchCardComponent,
     AuthModalMessageComponent,
     GenericErrorModalMessageComponent,
