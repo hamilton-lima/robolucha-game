@@ -1,10 +1,12 @@
 <app-game-background>
   <div class="container">
-    <div id="top-row" class="row pt-4">
+
+    <div class="row pt-4">
       <div class="col-4">
         <div>
-          <img src="assets/pages/robolucha-play.gif">
-          <div class="title-main">
+          <img width="280" height="300" src="assets/pages/robolucha-play.gif" class="clickable"
+            (click)="playMultiplayer()">
+          <div class="title-main clickable" (click)="playMultiplayer()">
             <span>PLAY</span>
           </div>
         </div>
@@ -12,11 +14,11 @@
 
       <div class="col-4">
         <div>
-          <img width="280" height="300" class="clickable" src="assets/pages/robolucha-personalize.gif"
+          <img width="280" height="300" src="assets/pages/robolucha-personalize.gif" class="clickable"
             (click)="customize()">
-            <div class="title-main clickable" (click)="customize()">
-              <span>PERSONALIZE</span>
-            </div>
+          <div class="title-main clickable" (click)="customize()">
+            <span>PERSONALIZE</span>
+          </div>
         </div>
       </div>
 
@@ -37,6 +39,23 @@
           </div>
         </div>
       </div>
+
     </div>
+
+    <div class="row">
+      <div class="col-12" id="learn-title">
+        <h2>Learn how to play</h2>
+      </div>
+    </div>
+
+    <div class="row">
+      <app-game-card [componentId]="match.name" class="col-sm-10 col-md-5 col-lg-3 mb-3"
+        *ngFor="let match of tutorialMatches" [match]="match" [userDetails]="userDetails" (onplay)="play($event)">
+      </app-game-card>
+      <div *ngIf="tutorialMatches.length <= 0">
+        <h4>There are no matches available</h4>
+      </div>
+    </div>
+
   </div>
 </app-game-background>

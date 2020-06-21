@@ -7,11 +7,15 @@
 .title-main{ 
   position: absolute;
   bottom: 0px;
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: rgba(0, 0, 0, 0.2);
   color: white;
   font-size: x-large;
   width: 280px;
   padding-left:20px;
+}
+
+#learn-title{
+  margin-top: 40px;
 }
 
 #left-image {
