@@ -1,12 +1,14 @@
 import { Component, OnInit, ViewEncapsulation } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
-import { DefaultService } from "src/app/sdk";
+import { DefaultService, ModelAvailableMatch, ModelMatch, ModelUserDetails } from "src/app/sdk";
 import { ModelGameComponent } from "src/app/sdk/model/mainGameComponent";
 import { ShepherdNewService, ITourStep } from "src/app/shepherd-new.service";
 import { EventsService } from "src/app/shared/events.service";
 import { UserService } from "src/app/shared/user.service";
 import Shepherd from "shepherd.js";
 import { LevelGroupService } from "src/app/level-group.service";
+import { Observable, Subject } from "rxjs";
+import { LevelControlService } from "../level-control.service";
 
 @Component({
   selector: "app-main",
@@ -18,6 +20,10 @@ export class MainComponent implements OnInit {
   page: string;
   tour: Shepherd.Tour;
 
+  userDetails: ModelUserDetails;
+  multiplayerMatch: ModelAvailableMatch;
+  tutorialMatches: ModelAvailableMatch[] = [];
+
   constructor(
     private router: Router,
     private api: DefaultService,
@@ -25,32 +31,39 @@ export class MainComponent implements OnInit {
     private shepherd: ShepherdNewService,
     private events: EventsService,
     private userService: UserService,
-    private level: LevelGroupService
-  ) {}
+    private level: LevelControlService) { }
 
   ngOnInit() {
     this.luchador = this.route.snapshot.data.luchador;
     this.page = this.route.snapshot.url.join("/");
-  }
+    this.userDetails = this.userService.getUser();
 
-  readonly steps: ITourStep[] = [
-    {
-      title: "Play on-line",
-      text: "Play here!",
-      attachTo: { element: "#public-arena-button", on: "top" }
-    },
-    {
-      title: "Customize your character",
-      text: "Use this option to change how your mask look like",
-      attachTo: { element: "#customize-button", on: "top" }
-    },
-    {
-      title: "Your luchador name",
-      text: "We created a new name for your character",
-      attachTo: { element: "#luchador-name", on: "bottom" },
-      offset: "0 20px"
-    }
-  ];
+    this.api.privateAvailableMatchPublicGet().subscribe((matches: ModelAvailableMatch[]) => {
+
+      const tutorialMatches: ModelAvailableMatch[] = [];
+
+      matches.forEach(match => {
+        if (match.gameDefinition.type === "tutorial") {
+          tutorialMatches.push(match);
+        } else {
+          if (this.level.canPlay(this.userDetails, match.gameDefinition)) {
+            this.multiplayerMatch = match;
+          }
+        }
+      });
+
+      this.tutorialMatches = tutorialMatches.sort((ma, mb) => {
+        const a = ma.gameDefinition.minLevel;
+        const b = mb.gameDefinition.minLevel;
+
+        if (a > b) return 1;
+        if (b > a) return -1;
+
+        return 0;
+      });
+
+    });
+  }
 
   ngAfterViewInit() {
     const user = this.userService.getUser();
@@ -58,40 +71,18 @@ export class MainComponent implements OnInit {
     if (!user.settings.visitedMainPage) {
       user.settings.visitedMainPage = true;
       this.userService.updateSettings(user.settings);
-      this.tour = this.shepherd.show(this.steps);
     }
-
   }
 
   customize() {
-    this.shepherd.done(this.tour);
     this.events.click(this.page, "customize");
     this.router.navigate(["mask"]);
-  }
-
-  publicArena() {
-    this.shepherd.done(this.tour);
-    this.events.click(this.page, "public-arena");
-    this.router.navigate(["public"]);
-  }
-
-  classroomArena() {
-    this.shepherd.done(this.tour);
-    this.events.click(this.page, "classroom-arena");
-    this.router.navigate(["classroom"]);
-  }
-
-  dashboard() {
-    this.shepherd.done(this.tour);
-    this.events.click(this.page, "classroom-arena");
-    this.router.navigate(["dashboard"]);
   }
 
   help() {
     this.shepherd.done(this.tour);
     this.events.click(this.page, "help");
     window.open("https://docs.robolucha.com", "robolucha-docs");
-    // this.router.navigate(["help"]);
   }
 
   forum() {
@@ -100,7 +91,14 @@ export class MainComponent implements OnInit {
     window.open("https://forum.robolucha.com", "robolucha-forum");
   }
 
-  roundClick() {
-    // console.log('click');
+  playMultiplayer() {
+    this.play(this.multiplayerMatch.id);
   }
+
+  play(matchID: number) {
+    this.api.privatePlayIdPost(matchID).subscribe((match: ModelMatch) => {
+      this.router.navigate(["watch", match.id]);
+    });
+  }
+
 }

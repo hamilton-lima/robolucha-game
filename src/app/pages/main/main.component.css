@@ -1,5 +1,30 @@
 @import 'src/styles/game.css';
 
+.clickable{
+  cursor: pointer;
+}
+
+.title-main-container{ 
+  position: absolute;
+  bottom: 0px;
+  background-color: rgba(0, 0, 0, 0.2);
+  width: 280px;
+  padding-left:20px;
+}
+
+.title-main{ 
+  color: white;
+  font-size: x-large;
+}
+
+.subtitle-main{ 
+  color: darkslategray;
+}
+
+#learn-title{
+  margin-top: 40px;
+}
+
 #left-image {
   position: fixed;
   left: 0%;

@@ -1,48 +1,62 @@
 <app-game-background>
-  <!-- Keep this here as reminder of existing bug of alignment when adding container 
-    <div class="container"> -->
-  <div id="top-row" class="row pt-4">
-    <div class="col-10">
-      <h1 id="luchador-name">Hi, {{ luchador.name }}</h1>
-    </div>
-    <app-role-guard role="dashboard_user">
+  <div class="container">
+
+    <div class="row pt-4">
+      <div class="col-4">
+        <div>
+          <img width="280" height="300" src="assets/pages/robolucha-play.gif" class="clickable"
+            (click)="playMultiplayer()">
+          <div class="title-main-container clickable" (click)="playMultiplayer()">
+            <span class="title-main">PLAY</span><br>
+            <span class="subtitle-main">{{ multiplayerMatch.gameDefinition.label }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-4">
+        <div>
+          <img width="280" height="300" src="assets/pages/robolucha-personalize.gif" class="clickable"
+            (click)="customize()">
+          <div class="title-main-container clickable" (click)="customize()">
+            <span class="title-main">PERSONALIZE</span>
+          </div>
+        </div>
+      </div>
+
       <div class="col-2">
-        <button id="dashboard-button" (click)="dashboard()" mat-raised-button>
-          DASHBOARD
-        </button>
-      </div>
-    </app-role-guard>
-  </div>
+        <div class="row pt-4">
+          <div class="col-12">
+            <app-big-button id="help-button" (click)="help()">
+              Help
+            </app-big-button>
+          </div>
+        </div>
 
-  <div class="row">
-    <div class="col-12">
-      <div id="left-image">
-        <img src="/assets/pages/luch_front_800x700.png" />
+        <div class="row pt-4">
+          <div class="col-12">
+            <app-big-button id="forum-button" (click)="forum()">
+              Forum
+            </app-big-button>
+          </div>
+        </div>
       </div>
-      <div id="right-image">
-        <img src="/assets/pages/luch_back_512x512.png" />
+
+    </div>
+
+    <div class="row">
+      <div class="col-12" id="learn-title">
+        <h2>Learn how to play</h2>
       </div>
     </div>
-  </div>
 
-  <div id="bottom-buttons" class="row">
-    <div class="col-12">
-      <app-big-button id="customize-button" (click)="customize()">
-        Customize
-      </app-big-button>
-      <app-big-button id="public-arena-button" (click)="publicArena()">
-        Public Arenas
-      </app-big-button>
-      <app-big-button id="classroom-arena-button" (click)="classroomArena()">
-        Classroom Arenas
-      </app-big-button>
-      <app-big-button id="help-button" (click)="help()">
-        Help
-      </app-big-button>
-      <app-big-button [themeColor]="'accent'" id="forum-button" (click)="forum()">
-        Forum
-      </app-big-button>
+    <div class="row">
+      <app-game-card [componentId]="match.name" class="col-sm-10 col-md-5 col-lg-3 mb-3"
+        *ngFor="let match of tutorialMatches" [match]="match" [userDetails]="userDetails" (onplay)="play($event)">
+      </app-game-card>
+      <div *ngIf="tutorialMatches.length <= 0">
+        <h4>There are no matches available</h4>
+      </div>
     </div>
+
   </div>
-  <!-- </div> -->
 </app-game-background>
