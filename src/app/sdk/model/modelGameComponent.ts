@@ -14,10 +14,16 @@ import { ModelConfig } from './modelConfig';
 
 
 export interface ModelGameComponent {
+    angle?: number;
     codes?: Array<ModelCode>;
     configs?: Array<ModelConfig>;
     gameDefinition?: number;
+    gunAngle?: number;
     id?: number;
+    isNPC?: boolean;
+    life?: number;
     name?: string;
     userID?: number;
+    x?: number;
+    y?: number;
 }

@@ -5,6 +5,7 @@ import {
   ModelAvailableMatch,
   ModelMatch,
   ModelUserDetails,
+  ModelLevelGroup,
 } from "src/app/sdk";
 import { Router } from "@angular/router";
 import { ITourStep, ShepherdNewService } from "src/app/shepherd-new.service";
@@ -12,6 +13,7 @@ import { UserService } from "src/app/shared/user.service";
 import { timer } from "rxjs";
 import Shepherd from "shepherd.js";
 import { LevelControlService } from "../level-control.service";
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: "app-list-public-games",
@@ -33,11 +35,18 @@ export class ListPublicGamesComponent implements OnInit {
 
   ngOnInit() {
     this.userDetails = this.userService.getUser();
+    const observables = [
+      this.api.privateLevelGroupGet(),
+      this.api.privateAvailableMatchPublicGet()
+    ];
 
-    this.api
-      .privateAvailableMatchPublicGet()
-      .subscribe((matches: Array<ModelAvailableMatch>) => {
-        this.matches = matches.filter((match) =>
+    forkJoin( observables ).subscribe((observer: [ModelLevelGroup[], ModelAvailableMatch[]]) => {
+      const levelGroups = observer[0];
+      const availableMatches = observer[1];
+
+      console.log(levelGroups);
+
+      this.matches = availableMatches.filter((match) =>
           this.level.showAvailableMatch(this.userDetails, match.gameDefinition)
         );
       });

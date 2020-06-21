@@ -8,7 +8,6 @@ import { BodyComponent } from "./body/body.component";
 import { LoginActivate, LoginDashboardActivate } from "./login.activate.service";
 import { NotFoundComponent } from "./not-found/not-found.component";
 import { AuthService } from "./auth.service";
-import { SetupComponent } from "./setup/setup.component";
 import { LuchadorComponent } from "./luchador/luchador.component";
 import { FormsModule } from "@angular/forms";
 import { ApiModule } from "./sdk/api.module";
@@ -142,7 +141,6 @@ export function apiConfigFactory(): Configuration {
     AppComponent,
     BodyComponent,
     NotFoundComponent,
-    SetupComponent,
     LuchadorComponent,
     CodeEditorComponent,
     WatchMatchComponent,
