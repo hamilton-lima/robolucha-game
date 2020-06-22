@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from "@angular/core";
+import { Component, OnInit, ChangeDetectorRef, ViewChild, ElementRef } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { Behavior } from "babylonjs";
 import { BehaviorSubject } from "rxjs";
@@ -10,6 +10,7 @@ import Shepherd from "shepherd.js";
 import { ShepherdNewService, ITourStep } from "src/app/shepherd-new.service";
 import { EventsService } from "src/app/shared/events.service";
 import { UserService } from "src/app/shared/user.service";
+import { FormControl, Validators } from "@angular/forms";
 
 const HIDE_SUCCESS_TIMEOUT = 3000;
 
@@ -24,6 +25,11 @@ export class MaskEditorComponent implements OnInit, CanComponentDeactivate {
   luchador: ModelGameComponent;
   tour: Shepherd.Tour;
   page: string;
+  errors: string[] = [];
+
+  luchadorNameFormControl = new FormControl('', [
+    Validators.required
+  ]);
 
   constructor(
     private route: ActivatedRoute,
@@ -45,6 +51,12 @@ export class MaskEditorComponent implements OnInit, CanComponentDeactivate {
     // console.log('configs on maskeditor', data.luchador.configs);
     this.refreshEditor(data.luchador.configs);
     this.luchador = data.luchador;
+    this.luchadorNameFormControl.setValue( this.luchador.name );
+
+    // reset the errors when the form control is changed
+    this.luchadorNameFormControl.valueChanges.subscribe(()=>{
+      this.errors = [];
+    });
   }
 
   readonly steps: ITourStep[] = [
@@ -118,5 +130,40 @@ export class MaskEditorComponent implements OnInit, CanComponentDeactivate {
       );
     }
     return true;
+  }
+
+  onNameChange(name:string){
+    name = this.sanitize(name);
+    console.log(name);
+  }
+
+  // see: https://github.com/fazlulkarimweb/string-sanitizer/blob/master/index.js
+  sanitize(str:string){
+    var str2 = str.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, "");
+    return str2.replace(/ /g, " ");
+  }
+
+  saveLuchadorName(){
+    console.log("save", this.luchadorNameFormControl.value);
+    const value = this.sanitize(this.luchadorNameFormControl.value);
+    this.luchadorNameFormControl.setValue(value);
+
+    if (this.luchadorNameFormControl.valid) {
+      this.errors = [];
+      this.luchador.name = this.luchadorNameFormControl.value;
+      const remoteCall = this.api.privateLuchadorPut(this.luchador);
+
+      remoteCall.subscribe(response => {
+        if( response.errors.length > 0 ){
+          this.errors = response.errors;
+          this.cdRef.detectChanges();
+          this.alert.error("ERROR When updating Luchador Name", "DISMISS");
+        } else {
+          this.alert.info("Luchador NAME updated", "DISMISS");
+          this.cdRef.detectChanges();
+        }
+      });
+    }
+
   }
 }

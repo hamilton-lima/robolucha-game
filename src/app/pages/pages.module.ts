@@ -13,7 +13,7 @@ import { HomeButtonComponent } from "./shared/home-button/home-button.component"
 import { HeaderComponent } from "./shared/header/header.component";
 import { GameCardComponent } from "./shared/game-card/game-card.component";
 import { JoinClassroomComponent } from "./list-classroom-games/join-classroom/join-classroom.component";
-import { FormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MaskEditorComponent } from "./mask-editor/mask-editor.component";
 import { LuchadorPreviewComponent } from "./mask-editor/luchador-preview/luchador-preview.component";
 import { MaskEditorDetailComponent } from "./mask-editor/mask-editor-detail/mask-editor-detail.component";
@@ -30,6 +30,7 @@ import { AboutComponent } from './about/about.component';
     CommonModule,
     BrowserAnimationsModule,
     FormsModule,
+    ReactiveFormsModule,
     RouterModule,
     MaterialAllComponentsModule,
     NgbModule,

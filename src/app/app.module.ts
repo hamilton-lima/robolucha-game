@@ -9,7 +9,7 @@ import { LoginActivate, LoginDashboardActivate } from "./login.activate.service"
 import { NotFoundComponent } from "./not-found/not-found.component";
 import { AuthService } from "./auth.service";
 import { LuchadorComponent } from "./luchador/luchador.component";
-import { FormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { ApiModule } from "./sdk/api.module";
 import { environment } from "src/environments/environment";
 import { Configuration, ConfigurationParameters } from "./sdk/configuration";
@@ -26,9 +26,9 @@ import { MessageComponent } from "./message/message.component";
 import { ScoreComponent } from "./score/score.component";
 import { ClockComponent } from "./clock/clock.component";
 import { CodeEditorPanelComponent } from "./code-editor-panel/code-editor-panel.component";
-import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { fas } from "@fortawesome/free-solid-svg-icons";
+// import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
+// import { library } from "@fortawesome/fontawesome-svg-core";
+// import { fas } from "@fortawesome/free-solid-svg-icons";
 import { WatchPageComponent } from "./watch-page/watch-page.component";
 import { NgxSpinnerModule } from "ngx-spinner";
 import { MatchCardComponent } from "./play/match-card/match-card.component";
@@ -52,7 +52,7 @@ import { EndTutorialGuardService } from "./end-tutorial-guard.service";
 import { MarkDownComponent } from './mark-down/mark-down.component';
 import { ActivityListComponent } from "./dashboard/activity-list/activity-list.component";
 
-library.add(fas);
+// library.add(fas);
 
 const ROUTES: Routes = [
   { path: "", redirectTo: "/home", pathMatch: "full" },
@@ -159,13 +159,13 @@ export function apiConfigFactory(): Configuration {
   imports: [
     BrowserModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpClientModule,
     ApiModule.forRoot(apiConfigFactory),
     RouterModule.forRoot(ROUTES, { useHash: true }),
     NgbModule,
     AceEditorModule,
     BrowserAnimationsModule,
-    FontAwesomeModule,
     NgxSpinnerModule,
     PagesModule,
     DashboardModule,

@@ -1,1 +1,10 @@
 @import 'src/styles/game.css';
+
+#luchadorName{
+    width: 74%;
+    margin-right: 10px;
+}
+
+.text-error{
+    color: #f44336;
+}
