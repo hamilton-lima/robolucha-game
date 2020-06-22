@@ -217,7 +217,7 @@ export class Luchador3D extends Base3D {
   animateFire() {
     this.animateFrom("fire");
   }
-  
+
   animateHit() {
     this.animateFrom("hit");
   }
@@ -247,11 +247,25 @@ export class Luchador3D extends Base3D {
   }
 
   dispose() {
-    this.character.dispose();
-    this.base.dispose();
-    this.turret.dispose();
-    this.mesh.dispose();
-    this.advancedTexture.dispose();
+    if (this.character) {
+      this.character.dispose();
+    }
+
+    if (this.base) {
+      this.base.dispose();
+    }
+
+    if (this.turret) {
+      this.turret.dispose();
+    }
+
+    if (this.mesh) {
+      this.mesh.dispose();
+    }
+
+    if (this.advancedTexture) {
+      this.advancedTexture.dispose();
+    }
   }
 
   rotateGun(value: number) {

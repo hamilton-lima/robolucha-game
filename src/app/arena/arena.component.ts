@@ -461,8 +461,12 @@ export class ArenaComponent implements OnInit, OnChanges {
       if (!found) {
         // not found remove from the scene
         const luchador3D = this.luchadores[luchador.id];
-        luchador3D.dispose();
-        delete this.bullets[luchador.id];
+        
+        // only removes if present in the scene
+        if( luchador3D){
+          luchador3D.dispose();
+          delete this.bullets[luchador.id];
+        }
       }
     });
   }
