@@ -8,7 +8,7 @@
             (click)="playMultiplayer()">
           <div class="title-main-container clickable" (click)="playMultiplayer()">
             <span class="title-main">PLAY</span><br>
-            <span class="subtitle-main">{{ multiplayerMatch.gameDefinition.label }}</span>
+            <span *ngIf="multiplayerMatch" class="subtitle-main">{{ multiplayerMatch.gameDefinition.label }}</span>
           </div>
         </div>
       </div>
