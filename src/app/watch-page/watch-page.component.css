@@ -1,4 +1,5 @@
 .drawer {
+  min-width: 400px;
   width: 20%;
   right: 0;
 }
@@ -12,10 +13,10 @@
 }
 
 .toogle {
-  z-index: 3;
+  z-index: 5;
   position: absolute;
-  right: 2%;
-  top: 2%;
+  right: 1%;
+  top: 1%;
   background-color: whitesmoke;
 }
 
@@ -28,6 +29,14 @@
   background-color: whitesmoke;
 }
 
+.score {
+  position: absolute;
+  left: 1%;
+  top: 1%;
+  /* width: 20%; */
+  min-width: 50px;
+  z-index: 9999;
+}
 
 .message-panel {
   left: 0;
@@ -97,20 +106,6 @@
 }
 
 .score-last {
-  overflow-y: scroll;
-}
-
-.score {
-  position: fixed;
-  left: auto;
-  top: 20%;
-  right: 0;
-  bottom: 0;
-  width: 60%;
-  min-width: 250px;
-  height: 60%;
-  z-index: 9999;
-  background-color: whitesmoke;
   overflow-y: scroll;
 }
 
