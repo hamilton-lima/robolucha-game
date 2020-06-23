@@ -28,21 +28,8 @@
   background-color: whitesmoke;
 }
 
-.code-editor-panel {
-  position: fixed;
-  left: -65%;
-  top: 10%;
-  right: auto;
-  bottom: 0;
-  width: 60%;
-  min-width: 250px;
-  height: 45%;
-  z-index: 9999;
-  background-color: whitesmoke;
-}
 
 .message-panel {
-  position: fixed;
   left: 0;
   right: 0;
   margin: 0 auto;
@@ -56,14 +43,6 @@
   overflow-y: scroll;
 }
 
-.panel-selector {
-  position: fixed;
-  bottom: 0%;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  z-index: 10000;
-}
 
 .panel-selector-item{
   margin-left: 15px;
@@ -132,5 +111,11 @@
   height: 60%;
   z-index: 9999;
   background-color: whitesmoke;
+  overflow-y: scroll;
+}
+
+.right-panel-scroll {
+  height: 100%;
+  width: 100%;
   overflow-y: scroll;
 }

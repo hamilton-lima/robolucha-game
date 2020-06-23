@@ -122,7 +122,6 @@ export class WatchPageComponent implements OnInit, CanComponentDeactivate, OnCha
   ngOnInit(): void {
     this.page = this.route.snapshot.url.join("/");
     this.luchador = this.route.snapshot.data.luchador;
-    this.refreshEditor();
 
     this.matchID = Number.parseInt(this.route.snapshot.paramMap.get("id"));
     this.gameDefinition = null;
@@ -132,6 +131,7 @@ export class WatchPageComponent implements OnInit, CanComponentDeactivate, OnCha
         .privateGameDefinitionIdIdGet(match.gameDefinitionID)
         .subscribe(gameDefinition => {
           this.gameDefinition = gameDefinition;
+          this.refreshEditor();
           
           // only display score if is not tutorial
           if( gameDefinition.type !== "tutorial"){
