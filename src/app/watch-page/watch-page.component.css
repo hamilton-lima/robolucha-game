@@ -1,11 +1,22 @@
+.drawer {
+  width: 20%;
+  right: 0;
+}
+
 .user-message {
   width: 100%;
 }
+
 .message-area {
   width: 100%;
 }
 
-.watch-main {
+.toogle {
+  z-index: 3;
+  position: absolute;
+  right: 2%;
+  top: 2%;
+  background-color: whitesmoke;
 }
 
 .clock {
