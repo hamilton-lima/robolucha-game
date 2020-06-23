@@ -1,87 +1,108 @@
-<div class="watch-main">
-  <app-clock class="clock" [matchStateSubject]="matchStateSubject"></app-clock>
+<mat-sidenav-container [hasBackdrop]="false">
+  <mat-sidenav #drawer [mode]="'over'" [opened]="true" position="end" class="drawer">
 
-  <div *ngIf="gameDefinition">
-    <app-watch-match
-      [gameDefinition]="gameDefinition"
-      [luchador]="luchador"
-      [matchID]="matchID"
-      (matchFinished)="endMatch()"
-      (matchStateSubject)="updateState($event)"
-      (messageSubject)="updateMessage($event)"
-    ></app-watch-match>
-  </div>
-
-  <div class="panel-selector">
-    <div class="panel-selector-item">
-      <app-home-button (onClick)="goHome()"></app-home-button>
-    </div>
-
-    <div class="panel-selector-item">
-      <app-round-button
-        id="button-edit-code"
-        [color]="'primary'"
-        [icon]="'pencil'"
-        (onclick)="toggleCode()"
-      >
-      </app-round-button>
-    </div>
-
-    <div *ngIf="displayScore" class="panel-selector-item">
-      <app-round-button
-        [color]="'primary'"
-        [icon]="'trophy'"
-        (onclick)="toggleScore()"
-      >
-      </app-round-button>
-    </div>
-
-    <div class="panel-selector-item">
-      <app-round-button
-        [color]="'primary'"
-        [icon]="'message-text-outline'"
-        (onclick)="toggleMessages()"
-      >
-      </app-round-button>
-    </div>
-  </div>
-
-  <div class="p-3 matchover-alert" *ngIf="matchOver">
-    <h1>This match is over!</h1>
-    <button class="btn btn-primary float-right" (click)="goBack()">
-      <span>Back to the list</span>
+    <button mat-icon-button class="mr-2" (click)="drawer.toggle()">
+      <mat-icon svgIcon="arrow-right"></mat-icon>
     </button>
-    <app-score [scores]="scores"></app-score>
-  </div>
 
-  <app-code-editor-panel
-    *ngIf="gameDefinition"
-    [gameDefinition]="gameDefinition"
-    (onSave)="onCodeSave()"
-    class="code-editor-panel"
-    [@slideInOut]="{
-      value: panelStates.code,
-      params: { inVal: '150%', outVal: 0 }
-    }"
-  >
-  </app-code-editor-panel>
+    <button mat-raised-button class="mr-2" (click)="goHome()">
+      HOME
+    </button>
 
-  <app-score
-    *ngIf="displayScore"
-    class="score"
-    [@slideInOut]="{
-      value: panelStates.score,
-      params: { inVal: '-30%', outVal: '100%' }
-    }"
-    [scores]="scores"
-  ></app-score>
+    <button mat-raised-button [disabled]="!dirty" class="mr-2" (click)="save()">
+      SAVE
+    </button>
 
-  <app-message
-    class="message-panel"
-    [@slideInOutVert]="{
-      value: panelStates.message,
-      params: { inVal: '-130%', outVal: '100%' }
-    }"
-    [messageSubject]="messageSubject"
-  ></app-message>
+    <div class="mt-2 right-panel-scroll">
+      <mat-accordion>
+
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            Help
+          </mat-expansion-panel-header>
+          <app-mark-down [fileName]="'help/code_editor_help'"></app-mark-down>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel [expanded]="true">
+          <mat-expansion-panel-header>
+            On Repeat
+          </mat-expansion-panel-header>
+          <app-code-editor [script]="codes.onRepeat.script" (onChange)="updateCode('onRepeat', $event)">
+          </app-code-editor>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            On Start
+          </mat-expansion-panel-header>
+          <app-code-editor [script]="codes.onStart.script" (onChange)="updateCode('onStart', $event)">
+          </app-code-editor>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            On Hit Wall
+          </mat-expansion-panel-header>
+          <app-code-editor [script]="codes.onHitWall.script" (onChange)="updateCode('onHitWall', $event)">
+          </app-code-editor>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            On Found
+          </mat-expansion-panel-header>
+          <app-code-editor [script]="codes.onFound.script" (onChange)="updateCode('onFound', $event)">
+          </app-code-editor>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            On Got Damage
+          </mat-expansion-panel-header>
+          <app-code-editor [script]="codes.onGotDamage.script" (onChange)="updateCode('onGotDamage', $event)">
+          </app-code-editor>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            On Hit Other
+          </mat-expansion-panel-header>
+          <app-code-editor [script]="codes.onHitOther.script" (onChange)="updateCode('onHitOther', $event)">
+          </app-code-editor>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            Code messages
+          </mat-expansion-panel-header>
+          <app-message class="message-panel" [messageSubject]="messageSubject"></app-message>
+        </mat-expansion-panel>
+
+      </mat-accordion>
+    </div>
+
+  </mat-sidenav>
+
+  <section>
+    <button mat-icon-button class="toogle" (click)="drawer.toggle()">
+      <mat-icon svgIcon="arrow-left"></mat-icon>
+    </button>
+    <div *ngIf="gameDefinition">
+      <app-watch-match [gameDefinition]="gameDefinition" [luchador]="luchador" [matchID]="matchID"
+        (matchFinished)="endMatch()" (matchStateSubject)="updateState($event)" (messageSubject)="updateMessage($event)">
+      </app-watch-match>
+    </div>
+  </section>
+</mat-sidenav-container>
+
+<app-clock class="clock" [matchStateSubject]="matchStateSubject"></app-clock>
+
+<div class="p-3 matchover-alert" *ngIf="matchOver">
+  <h1>This match is over!</h1>
+  <button class="btn btn-primary float-right" (click)="goBack()">
+    <span>BACK</span>
+  </button>
+  <app-score *ngIf="displayScore" [scores]="scores"></app-score>
 </div>
+
+<app-score *ngIf="displayScore" class="score" [scores]="scores"></app-score>

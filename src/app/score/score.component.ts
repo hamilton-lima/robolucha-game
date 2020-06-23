@@ -10,9 +10,11 @@ import { MatchState, GameDefinition, Score } from "../watch-match/watch-match.mo
 export class ScoreComponent implements OnChanges {
 
   @Input() scores: Score[];
+  mock: Score[];
 
   constructor() { 
     this.scores = [];
+    this.mock = [{"id":22,"name":"Gecko","k":0,"d":0,"score":60},{"id":23,"name":"Lighthouse","k":0,"d":0,"score":40},{"id":4,"name":"Something Cool","k":0,"d":0,"score":0}];
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -29,5 +31,11 @@ export class ScoreComponent implements OnChanges {
     }
 
     return 0;
+  }
+
+  format(pos:number){
+    let result = pos +1;
+    const preffix = result < 10 ? "0" : "";
+    return preffix + result;
   }
 }

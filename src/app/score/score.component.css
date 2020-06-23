@@ -1,0 +1,37 @@
+.table {
+    background-color:rgba(245, 245, 245, 0.1);
+    border: none;
+    margin: unset;
+}
+
+.table th,
+.table td {
+  padding: 3px;
+  border: none;
+}
+
+thead {
+  background-color: rgba(245, 245, 245, 0.1);
+}
+
+tr:nth-child(odd) {
+  background-color: rgba(245, 245, 245, 0.2);
+}
+
+.name {
+  font-weight: bold;
+}
+
+.score{
+  text-align: right;
+}
+
+.position {
+  padding: 2px;
+  height: 10px;
+  text-align: center;
+  line-height: 1.42;
+  border-radius: 4px;
+  border: none;
+  background-color: rgba(245, 245, 245, 1);
+}

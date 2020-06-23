@@ -1,11 +1,23 @@
+.drawer {
+  min-width: 400px;
+  width: 20%;
+  right: 0;
+}
+
 .user-message {
   width: 100%;
 }
+
 .message-area {
   width: 100%;
 }
 
-.watch-main {
+.toogle {
+  z-index: 5;
+  position: absolute;
+  right: 1%;
+  top: 1%;
+  background-color: whitesmoke;
 }
 
 .clock {
@@ -17,21 +29,16 @@
   background-color: whitesmoke;
 }
 
-.code-editor-panel {
-  position: fixed;
-  left: -65%;
-  top: 10%;
-  right: auto;
-  bottom: 0;
-  width: 60%;
-  min-width: 250px;
-  height: 45%;
+.score {
+  position: absolute;
+  left: 1%;
+  top: 1%;
+  /* width: 20%; */
+  min-width: 50px;
   z-index: 9999;
-  background-color: whitesmoke;
 }
 
 .message-panel {
-  position: fixed;
   left: 0;
   right: 0;
   margin: 0 auto;
@@ -45,14 +52,6 @@
   overflow-y: scroll;
 }
 
-.panel-selector {
-  position: fixed;
-  bottom: 0%;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  z-index: 10000;
-}
 
 .panel-selector-item{
   margin-left: 15px;
@@ -110,16 +109,8 @@
   overflow-y: scroll;
 }
 
-.score {
-  position: fixed;
-  left: auto;
-  top: 20%;
-  right: 0;
-  bottom: 0;
-  width: 60%;
-  min-width: 250px;
-  height: 60%;
-  z-index: 9999;
-  background-color: whitesmoke;
+.right-panel-scroll {
+  height: 100%;
+  width: 100%;
   overflow-y: scroll;
 }

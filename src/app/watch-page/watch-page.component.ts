@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild, OnChanges, SimpleChanges, ChangeDetectorRef } from "@angular/core";
 import {
   ActivatedRouteSnapshot,
   Router,
@@ -7,7 +7,8 @@ import {
 import {
   DefaultService,
   ModelGameDefinition,
-  ModelGameComponent
+  ModelGameComponent,
+  ModelCode
 } from "../sdk";
 import { WatchMatchComponent } from "../watch-match/watch-match.component";
 import { CanComponentDeactivate } from "../can-deactivate-guard.service";
@@ -26,61 +27,29 @@ import { ShepherdNewService, ITourStep } from "../shepherd-new.service";
 import { EventsService } from "../shared/events.service";
 import { UserService } from "../shared/user.service";
 import Shepherd from "shepherd.js";
+import { AlertService } from "../pages/alert.service";
 
 @Component({
   selector: "app-watch-page",
   templateUrl: "./watch-page.component.html",
-  styleUrls: ["./watch-page.component.css"],
-  animations: [
-    trigger("slideInOut", [
-      state(
-        "in",
-        style({
-          transform: "translate3d({{inVal}}, 0, 0)"
-        }),
-        { params: { inVal: 0 } }
-      ),
-      state(
-        "out",
-        style({
-          transform: "translate3d({{outVal}}, 0, 0)"
-        }),
-        { params: { outVal: "100%" } }
-      ),
-      transition("in => out", animate("400ms ease-in-out")),
-      transition("out => in", animate("400ms ease-in-out"))
-    ]),
-    trigger("slideInOutVert", [
-      state(
-        "in",
-        style({
-          transform: "translate3d(0, {{inVal}}, 0)"
-        }),
-        { params: { inVal: 0 } }
-      ),
-      state(
-        "out",
-        style({
-          transform: "translate3d(0, {{outVal}}, 0)"
-        }),
-        { params: { outVal: "100%" } }
-      ),
-      transition("in => out", animate("400ms ease-in-out")),
-      transition("out => in", animate("400ms ease-in-out"))
-    ])
-  ]
+  styleUrls: ["./watch-page.component.css"]
 })
-export class WatchPageComponent implements OnInit, CanComponentDeactivate {
+export class WatchPageComponent implements OnInit, CanComponentDeactivate, OnChanges {
   constructor(
     private api: DefaultService,
     private route: ActivatedRoute,
     private shepherd: ShepherdNewService,
     private events: EventsService,
-    private userService: UserService
+    private userService: UserService,
+    private cdRef: ChangeDetectorRef,
+    private alert: AlertService,
+    private router: Router
   ) {}
 
   matchOver = false;
   displayScore = false;
+  dirty = false;
+
   page: string;
   tour: Shepherd.Tour;
 
@@ -91,10 +60,15 @@ export class WatchPageComponent implements OnInit, CanComponentDeactivate {
   readonly messageSubject = new Subject<Message>();
   scores: Score[] = [];
 
-  scoreState: string = "out";
-  codeState: string = "out";
-  messageState: string = "out";
-  panelStates = { score: "out", code: "out", message: "out" };
+  codes = {
+    onStart: <ModelCode>{ event: "onStart" },
+    onRepeat: <ModelCode>{ event: "onRepeat" },
+    onGotDamage: <ModelCode>{ event: "onGotDamage" },
+    onFound: <ModelCode>{ event: "onFound" },
+    onHitOther: <ModelCode>{ event: "onHitOther" },
+    onHitWall: <ModelCode>{ event: "onHitWall" }
+  };
+
 
   @ViewChild(CodeEditorPanelComponent) codeEditor: CodeEditorPanelComponent;
 
@@ -148,6 +122,7 @@ export class WatchPageComponent implements OnInit, CanComponentDeactivate {
   ngOnInit(): void {
     this.page = this.route.snapshot.url.join("/");
     this.luchador = this.route.snapshot.data.luchador;
+
     this.matchID = Number.parseInt(this.route.snapshot.paramMap.get("id"));
     this.gameDefinition = null;
 
@@ -156,6 +131,7 @@ export class WatchPageComponent implements OnInit, CanComponentDeactivate {
         .privateGameDefinitionIdIdGet(match.gameDefinitionID)
         .subscribe(gameDefinition => {
           this.gameDefinition = gameDefinition;
+          this.refreshEditor();
           
           // only display score if is not tutorial
           if( gameDefinition.type !== "tutorial"){
@@ -180,6 +156,7 @@ export class WatchPageComponent implements OnInit, CanComponentDeactivate {
 
   goHome() {
     this.events.click(this.page, "home");
+    this.router.navigate(["home"]);
   }
 
   closeTour() {
@@ -187,55 +164,12 @@ export class WatchPageComponent implements OnInit, CanComponentDeactivate {
   }
 
   canDeactivate() {
-    if (this.codeEditor.dirty) {
+    if (this.dirty) {
       return window.confirm(
         "You have unsaved changes to your luchador code. Are you sure you want to leave?"
       );
     }
     return true;
-  }
-
-  closeAllPanels() {
-    this.panelStates.score = "out";
-    this.panelStates.code = "out";
-    this.panelStates.message = "out";
-  }
-
-  toggleScore() {
-    this.panelStates.score = this.panelStates.score === "out" ? "in" : "out";
-    this.panelStates.code = "out";
-    this.panelStates.message = "out";
-
-    if (this.panelStates.score == "in") {
-      this.events.click(this.page, "score.show");
-    } else {
-      this.events.click(this.page, "score.hide");
-    }
-  }
-
-  toggleCode() {
-    this.panelStates.code = this.panelStates.code === "out" ? "in" : "out";
-    this.panelStates.score = "out";
-    this.panelStates.message = "out";
-
-    if (this.panelStates.score == "in") {
-      this.events.click(this.page, "code.show");
-    } else {
-      this.events.click(this.page, "code.hide");
-    }
-  }
-
-  toggleMessages() {
-    this.panelStates.message =
-      this.panelStates.message === "out" ? "in" : "out";
-    this.panelStates.score = "out";
-    this.panelStates.code = "out";
-
-    if (this.panelStates.score == "in") {
-      this.events.click(this.page, "messages.show");
-    } else {
-      this.events.click(this.page, "messages.hide");
-    }
   }
 
   updateState(state: MatchState) {
@@ -246,10 +180,96 @@ export class WatchPageComponent implements OnInit, CanComponentDeactivate {
     this.messageSubject.next(message);
   }
 
-  onCodeSave() {
-    this.panelStates.code = "out";
-    this.panelStates.score = "out";
-    this.panelStates.message = "out";
-    this.events.click(this.page, "code.save");
+  ngOnChanges(changes: SimpleChanges) {
+    this.refreshEditor();
+    this.cdRef.detectChanges();
   }
+
+  /** Loads codes from luchador to the editor, filter by gameDefinition */
+  refreshEditor() {
+    if( ! this.gameDefinition){
+      console.warn("gameDefinition not set");
+      return;
+    }
+    
+    let loadedCodes = 0;
+    this.dirty = false;
+
+    for (var event in this.codes) {
+      // get codes from luchador for event + gamedefinition
+      let code = this.luchador.codes.find((code: ModelCode) => {
+        return (
+          code.event == event && code.gameDefinition == this.gameDefinition.id
+        );
+      });
+
+      // if exists updates working codes
+      if (code) {
+        loadedCodes++;
+        this.codes[event] = code;
+      }
+    }
+
+    // no code found for current gamedefinition
+    // apply suggested codes
+    if (loadedCodes == 0) {
+      for (var key in this.codes) {
+        let suggestedCode = this.getCodeFromGameDefinition(key);
+        this.codes[key] = suggestedCode;
+      }
+
+      this.dirty = true;
+    }
+  }
+
+  // return suggested code from the current gamedefinition
+  // if event not present in the list returns empy code
+  getCodeFromGameDefinition(event: string): ModelCode {
+    let result: ModelCode = this.gameDefinition.suggestedCodes.find(element => {
+      return element.event == event;
+    });
+
+    if (!result) {
+      result = <ModelCode>{ event: event };
+    }
+
+    result.id = null;
+    result.gameDefinition = this.gameDefinition.id;
+    return result;
+  }
+
+  // update the internal list of codes from the editor 
+  updateCode(event: string, script: string) {
+    // console.log("update code", event, script);
+    this.dirty = true;
+    this.codes[event].script = script;
+  }
+
+  save() {
+    // apply the changes to the luchador object
+    for (var event in this.codes) {
+      // get codes from luchador for event + gamedefinition
+      let code = this.luchador.codes.find((code: ModelCode) => {
+        return (
+          code.event == event &&
+          code.gameDefinition == this.codes[event].gameDefinition
+        );
+      });
+
+      // if exists updates the luchador with working code
+      if (code) {
+        code.script = this.codes[event].script;
+      } else {
+        this.luchador.codes.push(this.codes[event]);
+      }
+    }
+
+    this.api.privateLuchadorPut(this.luchador).subscribe(response => {
+      this.alert.infoTop("Luchador updated","DISMISS")
+      this.dirty = false;
+      this.cdRef.detectChanges();
+    });
+  }
+
+
 }
