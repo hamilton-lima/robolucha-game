@@ -5,7 +5,7 @@
       <mat-icon svgIcon="arrow-right"></mat-icon>
     </button>
 
-    <button mat-raised-button class="mr-2" (onClick)="goHome()">
+    <button mat-raised-button class="mr-2" (click)="goHome()">
       HOME
     </button>
 
@@ -19,13 +19,6 @@
           Help
         </mat-expansion-panel-header>
         <app-mark-down [fileName]="'help/code_editor_help'"></app-mark-down>
-      </mat-expansion-panel>
-
-      <mat-expansion-panel>
-        <mat-expansion-panel-header>
-          Code messages
-        </mat-expansion-panel-header>
-        <app-message class="message-panel" [messageSubject]="messageSubject"></app-message>
       </mat-expansion-panel>
 
       <mat-expansion-panel>
@@ -74,6 +67,14 @@
         <app-code-editor [script]="codes.onHitOther.script" (onChange)="updateCode('onHitOther', $event)">
         </app-code-editor>
       </mat-expansion-panel>
+
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          Code messages
+        </mat-expansion-panel-header>
+        <app-message class="message-panel" [messageSubject]="messageSubject"></app-message>
+      </mat-expansion-panel>
+
 
     </mat-accordion>
   </mat-sidenav>

@@ -42,7 +42,8 @@ export class WatchPageComponent implements OnInit, CanComponentDeactivate, OnCha
     private events: EventsService,
     private userService: UserService,
     private cdRef: ChangeDetectorRef,
-    private alert: AlertService
+    private alert: AlertService,
+    private router: Router
   ) {}
 
   matchOver = false;
@@ -121,6 +122,8 @@ export class WatchPageComponent implements OnInit, CanComponentDeactivate, OnCha
   ngOnInit(): void {
     this.page = this.route.snapshot.url.join("/");
     this.luchador = this.route.snapshot.data.luchador;
+    this.refreshEditor();
+
     this.matchID = Number.parseInt(this.route.snapshot.paramMap.get("id"));
     this.gameDefinition = null;
 
@@ -153,6 +156,7 @@ export class WatchPageComponent implements OnInit, CanComponentDeactivate, OnCha
 
   goHome() {
     this.events.click(this.page, "home");
+    this.router.navigate(["home"]);
   }
 
   closeTour() {
@@ -183,8 +187,8 @@ export class WatchPageComponent implements OnInit, CanComponentDeactivate, OnCha
 
   /** Loads codes from luchador to the editor, filter by gameDefinition */
   refreshEditor() {
-    if( !  this.gameDefinition){
-      console.warn("gameDefinition not set in code-editor-panel");
+    if( ! this.gameDefinition){
+      console.warn("gameDefinition not set");
       return;
     }
     
