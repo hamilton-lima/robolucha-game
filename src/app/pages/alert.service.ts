@@ -24,8 +24,8 @@ export class AlertService {
   infoTop(message: string, action: string) {
     this.snackBar.open(message, action, {
       duration: AlertService.DURATION,
-      verticalPosition: "top",
-      horizontalPosition: "left",
+      verticalPosition: "bottom",
+      horizontalPosition: "center",
       panelClass: AlertService.INFO
     });
   }
