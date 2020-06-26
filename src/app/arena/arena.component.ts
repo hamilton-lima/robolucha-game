@@ -4,7 +4,7 @@ import {
   ViewChild,
   Input,
   OnChanges,
-  SimpleChanges
+  SimpleChanges,
 } from "@angular/core";
 import * as BABYLON from "babylonjs";
 import { Luchador3D } from "./luchador3d";
@@ -15,7 +15,7 @@ import {
   MatchState,
   Luchador,
   Bullet,
-  SceneComponent
+  SceneComponent,
 } from "../watch-match/watch-match.model";
 import { Bullet3D } from "./bullet3d";
 import { Helper3D } from "./helper3d";
@@ -33,7 +33,7 @@ class SavedCamera {
 @Component({
   selector: "app-arena",
   templateUrl: "./arena.component.html",
-  styleUrls: ["./arena.component.css"]
+  styleUrls: ["./arena.component.css"],
 })
 export class ArenaComponent implements OnInit, OnChanges {
   @ViewChild("game") canvas;
@@ -120,7 +120,7 @@ export class ArenaComponent implements OnInit, OnChanges {
   saveCameraState() {
     let cameraState: SavedCamera = {
       position: this.camera.position,
-      target: this.camera.getTarget()
+      target: this.camera.getTarget(),
     };
 
     const savedCameraState = JSON.stringify(cameraState);
@@ -135,7 +135,7 @@ export class ArenaComponent implements OnInit, OnChanges {
       sceneComponents: [],
       punches: [],
       scores: [],
-      clock: 0
+      clock: 0,
     };
 
     this.nextMatchState = {
@@ -145,7 +145,7 @@ export class ArenaComponent implements OnInit, OnChanges {
       sceneComponents: [],
       punches: [],
       scores: [],
-      clock: 0
+      clock: 0,
     };
 
     this.luchadores = [];
@@ -173,15 +173,15 @@ export class ArenaComponent implements OnInit, OnChanges {
     });
 
     if (this.animateSubject) {
-      this.animateSubject.subscribe(name => {
-        this.luchadores.forEach(luchador => {
+      this.animateSubject.subscribe((name) => {
+        this.luchadores.forEach((luchador) => {
           luchador.animateFrom(name);
         });
       });
     }
 
     if (this.messageFPS) {
-      this.messageFPS.subscribe(fps => {
+      this.messageFPS.subscribe((fps) => {
         // // console.log(
         //   "FPS: messages:" + fps + ", render: " + this.engine.getFps()
         // );
@@ -226,9 +226,9 @@ export class ArenaComponent implements OnInit, OnChanges {
     );
 
     this.camera.rotation.x = Helper3D.angle2radian(45);
-    this.camera.attachControl(this.canvas.nativeElement, false);
 
     if (!this.cameraFollowLuchador) {
+      this.camera.attachControl(this.canvas.nativeElement, false);
       this.setCameraFromSavedState();
     }
 
@@ -260,11 +260,13 @@ export class ArenaComponent implements OnInit, OnChanges {
   }
 
   updateCamera(): any {
-    const luchador3D = this.luchadores[this.currentLuchador];
-    if (luchador3D && this.cameraFollowLuchador) {
-      const position = this.CAMERA_POSITION.add(luchador3D.getPosition());
-      this.camera.position = position;
-      this.camera.setTarget(luchador3D.getPosition());
+    if (this.cameraFollowLuchador) {
+      const luchador3D = this.luchadores[this.currentLuchador];
+      if (luchador3D) {
+        const position = this.CAMERA_POSITION.add(luchador3D.getPosition());
+        this.camera.position = position;
+        this.camera.setTarget(luchador3D.getPosition());
+      }
     } else {
       this.saveCameraState();
     }
@@ -406,14 +408,16 @@ export class ArenaComponent implements OnInit, OnChanges {
   loadMask(id: number): Promise<BABYLON.StandardMaterial> {
     return new Promise<BABYLON.StandardMaterial>((resolve, reject) => {
       // read the mask from the API
-      this.api.privateMaskConfigIdGet(id).subscribe(configs => {
+      this.api.privateMaskConfigIdGet(id).subscribe((configs) => {
         // // console.log("mask config loaded", id, configs);
 
         // build the material using dynamic texture
-        this.builder.loadDynamicTexture(configs, this.scene).then(material => {
-          // // console.log("dynamic texture loaded loaded", id, material);
-          resolve(material);
-        });
+        this.builder
+          .loadDynamicTexture(configs, this.scene)
+          .then((material) => {
+            // // console.log("dynamic texture loaded loaded", id, material);
+            resolve(material);
+          });
       });
     });
   }
@@ -461,9 +465,9 @@ export class ArenaComponent implements OnInit, OnChanges {
       if (!found) {
         // not found remove from the scene
         const luchador3D = this.luchadores[luchador.id];
-        
+
         // only removes if present in the scene
-        if( luchador3D){
+        if (luchador3D) {
           luchador3D.dispose();
           delete this.bullets[luchador.id];
         }

@@ -16,7 +16,7 @@ export class PlaygroundComponent implements OnInit, AfterViewInit {
 
   data: string;
   matchState: MatchState;
-  cameraFollowLuchador = true;
+  cameraFollowLuchador = false;
   animateSubject: Subject<string>;
   from: number = 130;
   to: number = 145;
