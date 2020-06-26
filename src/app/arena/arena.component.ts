@@ -98,7 +98,7 @@ export class ArenaComponent implements OnInit, OnChanges {
   setCameraFromSavedState() {
     const savedCameraState = localStorage.getItem(this.ROBOLUCHA_SAVED_CAMERA);
 
-    if (savedCameraState) {
+    if (savedCameraState && this.camera) {
       const cameraState: SavedCamera = JSON.parse(savedCameraState);
 
       this.camera.position.set(
