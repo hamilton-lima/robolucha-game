@@ -66,7 +66,7 @@ export class ArenaComponent implements OnInit, OnChanges {
   cameraZoomLevel = 0;
   cameraZoomLevels = [-5, 20];
 
-  private shadowGenerator: BABYLON.ShadowGenerator;
+  // private shadowGenerator: BABYLON.ShadowGenerator;
 
   constructor(private builder: TextureBuilder, private api: DefaultService) {
     this.resetState();
@@ -208,9 +208,9 @@ export class ArenaComponent implements OnInit, OnChanges {
     light2.position = new BABYLON.Vector3(10, 5, 5);
 
     // Shadows
-    this.shadowGenerator = new BABYLON.ShadowGenerator(512, light2);
-    this.shadowGenerator.useBlurExponentialShadowMap = true;
-    this.shadowGenerator.blurKernel = 32;
+    // this.shadowGenerator = new BABYLON.ShadowGenerator(512, light2);
+    // this.shadowGenerator.useBlurExponentialShadowMap = true;
+    // this.shadowGenerator.blurKernel = 32;
 
     const builder = new SceneBuilder(this.scene, this.gameDefinition);
     Promise.all([this.updateLuchadores(), builder.build()]).then(() => {
@@ -389,8 +389,8 @@ export class ArenaComponent implements OnInit, OnChanges {
           vehicleRotation,
           gunRotation,
           45,
-          this.convertPosition(420),
-          this.shadowGenerator
+          this.convertPosition(420)
+          // this.shadowGenerator
         );
 
         // save the new luchador3D

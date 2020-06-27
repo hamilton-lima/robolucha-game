@@ -52,10 +52,11 @@ export class Luchador3D extends Base3D {
     vehicleRotationY: number,
     gunRotationY: number,
     radarAngle: number,
-    radarRadius: number,
-    shadowGenerator: BABYLON.ShadowGenerator
+    radarRadius: number
+    // shadowGenerator: BABYLON.ShadowGenerator
   ) {
     super();
+    this.initAdvancedTexture();
 
     this.id = id;
     this.scene = scene;
@@ -183,7 +184,7 @@ export class Luchador3D extends Base3D {
     charLoader.then(mesh => {
       mesh.parent = self.turret;
       self.character = mesh;
-      shadowGenerator.addShadowCaster(mesh, true);
+      // shadowGenerator.addShadowCaster(mesh, true);
       self.character.id = self.getName() + ".character";
       material.then(result => (self.character.material = result));
 
@@ -288,7 +289,8 @@ export class Luchador3D extends Base3D {
     }
 
     //TODO: Get MaxHealth instead of hardcoding 20
-    let fillW = 50 * (this.health / 20);
+    const percentage = this.health / 20;
+    let fillW = 50 * percentage;
 
     this.lifeBarFill.width = fillW + "px";
     this.lifeBarFill.linkOffsetX =
@@ -296,5 +298,20 @@ export class Luchador3D extends Base3D {
       this.lifeBar.widthInPixels / 2 +
       ((50 - fillW) / 2 - (50 - fillW)) +
       "px";
+
+      this.lifeBarFill.color = this.getLifeBarColor(percentage);
+      this.lifeBarFill.background = this.getLifeBarColor(percentage);
+  }
+
+  getLifeBarColor(value){
+    if( value <= 0.2){
+      return "red";
+    }
+
+    if( value <= 0.5){
+      return "yellow";
+    }
+
+    return "green";
   }
 }

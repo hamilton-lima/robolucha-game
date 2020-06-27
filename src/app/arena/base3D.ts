@@ -14,7 +14,6 @@ export class Base3D {
   protected label: GUI.TextBlock;
 
   constructor() {
-    this.advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
   }
 
   animate(
@@ -88,12 +87,20 @@ export class Base3D {
 
   dispose(): any {
     this.mesh.dispose();
-    this.advancedTexture.dispose();
+
+    if( this.advancedTexture){
+      this.advancedTexture.dispose();
+    }
+
     // TODO: add Fadeout effect to remove elements from the scene
     // this.animate("visibility", 1, 0, this.speed, (mesh: BABYLON.Mesh) => {
     //   // console.log("trying to remove the bullet");
     // mesh.dispose();
     // });
+  }
+
+  initAdvancedTexture(){
+    this.advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
   }
 
   addLabel(
@@ -102,6 +109,11 @@ export class Base3D {
     baseOffsetX: number,
     textColor: BABYLON.Color3
   ) {
+
+    if( ! this.advancedTexture){
+      this.advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
+    }
+
     // var text1 = new BABYLON.GUI.TextBlock();
     // text1.text = text;
     // text1.color = "white";
