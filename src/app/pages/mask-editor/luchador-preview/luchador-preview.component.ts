@@ -136,27 +136,29 @@ export class LuchadorPreviewComponent implements OnInit, OnDestroy {
     return angle * this.ANGLE2RADIAN;
   }
 
-  rotateLeft(){
-    if (this.character) {
-      this.character.rotation.z += (this.ROTATION_SPEED * -1);
-    }
-  }
+  sliderValue = 0;
+  rotate(value : any){
+    if(!this.character)
+      return;
 
-  rotateRight(){
-    if (this.character) {
-      this.character.rotation.z += this.ROTATION_SPEED;
+    if(value > this.sliderValue){
+       this.character.rotation.z += this.ROTATION_SPEED;
+     }
+    else if(value < this.sliderValue){
+      this.character.rotation.z -= this.ROTATION_SPEED;
     }
+    this.sliderValue = value;
   }
 
   @HostListener('window:keydown', ['$event'])
   keyEvent(event: KeyboardEvent) {
 
     if( event.code == "ArrowLeft"){
-      this.rotateLeft();
+      //this.rotateLeft();
     }
 
     if( event.code == "ArrowRight"){
-      this.rotateRight();
+      //this.rotateRight();
     }
 
   }
