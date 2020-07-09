@@ -149,18 +149,4 @@ export class LuchadorPreviewComponent implements OnInit, OnDestroy {
     }
     this.sliderValue = value;
   }
-
-  @HostListener('window:keydown', ['$event'])
-  keyEvent(event: KeyboardEvent) {
-
-    if( event.code == "ArrowLeft"){
-      //this.rotateLeft();
-    }
-
-    if( event.code == "ArrowRight"){
-      //this.rotateRight();
-    }
-
-  }
-
 }
