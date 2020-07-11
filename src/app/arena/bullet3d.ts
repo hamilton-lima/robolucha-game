@@ -1,40 +1,36 @@
 import * as BABYLON from "babylonjs";
 import { Bullet } from "../watch-match/watch-match.model";
 import { Base3D } from "./base3D";
+import { ArenaData3D } from "./arena.data3D";
 
 export class Bullet3D extends Base3D {
-  static sphereCache: BABYLON.Mesh;
-  static material: BABYLON.StandardMaterial;
-
-  static init() {
-    Bullet3D.material = new BABYLON.StandardMaterial("material", null);
-    Bullet3D.material.diffuseColor = BABYLON.Color3.FromHexString("#FF0000");
-  }
-
-  getSphere(id: string) {
-    if (!Bullet3D.sphereCache) {
-      Bullet3D.sphereCache = BABYLON.MeshBuilder.CreateSphere(
-        "bullet-cache",
-        { diameter: 0.3 },
-        null
-      );
+  getSphere(id: string, data3D: ArenaData3D): BABYLON.Mesh {
+    if (!data3D.sphereCache) {
+      data3D.sphereCache = this.createSphere(data3D);
     }
-    return Bullet3D.sphereCache.clone(id, null);
+    return data3D.sphereCache.clone(id);
   }
 
-  constructor(scene: BABYLON.Scene, position: BABYLON.Vector3, bullet: Bullet) {
+  createSphere(data3D: ArenaData3D): BABYLON.Mesh {
+    const sphere = BABYLON.MeshBuilder.CreateSphere(
+      "bullet-cache",
+      { diameter: 0.3 },
+      null
+    );
+
+    const material = new BABYLON.StandardMaterial("material", null);
+    material.diffuseColor = BABYLON.Color3.FromHexString("#FF0000");
+    sphere.material = material;
+
+    return sphere;
+  }
+
+  constructor(data3D: ArenaData3D, position: BABYLON.Vector3, bullet: Bullet) {
     super();
-    if (!Bullet3D.material) {
-      Bullet3D.init();
-    }
-
-    this.scene = scene;
-    this.mesh = this.getSphere("bullet-" + bullet.id);
+    this.mesh = this.getSphere("bullet-" + bullet.id, data3D);
 
     this.mesh.position.x = position.x;
     this.mesh.position.y = position.y;
     this.mesh.position.z = position.z;
-
-    this.mesh.material = Bullet3D.material;
   }
 }

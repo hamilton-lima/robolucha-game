@@ -22,8 +22,8 @@ import { Helper3D } from "./helper3d";
 import { SceneComponent3D } from "./scenecomponent3D";
 import { SceneBuilder } from "./scene.builder3D";
 import { TextureBuilder } from "./texture-builder";
-import { ActivatedRoute } from "@angular/router";
 import { SharedConstants } from "./shared.constants";
+import {ArenaData3D} from "./arena.data3D";
 
 class SavedCamera {
   target: BABYLON.Vector3;
@@ -56,6 +56,7 @@ export class ArenaComponent implements OnInit, OnChanges {
 
   private currentMatchState: MatchState;
   private nextMatchState: MatchState;
+  private data3D: ArenaData3D;
 
   private HALF_LUCHADOR: number;
   private HALF_BULLET: number;
@@ -70,6 +71,7 @@ export class ArenaComponent implements OnInit, OnChanges {
 
   constructor(private builder: TextureBuilder, private api: DefaultService) {
     this.resetState();
+    this.data3D = new ArenaData3D();
   }
 
   fitToContainer() {
@@ -182,9 +184,6 @@ export class ArenaComponent implements OnInit, OnChanges {
 
     if (this.messageFPS) {
       this.messageFPS.subscribe((fps) => {
-        // // console.log(
-        //   "FPS: messages:" + fps + ", render: " + this.engine.getFps()
-        // );
       });
     }
 
@@ -192,7 +191,7 @@ export class ArenaComponent implements OnInit, OnChanges {
     this.engine.loadingUIText = "Loading the arena";
 
     this.scene = new BABYLON.Scene(this.engine);
-
+    
     const lightPosition = new BABYLON.Vector3(10, 10, -15);
     this.light = new BABYLON.HemisphericLight(
       "light1",
@@ -207,14 +206,8 @@ export class ArenaComponent implements OnInit, OnChanges {
     );
     light2.position = new BABYLON.Vector3(10, 5, 5);
 
-    // Shadows
-    // this.shadowGenerator = new BABYLON.ShadowGenerator(512, light2);
-    // this.shadowGenerator.useBlurExponentialShadowMap = true;
-    // this.shadowGenerator.blurKernel = 32;
-
     const builder = new SceneBuilder(this.scene, this.gameDefinition);
     Promise.all([this.updateLuchadores(), builder.build()]).then(() => {
-      // console.log("finished loading");
       this.engine.hideLoadingUI();
       this.render();
     });
@@ -300,7 +293,7 @@ export class ArenaComponent implements OnInit, OnChanges {
       } else {
         // not found add to the scene
         const position = this.calculateBulletPosition(bullet);
-        const newBullet = new Bullet3D(this.scene, position, bullet);
+        const newBullet = new Bullet3D(this.data3D, position, bullet);
         this.bullets[bullet.id] = newBullet;
 
         // animate luchador owner of the bullet
@@ -409,13 +402,11 @@ export class ArenaComponent implements OnInit, OnChanges {
     return new Promise<BABYLON.StandardMaterial>((resolve, reject) => {
       // read the mask from the API
       this.api.privateMaskConfigIdGet(id).subscribe((configs) => {
-        // // console.log("mask config loaded", id, configs);
 
         // build the material using dynamic texture
         this.builder
           .loadDynamicTexture(configs, this.scene)
           .then((material) => {
-            // // console.log("dynamic texture loaded loaded", id, material);
             resolve(material);
           });
       });
