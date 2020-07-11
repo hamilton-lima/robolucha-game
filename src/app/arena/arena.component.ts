@@ -23,7 +23,8 @@ import { SceneComponent3D } from "./scenecomponent3D";
 import { SceneBuilder } from "./scene.builder3D";
 import { TextureBuilder } from "./texture-builder";
 import { SharedConstants } from "./shared.constants";
-import {ArenaData3D} from "./arena.data3D";
+import { ArenaData3D } from "./arena.data3D";
+import { FPSRecorderService, FPSInfo } from "./fps.recorder.service";
 
 class SavedCamera {
   target: BABYLON.Vector3;
@@ -44,6 +45,7 @@ export class ArenaComponent implements OnInit, OnChanges {
   @Input() currentLuchador: number;
   @Input() animateSubject: Subject<string>;
   @Input() messageFPS: Subject<number>;
+  @Input() matchID: number;
 
   private engine: BABYLON.Engine;
   private scene: BABYLON.Scene;
@@ -69,7 +71,11 @@ export class ArenaComponent implements OnInit, OnChanges {
 
   // private shadowGenerator: BABYLON.ShadowGenerator;
 
-  constructor(private builder: TextureBuilder, private api: DefaultService) {
+  constructor(
+    private builder: TextureBuilder,
+    private api: DefaultService,
+    private fpsRecorder: FPSRecorderService
+  ) {
     this.resetState();
     this.data3D = new ArenaData3D();
   }
@@ -184,6 +190,12 @@ export class ArenaComponent implements OnInit, OnChanges {
 
     if (this.messageFPS) {
       this.messageFPS.subscribe((fps) => {
+        const info: FPSInfo = {
+          matchID: this.matchID,
+          messages: fps,
+          engine3D: this.engine.getFps(),
+        };
+        this.fpsRecorder.record(info);
       });
     }
 
@@ -191,7 +203,7 @@ export class ArenaComponent implements OnInit, OnChanges {
     this.engine.loadingUIText = "Loading the arena";
 
     this.scene = new BABYLON.Scene(this.engine);
-    
+
     const lightPosition = new BABYLON.Vector3(10, 10, -15);
     this.light = new BABYLON.HemisphericLight(
       "light1",
@@ -402,7 +414,6 @@ export class ArenaComponent implements OnInit, OnChanges {
     return new Promise<BABYLON.StandardMaterial>((resolve, reject) => {
       // read the mask from the API
       this.api.privateMaskConfigIdGet(id).subscribe((configs) => {
-
         // build the material using dynamic texture
         this.builder
           .loadDynamicTexture(configs, this.scene)

@@ -1,11 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import {
-  DefaultService,
-  ModelActiveMatch,
-  ModelAvailableMatch,
-  ModelMatch,
-  ModelUserDetails,
-  ModelLevelGroup,
+  DefaultService, ModelUserDetails, ModelMatch,
 } from "src/app/sdk";
 import { Router } from "@angular/router";
 import { ITourStep, ShepherdNewService } from "src/app/shepherd-new.service";
@@ -14,6 +9,8 @@ import { timer } from "rxjs";
 import Shepherd from "shepherd.js";
 import { LevelControlService } from "../level-control.service";
 import { forkJoin } from 'rxjs';
+import { ModelAvailableMatch } from "src/app/sdk/model/modelAvailableMatch";
+import { ModelLevelGroup } from "src/app/sdk/model/modelLevelGroup";
 
 @Component({
   selector: "app-list-public-games",
