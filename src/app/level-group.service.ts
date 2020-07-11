@@ -1,7 +1,8 @@
 import { Injectable } from "@angular/core";
-import { DefaultService, ModelLevelGroup } from "./sdk";
+import { DefaultService } from "./sdk";
 import { Subject, ReplaySubject, BehaviorSubject, Observable } from "rxjs";
 import { map } from "rxjs/operators";
+import { ModelLevelGroup } from "./sdk/model/modelLevelGroup";
 
 @Injectable({
   providedIn: "root",
