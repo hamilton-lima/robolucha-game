@@ -1,9 +1,14 @@
 import { Component, OnInit, ViewChild, Input, OnDestroy, HostListener } from "@angular/core";
 import { BehaviorSubject, Subscription } from "rxjs";
 import { TextureBuilder } from "../../../arena/texture-builder";
-import { MaskEditorMediator } from "../mask-editor.mediator";
+import { MaskEditorMediator, FeatureChange } from "../mask-editor.mediator";
 import { ModelGameComponent, ModelConfig } from "src/app/sdk";
-import { Vector3 } from "babylonjs";
+import { Vector3  } from "babylonjs";
+
+export interface ICameraConfiguration{
+  position : BABYLON.Vector3;
+  target : BABYLON.Vector3;
+}
 
 @Component({
   selector: "app-luchador-preview",
@@ -39,8 +44,8 @@ export class LuchadorPreviewComponent implements OnInit, OnDestroy {
   ngOnInit() {
     const self = this;
     this.engine = new BABYLON.Engine(this.canvas.nativeElement, true);
-    this.destPos = this.mapCamera.get("default")[0];
-    this.destTarg = this.mapCamera.get("default")[0];
+    this.destPos = this.mapCamera.get(FeatureChange.Default).position;
+    this.destTarg = this.mapCamera.get(FeatureChange.Default).target;
     this.subscription = this.mediator.configs.subscribe(
       (configs: ModelConfig[]) => {
         if (self.character) {
@@ -65,17 +70,20 @@ export class LuchadorPreviewComponent implements OnInit, OnDestroy {
     }
   }
 
+  cameraDefault : ICameraConfiguration = {position: new Vector3(0, 1, -2.3), target: new Vector3(0,0.1,0)};
+  cameraHead : ICameraConfiguration = {position: new Vector3(0, 0.5, -1.5), target: new Vector3(0,0.3,0)};
+  cameraBody : ICameraConfiguration = {position: new Vector3(0, -0.5, -1.5), target: new Vector3(0,-0.7,0)};
   // bodyParts cameraPosition cameraTarget
-  mapCamera:Map<string, Array<BABYLON.Vector3>> = 
+  mapCamera:Map<string, ICameraConfiguration> = 
     new Map([
-        ["default", [new Vector3(0, 1, -2.3), new Vector3(0,0.1,0)]],
-        ["head", [new Vector3(0, 0.5, -1.5), new Vector3(0,0.3,0)]],
-        ["body", [new Vector3(0, -0.5, -1.5), new Vector3(0,-0.7,0)]]
+        [FeatureChange.Default, this.cameraDefault],
+        [FeatureChange.Head, this.cameraHead],
+        [FeatureChange.Body, this.cameraBody]
     ]);
 
   cameraConfig(featuresChanges : string){
-      this.destPos = this.mapCamera.get(featuresChanges)[0];
-      this.destTarg = this.mapCamera.get(featuresChanges)[1];
+      this.destPos = this.mapCamera.get(featuresChanges).position;
+      this.destTarg = this.mapCamera.get(featuresChanges).target;
   }
 
   createScene(configs: ModelConfig[]): Promise<void> {

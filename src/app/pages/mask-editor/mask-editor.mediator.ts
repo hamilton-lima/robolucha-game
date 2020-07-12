@@ -2,6 +2,12 @@ import { Injectable } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
 import { ModelConfig } from "src/app/sdk";
 
+export enum FeatureChange{
+  Default = "default",
+  Head = "head",
+  Body = "body"
+}
+
 export interface IMediatorData{
   configs : ModelConfig[];
   featuresChanges : string;
