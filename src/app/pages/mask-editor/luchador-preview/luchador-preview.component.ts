@@ -156,6 +156,7 @@ export class LuchadorPreviewComponent implements OnInit, OnDestroy {
               .loadDynamicTexture(configs, self.scene)
               .then((dynamicTexture) => {
                 self.character.material = dynamicTexture.material;
+                self.mediator.mask.next(dynamicTexture.mask);
                 mesh.visibility = 1;
                 resolve();
               });

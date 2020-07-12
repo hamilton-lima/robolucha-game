@@ -98,6 +98,7 @@ export class TextureBuilder {
     const target = this;
 
     return new Promise<MaskBuild>(function (resolve, reject) {
+      // texture background
       const canvasPromise = target.buildLayerFromColor(
         configs,
         images,
@@ -105,6 +106,7 @@ export class TextureBuilder {
         "mask.primary.color"
       );
 
+      // square background
       const square = target.buildCanvasFromColor(
         configs,
         "skin.color",
@@ -113,12 +115,20 @@ export class TextureBuilder {
         200
       );
 
-      Promise.all([canvasPromise, square])
+      const faceBackground = target.buildLayerFromColor(
+        configs,
+        images,
+        "base",
+        "mask.primary.color"
+      );
+
+      Promise.all([canvasPromise, square, faceBackground])
         .then((backgrounds) => {
           const result = new MaskBuild();
 
-          result.texturePartial = backgrounds.find((one) => one.id != "square");
-          result.square = backgrounds.find((one) => one.id == "square");
+          result.texturePartial = backgrounds[0];// backgrounds.find((one) => one.id != "square");
+          result.square = backgrounds[1]; // backgrounds.find((one) => one.id == "square");
+          const faceBackground = backgrounds[2];
 
           let maskShape = target.buildLayerFromColor(
             configs,
@@ -164,7 +174,9 @@ export class TextureBuilder {
           Promise.all(promises)
             .then((tintedLayers) => {
               const context = result.texturePartial.getContext("2d");
+
               const contextSquare = result.square.getContext("2d");
+              contextSquare.drawImage(faceBackground, 0, 0);
 
               tintedLayers.forEach((layer) => {
                 // draw for the texture
@@ -336,6 +348,7 @@ export class TextureBuilder {
         self.loadImage("wrist"),
         self.loadImage("ankle"),
         self.loadImage("feet"),
+        self.loadImage("base"),
       ];
 
       self.addImagesFromShapes(configs, images2Load, maskEditorCategories);

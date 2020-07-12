@@ -18,7 +18,7 @@ export class CubeGeneratorService {
     }
 
     pdf.setFontSize(40);
-    pdf.text(5, 5, "Paranyan loves jsPDF");
+    pdf.text(5, 5, "robolucha - cube prototype");
 
     pdf.save("Filename.pdf");
   }
