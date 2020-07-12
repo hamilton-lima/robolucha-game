@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectorRef, ViewChild, ElementRef } from "@an
 import { ActivatedRoute } from "@angular/router";
 import { Behavior } from "babylonjs";
 import { BehaviorSubject } from "rxjs";
-import { MaskEditorMediator } from "./mask-editor.mediator";
+import { MaskEditorMediator, IMediatorData } from "./mask-editor.mediator";
 import { CanComponentDeactivate } from "src/app/can-deactivate-guard.service";
 import { ModelGameComponent, DefaultService, ModelConfig } from "src/app/sdk";
 import { AlertService } from "../alert.service";
@@ -116,11 +116,12 @@ export class MaskEditorComponent implements OnInit, CanComponentDeactivate {
     }
   }
 
-  onUpdate(map : any[]) {
+  onUpdate(mediatorData : IMediatorData) {
     this.dirty = true;
     // console.log("update on luchador", configs );
-    this.mediator.featuresChanges = map[0];
-    this.mediator.configs.next(map[1]);
+    console.log(mediatorData.featuresChanges);
+    this.mediator.featuresChanges = mediatorData.featuresChanges;
+    this.mediator.configs.next(mediatorData.configs);
   }
 
   canDeactivate() {

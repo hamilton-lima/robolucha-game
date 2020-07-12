@@ -10,7 +10,7 @@ import { ModelConfig } from "../../../sdk";
 import { Subscription } from "rxjs";
 import { LuchadorConfigService } from "./luchador-config.service";
 import { maskEditorCategories, EditorType } from "../mask-editor-category.model";
-import { MaskEditorMediator } from "../mask-editor.mediator";
+import { MaskEditorMediator, IMediatorData } from "../mask-editor.mediator";
 
 @Component({
   selector: "app-mask-editor-detail",
@@ -72,9 +72,7 @@ export class MaskEditorDetailComponent implements OnInit, OnDestroy {
       });
     }
 
-    let mediatorData : any[] = [];
-    mediatorData[0] = this.featuresChanges;
-    mediatorData[1] = this.configs;
+    let mediatorData : IMediatorData = {configs:this.configs, featuresChanges : this.featuresChanges};
     this.onChange.next(mediatorData);
   }
 
