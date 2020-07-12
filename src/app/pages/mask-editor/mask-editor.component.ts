@@ -102,6 +102,7 @@ export class MaskEditorComponent implements OnInit, CanComponentDeactivate {
   save() {
     this.events.click(this.page, "save");
 
+    this.mediator.featuresChanges = "default";
     let configs = this.mediator.configs.value;
     if (configs.length > 0) {
       this.luchador.configs = configs;
@@ -115,10 +116,11 @@ export class MaskEditorComponent implements OnInit, CanComponentDeactivate {
     }
   }
 
-  onUpdate(configs: ModelConfig[]) {
+  onUpdate(map : any[]) {
     this.dirty = true;
     // console.log("update on luchador", configs );
-    this.mediator.configs.next(configs);
+    this.mediator.featuresChanges = map[0];
+    this.mediator.configs.next(map[1]);
   }
 
   canDeactivate() {
