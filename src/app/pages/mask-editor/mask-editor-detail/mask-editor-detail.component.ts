@@ -10,7 +10,7 @@ import { ModelConfig } from "../../../sdk";
 import { Subscription } from "rxjs";
 import { LuchadorConfigService } from "./luchador-config.service";
 import { maskEditorCategories, EditorType } from "../mask-editor-category.model";
-import { MaskEditorMediator } from "../mask-editor.mediator";
+import { MaskEditorMediator, IMediatorData, FeatureChange } from "../mask-editor.mediator";
 
 @Component({
   selector: "app-mask-editor-detail",
@@ -27,6 +27,7 @@ export class MaskEditorDetailComponent implements OnInit, OnDestroy {
   
   type = EditorType;
   configs: ModelConfig[];
+  featuresChanges : string;
   subscription: Subscription;
 
   constructor(
@@ -38,6 +39,7 @@ export class MaskEditorDetailComponent implements OnInit, OnDestroy {
     // console.log("mask editor detail luchador", this.configs);
     this.subscription = this.mediator.configs.subscribe(configs => {
       this.configs = configs;
+      this.featuresChanges = this.mediator.featuresChanges;
     });
   }
 
@@ -70,22 +72,27 @@ export class MaskEditorDetailComponent implements OnInit, OnDestroy {
       });
     }
 
-    this.onChange.next(this.configs);
+    let mediatorData : IMediatorData = {configs:this.configs, featuresChanges : this.featuresChanges};
+    this.onChange.next(mediatorData);
   }
 
   getShapeName(key) {
+    this.featuresChanges = FeatureChange.Head;
     return this.luchadorConfigs.getShapeName(this.configs, key);
   }
 
   getColor(key) {
+    this.featuresChanges = FeatureChange.Body;
     return this.luchadorConfigs.getColor(this.configs, key);
   }
 
   getShape(key) {
+    this.featuresChanges = FeatureChange.Head;
     return this.luchadorConfigs.getShape(this.configs, key);
   }
 
   getColorLabel(key) {
+    this.featuresChanges = FeatureChange.Body;
     return this.luchadorConfigs.getColorLabel(this.configs, key);
   }
 }

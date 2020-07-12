@@ -1,8 +1,14 @@
 import { Component, OnInit, ViewChild, Input, OnDestroy, HostListener } from "@angular/core";
 import { BehaviorSubject, Subscription } from "rxjs";
 import { TextureBuilder } from "../../../arena/texture-builder";
-import { MaskEditorMediator } from "../mask-editor.mediator";
+import { MaskEditorMediator, FeatureChange } from "../mask-editor.mediator";
 import { ModelGameComponent, ModelConfig } from "src/app/sdk";
+import { Vector3  } from "babylonjs";
+
+export interface ICameraConfiguration{
+  position : BABYLON.Vector3;
+  target : BABYLON.Vector3;
+}
 
 @Component({
   selector: "app-luchador-preview",
@@ -38,6 +44,8 @@ export class LuchadorPreviewComponent implements OnInit, OnDestroy {
   ngOnInit() {
     const self = this;
     this.engine = new BABYLON.Engine(this.canvas.nativeElement, true);
+    this.destPos = this.mapCamera.get(FeatureChange.Default).position;
+    this.destTarg = this.mapCamera.get(FeatureChange.Default).target;
     this.subscription = this.mediator.configs.subscribe(
       (configs: ModelConfig[]) => {
         if (self.character) {
@@ -46,6 +54,7 @@ export class LuchadorPreviewComponent implements OnInit, OnDestroy {
             .then(material => {
               self.character.material = material;
             });
+            this.cameraConfig(this.mediator.featuresChanges);
         } else {
           this.current = this.createScene(configs).then(() => {
             this.render();
@@ -61,13 +70,30 @@ export class LuchadorPreviewComponent implements OnInit, OnDestroy {
     }
   }
 
+  cameraDefault : ICameraConfiguration = {position: new Vector3(0, 1, -2.3), target: new Vector3(0,0.1,0)};
+  cameraHead : ICameraConfiguration = {position: new Vector3(0, 0.5, -1.5), target: new Vector3(0,0.3,0)};
+  cameraBody : ICameraConfiguration = {position: new Vector3(0, -0.5, -1.5), target: new Vector3(0,-0.7,0)};
+  // bodyParts cameraPosition cameraTarget
+  mapCamera:Map<string, ICameraConfiguration> = 
+    new Map([
+        [FeatureChange.Default, this.cameraDefault],
+        [FeatureChange.Head, this.cameraHead],
+        [FeatureChange.Body, this.cameraBody]
+    ]);
+
+  cameraConfig(featuresChanges : string){
+      this.destPos = this.mapCamera.get(featuresChanges).position;
+      this.destTarg = this.mapCamera.get(featuresChanges).target;
+  }
+
   createScene(configs: ModelConfig[]): Promise<void> {
     const self = this;
+    console.log("criou a cena");
     return new Promise(function(resolve, reject) {
       const lightPosition = new BABYLON.Vector3(0, 10, -10);
-      const cameraPosition = new BABYLON.Vector3(2.0, 2.0, -2.5);
+      const cameraPosition = self.destPos;
       self.scene = new BABYLON.Scene(self.engine);
-
+      
       // create a basic light, aiming 0,1,0 - meaning, to the sky
       self.light = new BABYLON.HemisphericLight(
         "light1",
@@ -85,7 +111,7 @@ export class LuchadorPreviewComponent implements OnInit, OnDestroy {
       );
       self.camera.rotation.x = self.angle2radian(45);
       // // target the camera to scene origin
-      self.camera.setTarget(BABYLON.Vector3.Zero());
+      self.camera.setTarget(self.destTarg);
       // // attach the camera to the canvas
       // self.camera.attachControl(self.canvas.nativeElement, false);
       self.loadModel(self, configs, resolve);
@@ -106,7 +132,7 @@ export class LuchadorPreviewComponent implements OnInit, OnDestroy {
             self.character = mesh;
             self.character.position = BABYLON.Vector3.Zero();
             self.character.position.y = -2.3;
-            self.character.rotation.z = 1;
+            self.character.rotation.z = 1.6;
 
             let material = new BABYLON.StandardMaterial("material", self.scene);
             material.diffuseColor = BABYLON.Color3.FromHexString("#FAA21D");
@@ -127,8 +153,16 @@ export class LuchadorPreviewComponent implements OnInit, OnDestroy {
 
   render(): void {
     this.engine.runRenderLoop(() => {
+      this.interpolate();
       this.scene.render();
     });
+  }
+
+  destPos : BABYLON.Vector3;
+  destTarg : BABYLON.Vector3;
+  interpolate(){
+    this.camera.position = BABYLON.Vector3.Lerp(this.camera.position,this.destPos,0.05);
+    this.camera.setTarget(BABYLON.Vector3.Lerp(this.camera.getTarget(),this.destTarg,0.05));
   }
 
   readonly ANGLE2RADIAN = Math.PI / 180;
