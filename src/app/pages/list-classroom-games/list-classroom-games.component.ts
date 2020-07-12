@@ -3,13 +3,13 @@ import { AuthService } from "src/app/auth.service";
 import {
   ModelClassroom,
   ModelUserDetails,
-  ModelAvailableMatch,
   ModelMatch,
   DefaultService,
 } from "src/app/sdk";
 import { MatDialog } from "@angular/material";
 import { Router } from "@angular/router";
 import { LevelControlService } from "../level-control.service";
+import { ModelAvailableMatch } from "src/app/sdk/model/modelAvailableMatch";
 
 @Component({
   selector: "app-list-classroom-games",

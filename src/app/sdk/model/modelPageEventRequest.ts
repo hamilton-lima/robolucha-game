@@ -12,9 +12,12 @@
 
 
 export interface ModelPageEventRequest {
+    action?: string;
     appName?: string;
     appVersion?: string;
-    action?: string;
     componentID?: string;
     page?: string;
+    value1?: string;
+    value2?: string;
+    value3?: string;
 }

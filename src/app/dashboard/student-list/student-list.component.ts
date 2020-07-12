@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { DefaultService, ModelStudentResponse } from "src/app/sdk";
+import { DefaultService} from "src/app/sdk";
+import { ModelStudentResponse } from "src/app/sdk/model/modelStudentResponse";
 
 @Component({
   selector: "app-student-list",
