@@ -1,6 +1,6 @@
 <div class="row">
   <!-- left buttons -->
-  <div class="col-xs-12 col-3" id="mask-editor-categories-selector">
+  <div class="col-xs-12 col-4" id="mask-editor-categories-selector">
     <div class="btn-group-vertical" role="group" aria-label="...">
       <button
         *ngFor="let item of categories"
@@ -17,7 +17,7 @@
     </div>
   </div>
   <ng-container *ngFor="let category of categories">
-    <div *ngIf="isCurrent(category.id)" class="col-xs-12 col-9">
+    <div *ngIf="isCurrent(category.id)" class="col-xs-12 col-8">
       <ngb-accordion
         [closeOthers]="true"
         activeIds="{{ category.subcategories[0].key }}"

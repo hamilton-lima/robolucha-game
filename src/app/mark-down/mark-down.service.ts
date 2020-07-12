@@ -1,7 +1,13 @@
 import { Injectable } from "@angular/core";
-import { Marked, escape, Renderer } from "@ts-stack/markdown";
+import { Renderer} from "./lib/renderer";
+import { Marked } from "./lib/marked";
+import { MarkedOptions } from "./lib/interfaces";
 
 class MyRenderer extends Renderer {
+  constructor(){
+    super();
+  }
+
   link(href: string, title: string, text: string): string {
     let out = '<a href="' + href + '"';
 
@@ -27,7 +33,9 @@ export class MarkDownService {
   }
 
   addCustomTag() {
-    Marked.setOptions({ renderer: new MyRenderer() });
+    const options = new MarkedOptions();
+    options.renderer = new MyRenderer();
+    Marked.setOptions(options);
 
     Marked.setBlockRule(/^::: *(\w+)\n([\s\S]+?)\n:::/, function(execArr) {
       const channel = execArr[1];

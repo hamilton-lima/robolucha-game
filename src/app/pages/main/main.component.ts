@@ -1,14 +1,13 @@
-import { Component, OnInit, ViewEncapsulation } from "@angular/core";
+import { Component, OnInit} from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
-import { DefaultService, ModelAvailableMatch, ModelMatch, ModelUserDetails } from "src/app/sdk";
+import { DefaultService, ModelMatch, ModelUserDetails } from "src/app/sdk";
 import { ModelGameComponent } from "src/app/sdk/model/mainGameComponent";
-import { ShepherdNewService, ITourStep } from "src/app/shepherd-new.service";
+import { ShepherdNewService } from "src/app/shepherd-new.service";
 import { EventsService } from "src/app/shared/events.service";
 import { UserService } from "src/app/shared/user.service";
 import Shepherd from "shepherd.js";
-import { LevelGroupService } from "src/app/level-group.service";
-import { Observable, Subject } from "rxjs";
 import { LevelControlService } from "../level-control.service";
+import { ModelAvailableMatch } from "src/app/sdk/model/modelAvailableMatch";
 
 @Component({
   selector: "app-main",

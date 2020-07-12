@@ -11,7 +11,10 @@ variables:
 build:
   stage: build
   script:
-    - docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD} ${DOCKER_SERVER}
+    - docker --version
+    - docker login --help
+    - echo  "${DOCKER_USER}" "${DOCKER_PASSWORD}" ${DOCKER_SERVER}
+    - docker login -u "${DOCKER_USER}" -p "${DOCKER_PASSWORD}" ${DOCKER_SERVER}
     - docker build -t ${CONTAINER_IMAGE} . 
     - docker tag ${CONTAINER_IMAGE} ${CONTAINER_IMAGE}
     - docker tag ${CONTAINER_IMAGE} ${NAME}
