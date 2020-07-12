@@ -7,4 +7,5 @@ import { ModelConfig } from "src/app/sdk";
 })
 export class MaskEditorMediator {
   configs: BehaviorSubject<ModelConfig[]> = new BehaviorSubject([]);
+  featuresChanges : string;
 }
