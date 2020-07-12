@@ -6,8 +6,8 @@ variables:
   NAME: robolucha/game
   BUILD: ${NAME}:${CI_COMMIT_SHORT_SHA}
   LATEST: ${NAME}:latest
-  PUSH_BUILD: ${DOCKER_SERVER}/${BUILD}
-  PUSH_LATEST: ${DOCKER_SERVER}/${LATEST}
+  PUSH_BUILD: ${DOCKER_SERVER}/${NAME}:${CI_COMMIT_SHORT_SHA}
+  PUSH_LATEST: ${DOCKER_SERVER}/${NAME}:latest
   
 before_script:
   - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD $DOCKER_SERVER
