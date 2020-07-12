@@ -22,6 +22,11 @@ class PartialTextureBuild {
   mask: HTMLCanvasElement;
 }
 
+class MaskBuild {
+  texturePartial: HTMLCanvasElement;
+  square: HTMLCanvasElement;
+}
+
 @Injectable({
   providedIn: "root",
 })
@@ -66,8 +71,8 @@ export class TextureBuilder {
 
       promises.push(
         this.buildMask(configs, images).then((canvas) => {
-          result.mask = canvas;
-          return Promise.resolve(canvas);
+          result.mask = canvas.square;
+          return Promise.resolve(canvas.texturePartial);
         })
       );
 
@@ -89,10 +94,10 @@ export class TextureBuilder {
   private buildMask(
     configs: ModelConfig[],
     images: Array<HTMLImageElement>
-  ): Promise<HTMLCanvasElement> {
+  ): Promise<MaskBuild> {
     const target = this;
 
-    return new Promise<HTMLCanvasElement>(function (resolve, reject) {
+    return new Promise<MaskBuild>(function (resolve, reject) {
       const canvasPromise = target.buildLayerFromColor(
         configs,
         images,
@@ -100,8 +105,21 @@ export class TextureBuilder {
         "mask.primary.color"
       );
 
-      canvasPromise
-        .then((canvas) => {
+      const square = target.buildCanvasFromColor(
+        configs,
+        "skin.color",
+        "square",
+        200,
+        200
+      );
+
+      Promise.all([canvasPromise, square])
+        .then((backgrounds) => {
+          const result = new MaskBuild();
+
+          result.texturePartial = backgrounds.find((one) => one.id != "square");
+          result.square = backgrounds.find((one) => one.id == "square");
+
           let maskShape = target.buildLayerFromColor(
             configs,
             images,
@@ -145,15 +163,22 @@ export class TextureBuilder {
 
           Promise.all(promises)
             .then((tintedLayers) => {
-              const context = canvas.getContext("2d");
+              const context = result.texturePartial.getContext("2d");
+              const contextSquare = result.square.getContext("2d");
+
               tintedLayers.forEach((layer) => {
+                // draw for the texture
                 context.drawImage(
                   layer,
                   target.maskLayers.x,
                   target.maskLayers.y
                 );
+
+                // draw for the square
+                contextSquare.drawImage(layer, 0, 0);
               });
-              resolve(canvas);
+
+              resolve(result);
             })
             .catch(function (error) {
               console.error("Error drawing mask layers", error);
@@ -179,6 +204,33 @@ export class TextureBuilder {
         canvas.width = 1;
         canvas.height = 1;
       }
+
+      resolve(canvas);
+    });
+  }
+
+  private buildCanvasFromColor(
+    configs: ModelConfig[],
+    colorName: string,
+    id: string,
+    width: number,
+    height: number
+  ): Promise<HTMLCanvasElement> {
+    const target = this;
+
+    return new Promise<HTMLCanvasElement>((resolve, reject) => {
+      const canvas = document.createElement("canvas");
+      canvas.id = id;
+      canvas.width = width;
+      canvas.height = height;
+
+      let context = canvas.getContext("2d");
+      context.imageSmoothingEnabled = true;
+
+      let color = target.getValue(configs, colorName, "#000000");
+      context.fillStyle = color;
+      context.fillRect(0, 0, width, height);
+      context.fill();
 
       resolve(canvas);
     });
@@ -290,7 +342,6 @@ export class TextureBuilder {
 
       let sequence = forkJoin(images2Load);
       sequence.subscribe((images: Array<HTMLImageElement>) => {
-
         if (configs) {
           self
             .build(configs, images, TEXTURE_WIDTH, TEXTURE_HEIGHT)

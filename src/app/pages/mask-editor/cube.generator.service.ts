@@ -14,7 +14,7 @@ export class CubeGeneratorService {
     const canvas = this.mediator.mask.value;
     if (canvas) {
       const png = canvas.toDataURL("image/png");
-      pdf.addImage(png, "PNG", 0, 0, 29.7, 21.0);
+      pdf.addImage(png, "PNG", 10, 5, 5, 5);
     }
 
     pdf.setFontSize(40);
