@@ -1,22 +1,28 @@
-import { Component, OnInit, ViewChild, Input, OnDestroy, HostListener } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  Input,
+  OnDestroy,
+  HostListener,
+} from "@angular/core";
 import { BehaviorSubject, Subscription } from "rxjs";
 import { TextureBuilder } from "../../../arena/texture-builder";
 import { MaskEditorMediator, FeatureChange } from "../mask-editor.mediator";
 import { ModelGameComponent, ModelConfig } from "src/app/sdk";
-import { Vector3  } from "babylonjs";
+import { Vector3 } from "babylonjs";
 
-export interface ICameraConfiguration{
-  position : BABYLON.Vector3;
-  target : BABYLON.Vector3;
+export interface ICameraConfiguration {
+  position: BABYLON.Vector3;
+  target: BABYLON.Vector3;
 }
 
 @Component({
   selector: "app-luchador-preview",
   templateUrl: "./luchador-preview.component.html",
-  styleUrls: ["./luchador-preview.component.css"]
+  styleUrls: ["./luchador-preview.component.css"],
 })
 export class LuchadorPreviewComponent implements OnInit, OnDestroy {
-
   @ViewChild("preview") canvas;
   @Input() luchadorSubject: BehaviorSubject<ModelGameComponent>;
 
@@ -51,10 +57,11 @@ export class LuchadorPreviewComponent implements OnInit, OnDestroy {
         if (self.character) {
           self.builder
             .loadDynamicTexture(configs, self.scene)
-            .then(material => {
-              self.character.material = material;
+            .then((dynamicTexture) => {
+              self.character.material = dynamicTexture.material;
+              this.mediator.mask.next(dynamicTexture.mask);
             });
-            this.cameraConfig(this.mediator.featuresChanges);
+          this.cameraConfig(this.mediator.featuresChanges);
         } else {
           this.current = this.createScene(configs).then(() => {
             this.render();
@@ -70,30 +77,38 @@ export class LuchadorPreviewComponent implements OnInit, OnDestroy {
     }
   }
 
-  cameraDefault : ICameraConfiguration = {position: new Vector3(0, 1, -2.3), target: new Vector3(0,0.1,0)};
-  cameraHead : ICameraConfiguration = {position: new Vector3(0, 0.5, -1.5), target: new Vector3(0,0.3,0)};
-  cameraBody : ICameraConfiguration = {position: new Vector3(0, -0.5, -1.5), target: new Vector3(0,-0.7,0)};
+  cameraDefault: ICameraConfiguration = {
+    position: new Vector3(0, 1, -2.3),
+    target: new Vector3(0, 0.1, 0),
+  };
+  cameraHead: ICameraConfiguration = {
+    position: new Vector3(0, 0.5, -1.5),
+    target: new Vector3(0, 0.3, 0),
+  };
+  cameraBody: ICameraConfiguration = {
+    position: new Vector3(0, -0.5, -1.5),
+    target: new Vector3(0, -0.7, 0),
+  };
   // bodyParts cameraPosition cameraTarget
-  mapCamera:Map<string, ICameraConfiguration> = 
-    new Map([
-        [FeatureChange.Default, this.cameraDefault],
-        [FeatureChange.Head, this.cameraHead],
-        [FeatureChange.Body, this.cameraBody]
-    ]);
+  mapCamera: Map<string, ICameraConfiguration> = new Map([
+    [FeatureChange.Default, this.cameraDefault],
+    [FeatureChange.Head, this.cameraHead],
+    [FeatureChange.Body, this.cameraBody],
+  ]);
 
-  cameraConfig(featuresChanges : string){
-      this.destPos = this.mapCamera.get(featuresChanges).position;
-      this.destTarg = this.mapCamera.get(featuresChanges).target;
+  cameraConfig(featuresChanges: string) {
+    this.destPos = this.mapCamera.get(featuresChanges).position;
+    this.destTarg = this.mapCamera.get(featuresChanges).target;
   }
 
   createScene(configs: ModelConfig[]): Promise<void> {
     const self = this;
     console.log("criou a cena");
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
       const lightPosition = new BABYLON.Vector3(0, 10, -10);
       const cameraPosition = self.destPos;
       self.scene = new BABYLON.Scene(self.engine);
-      
+
       // create a basic light, aiming 0,1,0 - meaning, to the sky
       self.light = new BABYLON.HemisphericLight(
         "light1",
@@ -124,9 +139,8 @@ export class LuchadorPreviewComponent implements OnInit, OnDestroy {
       "assets/",
       "robolucha_char03.babylon",
       self.scene,
-      function(newMeshes) {
-
-        newMeshes.forEach(mesh => {
+      function (newMeshes) {
+        newMeshes.forEach((mesh) => {
           if (mesh.name == "robolucha_retopo") {
             mesh.visibility = 0;
             self.character = mesh;
@@ -140,8 +154,8 @@ export class LuchadorPreviewComponent implements OnInit, OnDestroy {
 
             self.builder
               .loadDynamicTexture(configs, self.scene)
-              .then(material => {
-                self.character.material = material;
+              .then((dynamicTexture) => {
+                self.character.material = dynamicTexture.material;
                 mesh.visibility = 1;
                 resolve();
               });
@@ -158,11 +172,17 @@ export class LuchadorPreviewComponent implements OnInit, OnDestroy {
     });
   }
 
-  destPos : BABYLON.Vector3;
-  destTarg : BABYLON.Vector3;
-  interpolate(){
-    this.camera.position = BABYLON.Vector3.Lerp(this.camera.position,this.destPos,0.05);
-    this.camera.setTarget(BABYLON.Vector3.Lerp(this.camera.getTarget(),this.destTarg,0.05));
+  destPos: BABYLON.Vector3;
+  destTarg: BABYLON.Vector3;
+  interpolate() {
+    this.camera.position = BABYLON.Vector3.Lerp(
+      this.camera.position,
+      this.destPos,
+      0.05
+    );
+    this.camera.setTarget(
+      BABYLON.Vector3.Lerp(this.camera.getTarget(), this.destTarg, 0.05)
+    );
   }
 
   readonly ANGLE2RADIAN = Math.PI / 180;
@@ -171,14 +191,12 @@ export class LuchadorPreviewComponent implements OnInit, OnDestroy {
   }
 
   sliderValue = 0;
-  rotate(value : any){
-    if(!this.character)
-      return;
+  rotate(value: any) {
+    if (!this.character) return;
 
-    if(value > this.sliderValue){
-       this.character.rotation.z += this.ROTATION_SPEED;
-     }
-    else if(value < this.sliderValue){
+    if (value > this.sliderValue) {
+      this.character.rotation.z += this.ROTATION_SPEED;
+    } else if (value < this.sliderValue) {
       this.character.rotation.z -= this.ROTATION_SPEED;
     }
     this.sliderValue = value;

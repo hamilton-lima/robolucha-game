@@ -18,5 +18,6 @@ export interface IMediatorData{
 })
 export class MaskEditorMediator {
   configs: BehaviorSubject<ModelConfig[]> = new BehaviorSubject([]);
+  mask: BehaviorSubject<HTMLCanvasElement>  = new BehaviorSubject(null);
   featuresChanges : string;
 }

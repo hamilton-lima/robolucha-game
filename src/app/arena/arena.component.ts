@@ -417,8 +417,8 @@ export class ArenaComponent implements OnInit, OnChanges {
         // build the material using dynamic texture
         this.builder
           .loadDynamicTexture(configs, this.scene)
-          .then((material) => {
-            resolve(material);
+          .then((dynamicTexture) => {
+            resolve(dynamicTexture.material);
           });
       });
     });
