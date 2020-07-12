@@ -1,25 +1,27 @@
-image: docker:stable
+image: docker:19.03.11
 services:
-  - docker:19.03.5-dind
+  - docker:19.03.11-dind
 
 variables:
-  NAME: robolucha/game:latest
-  CONTAINER_IMAGE: robolucha/game:${CI_COMMIT_SHORT_SHA}
-  DOCKER_USER: gitlab
-  LATEST: ${DOCKER_SERVER}/${NAME}
+  NAME: robolucha/game
+  BUILD: ${NAME}:${CI_COMMIT_SHORT_SHA}
+  LATEST: ${NAME}:latest
+  PUSH_BUILD: ${DOCKER_SERVER}/${BUILD}
+  PUSH_LATEST: ${DOCKER_SERVER}/${LATEST}
+  
+before_script:
+  - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD $DOCKER_SERVER
 
 build:
   stage: build
   script:
-    - docker --version
-    - docker login --help
-    - echo  "${DOCKER_USER}" "${DOCKER_PASSWORD}" ${DOCKER_SERVER}
-    - docker login -u "${DOCKER_USER}" -p "${DOCKER_PASSWORD}" ${DOCKER_SERVER}
-    - docker build -t ${CONTAINER_IMAGE} . 
-    - docker tag ${CONTAINER_IMAGE} ${CONTAINER_IMAGE}
-    - docker tag ${CONTAINER_IMAGE} ${NAME}
-    - docker tag ${CONTAINER_IMAGE} ${LATEST}
-    - docker push ${LATEST}
-  #     - curl --max-time 900 --silent --fail -H "web-hook-token:$DEV" dev.robolucha.com:4295/dev-docs
+    - echo Building $BUILD
+    - docker build --cache-from $PUSH_LATEST -t $BUILD . 
+    - docker tag $BUILD $PUSH_BUILD
+    - docker tag $BUILD $PUSH_LATEST
+    - echo Pushing $PUSH_BUILD $PUSH_LATEST 
+    - docker push $PUSH_BUILD
+    - docker push $PUSH_LATEST
+  # - curl --max-time 900 --silent --fail -H "web-hook-token:$DEV" dev.robolucha.com:4295/dev-docs
   only:
     - development
