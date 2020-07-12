@@ -3,6 +3,7 @@ import { BehaviorSubject, Subscription } from "rxjs";
 import { TextureBuilder } from "../../../arena/texture-builder";
 import { MaskEditorMediator } from "../mask-editor.mediator";
 import { ModelGameComponent, ModelConfig } from "src/app/sdk";
+import { Vector3 } from "babylonjs";
 
 @Component({
   selector: "app-luchador-preview",
@@ -38,6 +39,8 @@ export class LuchadorPreviewComponent implements OnInit, OnDestroy {
   ngOnInit() {
     const self = this;
     this.engine = new BABYLON.Engine(this.canvas.nativeElement, true);
+    this.destPos = this.mapCamera.get("default")[0];
+    this.destTarg = this.mapCamera.get("default")[0];
     this.subscription = this.mediator.configs.subscribe(
       (configs: ModelConfig[]) => {
         if (self.character) {
@@ -46,6 +49,7 @@ export class LuchadorPreviewComponent implements OnInit, OnDestroy {
             .then(material => {
               self.character.material = material;
             });
+            this.cameraConfig(this.mediator.featuresChanges);
         } else {
           this.current = this.createScene(configs).then(() => {
             this.render();
@@ -61,13 +65,27 @@ export class LuchadorPreviewComponent implements OnInit, OnDestroy {
     }
   }
 
+  // bodyParts cameraPosition cameraTarget
+  mapCamera:Map<string, Array<BABYLON.Vector3>> = 
+    new Map([
+        ["default", [new Vector3(0, 1, -2.3), new Vector3(0,0.1,0)]],
+        ["head", [new Vector3(0, 0.5, -1.5), new Vector3(0,0.3,0)]],
+        ["body", [new Vector3(0, -0.5, -1.5), new Vector3(0,-0.7,0)]]
+    ]);
+
+  cameraConfig(featuresChanges : string){
+      this.destPos = this.mapCamera.get(featuresChanges)[0];
+      this.destTarg = this.mapCamera.get(featuresChanges)[1];
+  }
+
   createScene(configs: ModelConfig[]): Promise<void> {
     const self = this;
+    console.log("criou a cena");
     return new Promise(function(resolve, reject) {
       const lightPosition = new BABYLON.Vector3(0, 10, -10);
-      const cameraPosition = new BABYLON.Vector3(2.0, 2.0, -2.5);
+      const cameraPosition = self.destPos;
       self.scene = new BABYLON.Scene(self.engine);
-
+      
       // create a basic light, aiming 0,1,0 - meaning, to the sky
       self.light = new BABYLON.HemisphericLight(
         "light1",
@@ -85,7 +103,7 @@ export class LuchadorPreviewComponent implements OnInit, OnDestroy {
       );
       self.camera.rotation.x = self.angle2radian(45);
       // // target the camera to scene origin
-      self.camera.setTarget(BABYLON.Vector3.Zero());
+      self.camera.setTarget(self.destTarg);
       // // attach the camera to the canvas
       // self.camera.attachControl(self.canvas.nativeElement, false);
       self.loadModel(self, configs, resolve);
@@ -106,7 +124,7 @@ export class LuchadorPreviewComponent implements OnInit, OnDestroy {
             self.character = mesh;
             self.character.position = BABYLON.Vector3.Zero();
             self.character.position.y = -2.3;
-            self.character.rotation.z = 1;
+            self.character.rotation.z = 1.6;
 
             let material = new BABYLON.StandardMaterial("material", self.scene);
             material.diffuseColor = BABYLON.Color3.FromHexString("#FAA21D");
@@ -127,8 +145,16 @@ export class LuchadorPreviewComponent implements OnInit, OnDestroy {
 
   render(): void {
     this.engine.runRenderLoop(() => {
+      this.interpolate();
       this.scene.render();
     });
+  }
+
+  destPos : BABYLON.Vector3;
+  destTarg : BABYLON.Vector3;
+  interpolate(){
+    this.camera.position = BABYLON.Vector3.Lerp(this.camera.position,this.destPos,0.05);
+    this.camera.setTarget(BABYLON.Vector3.Lerp(this.camera.getTarget(),this.destTarg,0.05));
   }
 
   readonly ANGLE2RADIAN = Math.PI / 180;
