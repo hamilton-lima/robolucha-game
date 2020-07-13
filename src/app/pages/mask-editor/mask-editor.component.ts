@@ -171,6 +171,6 @@ export class MaskEditorComponent implements OnInit, CanComponentDeactivate {
   }
 
   cubeIt() {
-    this.cube.generate();
+    this.cube.generate(this.luchador.name);
   }
 }

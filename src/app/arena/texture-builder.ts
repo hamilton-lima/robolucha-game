@@ -398,7 +398,7 @@ export class TextureBuilder {
     return this.loadImageFromFileName(fileName, name);
   }
 
-  private loadImageFromFileName(fileName, name): Subject<HTMLImageElement> {
+  public loadImageFromFileName(fileName, name): Subject<HTMLImageElement> {
     let result = new Subject<HTMLImageElement>();
     let img = new Image();
     img.name = name;
