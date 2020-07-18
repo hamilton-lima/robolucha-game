@@ -14,6 +14,7 @@ interface BoxPosition {
   name: string;
   colorName: string;
   dimension: Dimension;
+  type?: string;
 }
 
 @Injectable({
@@ -125,6 +126,50 @@ export class CubeGeneratorService {
       name: "4-ankle",
       colorName: "ankle.color",
       dimension: { x: 17.565, y: 10.623, width: 1.104, height: 0.219 },
+    },
+    {
+      name: "1-arm",
+      colorName: "skin.color",
+      dimension: { x: 1.902, y: 7.592, width: 0.959, height: 1.713 },
+    },
+    {
+      name: "1-hand-shadow",
+      colorName: "#000000",
+      type: "circle",
+      dimension: { x: 1.884, y: 9.139, width: 1.1, height: 1.069 },
+    },
+    {
+      name: "1-hand",
+      colorName: "skin.color",
+      type: "circle",
+      dimension: { x: 1.831, y: 9.086, width: 1.1, height: 1.069 },
+    },
+    {
+      name: "1-wrist",
+      colorName: "wrist.color",
+      dimension: { x: 1.902, y: 8.961, width: 0.959, height: 0.345 },
+    },
+    {
+      name: "3-arm",
+      colorName: "skin.color",
+      dimension: { x: 10.951, y: 7.592, width: 0.959, height: 1.713 },
+    },
+    {
+      name: "3-hand-shadow",
+      colorName: "#000000",
+      type: "circle",
+      dimension: { x: 10.850, y: 9.139, width: 1.1, height: 1.069 },
+    },
+    {
+      name: "3-hand",
+      colorName: "skin.color",
+      type: "circle",
+      dimension: { x: 10.900, y: 9.086, width: 1.1, height: 1.069 },
+    },
+    {
+      name: "3-wrist",
+      colorName: "wrist.color",
+      dimension: { x: 10.951, y: 8.961, width: 0.959, height: 0.345 },
     }
   ];
 
@@ -171,7 +216,7 @@ export class CubeGeneratorService {
           const color = this.textureBuilder.getValue(
             configs,
             box.colorName,
-            this.defaultColor
+            box.colorName
           );
 
           pdf.setFillColor(color);
@@ -215,6 +260,7 @@ export class CubeGeneratorService {
         const startY = this.colorsY + 2 * this.colorsYStep;
         const colors = this.getListOfColorNames();
         let line = 0;
+
         colors.forEach((color) => {
           pdf.text(
             this.colorsX,
