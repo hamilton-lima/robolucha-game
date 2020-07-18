@@ -101,8 +101,25 @@ export class CubeGeneratorService {
   marginX = 2;
   marginY = 2;
 
+  colorsX = 21.345;
+  colorsY = 3.451;
+  colorsYStep = 0.5;
+
   mask: Dimension = { x: 3.816, y: 2.118, width: 6.284, height: 7.391 };
+
   defaultColor = "#FFFFFF";
+
+  getListOfColorNames(): string[] {
+    const result: string[] = [];
+    const configs = this.mediator.configs.value;
+    configs.forEach((config) => {
+      if (config.key.endsWith(".name")) {
+        result.push(config.value);
+      }
+    });
+
+    return result;
+  }
 
   generate(name: string) {
     this.textureBuilder
@@ -114,7 +131,7 @@ export class CubeGeneratorService {
         pdf.text(
           this.marginX + 1,
           this.marginY + 12.526,
-          "game.robolucha.com - play with us",
+          "https://game.robolucha.com",
           "left"
         );
         const configs = this.mediator.configs.value;
@@ -151,6 +168,32 @@ export class CubeGeneratorService {
         }
 
         pdf.addImage(image, "PNG", this.marginX, this.marginY, 18.682, 11.311);
+
+        pdf.setFontSize(14);
+        pdf.setFontType("bold");
+
+        pdf.text(
+          this.colorsX,
+          this.colorsY,
+          "List of ingredient colors",
+          "left"
+        );
+
+        pdf.setFontSize(11);
+        pdf.setFontType("normal");
+
+        const startY = this.colorsY + 2 * this.colorsYStep;
+        const colors = this.getListOfColorNames();
+        let line = 0;
+        colors.forEach((color) => {
+          pdf.text(
+            this.colorsX,
+            startY + line * this.colorsYStep,
+            color,
+            "left"
+          );
+          line++;
+        });
 
         pdf.save(name + ".pdf");
       });
