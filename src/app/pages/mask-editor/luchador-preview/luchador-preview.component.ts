@@ -97,8 +97,13 @@ export class LuchadorPreviewComponent implements OnInit, OnDestroy {
   ]);
 
   cameraConfig(featuresChanges: string) {
-    this.destPos = this.mapCamera.get(featuresChanges).position;
-    this.destTarg = this.mapCamera.get(featuresChanges).target;
+    if (featuresChanges) {
+      this.destPos = this.mapCamera.get(featuresChanges).position;
+      this.destTarg = this.mapCamera.get(featuresChanges).target;
+    } else {
+      this.destPos = this.mapCamera.get(FeatureChange.Default).position;
+      this.destTarg = this.mapCamera.get(FeatureChange.Default).target;
+    }
   }
 
   createScene(configs: ModelConfig[]): Promise<void> {

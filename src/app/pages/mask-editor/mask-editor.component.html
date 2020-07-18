@@ -21,14 +21,15 @@
         <button color="accent" *ngIf="dirty" class="mr-2" (click)="save()" mat-raised-button>
           SAVE
         </button>
-        <button id="random-mask" (click)="random()" mat-raised-button>RANDOM</button>
+        <button id="random-mask" (click)="random()" class="mr-2" mat-raised-button>RANDOM</button>
+        <button id="cube-it" (click)="cubeIt()" mat-raised-button>CUBE IT!</button>
+
       </div>
     </div>
 
     <div class="row">
       <div class="col-6 text-left">
         <app-mask-editor-detail (onChange)="onUpdate($event)"></app-mask-editor-detail>
-        <button id="cube-it" (click)="cubeIt()" mat-raised-button>CUBE IT!</button>
       </div>
 
       <div class="col-6 text-center">

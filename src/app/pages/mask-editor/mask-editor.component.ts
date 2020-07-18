@@ -123,6 +123,7 @@ export class MaskEditorComponent implements OnInit, CanComponentDeactivate {
     // console.log("update on luchador", configs );
     this.mediator.featuresChanges = mediatorData.featuresChanges;
     this.mediator.configs.next(mediatorData.configs);
+    console.log(mediatorData.configs);
   }
 
   canDeactivate() {

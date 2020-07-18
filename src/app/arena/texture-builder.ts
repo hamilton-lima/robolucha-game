@@ -107,9 +107,7 @@ export class TextureBuilder {
       );
 
       // square background
-      const square = target.buildCanvasFromColor(
-        configs,
-        "skin.color",
+      const square = target.buildCanvas(
         "square",
         200,
         200
@@ -176,7 +174,7 @@ export class TextureBuilder {
               const context = result.texturePartial.getContext("2d");
 
               const contextSquare = result.square.getContext("2d");
-              contextSquare.drawImage(faceBackground, 0, 0);
+              // contextSquare.drawImage(faceBackground, 0, 0);
 
               tintedLayers.forEach((layer) => {
                 // draw for the texture
@@ -246,6 +244,22 @@ export class TextureBuilder {
 
       resolve(canvas);
     });
+  }  
+  
+  private buildCanvas(
+    id: string,
+    width: number,
+    height: number
+  ): Promise<HTMLCanvasElement> {
+    const target = this;
+
+    return new Promise<HTMLCanvasElement>((resolve, reject) => {
+      const canvas = document.createElement("canvas");
+      canvas.id = id;
+      canvas.width = width;
+      canvas.height = height;
+      resolve(canvas);
+    });
   }
 
   private buildLayerFromColor(
@@ -269,7 +283,7 @@ export class TextureBuilder {
     }
   }
 
-  private getValue(
+  public getValue(
     configs: ModelConfig[],
     key: string,
     defaultValue: string
