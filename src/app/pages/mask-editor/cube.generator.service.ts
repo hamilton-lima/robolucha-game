@@ -96,6 +96,36 @@ export class CubeGeneratorService {
       colorName: "skin.color",
       dimension: { x: 17.575, y: 9.509, width: 1.098, height: 1.771 },
     },
+    {
+      name: "1-feet",
+      colorName: "feet.color",
+      dimension: { x: 0.771, y: 10.841, width: 4.419, height: 0.439 },
+    },
+    {
+      name: "1-ankle",
+      colorName: "ankle.color",
+      dimension: { x: 0.771, y: 10.623, width: 4.419, height: 0.219 },
+    },
+    {
+      name: "3-feet",
+      colorName: "feet.color",
+      dimension: { x: 8.624, y: 10.841, width: 5.584, height: 0.439 },
+    },
+    {
+      name: "3-ankle",
+      colorName: "ankle.color",
+      dimension: { x: 8.594, y: 10.623, width: 5.584, height: 0.219 },
+    },
+    {
+      name: "4-feet",
+      colorName: "feet.color",
+      dimension: { x: 17.565, y: 10.841, width: 1.104, height: 0.439 },
+    },
+    {
+      name: "4-ankle",
+      colorName: "ankle.color",
+      dimension: { x: 17.565, y: 10.623, width: 1.104, height: 0.219 },
+    }
   ];
 
   marginX = 2;
@@ -127,7 +157,7 @@ export class CubeGeneratorService {
       .subscribe((image) => {
         let pdf = new jspdf("l", "cm", "a4");
 
-        pdf.setFontSize(30);
+        pdf.setFontSize(14);
         pdf.text(
           this.marginX + 1,
           this.marginY + 12.526,
