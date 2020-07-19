@@ -11,6 +11,7 @@ import { ShepherdNewService, ITourStep } from "src/app/shepherd-new.service";
 import { EventsService } from "src/app/shared/events.service";
 import { UserService } from "src/app/shared/user.service";
 import { FormControl, Validators } from "@angular/forms";
+import { CubeGeneratorService } from "./cube.generator.service";
 
 const HIDE_SUCCESS_TIMEOUT = 3000;
 
@@ -39,7 +40,8 @@ export class MaskEditorComponent implements OnInit, CanComponentDeactivate {
     private alert: AlertService,
     private shepherd: ShepherdNewService,
     private events: EventsService,
-    private userService: UserService
+    private userService: UserService,
+    private cube: CubeGeneratorService
   ) {
     this.luchador = {};
   }
@@ -121,6 +123,7 @@ export class MaskEditorComponent implements OnInit, CanComponentDeactivate {
     // console.log("update on luchador", configs );
     this.mediator.featuresChanges = mediatorData.featuresChanges;
     this.mediator.configs.next(mediatorData.configs);
+    console.log(mediatorData.configs);
   }
 
   canDeactivate() {
@@ -166,6 +169,9 @@ export class MaskEditorComponent implements OnInit, CanComponentDeactivate {
         }
       });
     }
+  }
 
+  cubeIt() {
+    this.cube.generate(this.luchador.name);
   }
 }
