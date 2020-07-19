@@ -249,7 +249,7 @@ export class CubeGeneratorService {
 
         pdf.text(
           this.colorsX,
-          this.colorsY,
+          this.colorsY + this.marginY,
           "List of ingredient colors",
           "left"
         );
@@ -257,7 +257,7 @@ export class CubeGeneratorService {
         pdf.setFontSize(11);
         pdf.setFontType("normal");
 
-        const startY = this.colorsY + 2 * this.colorsYStep;
+        const startY =  + this.marginY + this.colorsY + (2 * this.colorsYStep);
         const colors = this.getListOfColorNames();
         let line = 0;
 
