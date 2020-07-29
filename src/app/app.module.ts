@@ -51,6 +51,7 @@ import { AboutComponent } from "./pages/about/about.component";
 import { EndTutorialGuardService } from "./end-tutorial-guard.service";
 import { MarkDownComponent } from './mark-down/mark-down.component';
 import { ActivityListComponent } from "./dashboard/activity-list/activity-list.component";
+import { LobbyComponent } from './lobby/lobby.component';
 
 // library.add(fas);
 
@@ -73,6 +74,11 @@ const ROUTES: Routes = [
   {
     path: "playground",
     component: PlaygroundComponent,
+    canActivate: [LoginActivate]
+  },
+  {
+    path: "lobby",
+    component: LobbyComponent,
     canActivate: [LoginActivate]
   },
   {
@@ -155,6 +161,7 @@ export function apiConfigFactory(): Configuration {
     AuthModalMessageComponent,
     GenericErrorModalMessageComponent,
     MarkDownComponent,
+    LobbyComponent,
   ],
   imports: [
     BrowserModule,
