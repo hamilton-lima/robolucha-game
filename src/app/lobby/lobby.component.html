@@ -1,0 +1,52 @@
+<div class="container">
+
+  <div class="row pt-4 pb-4">
+    <div class="col-md-8">
+      <h1>Choose your arena</h1>
+    </div>
+  </div>
+  
+  <div class="row">
+    <div *ngIf="availableMatches.length <= 0">
+      <h4>There are no matches</h4>
+    </div>
+  </div>
+  <div>
+    <table mat-table [dataSource]="availableMatches" class="mat-elevation-z8">
+
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef> Name </th>
+        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="participants">
+        <th mat-header-cell *matHeaderCellDef> Participants </th>
+        <td mat-cell *matCellDef="let element"> {{element.participants}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="timeLeft">
+        <th mat-header-cell *matHeaderCellDef> Ends </th>
+        <td mat-cell *matCellDef="let element"> {{element.timeLeft}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="btnJoin">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element"> 
+          <button id="btnJoinMatch"  
+          mat-raised-button
+          [matTooltip]="getTipButton(element.canPlay)" 
+          matTooltipPosition="right" [color]="getColorButton(element.canPlay)" 
+          (click)="play(element.matchID, element.canPlay)">
+             <span>
+              <mat-label [hidden]="!element.canPlay">Join</mat-label>
+              <mat-icon [hidden]="element.canPlay" svgIcon="lock"></mat-icon>
+            </span>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="columns"></tr>
+      <tr mat-row *matRowDef="let row; columns: columns;"></tr>
+    </table>
+  </div>
+</div>
