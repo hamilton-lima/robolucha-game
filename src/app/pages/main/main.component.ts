@@ -78,6 +78,10 @@ export class MainComponent implements OnInit {
     this.router.navigate(["mask"]);
   }
 
+  lobby() {
+    this.router.navigate(["lobby"]);
+  }
+
   help() {
     this.shepherd.done(this.tour);
     this.events.click(this.page, "help");
