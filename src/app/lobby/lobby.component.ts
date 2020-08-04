@@ -1,13 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
-import { DefaultService, ModelMatch, ModelUserDetails } from "src/app/sdk";
+import { DefaultService, ModelJoinMatch, ModelMatch, ModelUserDetails, ModelGameDefinition } from "src/app/sdk";
 import { LevelControlService } from "../pages/level-control.service";
-import { ModelAvailableMatch } from "src/app/sdk/model/modelAvailableMatch";
+
+import { ModelActiveMatch } from "../sdk/model/modelActiveMatch";
 import { UserService } from "src/app/shared/user.service";
+
+import { MatTable } from '@angular/material';
+import { int } from 'babylonjs';
 
 export interface IGameData {
   name: string;
   participants: number;
+  maxParticipants: number;
   timeLeft: number;
   matchID: number;
   canPlay: boolean;
@@ -19,6 +24,8 @@ export interface IGameData {
   styleUrls: ['./lobby.component.scss']
 })
 export class LobbyComponent implements OnInit {
+
+  @ViewChild(MatTable) table: MatTable<any>;
 
   userDetails: ModelUserDetails;
   columns: string[] = ['name', 'participants', 'timeLeft', 'btnJoin'];
@@ -33,7 +40,46 @@ export class LobbyComponent implements OnInit {
   ngOnInit() {
 
     this.userDetails = this.userService.getUser();
-    this.api.privateAvailableMatchPublicGet().subscribe((matches: ModelAvailableMatch[]) => {
+    this.api.privateMatchGet().subscribe((matches: Array<ModelActiveMatch>) => {
+
+      for(let match of matches){
+        if(match.type === "multiplayer"){
+          const request: ModelJoinMatch = { matchID: match.matchID };
+          const name : string = match.name;
+
+          this.api.privateJoinMatchPost(request).subscribe((match: ModelMatch) => {
+            const participants : number = match.participants.length;
+            const availableMatchID : number = match.availableMatchID;
+            const timeServer = match.timeStart.split('');
+            const hourServer = Number.parseInt(timeServer[11].concat(timeServer[12]));
+            const minuteServe = Number.parseInt(timeServer[14].concat(timeServer[15])) + (hourServer * 60);
+
+            this.api.privateGameDefinitionIdIdGet(match.gameDefinitionID).subscribe((gameDefinition : ModelGameDefinition) =>
+            {
+              const time = new Date().toString().split('');
+              const hour = Number.parseInt(time[16].concat(time[17])) + 3;
+              const minute = Number.parseInt(time[19].concat(time[20])) + (hour * 60);
+              const minutesEnd : number = (minuteServe + gameDefinition.duration/60000) - minute ;
+
+              this.availableMatches.push({name:name, 
+                participants : participants, 
+                maxParticipants : gameDefinition.maxParticipants,
+                timeLeft:minutesEnd, 
+                matchID: availableMatchID, 
+                canPlay: this.level.canPlay(this.userDetails, gameDefinition)});
+
+              this.table.renderRows();
+            });
+            
+          });
+
+        }
+      }
+
+      console.log(this.availableMatches);
+    });
+
+    /*this.api.privateAvailableMatchPublicGet().subscribe((matches: ModelAvailableMatch[]) => {
 
       const availableMatches : IGameData[] = [];
 
@@ -48,6 +94,8 @@ export class LobbyComponent implements OnInit {
       });
       this.availableMatches = availableMatches;
     });
+
+    console.log(this.availableMatches);*/
   }
 
   getColorButton(canPlay: boolean){
