@@ -41,12 +41,16 @@ export class MainComponent implements OnInit {
 
       const tutorialMatches: ModelAvailableMatch[] = [];
 
+      console.log('matches', matches);
       matches.forEach(match => {
-        if (match.gameDefinition.type === "tutorial") {
-          tutorialMatches.push(match);
-        } else {
-          if (this.level.canPlay(this.userDetails, match.gameDefinition)) {
-            this.multiplayerMatch = match;
+        // Add extra protection for bad configuration data
+        if( match.gameDefinition){
+          if (match.gameDefinition.type === "tutorial") {
+            tutorialMatches.push(match);
+          } else {
+            if (this.level.canPlay(this.userDetails, match.gameDefinition)) {
+              this.multiplayerMatch = match;
+            }
           }
         }
       });
