@@ -12,6 +12,7 @@
 import { ModelCode } from './modelCode';
 import { ModelGameComponent } from './modelGameComponent';
 import { ModelSceneComponent } from './modelSceneComponent';
+import { ModelTeamDefinition } from './modelTeamDefinition';
 
 
 export interface ModelGameDefinition {
@@ -58,6 +59,7 @@ export interface ModelGameDefinition {
     sceneComponents?: Array<ModelSceneComponent>;
     sortOrder?: number;
     suggestedCodes?: Array<ModelCode>;
+    teamDefinition?: ModelTeamDefinition;
     turnGunSpeed?: number;
     turnSpeed?: number;
     type?: string;
