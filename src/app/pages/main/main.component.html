@@ -5,10 +5,9 @@
       <div class="col-4">
         <div>
           <img width="280" height="300" src="assets/pages/robolucha-play.gif" class="clickable"
-            (click)="playMultiplayer()">
-          <div class="title-main-container clickable" (click)="playMultiplayer()">
+            (click)="lobby()">
+          <div class="title-main-container clickable" (click)="lobby()">
             <span class="title-main">PLAY</span><br>
-            <span *ngIf="multiplayerMatch" class="subtitle-main">{{ multiplayerMatch.gameDefinition.label }}</span>
           </div>
         </div>
       </div>
@@ -36,14 +35,6 @@
           <div class="col-12">
             <app-big-button id="forum-button" (click)="forum()">
               Forum
-            </app-big-button>
-          </div>
-        </div>
-
-        <div class="row pt-4">
-          <div class="col-12">
-            <app-big-button id="matches-button" (click)="lobby()">
-              Matches
             </app-big-button>
           </div>
         </div>
