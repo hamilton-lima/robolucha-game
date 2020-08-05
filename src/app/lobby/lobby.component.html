@@ -26,7 +26,7 @@
 
       <ng-container matColumnDef="timeLeft">
         <th mat-header-cell *matHeaderCellDef> Ends </th>
-        <td mat-cell *matCellDef="let element"> In {{element.timeLeft}} minutes </td>
+        <td mat-cell *matCellDef="let element"> {{element.timeLeft}} </td>
       </ng-container>
 
       <ng-container matColumnDef="btnJoin">
@@ -38,7 +38,7 @@
           matTooltipPosition="right" [color]="getColorButton(element.canPlay)" 
           (click)="play(element.matchID, element.canPlay)">
              <span>
-              <mat-label [hidden]="!element.canPlay">Join</mat-label>
+              <mat-label [hidden]="!element.canPlay">{{element.btnText}}</mat-label>
               <mat-icon [hidden]="element.canPlay" svgIcon="lock"></mat-icon>
             </span>
           </button>

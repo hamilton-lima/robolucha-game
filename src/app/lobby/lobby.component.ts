@@ -3,19 +3,21 @@ import { Router } from "@angular/router";
 import { DefaultService, ModelJoinMatch, ModelMatch, ModelUserDetails, ModelGameDefinition } from "src/app/sdk";
 import { LevelControlService } from "../pages/level-control.service";
 
-import { ModelActiveMatch } from "../sdk/model/modelActiveMatch";
+import { ModelAvailableMatch } from "src/app/sdk/model/modelAvailableMatch";
 import { UserService } from "src/app/shared/user.service";
 
 import { MatTable } from '@angular/material';
-import { int } from 'babylonjs';
+import * as moment from 'moment';
 
 export interface IGameData {
   name: string;
   participants: number;
   maxParticipants: number;
-  timeLeft: number;
+  timeLeft: string;
   matchID: number;
   canPlay: boolean;
+  duration : number;
+  btnText : string;
 }
 
 @Component({
@@ -24,8 +26,6 @@ export interface IGameData {
   styleUrls: ['./lobby.component.scss']
 })
 export class LobbyComponent implements OnInit {
-
-  @ViewChild(MatTable) table: MatTable<any>;
 
   userDetails: ModelUserDetails;
   columns: string[] = ['name', 'participants', 'timeLeft', 'btnJoin'];
@@ -38,64 +38,40 @@ export class LobbyComponent implements OnInit {
     private level: LevelControlService) { }
 
   ngOnInit() {
-
     this.userDetails = this.userService.getUser();
-    this.api.privateMatchGet().subscribe((matches: Array<ModelActiveMatch>) => {
-
-      for(let match of matches){
-        if(match.type === "multiplayer"){
-          const request: ModelJoinMatch = { matchID: match.matchID };
-          const name : string = match.name;
-
-          this.api.privateJoinMatchPost(request).subscribe((match: ModelMatch) => {
-            const participants : number = match.participants.length;
-            const availableMatchID : number = match.availableMatchID;
-            const timeServer = match.timeStart.split('');
-            const hourServer = Number.parseInt(timeServer[11].concat(timeServer[12]));
-            const minuteServe = Number.parseInt(timeServer[14].concat(timeServer[15])) + (hourServer * 60);
-
-            this.api.privateGameDefinitionIdIdGet(match.gameDefinitionID).subscribe((gameDefinition : ModelGameDefinition) =>
-            {
-              const time = new Date().toString().split('');
-              const hour = Number.parseInt(time[16].concat(time[17])) + 3;
-              const minute = Number.parseInt(time[19].concat(time[20])) + (hour * 60);
-              const minutesEnd : number = (minuteServe + gameDefinition.duration/60000) - minute ;
-
-              this.availableMatches.push({name:name, 
-                participants : participants, 
-                maxParticipants : gameDefinition.maxParticipants,
-                timeLeft:minutesEnd, 
-                matchID: availableMatchID, 
-                canPlay: this.level.canPlay(this.userDetails, gameDefinition)});
-
-              this.table.renderRows();
-            });
-            
-          });
-
-        }
-      }
-
-      console.log(this.availableMatches);
-    });
-
-    /*this.api.privateAvailableMatchPublicGet().subscribe((matches: ModelAvailableMatch[]) => {
+    this.api.privateAvailableMatchPublicGet().subscribe((matches: ModelAvailableMatch[]) => {
 
       const availableMatches : IGameData[] = [];
 
       matches.forEach(match => {
         if (match.gameDefinition.type === "multiplayer") {
           availableMatches.push({name:match.name, 
-                                participants : 10, 
-                                timeLeft:10, 
-                                matchID: match.id, 
-                                canPlay: this.level.canPlay(this.userDetails, match.gameDefinition)});
+            participants : 0, 
+            maxParticipants : match.gameDefinition.maxParticipants,
+            timeLeft:"not started", 
+            matchID: match.id, 
+            canPlay: this.level.canPlay(this.userDetails, match.gameDefinition),
+            duration: match.gameDefinition.duration,
+            btnText: "Create"});
         }
       });
-      this.availableMatches = availableMatches;
-    });
 
-    console.log(this.availableMatches);*/
+      this.availableMatches = availableMatches;
+
+      this.api.privateMatchMultiplayerGet().subscribe((matches : ModelMatch[]) => {
+
+        this.availableMatches.forEach(avaiableMatch => {
+          for(let activeMatch of matches)
+          {
+            if(avaiableMatch.matchID === activeMatch.availableMatchID){
+              avaiableMatch.participants = activeMatch.participants.length;
+              avaiableMatch.timeLeft = moment(activeMatch.timeStart).add(avaiableMatch.duration,'ms').fromNow();
+              avaiableMatch.btnText = "Join";
+            } 
+          }
+        });
+      });
+    });
   }
 
   getColorButton(canPlay: boolean){
