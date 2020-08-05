@@ -16,6 +16,8 @@ export * from './modelSceneComponent';
 export * from './modelScoreList';
 export * from './modelSkill';
 export * from './modelStudent';
+export * from './modelTeam';
+export * from './modelTeamDefinition';
 export * from './modelUpdateLuchadorResponse';
 export * from './modelUser';
 export * from './modelUserDetails';
