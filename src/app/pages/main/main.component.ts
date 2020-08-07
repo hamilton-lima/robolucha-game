@@ -6,7 +6,6 @@ import { ShepherdNewService } from "src/app/shepherd-new.service";
 import { EventsService } from "src/app/shared/events.service";
 import { UserService } from "src/app/shared/user.service";
 import Shepherd from "shepherd.js";
-import { LevelControlService } from "../level-control.service";
 import { ModelAvailableMatch } from "src/app/sdk/model/modelAvailableMatch";
 
 @Component({
@@ -29,8 +28,7 @@ export class MainComponent implements OnInit {
     private route: ActivatedRoute,
     private shepherd: ShepherdNewService,
     private events: EventsService,
-    private userService: UserService,
-    private level: LevelControlService) { }
+    private userService: UserService) { }
 
   ngOnInit() {
     this.luchador = this.route.snapshot.data.luchador;
@@ -41,16 +39,11 @@ export class MainComponent implements OnInit {
 
       const tutorialMatches: ModelAvailableMatch[] = [];
 
-      console.log('matches', matches);
       matches.forEach(match => {
         // Add extra protection for bad configuration data
         if( match.gameDefinition){
           if (match.gameDefinition.type === "tutorial") {
             tutorialMatches.push(match);
-          } else {
-            if (this.level.canPlay(this.userDetails, match.gameDefinition)) {
-              this.multiplayerMatch = match;
-            }
           }
         }
       });
@@ -82,6 +75,10 @@ export class MainComponent implements OnInit {
     this.router.navigate(["mask"]);
   }
 
+  lobby() {
+    this.router.navigate(["lobby"]);
+  }
+
   help() {
     this.shepherd.done(this.tour);
     this.events.click(this.page, "help");
@@ -92,10 +89,6 @@ export class MainComponent implements OnInit {
     this.shepherd.done(this.tour);
     this.events.click(this.page, "forum");
     window.open("https://forum.robolucha.com", "robolucha-forum");
-  }
-
-  playMultiplayer() {
-    this.play(this.multiplayerMatch.id);
   }
 
   play(matchID: number) {
