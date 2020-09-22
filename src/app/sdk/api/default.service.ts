@@ -30,6 +30,7 @@ import { ModelMatchMetric } from '../model/modelMatchMetric';
 import { ModelMatchParticipant } from '../model/modelMatchParticipant';
 import { ModelMatchScore } from '../model/modelMatchScore';
 import { ModelPageEventRequest } from '../model/modelPageEventRequest';
+import { ModelPlayRequest } from '../model/modelPlayRequest';
 import { ModelScoreList } from '../model/modelScoreList';
 import { ModelUpdateLuchadorResponse } from '../model/modelUpdateLuchadorResponse';
 import { ModelUserDetails } from '../model/modelUserDetails';
@@ -1872,16 +1873,16 @@ export class DefaultService {
     /**
      * request to play a match
      * 
-     * @param id AvailableMatch id
+     * @param request PlayRequest
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public privatePlayIdPost(id: number, observe?: 'body', reportProgress?: boolean): Observable<ModelMatch>;
-    public privatePlayIdPost(id: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ModelMatch>>;
-    public privatePlayIdPost(id: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ModelMatch>>;
-    public privatePlayIdPost(id: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling privatePlayIdPost.');
+    public privatePlayPost(request: ModelPlayRequest, observe?: 'body', reportProgress?: boolean): Observable<ModelMatch>;
+    public privatePlayPost(request: ModelPlayRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ModelMatch>>;
+    public privatePlayPost(request: ModelPlayRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ModelMatch>>;
+    public privatePlayPost(request: ModelPlayRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (request === null || request === undefined) {
+            throw new Error('Required parameter request was null or undefined when calling privatePlayPost.');
         }
 
         let headers = this.defaultHeaders;
@@ -1904,9 +1905,13 @@ export class DefaultService {
         let consumes: string[] = [
             'application/json'
         ];
+        let httpContentTypeSelected:string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set("Content-Type", httpContentTypeSelected);
+        }
 
-        return this.httpClient.post<ModelMatch>(`${this.basePath}/private/play/${encodeURIComponent(String(id))}`,
-            null,
+        return this.httpClient.post<ModelMatch>(`${this.basePath}/private/play`,
+            request,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
