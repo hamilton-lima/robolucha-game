@@ -6,7 +6,7 @@ import {
   ModelMatch,
   ModelUserDetails,
   ModelGameDefinition,
-  ModelPlayRequest,, ModelTeam
+  ModelPlayRequest, ModelTeam
 } from "src/app/sdk";
 import { LevelControlService } from "../pages/level-control.service";
 
@@ -94,18 +94,7 @@ export class LobbyComponent implements OnInit {
       });
   }
 
-  getColorButton(canPlay: boolean) {
-    return canPlay ? "primary" : "warn";
-  }
-
-  getTipButton(canPlay: boolean) {
-    return canPlay ? "" : "You don't have level";
-  }
-
-  play(matchID: number, canPlay: boolean, teamID: number) {
-    if (!canPlay) return;
-
-    // Will move to /lobby if need team information?
+  play(matchID: number, teamID: number) {
     const playRequest = <ModelPlayRequest>{
       availableMatchID: matchID,
       teamID: teamID

@@ -52,6 +52,7 @@ import { EndTutorialGuardService } from "./end-tutorial-guard.service";
 import { MarkDownComponent } from './mark-down/mark-down.component';
 import { ActivityListComponent } from "./dashboard/activity-list/activity-list.component";
 import { LobbyComponent } from './lobby/lobby.component';
+import { CantPlayComponent } from "./lobby/cant-play/cant-play.component";
 
 // library.add(fas);
 
@@ -162,6 +163,7 @@ export function apiConfigFactory(): Configuration {
     GenericErrorModalMessageComponent,
     MarkDownComponent,
     LobbyComponent,
+    CantPlayComponent,
   ],
   imports: [
     BrowserModule,
