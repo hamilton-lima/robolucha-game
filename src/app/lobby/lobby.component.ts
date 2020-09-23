@@ -17,7 +17,7 @@ import { MatTable } from "@angular/material";
 import * as moment from "moment";
 
 export interface IGameData {
-  name: string;
+  label: string;
   participants: number;
   maxParticipants: number;
   timeLeft: string;
@@ -56,7 +56,7 @@ export class LobbyComponent implements OnInit {
         matches.forEach((match) => {
           if (match.gameDefinition.type === "multiplayer") {
             availableMatches.push({
-              name: match.name,
+              label: match.gameDefinition.label,
               participants: 0,
               maxParticipants: match.gameDefinition.maxParticipants,
               timeLeft: "not started",
