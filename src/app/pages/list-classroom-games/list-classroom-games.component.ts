@@ -4,7 +4,7 @@ import {
   ModelClassroom,
   ModelUserDetails,
   ModelMatch,
-  DefaultService,, ModelPlayRequest
+  DefaultService,ModelPlayRequest
 } from "src/app/sdk";
 import { MatDialog } from "@angular/material";
 import { Router } from "@angular/router";

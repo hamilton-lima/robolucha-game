@@ -6,7 +6,7 @@ import {
   ModelMatch,
   ModelUserDetails,
   ModelGameDefinition,
-  ModelPlayRequest,
+  ModelPlayRequest,, ModelTeam
 } from "src/app/sdk";
 import { LevelControlService } from "../pages/level-control.service";
 
@@ -25,6 +25,8 @@ export interface IGameData {
   canPlay: boolean;
   duration: number;
   btnText: string;
+  teams: ModelTeam[];
+  isParticipant: boolean;
 }
 
 @Component({
@@ -64,7 +66,9 @@ export class LobbyComponent implements OnInit {
                 match.gameDefinition
               ),
               duration: match.gameDefinition.duration,
-              btnText: "Create",
+              btnText: "Start",
+              teams: match.gameDefinition.teamDefinition.teams,
+              isParticipant: false
             });
           }
         });
@@ -81,7 +85,8 @@ export class LobbyComponent implements OnInit {
                   avaiableMatch.timeLeft = moment(activeMatch.timeStart)
                     .add(avaiableMatch.duration, "ms")
                     .fromNow();
-                  avaiableMatch.btnText = "Join";
+                  avaiableMatch.btnText = "Rejoin";
+                  avaiableMatch.isParticipant = true;
                 }
               }
             });
@@ -97,13 +102,13 @@ export class LobbyComponent implements OnInit {
     return canPlay ? "" : "You don't have level";
   }
 
-  play(matchID: number, canPlay: boolean) {
+  play(matchID: number, canPlay: boolean, teamID: number) {
     if (!canPlay) return;
 
     // Will move to /lobby if need team information?
     const playRequest = <ModelPlayRequest>{
       availableMatchID: matchID,
-      teamID: 0,
+      teamID: teamID
     };
 
     this.api.privatePlayPost(playRequest).subscribe((match: ModelMatch) => {
