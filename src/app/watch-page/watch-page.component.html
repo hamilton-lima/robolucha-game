@@ -98,7 +98,7 @@
 <app-clock class="clock" [matchStateSubject]="matchStateSubject"></app-clock>
 
 <div class="p-3 matchover-alert" *ngIf="matchOver">
-  <h1>This match is over!</h1>
+  <h1>{{matchOverTitle}}</h1>
   <button class="btn btn-primary mb-2" (click)="goBack()">
     <span>BACK</span>
   </button>

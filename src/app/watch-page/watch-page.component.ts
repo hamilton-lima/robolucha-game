@@ -47,6 +47,8 @@ export class WatchPageComponent implements OnInit, CanComponentDeactivate, OnCha
   ) {}
 
   matchOver = false;
+  matchOverTitle: string;
+
   displayScore = false;
   dirty = false;
 
@@ -132,10 +134,12 @@ export class WatchPageComponent implements OnInit, CanComponentDeactivate, OnCha
         .subscribe(gameDefinition => {
           this.gameDefinition = gameDefinition;
           this.refreshEditor();
+          this.matchOverTitle = "Congratulations!";
           
           // only display score if is not tutorial
           if( gameDefinition.type !== "tutorial"){
             this.displayScore = true;
+            this.matchOverTitle = "End of the Match";
           }
         });
     });
