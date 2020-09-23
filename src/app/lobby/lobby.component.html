@@ -76,16 +76,13 @@
                 </span>
               </button>
             </span>
-
             <span *ngIf="!element.isParticipant && element.teams && element.teams.length == 1">
               <button
-                class="team-button"
                 *ngFor="let team of element.teams"
                 id="btnJoinMatch"
                 mat-raised-button
                 (click)="play(element.matchID, team.id)"
-              >
-                <span>
+              ><span>
                   <mat-icon
                     [ngStyle]="{ 'color': team.color }"
                     svgIcon="flag"
