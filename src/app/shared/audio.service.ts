@@ -49,13 +49,13 @@ export class AudioService {
 
   hit(mesh : BABYLON.Mesh, scene : BABYLON.Scene){
     let number = Math.floor((Math.random() * 6) + 1);
-    var fire = new BABYLON.Sound("hit", AudioType.Hit + number +".mp3", scene, null, {
+    var hit = new BABYLON.Sound("hit", AudioType.Hit + number +".mp3", scene, null, {
       loop: false,
       autoplay: true,
       spatialSound: true,
       maxDistance:50
     });
-    fire.setPosition(mesh.position);
-    fire.attachToMesh(mesh);
+    hit.setPosition(mesh.position);
+    hit.attachToMesh(mesh);
   }
 }
