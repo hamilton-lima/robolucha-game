@@ -25,6 +25,7 @@ import { TextureBuilder } from "./texture-builder";
 import { SharedConstants } from "./shared.constants";
 import { ArenaData3D } from "./arena.data3D";
 import { FPSRecorderService, FPSInfo } from "./fps.recorder.service";
+import { AudioService } from "../shared/audio.service";
 
 class SavedCamera {
   target: BABYLON.Vector3;
@@ -74,7 +75,8 @@ export class ArenaComponent implements OnInit, OnChanges {
   constructor(
     private builder: TextureBuilder,
     private api: DefaultService,
-    private fpsRecorder: FPSRecorderService
+    private fpsRecorder: FPSRecorderService,
+    private audio: AudioService
   ) {
     this.resetState();
     this.data3D = new ArenaData3D();
@@ -240,6 +242,8 @@ export class ArenaComponent implements OnInit, OnChanges {
     if (this.debug) {
       Helper3D.showAxis(this.scene, 5);
     }
+
+    this.audio.arenaMusic(this.scene);
   }
 
   render(): void {
@@ -311,7 +315,7 @@ export class ArenaComponent implements OnInit, OnChanges {
         // animate luchador owner of the bullet
         const luchador3D = this.luchadores[bullet.owner];
         if (luchador3D) {
-          luchador3D.animateFire();
+          luchador3D.fire();
         }
       }
     });
@@ -394,7 +398,8 @@ export class ArenaComponent implements OnInit, OnChanges {
           vehicleRotation,
           gunRotation,
           45,
-          this.convertPosition(420)
+          this.convertPosition(420),
+          this.audio
           // this.shadowGenerator
         );
 
@@ -497,7 +502,7 @@ export class ArenaComponent implements OnInit, OnChanges {
 
   update(luchador3D: Luchador3D, next: Luchador) {
     if (luchador3D.getHealth() > next.life) {
-      luchador3D.animateHit();
+      luchador3D.hit();
     }
 
     const x = this.convertPosition(next.x);

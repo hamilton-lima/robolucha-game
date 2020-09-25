@@ -3,6 +3,7 @@ import * as GUI from "babylonjs-gui";
 import { Base3D } from "./base3D";
 import { MeshLoader } from "./mesh.loader";
 import { Helper3D } from "./helper3d";
+import { AudioService, AudioType } from "../shared/audio.service";
 
 export interface AnimationDefition {
   name: string;
@@ -43,6 +44,8 @@ export class Luchador3D extends Base3D {
   private readonly OFFSET_Y = -65;
   private readonly LABEL_OFFSET_Y = -85;
 
+  private audio: AudioService;
+
   constructor(
     id: number,
     name: string,
@@ -52,7 +55,8 @@ export class Luchador3D extends Base3D {
     vehicleRotationY: number,
     gunRotationY: number,
     radarAngle: number,
-    radarRadius: number
+    radarRadius: number,
+    audio: AudioService
     // shadowGenerator: BABYLON.ShadowGenerator
   ) {
     super();
@@ -60,7 +64,7 @@ export class Luchador3D extends Base3D {
 
     this.id = id;
     this.scene = scene;
-
+    this.audio = audio;
     this.mesh = BABYLON.Mesh.CreateBox(this.getName(), 1, scene);
     this.mesh.isVisible = false;
     this.mesh.position.x = position.x;
@@ -201,6 +205,7 @@ export class Luchador3D extends Base3D {
 
     let labelColor = BABYLON.Color3.FromHexString("#DDDDDD");
     this.addLabel(name, this.LABEL_OFFSET_Y, this.OFFSET_X, labelColor);
+    this.audio.move(this.mesh, this.scene);
   }
 
   idle: BABYLON.Animatable;
@@ -215,12 +220,14 @@ export class Luchador3D extends Base3D {
     );
   }
 
-  animateFire() {
+  fire() {
     this.animateFrom("fire");
+    this.audio.fire(this.mesh, this.scene);
   }
 
-  animateHit() {
+  hit() {
     this.animateFrom("hit");
+    this.audio.hit(this.mesh, this.scene);
   }
 
   animateFound() {
