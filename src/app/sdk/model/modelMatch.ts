@@ -21,6 +21,7 @@ export interface ModelMatch {
     id?: number;
     lastTimeAlive?: string;
     participants?: Array<ModelGameComponent>;
+    status?: string;
     teamParticipants?: Array<ModelTeamParticipant>;
     timeEnd?: string;
     timeStart?: string;
