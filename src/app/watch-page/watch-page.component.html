@@ -105,4 +105,14 @@
   <app-score *ngIf="displayScore" [scores]="scores"></app-score>
 </div>
 
+<div class="p-3 matchover-alert" *ngIf="matchPreparing">
+  <h1>Preparing match</h1>
+  <button class="btn btn-primary mb-2" (click)="goBack()">
+    <span>BACK</span>
+  </button>
+  <div>
+    show participants
+  </div>
+</div>
+
 <app-score *ngIf="displayScore" class="score" [scores]="scores"></app-score>

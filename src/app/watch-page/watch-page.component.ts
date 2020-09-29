@@ -1,14 +1,22 @@
-import { Component, OnInit, ViewChild, OnChanges, SimpleChanges, ChangeDetectorRef } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  OnChanges,
+  SimpleChanges,
+  ChangeDetectorRef,
+} from "@angular/core";
 import {
   ActivatedRouteSnapshot,
   Router,
-  ActivatedRoute
+  ActivatedRoute,
 } from "@angular/router";
 import {
   DefaultService,
   ModelGameDefinition,
   ModelGameComponent,
-  ModelCode
+  ModelCode,
+  ModelMatch,
 } from "../sdk";
 import { WatchMatchComponent } from "../watch-match/watch-match.component";
 import { CanComponentDeactivate } from "../can-deactivate-guard.service";
@@ -17,7 +25,7 @@ import {
   state,
   style,
   transition,
-  animate
+  animate,
 } from "@angular/animations";
 import { Subject } from "rxjs";
 import { MatchState, Score } from "../watch-match/watch-match.model";
@@ -32,9 +40,10 @@ import { AlertService } from "../pages/alert.service";
 @Component({
   selector: "app-watch-page",
   templateUrl: "./watch-page.component.html",
-  styleUrls: ["./watch-page.component.css"]
+  styleUrls: ["./watch-page.component.css"],
 })
-export class WatchPageComponent implements OnInit, CanComponentDeactivate, OnChanges {
+export class WatchPageComponent
+  implements OnInit, CanComponentDeactivate, OnChanges {
   constructor(
     private api: DefaultService,
     private route: ActivatedRoute,
@@ -47,6 +56,7 @@ export class WatchPageComponent implements OnInit, CanComponentDeactivate, OnCha
   ) {}
 
   matchOver = false;
+  matchPreparing = false;
   matchOverTitle: string;
 
   displayScore = false;
@@ -68,9 +78,8 @@ export class WatchPageComponent implements OnInit, CanComponentDeactivate, OnCha
     onGotDamage: <ModelCode>{ event: "onGotDamage" },
     onFound: <ModelCode>{ event: "onFound" },
     onHitOther: <ModelCode>{ event: "onHitOther" },
-    onHitWall: <ModelCode>{ event: "onHitWall" }
+    onHitWall: <ModelCode>{ event: "onHitWall" },
   };
-
 
   @ViewChild(CodeEditorPanelComponent) codeEditor: CodeEditorPanelComponent;
 
@@ -79,19 +88,19 @@ export class WatchPageComponent implements OnInit, CanComponentDeactivate, OnCha
       title: "Know your luchador",
       text:
         '<img src="assets/help/luchador.jpg"><br>This is your luchador, you control them by writing instructions, know as CODE',
-      attachTo: { element: "#selector-luchador", on: "top" }
+      attachTo: { element: "#selector-luchador", on: "top" },
     },
     {
       title: "Move to the green",
       text:
         "When in a tutorial your objective is move your character to the GREEN area",
-      attachTo: { element: "#selector-green-area", on: "top" }
+      attachTo: { element: "#selector-green-area", on: "top" },
     },
     {
       title: "Editting some code",
       text: "Click here to edit your luchador code",
       attachTo: { element: "#button-edit-code", on: "top" },
-      offset: "0 20px"
+      offset: "0 20px",
     },
     {
       title: "What is going on here?",
@@ -100,14 +109,14 @@ export class WatchPageComponent implements OnInit, CanComponentDeactivate, OnCha
         '<strong>"move"</strong> is the action that your luchador will do <strong>10</strong>' +
         " is the intensity of the action",
       attachTo: { element: ".ace-content", on: "left" },
-      offset: "0 20px"
+      offset: "0 20px",
     },
     {
       title: "Let's see some action",
       text: "click save to send the code to the luchador",
       attachTo: { element: "#button-code-editor-save", on: "top" },
-      offset: "0 20px"
-    }
+      offset: "0 20px",
+    },
   ];
 
   ngAfterViewInit() {
@@ -121,6 +130,11 @@ export class WatchPageComponent implements OnInit, CanComponentDeactivate, OnCha
     }
   }
 
+  // possible states of a match
+  onMatchNotReady: Subject<ModelMatch> = new Subject();
+  onMatchRunning: Subject<ModelMatch> = new Subject();
+  onMatchFinished: Subject<ModelMatch> = new Subject();
+
   ngOnInit(): void {
     this.page = this.route.snapshot.url.join("/");
     this.luchador = this.route.snapshot.data.luchador;
@@ -128,25 +142,74 @@ export class WatchPageComponent implements OnInit, CanComponentDeactivate, OnCha
     this.matchID = Number.parseInt(this.route.snapshot.paramMap.get("id"));
     this.gameDefinition = null;
 
-    this.api.privateMatchSingleGet(this.matchID).subscribe(match => {
-      this.api
-        .privateGameDefinitionIdIdGet(match.gameDefinitionID)
-        .subscribe(gameDefinition => {
-          this.gameDefinition = gameDefinition;
-          this.refreshEditor();
-          this.matchOverTitle = "Congratulations!";
-          
-          // only display score if is not tutorial
-          if( gameDefinition.type !== "tutorial"){
-            this.displayScore = true;
-            this.matchOverTitle = "End of the Match";
-          }
-        });
+    this.onMatchRunning.subscribe((match) => {
+      this.matchPreparing = false;
+      this.startMatch(match);
     });
+
+    this.onMatchNotReady.subscribe((match) => {
+      this.matchPreparing = true;
+      // try again in 5 seconds
+      setTimeout( this.tryToStartMatch, 5000);
+    });
+
+    this.onMatchFinished.subscribe((match) => {
+      this.matchPreparing = false;
+      this.api
+      .privateGameDefinitionIdIdGet(match.gameDefinitionID)
+      .subscribe((gameDefinition) => {
+
+        // get scores?
+        this.defineMatchOverTitle(gameDefinition);
+        this.endMatch();
+      });
+    });
+
+    this.tryToStartMatch();
 
     this.matchStateSubject.subscribe((matchState: MatchState) => {
       this.scores = matchState.scores;
     });
+  }
+
+  tryToStartMatch() {
+    this.api.privateMatchSingleGet(this.matchID).subscribe((match) => {
+      // ready!
+      if( match.status == "RUNNING"){
+        this.onMatchRunning.next(match);
+      }
+
+      // trying to watch a match that is not ready 
+      if( match.status == "CREATED"){
+        this.onMatchNotReady.next(match);
+      }
+
+      // trying to watch a match that already finished
+      if( match.status == "FINISHED"){
+        this.onMatchFinished.next(match);
+      }
+    });
+  }
+
+  defineMatchOverTitle(gameDefinition: ModelGameDefinition){
+    this.matchOverTitle = "Congratulations!";
+
+    // only display score if is not tutorial
+    if (gameDefinition.type !== "tutorial") {
+      this.displayScore = true;
+      this.matchOverTitle = "End of the Match";
+    }
+
+  }
+
+  startMatch(match: ModelMatch) {
+    this.api
+      .privateGameDefinitionIdIdGet(match.gameDefinitionID)
+      .subscribe((gameDefinition) => {
+        this.gameDefinition = gameDefinition;
+        this.refreshEditor();
+        this.defineMatchOverTitle(gameDefinition);
+      });
   }
 
   endMatch() {
@@ -191,11 +254,11 @@ export class WatchPageComponent implements OnInit, CanComponentDeactivate, OnCha
 
   /** Loads codes from luchador to the editor, filter by gameDefinition */
   refreshEditor() {
-    if( ! this.gameDefinition){
+    if (!this.gameDefinition) {
       console.warn("gameDefinition not set");
       return;
     }
-    
+
     let loadedCodes = 0;
     this.dirty = false;
 
@@ -229,9 +292,11 @@ export class WatchPageComponent implements OnInit, CanComponentDeactivate, OnCha
   // return suggested code from the current gamedefinition
   // if event not present in the list returns empy code
   getCodeFromGameDefinition(event: string): ModelCode {
-    let result: ModelCode = this.gameDefinition.suggestedCodes.find(element => {
-      return element.event == event;
-    });
+    let result: ModelCode = this.gameDefinition.suggestedCodes.find(
+      (element) => {
+        return element.event == event;
+      }
+    );
 
     if (!result) {
       result = <ModelCode>{ event: event };
@@ -242,7 +307,7 @@ export class WatchPageComponent implements OnInit, CanComponentDeactivate, OnCha
     return result;
   }
 
-  // update the internal list of codes from the editor 
+  // update the internal list of codes from the editor
   updateCode(event: string, script: string) {
     // console.log("update code", event, script);
     this.dirty = true;
@@ -268,12 +333,10 @@ export class WatchPageComponent implements OnInit, CanComponentDeactivate, OnCha
       }
     }
 
-    this.api.privateLuchadorPut(this.luchador).subscribe(response => {
-      this.alert.infoTop("Luchador updated","DISMISS")
+    this.api.privateLuchadorPut(this.luchador).subscribe((response) => {
+      this.alert.infoTop("Luchador updated", "DISMISS");
       this.dirty = false;
       this.cdRef.detectChanges();
     });
   }
-
-
 }
