@@ -55,6 +55,8 @@ export class WatchPageComponent
     private router: Router
   ) {}
 
+  matchReady = false;
+  matchFinished = false;
   matchOver = false;
   matchPreparing = false;
   matchOverTitle: string;
@@ -144,25 +146,31 @@ export class WatchPageComponent
 
     this.onMatchRunning.subscribe((match) => {
       this.matchPreparing = false;
+      this.matchReady = true;
       this.startMatch(match);
     });
 
+    const self = this;
     this.onMatchNotReady.subscribe((match) => {
       this.matchPreparing = true;
       // try again in 5 seconds
-      setTimeout( this.tryToStartMatch, 5000);
+      setTimeout(() => {
+        self.tryToStartMatch();
+      }, 2000);
     });
 
     this.onMatchFinished.subscribe((match) => {
       this.matchPreparing = false;
-      this.api
-      .privateGameDefinitionIdIdGet(match.gameDefinitionID)
-      .subscribe((gameDefinition) => {
+      this.matchFinished = true;
 
-        // get scores?
-        this.defineMatchOverTitle(gameDefinition);
-        this.endMatch();
-      });
+      console.log("finished", this.displayScore);
+
+      this.api
+        .privateGameDefinitionIdIdGet(match.gameDefinitionID)
+        .subscribe((gameDefinition) => {
+          this.defineMatchOverTitle(gameDefinition);
+          this.endMatch();
+        });
     });
 
     this.tryToStartMatch();
@@ -175,23 +183,28 @@ export class WatchPageComponent
   tryToStartMatch() {
     this.api.privateMatchSingleGet(this.matchID).subscribe((match) => {
       // ready!
-      if( match.status == "RUNNING"){
+      if (match.status == "RUNNING") {
         this.onMatchRunning.next(match);
       }
 
-      // trying to watch a match that is not ready 
-      if( match.status == "CREATED"){
+      // trying to watch a match that is not ready
+      if (match.status == "CREATED") {
         this.onMatchNotReady.next(match);
       }
 
       // trying to watch a match that already finished
-      if( match.status == "FINISHED"){
+      if (match.status == "FINISHED") {
+        this.onMatchFinished.next(match);
+      }
+
+      // old matches without status should be considered finished
+      if (match.status == "") {
         this.onMatchFinished.next(match);
       }
     });
   }
 
-  defineMatchOverTitle(gameDefinition: ModelGameDefinition){
+  defineMatchOverTitle(gameDefinition: ModelGameDefinition) {
     this.matchOverTitle = "Congratulations!";
 
     // only display score if is not tutorial
@@ -199,7 +212,6 @@ export class WatchPageComponent
       this.displayScore = true;
       this.matchOverTitle = "End of the Match";
     }
-
   }
 
   startMatch(match: ModelMatch) {
