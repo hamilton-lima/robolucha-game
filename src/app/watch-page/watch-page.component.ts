@@ -58,6 +58,7 @@ export class WatchPageComponent
   matchReady = false;
   matchFinished = false;
   matchOver = false;
+
   matchPreparing = false;
   matchOverTitle: string;
 
@@ -161,6 +162,7 @@ export class WatchPageComponent
 
     this.onMatchFinished.subscribe((match) => {
       this.matchPreparing = false;
+      this.matchOver = false;
       this.matchFinished = true;
 
       console.log("finished", this.displayScore);
@@ -169,7 +171,6 @@ export class WatchPageComponent
         .privateGameDefinitionIdIdGet(match.gameDefinitionID)
         .subscribe((gameDefinition) => {
           this.defineMatchOverTitle(gameDefinition);
-          this.endMatch();
         });
     });
 

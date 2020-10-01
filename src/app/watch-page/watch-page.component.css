@@ -64,15 +64,35 @@
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
   z-index: 4;
-  background-color: white;
-  overflow-y: scroll;
-  width: 80%;
-  height: 60%;
+  width: 50%;
+  height: 70%;
 }
 
-/* .matchover-alert p {
-  margin: 25px;
-} */
+.score-in-alert {
+  overflow-y: scroll;
+}
+
+.matchover-preparing {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  z-index: 4;
+  width: 30%;
+  height: 30%;
+}
+
+.matchover-finished {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  z-index: 4;
+  width: 30%;
+  height: 30%;
+}
 
 .matchover-alert button {
   margin: 0 auto;

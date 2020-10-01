@@ -125,25 +125,45 @@
 </div>
 
 <div class="p-3 matchover-alert" *ngIf="matchOver">
-  <h1>{{ matchOverTitle }}</h1>
-  <button class="btn btn-primary mb-2" (click)="goBack()">
-    <span>BACK</span>
-  </button>
-  <app-score *ngIf="displayScore" [scores]="scores"></app-score>
+  <mat-card>
+    <mat-card-title
+      ><h1>{{ matchOverTitle }}</h1></mat-card-title
+    >
+    <mat-card-content>
+      <div class="score-in-alert">
+        <app-score *ngIf="displayScore" [scores]="scores"></app-score>
+      </div>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button class="mb-2" (click)="goBack()">
+        <span>BACK</span>
+      </button>
+    </mat-card-actions>
+  </mat-card>
 </div>
 
-<div class="p-3 matchover-alert" *ngIf="matchPreparing">
-  <h1>Preparing match</h1>
-  <button class="btn btn-primary mb-2" (click)="goBack()">
-    <span>BACK</span>
-  </button>
-  <div>Please wait we are preparing the match...</div>
+<div class="p-3 matchover-preparing" *ngIf="matchPreparing">
+  <mat-card>
+    <mat-card-title> <h1>Preparing match</h1> </mat-card-title>
+    <mat-card-content>
+      <div>Please wait we are preparing the match...</div>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button class="mb-2" (click)="goBack()">
+        <span>BACK</span>
+      </button>
+    </mat-card-actions>
+  </mat-card>
 </div>
 
-<div class="p-3 matchover-alert" *ngIf="matchFinished">
-  <h1>This match is already finished</h1>
-  <button class="btn btn-primary mb-2" (click)="goHome()">
-    <span>BACK</span>
-  </button>
+<div class="p-3 matchover-finished" *ngIf="matchFinished">
+  <mat-card>
+    <mat-card-title><h1>This match is already finished</h1></mat-card-title>
+    <mat-card-content></mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button class="mb-2" (click)="goBack()">
+        <span>BACK</span>
+      </button>
+    </mat-card-actions>
+  </mat-card>
 </div>
-
