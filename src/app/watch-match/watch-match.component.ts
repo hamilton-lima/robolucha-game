@@ -18,7 +18,7 @@ import {
 import { ActivatedRoute } from "@angular/router";
 import { SharedStateService } from "../shared-state.service";
 import { Subscription, Subject } from "rxjs";
-import { MatchState, GameDefinition } from "./watch-match.model";
+import { MatchState, GameDefinition, MatchEvent } from "./watch-match.model";
 import { Message } from "../message/message.model";
 import {
   trigger,
@@ -44,6 +44,7 @@ export class WatchMatchComponent implements OnInit, OnDestroy, OnChanges {
   @Output() matchFinished = new EventEmitter<boolean>();
   @Output() matchStateSubject = new EventEmitter<MatchState>();
   @Output() messageSubject = new EventEmitter<Message>();
+  @Output() matchEventSubject = new EventEmitter<MatchEvent>();
 
   @ViewChild(ArenaComponent) arena: ArenaComponent;
 
@@ -90,7 +91,6 @@ export class WatchMatchComponent implements OnInit, OnDestroy, OnChanges {
     this.onMessage = this.service.watch(details).subscribe(message => {
       this.message = message;
       const parsed = JSON.parse(this.message);
-      // parsedMessage.type = parsedMessage.type.toLowerCase();
 
       if (parsed.type == "match-state") {
         this.matchStateSubject.emit(parsed.message);
@@ -99,10 +99,15 @@ export class WatchMatchComponent implements OnInit, OnDestroy, OnChanges {
           this.matchFinished.emit(true);
         }
         return;
-      }
+      } 
 
       if (parsed.type == "message") {
         this.messageSubject.emit(parsed.message);
+        return;
+      }
+      
+      if (parsed.type == "event") {
+        this.matchEventSubject.emit(parsed.message);
         return;
       }
     });

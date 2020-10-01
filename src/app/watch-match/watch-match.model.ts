@@ -51,6 +51,13 @@ export interface MatchState {
   clock: number;
 }
 
+export interface MatchEvent{
+  amount: number;
+  componentA: number;
+  componentB: number;
+  event: string;
+}
+
 export interface MessageEnvelope {
   type: string;
   message: any;

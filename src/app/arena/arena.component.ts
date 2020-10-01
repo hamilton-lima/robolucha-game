@@ -15,7 +15,7 @@ import {
   MatchState,
   Luchador,
   Bullet,
-  SceneComponent,
+  SceneComponent, MatchEvent
 } from "../watch-match/watch-match.model";
 import { Bullet3D } from "./bullet3d";
 import { Helper3D } from "./helper3d";
@@ -40,6 +40,8 @@ export class ArenaComponent implements OnInit, OnChanges {
   @ViewChild("game") canvas;
   @Input() gameDefinition: GameDefinition;
   @Input() matchStateSubject: Subject<MatchState>;
+  @Input() matchEventSubject: Subject<MatchEvent>;
+
   @Input() debug = false;
   @Input() cameraFollowLuchador = true;
   @Input() currentLuchador: number;
@@ -178,6 +180,10 @@ export class ArenaComponent implements OnInit, OnChanges {
 
     this.matchStateSubject.subscribe((matchState: MatchState) => {
       this.nextMatchState = matchState;
+    });
+    
+    this.matchEventSubject.subscribe((event: MatchEvent) => {
+      console.log('event', event);
     });
 
     if (this.animateSubject) {
