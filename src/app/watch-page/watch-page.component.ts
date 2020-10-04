@@ -36,6 +36,11 @@ import { EventsService } from "../shared/events.service";
 import { UserService } from "../shared/user.service";
 import Shepherd from "shepherd.js";
 import { AlertService } from "../pages/alert.service";
+import {
+  WatchDetails,
+  WatchMatchService,
+} from "../watch-match/watch-match.service";
+import { MatchReady } from "./watch-page.model";
 
 @Component({
   selector: "app-watch-page",
@@ -44,6 +49,7 @@ import { AlertService } from "../pages/alert.service";
 })
 export class WatchPageComponent
   implements OnInit, CanComponentDeactivate, OnChanges {
+  
   constructor(
     private api: DefaultService,
     private route: ActivatedRoute,
@@ -52,12 +58,15 @@ export class WatchPageComponent
     private userService: UserService,
     private cdRef: ChangeDetectorRef,
     private alert: AlertService,
-    private router: Router
+    private router: Router,
+    private watchService: WatchMatchService
   ) {}
 
   matchReady = false;
   matchFinished = false;
   matchOver = false;
+
+  matchNotReadyInfo: MatchReady;
 
   matchPreparing = false;
   matchOverTitle: string;
@@ -154,10 +163,32 @@ export class WatchPageComponent
     const self = this;
     this.onMatchNotReady.subscribe((match) => {
       this.matchPreparing = true;
-      // try again in 5 seconds
-      setTimeout(() => {
-        self.tryToStartMatch();
-      }, 2000);
+
+      // wait for the connection
+      this.watchService.connect().subscribe((ready) => {
+        console.log("match created and not ready");
+
+        const details: WatchDetails = {
+          luchadorID: this.luchador.id,
+          matchID: this.matchID,
+        };
+
+        // wait for server notifications about the match state
+        this.watchService.watch(details).subscribe((message) => {
+          const parsed = JSON.parse(message);
+
+          // to get structure and build model of the message
+          if (parsed.type == "match-created") {
+            this.matchNotReadyInfo = parsed;
+
+            // we are ready close websocket connection and try to start the match
+            if( this.matchNotReadyInfo.ready){
+              this.watchService.close();
+              self.tryToStartMatch();
+            }
+          }
+        });
+      });
     });
 
     this.onMatchFinished.subscribe((match) => {

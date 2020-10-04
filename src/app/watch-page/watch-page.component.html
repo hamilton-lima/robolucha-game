@@ -144,9 +144,9 @@
 
 <div class="p-3 matchover-preparing" *ngIf="matchPreparing">
   <mat-card>
-    <mat-card-title> <h1>Preparing match</h1> </mat-card-title>
+    <mat-card-title><h1>Waiting for more participants</h1></mat-card-title>
     <mat-card-content>
-      <div>Please wait we are preparing the match...</div>
+      <div> here{{ matchNotReadyInfo | json }} </div>
     </mat-card-content>
     <mat-card-actions>
       <button mat-raised-button class="mb-2" (click)="goBack()">

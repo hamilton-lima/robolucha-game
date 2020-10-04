@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
-import { Subject, timer } from "rxjs";
+import { Observable } from "babylonjs";
+import { BehaviorSubject, Subject, timer } from "rxjs";
 import { environment } from "src/environments/environment";
 
 export interface WatchDetails {
@@ -23,6 +24,11 @@ export class WatchMatchService {
   constructor() {}
 
   connect() {
+    // already connected
+    if( this.socket && this.socket.readyState == WebSocket.OPEN ){
+      return new BehaviorSubject(true);
+    }
+
     // console.log("connect to the publisher", environment.PUBLISHER);
     this.socket = new WebSocket(environment.PUBLISHER);
     this.socket.onopen = () => {
@@ -35,6 +41,8 @@ export class WatchMatchService {
       this.fps.next(this.messages);
       this.messages = 0;
     });
+
+    return this.ready;
   }
 
   close() {
