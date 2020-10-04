@@ -6,7 +6,8 @@ import {
   ModelMatch,
   ModelUserDetails,
   ModelGameDefinition,
-  ModelPlayRequest, ModelTeam
+  ModelPlayRequest,
+  ModelTeam,
 } from "src/app/sdk";
 import { LevelControlService } from "../pages/level-control.service";
 
@@ -68,7 +69,7 @@ export class LobbyComponent implements OnInit {
               duration: match.gameDefinition.duration,
               btnText: "Start",
               teams: match.gameDefinition.teamDefinition.teams,
-              isParticipant: false
+              isParticipant: false,
             });
           }
         });
@@ -80,11 +81,16 @@ export class LobbyComponent implements OnInit {
           .subscribe((matches: ModelMatch[]) => {
             this.availableMatches.forEach((avaiableMatch) => {
               for (let activeMatch of matches) {
+                console.log("match", activeMatch);
                 if (avaiableMatch.matchID === activeMatch.availableMatchID) {
                   avaiableMatch.participants = activeMatch.participants.length;
-                  avaiableMatch.timeLeft = moment(activeMatch.timeStart)
-                    .add(avaiableMatch.duration, "ms")
-                    .fromNow();
+                  
+                  // only add time left if is running
+                  if (activeMatch.status == "RUNNING") {
+                    avaiableMatch.timeLeft = moment(activeMatch.timeStart)
+                      .add(avaiableMatch.duration, "ms")
+                      .fromNow();
+                  }
                   avaiableMatch.btnText = "Rejoin";
                   avaiableMatch.isParticipant = true;
                 }
@@ -97,7 +103,7 @@ export class LobbyComponent implements OnInit {
   play(matchID: number, teamID: number) {
     const playRequest = <ModelPlayRequest>{
       availableMatchID: matchID,
-      teamID: teamID
+      teamID: teamID,
     };
 
     this.api.privatePlayPost(playRequest).subscribe((match: ModelMatch) => {
