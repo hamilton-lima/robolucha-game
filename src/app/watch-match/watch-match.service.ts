@@ -25,12 +25,14 @@ export class WatchMatchService {
   connect() {
     // already connected
     if (this.socket && this.socket.readyState == WebSocket.OPEN) {
+      console.log("websocket already connected");
       return new BehaviorSubject(true);
     }
 
     // console.log("connect to the publisher", environment.PUBLISHER);
     this.socket = new WebSocket(environment.PUBLISHER);
     this.socket.onopen = () => {
+      console.log("websocket connection open");
       this.ready.next(true);
     };
 

@@ -28,7 +28,7 @@ import {
   transition,
   animate,
 } from "@angular/animations";
-import { Subject } from "rxjs";
+import { Subject, Subscription } from "rxjs";
 import { MatchState, Score } from "../watch-match/watch-match.model";
 import { Message } from "../message/message.model";
 import { CodeEditorPanelComponent } from "../code-editor-panel/code-editor-panel.component";
@@ -146,6 +146,7 @@ export class WatchPageComponent
   onMatchNotReady: Subject<ModelMatch> = new Subject();
   onMatchRunning: Subject<ModelMatch> = new Subject();
   onMatchFinished: Subject<ModelMatch> = new Subject();
+  watchSubscription: Subscription;
 
   ngOnInit(): void {
     this.page = this.route.snapshot.url.join("/");
@@ -164,8 +165,14 @@ export class WatchPageComponent
     this.onMatchNotReady.subscribe((match) => {
       this.matchPreparing = true;
 
+      if (this.watchSubscription && !this.watchSubscription.closed) {
+        console.log("already subscribed to watch");
+        return;
+      }
+
       // wait for the connection
       this.watchService.connect().subscribe((ready) => {
+        console.log("watch-page connection to websocket", ready);
         console.log("match created and not ready");
 
         const details: WatchDetails = {
@@ -174,29 +181,42 @@ export class WatchPageComponent
         };
 
         // wait for server notifications about the match state
-        this.watchService.watch(details).subscribe((message) => {
-          const parsed = JSON.parse(message);
-          console.log("message from match", parsed);
+        this.watchSubscription = this.watchService
+          .watch(details)
+          .subscribe((message) => {
+            const parsed = JSON.parse(message);
+            console.log("message from match", parsed);
 
-          // ready to go, the server started to send state
-          if (parsed.type == "match-state") {
-            this.watchService.close();
-            self.tryToStartMatch();
-          }
-
-          // to get structure and build model of the message
-          if (parsed.type == "match-created") {
-            this.matchNotReadyInfo = parsed.message;
-            console.log("match-created update", this.matchNotReadyInfo);
-
-            // we are ready close websocket connection and try to start the match
-            if (this.matchNotReadyInfo.ready) {
-              console.log("we are ready lets start the match");
+            // ready to go, the server started to send state
+            if (parsed.type == "match-state") {
               this.watchService.close();
+              this.watchSubscription.unsubscribe();
+
+              console.log(
+                "watchsubscription.closed",
+                this.watchSubscription.closed
+              );
               self.tryToStartMatch();
             }
-          }
-        });
+
+            // to get structure and build model of the message
+            if (parsed.type == "match-created") {
+              this.matchNotReadyInfo = parsed.message;
+              console.log("match-created update", this.matchNotReadyInfo);
+
+              // we are ready close websocket connection and try to start the match
+              if (this.matchNotReadyInfo.ready) {
+                console.log("we are ready lets start the match");
+                this.watchService.close();
+                this.watchSubscription.unsubscribe();
+                console.log(
+                  "watchsubscription.closed",
+                  this.watchSubscription.closed
+                );
+                self.tryToStartMatch();
+              }
+            }
+          });
       });
     });
 

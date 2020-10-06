@@ -76,12 +76,14 @@ export class WatchMatchComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   readyToStart() {
-    const details: WatchDetails = {
-      luchadorID: this.luchador.id,
-      matchID: this.matchID,
-    };
-
     this.service.connect().subscribe((ready) => {
+      console.log("watch-match connection to websocket", ready);
+
+      const details: WatchDetails = {
+        luchadorID: this.luchador.id,
+        matchID: this.matchID,
+      };
+  
       this.onMessage = this.service.watch(details).subscribe((message) => {
         this.message = message;
         const parsed = JSON.parse(this.message);
