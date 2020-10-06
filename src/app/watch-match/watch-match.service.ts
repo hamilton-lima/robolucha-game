@@ -1,5 +1,4 @@
 import { Injectable } from "@angular/core";
-import { Observable } from "babylonjs";
 import { BehaviorSubject, Subject, timer } from "rxjs";
 import { environment } from "src/environments/environment";
 
@@ -9,7 +8,7 @@ export interface WatchDetails {
 }
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class WatchMatchService {
   private socket: WebSocket;
@@ -25,7 +24,7 @@ export class WatchMatchService {
 
   connect() {
     // already connected
-    if( this.socket && this.socket.readyState == WebSocket.OPEN ){
+    if (this.socket && this.socket.readyState == WebSocket.OPEN) {
       return new BehaviorSubject(true);
     }
 
@@ -46,7 +45,9 @@ export class WatchMatchService {
   }
 
   close() {
-    this.socket.close();
+    if (this.socket) {
+      this.socket.close();
+    }
   }
 
   watch(details: WatchDetails): Subject<string> {
@@ -57,5 +58,4 @@ export class WatchMatchService {
     };
     return this.message;
   }
-
 }

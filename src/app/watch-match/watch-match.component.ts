@@ -7,13 +7,13 @@ import {
   Input,
   ViewChild,
   OnChanges,
-  SimpleChanges
+  SimpleChanges,
 } from "@angular/core";
 import { WatchMatchService, WatchDetails } from "./watch-match.service";
 import {
   ModelGameComponent,
   ModelGameDefinition,
-  ModelMatch
+  ModelMatch,
 } from "../sdk/model/models";
 import { ActivatedRoute } from "@angular/router";
 import { SharedStateService } from "../shared-state.service";
@@ -25,7 +25,7 @@ import {
   state,
   style,
   transition,
-  animate
+  animate,
 } from "@angular/animations";
 import { CanComponentDeactivate } from "../can-deactivate-guard.service";
 import { CodeEditorPanelComponent } from "../code-editor-panel/code-editor-panel.component";
@@ -34,7 +34,7 @@ import { ArenaComponent } from "../arena/arena.component";
 @Component({
   selector: "app-watch-match",
   templateUrl: "./watch-match.component.html",
-  styleUrls: ["./watch-match.component.css"]
+  styleUrls: ["./watch-match.component.css"],
 })
 export class WatchMatchComponent implements OnInit, OnDestroy, OnChanges {
   @Input() gameDefinition: ModelGameDefinition;
@@ -62,13 +62,9 @@ export class WatchMatchComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnInit() {
-    // this.releaseConnection();
-
     this.subscription = this.service.ready.subscribe(() => {
       this.readyToStart();
     });
-
-    this.service.connect();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -82,33 +78,33 @@ export class WatchMatchComponent implements OnInit, OnDestroy, OnChanges {
   readyToStart() {
     const details: WatchDetails = {
       luchadorID: this.luchador.id,
-      matchID: this.matchID
+      matchID: this.matchID,
     };
 
-    // console.log("watch details", details);
+    this.service.connect().subscribe((ready) => {
+      this.onMessage = this.service.watch(details).subscribe((message) => {
+        this.message = message;
+        const parsed = JSON.parse(this.message);
 
-    this.onMessage = this.service.watch(details).subscribe(message => {
-      this.message = message;
-      const parsed = JSON.parse(this.message);
+        if (parsed.type == "match-state") {
+          this.matchStateSubject.emit(parsed.message);
 
-      if (parsed.type == "match-state") {
-        this.matchStateSubject.emit(parsed.message);
-
-        if (parsed.message.clock < 0) {
-          this.matchFinished.emit(true);
+          if (parsed.message.clock < 0) {
+            this.matchFinished.emit(true);
+          }
+          return;
         }
-        return;
-      } 
 
-      if (parsed.type == "message") {
-        this.messageSubject.emit(parsed.message);
-        return;
-      }
-      
-      if (parsed.type == "event") {
-        this.matchEventSubject.emit(parsed.message);
-        return;
-      }
+        if (parsed.type == "message") {
+          this.messageSubject.emit(parsed.message);
+          return;
+        }
+
+        if (parsed.type == "event") {
+          this.matchEventSubject.emit(parsed.message);
+          return;
+        }
+      });
     });
   }
 

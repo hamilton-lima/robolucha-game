@@ -5,6 +5,7 @@ import {
   OnChanges,
   SimpleChanges,
   ChangeDetectorRef,
+  OnDestroy,
 } from "@angular/core";
 import {
   ActivatedRouteSnapshot,
@@ -48,8 +49,7 @@ import { MatchReady } from "./watch-page.model";
   styleUrls: ["./watch-page.component.css"],
 })
 export class WatchPageComponent
-  implements OnInit, CanComponentDeactivate, OnChanges {
-  
+  implements OnInit, CanComponentDeactivate, OnChanges, OnDestroy {
   constructor(
     private api: DefaultService,
     private route: ActivatedRoute,
@@ -176,13 +176,22 @@ export class WatchPageComponent
         // wait for server notifications about the match state
         this.watchService.watch(details).subscribe((message) => {
           const parsed = JSON.parse(message);
+          console.log("message from match", parsed);
+
+          // ready to go, the server started to send state
+          if (parsed.type == "match-state") {
+            this.watchService.close();
+            self.tryToStartMatch();
+          }
 
           // to get structure and build model of the message
           if (parsed.type == "match-created") {
-            this.matchNotReadyInfo = parsed;
+            this.matchNotReadyInfo = parsed.message;
+            console.log("match-created update", this.matchNotReadyInfo);
 
             // we are ready close websocket connection and try to start the match
-            if( this.matchNotReadyInfo.ready){
+            if (this.matchNotReadyInfo.ready) {
+              console.log("we are ready lets start the match");
               this.watchService.close();
               self.tryToStartMatch();
             }
@@ -212,8 +221,17 @@ export class WatchPageComponent
     });
   }
 
+  ngOnDestroy(): void {
+    if (this.watchService) {
+      this.watchService.close();
+      console.log("closing connection");
+    }
+  }
+
   tryToStartMatch() {
+    console.log("try to start the match");
     this.api.privateMatchSingleGet(this.matchID).subscribe((match) => {
+      console.log("match status", match);
       // ready!
       if (match.status == "RUNNING") {
         this.onMatchRunning.next(match);
