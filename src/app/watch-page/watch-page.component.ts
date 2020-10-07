@@ -70,6 +70,7 @@ export class WatchPageComponent
   ) {}
 
   matchReady = false;
+  notReadyMessage = "";
   matchFinished = false;
   matchOver = false;
 
@@ -173,15 +174,11 @@ export class WatchPageComponent
       this.matchPreparing = true;
 
       if (this.watchSubscription && !this.watchSubscription.closed) {
-        console.log("already subscribed to watch");
         return;
       }
 
       // wait for the connection
       this.watchService.connect().subscribe((ready) => {
-        console.log("watch-page connection to websocket", ready);
-        console.log("match created and not ready");
-
         const details: WatchDetails = {
           luchadorID: this.luchador.id,
           matchID: this.matchID,
@@ -208,7 +205,8 @@ export class WatchPageComponent
 
             // to get structure and build model of the message
             if (parsed.type == "match-created") {
-              this.matchNotReadyInfo = parsed.message;
+              this.setMatchNotReadyInfo(parsed.message);
+
               console.log("match-created update", this.matchNotReadyInfo);
 
               // we are ready close websocket connection and try to start the match
@@ -232,8 +230,6 @@ export class WatchPageComponent
       this.matchOver = false;
       this.matchFinished = true;
 
-      console.log("finished", this.displayScore);
-
       this.api
         .privateGameDefinitionIdIdGet(match.gameDefinitionID)
         .subscribe((gameDefinition) => {
@@ -248,6 +244,26 @@ export class WatchPageComponent
     });
   }
 
+  // data example
+  // { "ready": false, "matchID": 118,
+  //   "minParticipants": 1, "maxParticipants": 10,
+  //   "participants": 1,
+  //   "teamParticipants": [
+  //     { "teamID": 3, "minParticipants": 2, "maxParticipants": 5, "participants": 1 }
+  //   ] }
+  setMatchNotReadyInfo(info: MatchReady) {
+    this.matchNotReadyInfo = info;
+    if (info.ready) {
+      this.notReadyMessage = "Go go go";
+    } else {
+      if (info.teamParticipants && info.teamParticipants.length > 0) {
+        this.notReadyMessage = "Waiting for more participants";
+      } else {
+        this.notReadyMessage = "Assembling all the pieces";
+      }
+    }
+  }
+
   ngOnDestroy(): void {
     if (this.watchService) {
       this.watchService.close();
@@ -258,7 +274,6 @@ export class WatchPageComponent
   tryToStartMatch() {
     console.log("try to start the match");
     this.api.privateMatchSingleGet(this.matchID).subscribe((match) => {
-      console.log("match status", match);
       // ready!
       if (match.status == "RUNNING") {
         this.onMatchRunning.next(match);
@@ -398,7 +413,6 @@ export class WatchPageComponent
 
   // update the internal list of codes from the editor
   updateCode(event: string, script: string) {
-    // console.log("update code", event, script);
     this.dirty = true;
     this.codes[event].script = script;
     this.cdRef.detectChanges();

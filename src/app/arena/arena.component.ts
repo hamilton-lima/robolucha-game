@@ -173,6 +173,7 @@ export class ArenaComponent
       console.log("trying to create babylon engine for the second time");
       return;
     }
+    
     this.engine = new BABYLON.Engine(this.canvas.nativeElement, true);
     this.resetState();
 
