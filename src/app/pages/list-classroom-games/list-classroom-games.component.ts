@@ -4,7 +4,7 @@ import {
   ModelClassroom,
   ModelUserDetails,
   ModelMatch,
-  DefaultService,
+  DefaultService,ModelPlayRequest
 } from "src/app/sdk";
 import { MatDialog } from "@angular/material";
 import { Router } from "@angular/router";
@@ -76,8 +76,15 @@ export class ListClassroomGamesComponent implements OnInit {
   }
 
   play(matchID: number) {
-    this.api.privatePlayIdPost(matchID).subscribe((match: ModelMatch) => {
+
+    const playRequest = <ModelPlayRequest>{
+      availableMatchID: matchID,
+      teamID: 0,
+    };
+
+    this.api.privatePlayPost(playRequest).subscribe((match: ModelMatch) => {
       this.router.navigate(["watch", match.id]);
     });
+
   }
 }

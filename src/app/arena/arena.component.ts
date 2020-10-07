@@ -5,6 +5,8 @@ import {
   Input,
   OnChanges,
   SimpleChanges,
+  OnDestroy,
+  AfterViewInit,
 } from "@angular/core";
 import * as BABYLON from "babylonjs";
 import { Luchador3D } from "./luchador3d";
@@ -16,6 +18,7 @@ import {
   Luchador,
   Bullet,
   SceneComponent,
+  MatchEvent,
 } from "../watch-match/watch-match.model";
 import { Bullet3D } from "./bullet3d";
 import { Helper3D } from "./helper3d";
@@ -37,10 +40,13 @@ class SavedCamera {
   templateUrl: "./arena.component.html",
   styleUrls: ["./arena.component.css"],
 })
-export class ArenaComponent implements OnInit, OnChanges {
+export class ArenaComponent
+  implements OnInit, OnChanges, OnDestroy, AfterViewInit {
   @ViewChild("game") canvas;
   @Input() gameDefinition: GameDefinition;
   @Input() matchStateSubject: Subject<MatchState>;
+  @Input() matchEventSubject: Subject<MatchEvent>;
+
   @Input() debug = false;
   @Input() cameraFollowLuchador = true;
   @Input() currentLuchador: number;
@@ -82,12 +88,10 @@ export class ArenaComponent implements OnInit, OnChanges {
     this.data3D = new ArenaData3D();
   }
 
-  fitToContainer() {
-    // var canvas = this.canvas.nativeElement;
-    // canvas.style.width = "100%";
-    // canvas.style.height = "100%";
-    // canvas.width = canvas.offsetWidth;
-    // canvas.height = canvas.offsetHeight;
+  ngOnDestroy() {
+    if (this.engine) {
+      this.engine.dispose();
+    }
   }
 
   ngOnInit() {
@@ -95,7 +99,10 @@ export class ArenaComponent implements OnInit, OnChanges {
       console.error("currentLuchador missing");
       return;
     }
+    console.log("arena-component nginit");
+  }
 
+  ngAfterViewInit() {
     this.createScene();
   }
 
@@ -163,11 +170,13 @@ export class ArenaComponent implements OnInit, OnChanges {
     this.sceneComponents = [];
   }
 
-  createScene(): void {
-    if (this.engine) {
-      this.engine.dispose();
+  createScene() {
+    if( this.engine){
+      console.log("trying to create babylon engine for the second time");
+      return;
     }
-
+    
+    this.engine = new BABYLON.Engine(this.canvas.nativeElement, true);
     this.resetState();
 
     this.HALF_LUCHADOR = this.convertPosition(
@@ -175,11 +184,12 @@ export class ArenaComponent implements OnInit, OnChanges {
     );
     this.HALF_BULLET = this.convertPosition(this.gameDefinition.bulletSize / 2);
 
-    this.fitToContainer();
-    this.engine = new BABYLON.Engine(this.canvas.nativeElement, true);
-
     this.matchStateSubject.subscribe((matchState: MatchState) => {
       this.nextMatchState = matchState;
+    });
+
+    this.matchEventSubject.subscribe((event: MatchEvent) => {
+      console.log("event", event);
     });
 
     if (this.animateSubject) {

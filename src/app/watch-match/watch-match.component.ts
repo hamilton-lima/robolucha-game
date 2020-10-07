@@ -7,25 +7,26 @@ import {
   Input,
   ViewChild,
   OnChanges,
-  SimpleChanges
+  SimpleChanges,
+  AfterViewInit,
 } from "@angular/core";
 import { WatchMatchService, WatchDetails } from "./watch-match.service";
 import {
   ModelGameComponent,
   ModelGameDefinition,
-  ModelMatch
+  ModelMatch,
 } from "../sdk/model/models";
 import { ActivatedRoute } from "@angular/router";
 import { SharedStateService } from "../shared-state.service";
 import { Subscription, Subject } from "rxjs";
-import { MatchState, GameDefinition } from "./watch-match.model";
+import { MatchState, GameDefinition, MatchEvent } from "./watch-match.model";
 import { Message } from "../message/message.model";
 import {
   trigger,
   state,
   style,
   transition,
-  animate
+  animate,
 } from "@angular/animations";
 import { CanComponentDeactivate } from "../can-deactivate-guard.service";
 import { CodeEditorPanelComponent } from "../code-editor-panel/code-editor-panel.component";
@@ -34,9 +35,10 @@ import { ArenaComponent } from "../arena/arena.component";
 @Component({
   selector: "app-watch-match",
   templateUrl: "./watch-match.component.html",
-  styleUrls: ["./watch-match.component.css"]
+  styleUrls: ["./watch-match.component.css"],
+  providers: [WatchMatchService],
 })
-export class WatchMatchComponent implements OnInit, OnDestroy, OnChanges {
+export class WatchMatchComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() gameDefinition: ModelGameDefinition;
   @Input() luchador: ModelGameComponent;
   @Input() matchID: number;
@@ -44,6 +46,7 @@ export class WatchMatchComponent implements OnInit, OnDestroy, OnChanges {
   @Output() matchFinished = new EventEmitter<boolean>();
   @Output() matchStateSubject = new EventEmitter<MatchState>();
   @Output() messageSubject = new EventEmitter<Message>();
+  @Output() matchEventSubject = new EventEmitter<MatchEvent>();
 
   @ViewChild(ArenaComponent) arena: ArenaComponent;
 
@@ -61,50 +64,45 @@ export class WatchMatchComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnInit() {
-    // this.releaseConnection();
-
-    this.subscription = this.service.ready.subscribe(() => {
-      this.readyToStart();
-    });
-
-    // // console.log("watch match oninit", this.luchador);
-    this.service.connect();
+    this.readyToStart();
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    // console.log("changes", changes.matchID);
-    if (changes.matchID && !changes.matchID.firstChange) {
-      this.readyToStart();
-      this.arena.createScene();
-    }
+  ngAfterViewInit(): void {
+    this.arena.createScene();
   }
 
   readyToStart() {
-    const details: WatchDetails = {
-      luchadorID: this.luchador.id,
-      matchID: this.matchID
-    };
+    this.service.connect().subscribe((ready) => {
+      console.log("watch-match connection to websocket", ready);
 
-    // console.log("watch details", details);
+      const details: WatchDetails = {
+        luchadorID: this.luchador.id,
+        matchID: this.matchID,
+      };
 
-    this.onMessage = this.service.watch(details).subscribe(message => {
-      this.message = message;
-      const parsed = JSON.parse(this.message);
-      // parsedMessage.type = parsedMessage.type.toLowerCase();
+      this.onMessage = this.service.watch(details).subscribe((message) => {
+        this.message = message;
+        const parsed = JSON.parse(this.message);
 
-      if (parsed.type == "match-state") {
-        this.matchStateSubject.emit(parsed.message);
+        if (parsed.type == "match-state") {
+          this.matchStateSubject.emit(parsed.message);
 
-        if (parsed.message.clock < 0) {
-          this.matchFinished.emit(true);
+          if (parsed.message.clock < 0) {
+            this.matchFinished.emit(true);
+          }
+          return;
         }
-        return;
-      }
 
-      if (parsed.type == "message") {
-        this.messageSubject.emit(parsed.message);
-        return;
-      }
+        if (parsed.type == "message") {
+          this.messageSubject.emit(parsed.message);
+          return;
+        }
+
+        if (parsed.type == "event") {
+          this.matchEventSubject.emit(parsed.message);
+          return;
+        }
+      });
     });
   }
 

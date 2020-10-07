@@ -1,108 +1,169 @@
-<mat-sidenav-container [hasBackdrop]="false">
-  <mat-sidenav #drawer [mode]="'over'" [opened]="true" position="end" class="drawer">
+<div *ngIf="matchReady">
+  <mat-sidenav-container [hasBackdrop]="false">
+    <mat-sidenav
+      #drawer
+      [mode]="'over'"
+      [opened]="true"
+      position="end"
+      class="drawer"
+    >
+      <button mat-icon-button class="mr-2" (click)="drawer.toggle()">
+        <mat-icon svgIcon="arrow-right"></mat-icon>
+      </button>
 
-    <button mat-icon-button class="mr-2" (click)="drawer.toggle()">
-      <mat-icon svgIcon="arrow-right"></mat-icon>
-    </button>
+      <button mat-raised-button class="mr-2" (click)="goHome()">HOME</button>
 
-    <button mat-raised-button class="mr-2" (click)="goHome()">
-      HOME
-    </button>
+      <button
+        mat-raised-button
+        [disabled]="!dirty"
+        class="mr-2"
+        (click)="save()"
+      >
+        SAVE
+      </button>
 
-    <button mat-raised-button [disabled]="!dirty" class="mr-2" (click)="save()">
-      SAVE
-    </button>
+      <div class="mt-2 right-panel-scroll">
+        <mat-accordion>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header> Help </mat-expansion-panel-header>
+            <app-mark-down [fileName]="'help/code_editor_help'"></app-mark-down>
+          </mat-expansion-panel>
 
-    <div class="mt-2 right-panel-scroll">
-      <mat-accordion>
+          <mat-expansion-panel [expanded]="true">
+            <mat-expansion-panel-header> On Repeat </mat-expansion-panel-header>
+            <app-code-editor
+              [script]="codes.onRepeat.script"
+              (onChange)="updateCode('onRepeat', $event)"
+            >
+            </app-code-editor>
+          </mat-expansion-panel>
 
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            Help
-          </mat-expansion-panel-header>
-          <app-mark-down [fileName]="'help/code_editor_help'"></app-mark-down>
-        </mat-expansion-panel>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header> On Start </mat-expansion-panel-header>
+            <app-code-editor
+              [script]="codes.onStart.script"
+              (onChange)="updateCode('onStart', $event)"
+            >
+            </app-code-editor>
+          </mat-expansion-panel>
 
-        <mat-expansion-panel [expanded]="true">
-          <mat-expansion-panel-header>
-            On Repeat
-          </mat-expansion-panel-header>
-          <app-code-editor [script]="codes.onRepeat.script" (onChange)="updateCode('onRepeat', $event)">
-          </app-code-editor>
-        </mat-expansion-panel>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              On Hit Wall
+            </mat-expansion-panel-header>
+            <app-code-editor
+              [script]="codes.onHitWall.script"
+              (onChange)="updateCode('onHitWall', $event)"
+            >
+            </app-code-editor>
+          </mat-expansion-panel>
 
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            On Start
-          </mat-expansion-panel-header>
-          <app-code-editor [script]="codes.onStart.script" (onChange)="updateCode('onStart', $event)">
-          </app-code-editor>
-        </mat-expansion-panel>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header> On Found </mat-expansion-panel-header>
+            <app-code-editor
+              [script]="codes.onFound.script"
+              (onChange)="updateCode('onFound', $event)"
+            >
+            </app-code-editor>
+          </mat-expansion-panel>
 
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            On Hit Wall
-          </mat-expansion-panel-header>
-          <app-code-editor [script]="codes.onHitWall.script" (onChange)="updateCode('onHitWall', $event)">
-          </app-code-editor>
-        </mat-expansion-panel>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              On Got Damage
+            </mat-expansion-panel-header>
+            <app-code-editor
+              [script]="codes.onGotDamage.script"
+              (onChange)="updateCode('onGotDamage', $event)"
+            >
+            </app-code-editor>
+          </mat-expansion-panel>
 
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            On Found
-          </mat-expansion-panel-header>
-          <app-code-editor [script]="codes.onFound.script" (onChange)="updateCode('onFound', $event)">
-          </app-code-editor>
-        </mat-expansion-panel>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              On Hit Other
+            </mat-expansion-panel-header>
+            <app-code-editor
+              [script]="codes.onHitOther.script"
+              (onChange)="updateCode('onHitOther', $event)"
+            >
+            </app-code-editor>
+          </mat-expansion-panel>
 
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            On Got Damage
-          </mat-expansion-panel-header>
-          <app-code-editor [script]="codes.onGotDamage.script" (onChange)="updateCode('onGotDamage', $event)">
-          </app-code-editor>
-        </mat-expansion-panel>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              Code messages
+            </mat-expansion-panel-header>
+            <app-message
+              class="message-panel"
+              [messageSubject]="messageSubject"
+            ></app-message>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </div>
+    </mat-sidenav>
 
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            On Hit Other
-          </mat-expansion-panel-header>
-          <app-code-editor [script]="codes.onHitOther.script" (onChange)="updateCode('onHitOther', $event)">
-          </app-code-editor>
-        </mat-expansion-panel>
+    <section>
+      <button mat-icon-button class="toogle" (click)="drawer.toggle()">
+        <mat-icon svgIcon="arrow-left"></mat-icon>
+      </button>
+      <div *ngIf="gameDefinition">
+        <app-watch-match
+          [gameDefinition]="gameDefinition"
+          [luchador]="luchador"
+          [matchID]="matchID"
+          (matchFinished)="endMatch()"
+          (matchStateSubject)="updateState($event)"
+          (messageSubject)="updateMessage($event)"
+        >
+        </app-watch-match>
+      </div>
+    </section>
+  </mat-sidenav-container>
 
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            Code messages
-          </mat-expansion-panel-header>
-          <app-message class="message-panel" [messageSubject]="messageSubject"></app-message>
-        </mat-expansion-panel>
-
-      </mat-accordion>
-    </div>
-
-  </mat-sidenav>
-
-  <section>
-    <button mat-icon-button class="toogle" (click)="drawer.toggle()">
-      <mat-icon svgIcon="arrow-left"></mat-icon>
-    </button>
-    <div *ngIf="gameDefinition">
-      <app-watch-match [gameDefinition]="gameDefinition" [luchador]="luchador" [matchID]="matchID"
-        (matchFinished)="endMatch()" (matchStateSubject)="updateState($event)" (messageSubject)="updateMessage($event)">
-      </app-watch-match>
-    </div>
-  </section>
-</mat-sidenav-container>
-
-<app-clock class="clock" [matchStateSubject]="matchStateSubject"></app-clock>
-
-<div class="p-3 matchover-alert" *ngIf="matchOver">
-  <h1>This match is over!</h1>
-  <button class="btn btn-primary mb-2" (click)="goBack()">
-    <span>BACK</span>
-  </button>
-  <app-score *ngIf="displayScore" [scores]="scores"></app-score>
+  <app-clock class="clock" [matchStateSubject]="matchStateSubject"></app-clock>
+  <app-score *ngIf="displayScore" class="score" [scores]="scores"></app-score>
 </div>
 
-<app-score *ngIf="displayScore" class="score" [scores]="scores"></app-score>
+<div class="p-3 matchover-alert" *ngIf="matchOver">
+  <mat-card>
+    <mat-card-title
+      ><h1>{{ matchOverTitle }}</h1></mat-card-title
+    >
+    <mat-card-content>
+      <div class="score-in-alert">
+        <app-score *ngIf="displayScore" [scores]="scores"></app-score>
+      </div>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button class="mb-2" (click)="goBack()">
+        <span>BACK</span>
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>
+
+<div class="p-3 matchover-preparing" *ngIf="matchPreparing">
+  <mat-card>
+    <mat-card-title><h1>Getting ready</h1></mat-card-title>
+    <mat-card-content>
+      <div>{{ notReadyMessage }}</div>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button class="mb-2" (click)="goBack()">
+        <span>BACK</span>
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>
+
+<div class="p-3 matchover-finished" *ngIf="matchFinished">
+  <mat-card>
+    <mat-card-title><h1>This match is over</h1></mat-card-title>
+    <mat-card-content></mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button class="mb-2" (click)="goBack()">
+        <span>BACK</span>
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>

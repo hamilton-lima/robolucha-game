@@ -11,8 +11,7 @@
  */
 
 
-export interface ModelMatchParticipant {
-    luchadorID?: number;
-    matchID?: number;
+export interface ModelPlayRequest {
+    availableMatchID?: number;
     teamID?: number;
 }
