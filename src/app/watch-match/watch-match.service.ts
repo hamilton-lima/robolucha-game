@@ -7,9 +7,7 @@ export interface WatchDetails {
   luchadorID: number;
 }
 
-@Injectable({
-  providedIn: "root",
-})
+@Injectable()
 export class WatchMatchService {
   private socket: WebSocket;
 

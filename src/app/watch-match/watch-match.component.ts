@@ -7,7 +7,7 @@ import {
   Input,
   ViewChild,
   OnChanges,
-  SimpleChanges,
+  SimpleChanges,, AfterViewInit
 } from "@angular/core";
 import { WatchMatchService, WatchDetails } from "./watch-match.service";
 import {
@@ -35,8 +35,9 @@ import { ArenaComponent } from "../arena/arena.component";
   selector: "app-watch-match",
   templateUrl: "./watch-match.component.html",
   styleUrls: ["./watch-match.component.css"],
+  providers: [WatchMatchService],
 })
-export class WatchMatchComponent implements OnInit, OnDestroy, OnChanges {
+export class WatchMatchComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() gameDefinition: ModelGameDefinition;
   @Input() luchador: ModelGameComponent;
   @Input() matchID: number;
@@ -62,17 +63,11 @@ export class WatchMatchComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnInit() {
-    this.subscription = this.service.ready.subscribe(() => {
-      this.readyToStart();
-    });
+    this.readyToStart();
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    // console.log("changes", changes.matchID);
-    if (changes.matchID && !changes.matchID.firstChange) {
-      this.readyToStart();
-      this.arena.createScene();
-    }
+  ngAfterViewInit(): void {
+    this.arena.createScene();
   }
 
   readyToStart() {
@@ -83,7 +78,7 @@ export class WatchMatchComponent implements OnInit, OnDestroy, OnChanges {
         luchadorID: this.luchador.id,
         matchID: this.matchID,
       };
-  
+
       this.onMessage = this.service.watch(details).subscribe((message) => {
         this.message = message;
         const parsed = JSON.parse(this.message);

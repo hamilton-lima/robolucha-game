@@ -47,6 +47,7 @@ import { MatchReady } from "./watch-page.model";
   selector: "app-watch-page",
   templateUrl: "./watch-page.component.html",
   styleUrls: ["./watch-page.component.css"],
+  providers: [WatchMatchService],
 })
 export class WatchPageComponent
   implements OnInit, CanComponentDeactivate, OnChanges, OnDestroy {
