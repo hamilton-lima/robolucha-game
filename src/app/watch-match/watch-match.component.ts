@@ -7,7 +7,8 @@ import {
   Input,
   ViewChild,
   OnChanges,
-  SimpleChanges,, AfterViewInit
+  SimpleChanges,
+  AfterViewInit,
 } from "@angular/core";
 import { WatchMatchService, WatchDetails } from "./watch-match.service";
 import {

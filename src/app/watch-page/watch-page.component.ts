@@ -6,6 +6,7 @@ import {
   SimpleChanges,
   ChangeDetectorRef,
   OnDestroy,
+  AfterViewInit,
 } from "@angular/core";
 import {
   ActivatedRouteSnapshot,
@@ -50,7 +51,12 @@ import { MatchReady } from "./watch-page.model";
   providers: [WatchMatchService],
 })
 export class WatchPageComponent
-  implements OnInit, CanComponentDeactivate, OnChanges, OnDestroy {
+  implements
+    OnInit,
+    CanComponentDeactivate,
+    OnChanges,
+    OnDestroy,
+    AfterViewInit {
   constructor(
     private api: DefaultService,
     private route: ActivatedRoute,
@@ -395,6 +401,7 @@ export class WatchPageComponent
     // console.log("update code", event, script);
     this.dirty = true;
     this.codes[event].script = script;
+    this.cdRef.detectChanges();
   }
 
   save() {
