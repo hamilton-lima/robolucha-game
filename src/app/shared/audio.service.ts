@@ -4,7 +4,9 @@ export enum AudioType{
   Fire = "/assets/audios/robolucha-shot.wav",
   Hit = "/assets/audios/robolucha-grunts",
   ArenaMusic = "/assets/audios/robolucha-arena-music.mp3",
-  Move = "/assets/audios/robolucha-vehicle-engine.wav"
+  Move = "/assets/audios/robolucha-vehicle-engine.wav",
+  Death = "/assets/audios/robolucha-death.mp3",
+  Kill = "/assets/audios/robolucha-kill.wav"
 }
 
 @Injectable({
@@ -19,6 +21,22 @@ export class AudioService {
       loop: true,
       autoplay: true,
       volume: 0.1
+    });
+  }
+
+  death(scene : BABYLON.Scene){
+    var death = new BABYLON.Sound("death", AudioType.Death, scene, null, {
+      loop: false,
+      autoplay: true,
+      volume: 0.5
+    });
+  }
+
+  kill(scene : BABYLON.Scene){
+    var kill = new BABYLON.Sound("kill", AudioType.Kill, scene, null, {
+      loop: false,
+      autoplay: true,
+      volume: 0.5
     });
   }
 
