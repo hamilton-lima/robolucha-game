@@ -189,7 +189,13 @@ export class ArenaComponent
     });
 
     this.matchEventSubject.subscribe((event: MatchEvent) => {
-      console.log("event", event);
+      if(event.event == 'KILL'){
+        if(this.currentLuchador == event.componentA){
+           this.audio.kill(this.scene);
+        }else if(this.currentLuchador == event.componentB){
+          this.audio.death(this.scene);
+        }
+      }
     });
 
     if (this.animateSubject) {
