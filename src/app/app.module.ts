@@ -56,6 +56,7 @@ import { MarkDownComponent } from "./mark-down/mark-down.component";
 import { ActivityListComponent } from "./dashboard/activity-list/activity-list.component";
 import { LobbyComponent } from "./lobby/lobby.component";
 import { CantPlayComponent } from "./lobby/cant-play/cant-play.component";
+import { MapsComponent } from './maps/maps.component';
 
 // library.add(fas);
 
@@ -73,6 +74,12 @@ const ROUTES: Routes = [
     component: MaskEditorComponent,
     canActivate: [LoginActivate],
     canDeactivate: [CanDeactivateGuard],
+    resolve: { luchador: LuchadorResolverService },
+  },
+  {
+    path: "maps",
+    component: MapsComponent,
+    canActivate: [LoginActivate],
     resolve: { luchador: LuchadorResolverService },
   },
   {
@@ -175,6 +182,7 @@ export function apiConfigFactory(): Configuration {
     MarkDownComponent,
     LobbyComponent,
     CantPlayComponent,
+    MapsComponent,
   ],
   imports: [
     BrowserModule,
