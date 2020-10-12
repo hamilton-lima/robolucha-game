@@ -24,6 +24,7 @@ import { GameBackgroundComponent } from './shared/game-background/game-backgroun
 import { BigButtonComponent } from './shared/big-button/big-button.component';
 import { SharedModule } from "../shared/shared.module";
 import { AboutComponent } from './about/about.component';
+import { MapsComponent } from "../maps/maps.component";
 
 @NgModule({
   imports: [
@@ -46,6 +47,7 @@ import { AboutComponent } from './about/about.component';
     GameCardComponent,
     JoinClassroomComponent,
     MaskEditorComponent,
+    MapsComponent,
     LuchadorPreviewComponent,
     MaskEditorDetailComponent,
     ColorPickerComponent,

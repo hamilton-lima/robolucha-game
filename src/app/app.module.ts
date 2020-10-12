@@ -182,7 +182,6 @@ export function apiConfigFactory(): Configuration {
     MarkDownComponent,
     LobbyComponent,
     CantPlayComponent,
-    MapsComponent,
   ],
   imports: [
     BrowserModule,
