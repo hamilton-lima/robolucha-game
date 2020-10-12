@@ -5,7 +5,10 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 import { AppComponent } from "./app.component";
 import { BodyComponent } from "./body/body.component";
-import { LoginActivate, LoginDashboardActivate } from "./login.activate.service";
+import {
+  LoginActivate,
+  LoginDashboardActivate,
+} from "./login.activate.service";
 import { NotFoundComponent } from "./not-found/not-found.component";
 import { AuthService } from "./auth.service";
 import { LuchadorComponent } from "./luchador/luchador.component";
@@ -46,12 +49,13 @@ import { DashboardModule } from "./dashboard/dashboard.module";
 import { ClassroomListComponent } from "./dashboard/classroom-list/classroom-list.component";
 import { ClassroomCreateComponent } from "./dashboard/classroom-create/classroom-create.component";
 import { StudentListComponent } from "./dashboard/student-list/student-list.component";
-import { GenericErrorModalMessageComponent } from './interceptor/generic-error-modal-message/generic-error-modal-message.component';
+import { GenericErrorModalMessageComponent } from "./interceptor/generic-error-modal-message/generic-error-modal-message.component";
 import { AboutComponent } from "./pages/about/about.component";
 import { EndTutorialGuardService } from "./end-tutorial-guard.service";
-import { MarkDownComponent } from './mark-down/mark-down.component';
+import { MarkDownComponent } from "./mark-down/mark-down.component";
 import { ActivityListComponent } from "./dashboard/activity-list/activity-list.component";
-import { LobbyComponent } from './lobby/lobby.component';
+import { LobbyComponent } from "./lobby/lobby.component";
+import { CantPlayComponent } from "./lobby/cant-play/cant-play.component";
 
 // library.add(fas);
 
@@ -62,61 +66,61 @@ const ROUTES: Routes = [
     component: LuchadorComponent,
     canActivate: [LoginActivate],
     canDeactivate: [CanDeactivateGuard],
-    resolve: { luchador: LuchadorResolverService }
+    resolve: { luchador: LuchadorResolverService },
   },
   {
     path: "mask",
     component: MaskEditorComponent,
     canActivate: [LoginActivate],
     canDeactivate: [CanDeactivateGuard],
-    resolve: { luchador: LuchadorResolverService }
+    resolve: { luchador: LuchadorResolverService },
   },
   {
     path: "playground",
     component: PlaygroundComponent,
-    canActivate: [LoginActivate]
+    canActivate: [LoginActivate],
   },
   {
     path: "lobby",
     component: LobbyComponent,
-    canActivate: [LoginActivate]
+    canActivate: [LoginActivate],
   },
   {
     path: "play",
     component: PlayComponent,
     canActivate: [LoginActivate],
-    resolve: { luchador: LuchadorResolverService }
+    resolve: { luchador: LuchadorResolverService },
   },
   {
     path: "watch/:id",
     component: WatchPageComponent,
     canActivate: [LoginActivate],
     canDeactivate: [CanDeactivateGuard, EndTutorialGuardService],
-    resolve: { luchador: LuchadorResolverService }
+    resolve: { luchador: LuchadorResolverService },
   },
   {
     path: "public",
     component: ListPublicGamesComponent,
     canActivate: [LoginActivate],
-    resolve: { luchador: LuchadorResolverService }
+    resolve: { luchador: LuchadorResolverService },
   },
   {
     path: "classroom",
     component: ListClassroomGamesComponent,
     canActivate: [LoginActivate],
-    resolve: { luchador: LuchadorResolverService }
+    resolve: { luchador: LuchadorResolverService },
   },
   {
     path: "about",
     component: AboutComponent,
     canActivate: [LoginActivate],
-    resolve: { luchador: LuchadorResolverService }
+    resolve: { luchador: LuchadorResolverService },
   },
   {
     path: "home",
     component: MainComponent,
     canActivate: [LoginActivate],
-    resolve: { luchador: LuchadorResolverService }
+    resolve: { luchador: LuchadorResolverService },
   },
   {
     path: "dashboard",
@@ -127,16 +131,24 @@ const ROUTES: Routes = [
       { path: "classrooms", component: ClassroomListComponent },
       { path: "classroom-create", component: ClassroomCreateComponent },
       { path: "classroom-students/:id", component: StudentListComponent },
-      { path: "", redirectTo: "classrooms", pathMatch: "full" }
-    ]
+      { path: "", redirectTo: "classrooms", pathMatch: "full" },
+    ],
   },
-  { path: "**", redirectTo: "/home" }
+  { path: "**", redirectTo: "/home" },
 ];
 
 export function apiConfigFactory(): Configuration {
+  let authorization = {};
+  const testUser = sessionStorage.getItem("robolucha-test-user");
+
+  if (testUser) {
+    console.log("Creating session with testUser", testUser);
+    authorization = { Authorization: testUser };
+  }
+
   const params: ConfigurationParameters = {
-    apiKeys: {},
-    basePath: environment.BASE_PATH
+    apiKeys: authorization,
+    basePath: environment.BASE_PATH,
   };
   return new Configuration(params);
 }
@@ -162,6 +174,7 @@ export function apiConfigFactory(): Configuration {
     GenericErrorModalMessageComponent,
     MarkDownComponent,
     LobbyComponent,
+    CantPlayComponent,
   ],
   imports: [
     BrowserModule,
@@ -183,9 +196,16 @@ export function apiConfigFactory(): Configuration {
     LoginDashboardActivate,
     AuthService,
     CanDeactivateGuard,
-    { provide: HTTP_INTERCEPTORS, useClass: HttpConfigInterceptor, multi: true }
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpConfigInterceptor,
+      multi: true,
+    },
   ],
   bootstrap: [AppComponent],
-  entryComponents: [AuthModalMessageComponent, GenericErrorModalMessageComponent]
+  entryComponents: [
+    AuthModalMessageComponent,
+    GenericErrorModalMessageComponent,
+  ],
 })
 export class AppModule {}

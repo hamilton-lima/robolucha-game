@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Subject, timer } from "rxjs";
+import { BehaviorSubject, Subject, timer } from "rxjs";
 import { environment } from "src/environments/environment";
 
 export interface WatchDetails {
@@ -7,9 +7,7 @@ export interface WatchDetails {
   luchadorID: number;
 }
 
-@Injectable({
-  providedIn: "root"
-})
+@Injectable()
 export class WatchMatchService {
   private socket: WebSocket;
 
@@ -23,9 +21,16 @@ export class WatchMatchService {
   constructor() {}
 
   connect() {
+    // already connected
+    if (this.socket && this.socket.readyState == WebSocket.OPEN) {
+      console.log("websocket already connected");
+      return new BehaviorSubject(true);
+    }
+
     // console.log("connect to the publisher", environment.PUBLISHER);
     this.socket = new WebSocket(environment.PUBLISHER);
     this.socket.onopen = () => {
+      console.log("websocket connection open");
       this.ready.next(true);
     };
 
@@ -35,10 +40,14 @@ export class WatchMatchService {
       this.fps.next(this.messages);
       this.messages = 0;
     });
+
+    return this.ready;
   }
 
   close() {
-    this.socket.close();
+    if (this.socket) {
+      this.socket.close();
+    }
   }
 
   watch(details: WatchDetails): Subject<string> {
@@ -49,5 +58,4 @@ export class WatchMatchService {
     };
     return this.message;
   }
-
 }

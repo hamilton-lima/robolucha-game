@@ -11,6 +11,7 @@
  */
 import { ModelGameComponent } from './modelGameComponent';
 import { ModelGameDefinition } from './modelGameDefinition';
+import { ModelTeamParticipant } from './modelTeamParticipant';
 
 
 export interface ModelMatch {
@@ -20,6 +21,8 @@ export interface ModelMatch {
     id?: number;
     lastTimeAlive?: string;
     participants?: Array<ModelGameComponent>;
+    status?: string;
+    teamParticipants?: Array<ModelTeamParticipant>;
     timeEnd?: string;
     timeStart?: string;
 }

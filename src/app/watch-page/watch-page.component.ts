@@ -1,14 +1,24 @@
-import { Component, OnInit, ViewChild, OnChanges, SimpleChanges, ChangeDetectorRef } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  OnChanges,
+  SimpleChanges,
+  ChangeDetectorRef,
+  OnDestroy,
+  AfterViewInit,
+} from "@angular/core";
 import {
   ActivatedRouteSnapshot,
   Router,
-  ActivatedRoute
+  ActivatedRoute,
 } from "@angular/router";
 import {
   DefaultService,
   ModelGameDefinition,
   ModelGameComponent,
-  ModelCode
+  ModelCode,
+  ModelMatch,
 } from "../sdk";
 import { WatchMatchComponent } from "../watch-match/watch-match.component";
 import { CanComponentDeactivate } from "../can-deactivate-guard.service";
@@ -17,9 +27,9 @@ import {
   state,
   style,
   transition,
-  animate
+  animate,
 } from "@angular/animations";
-import { Subject } from "rxjs";
+import { Subject, Subscription } from "rxjs";
 import { MatchState, Score } from "../watch-match/watch-match.model";
 import { Message } from "../message/message.model";
 import { CodeEditorPanelComponent } from "../code-editor-panel/code-editor-panel.component";
@@ -28,13 +38,25 @@ import { EventsService } from "../shared/events.service";
 import { UserService } from "../shared/user.service";
 import Shepherd from "shepherd.js";
 import { AlertService } from "../pages/alert.service";
+import {
+  WatchDetails,
+  WatchMatchService,
+} from "../watch-match/watch-match.service";
+import { MatchReady } from "./watch-page.model";
 
 @Component({
   selector: "app-watch-page",
   templateUrl: "./watch-page.component.html",
-  styleUrls: ["./watch-page.component.css"]
+  styleUrls: ["./watch-page.component.css"],
+  providers: [WatchMatchService],
 })
-export class WatchPageComponent implements OnInit, CanComponentDeactivate, OnChanges {
+export class WatchPageComponent
+  implements
+    OnInit,
+    CanComponentDeactivate,
+    OnChanges,
+    OnDestroy,
+    AfterViewInit {
   constructor(
     private api: DefaultService,
     private route: ActivatedRoute,
@@ -43,10 +65,20 @@ export class WatchPageComponent implements OnInit, CanComponentDeactivate, OnCha
     private userService: UserService,
     private cdRef: ChangeDetectorRef,
     private alert: AlertService,
-    private router: Router
+    private router: Router,
+    private watchService: WatchMatchService
   ) {}
 
+  matchReady = false;
+  notReadyMessage = "";
+  matchFinished = false;
   matchOver = false;
+
+  matchNotReadyInfo: MatchReady;
+
+  matchPreparing = false;
+  matchOverTitle: string;
+
   displayScore = false;
   dirty = false;
 
@@ -66,9 +98,8 @@ export class WatchPageComponent implements OnInit, CanComponentDeactivate, OnCha
     onGotDamage: <ModelCode>{ event: "onGotDamage" },
     onFound: <ModelCode>{ event: "onFound" },
     onHitOther: <ModelCode>{ event: "onHitOther" },
-    onHitWall: <ModelCode>{ event: "onHitWall" }
+    onHitWall: <ModelCode>{ event: "onHitWall" },
   };
-
 
   @ViewChild(CodeEditorPanelComponent) codeEditor: CodeEditorPanelComponent;
 
@@ -77,19 +108,19 @@ export class WatchPageComponent implements OnInit, CanComponentDeactivate, OnCha
       title: "Know your luchador",
       text:
         '<img src="assets/help/luchador.jpg"><br>This is your luchador, you control them by writing instructions, know as CODE',
-      attachTo: { element: "#selector-luchador", on: "top" }
+      attachTo: { element: "#selector-luchador", on: "top" },
     },
     {
       title: "Move to the green",
       text:
         "When in a tutorial your objective is move your character to the GREEN area",
-      attachTo: { element: "#selector-green-area", on: "top" }
+      attachTo: { element: "#selector-green-area", on: "top" },
     },
     {
       title: "Editting some code",
       text: "Click here to edit your luchador code",
       attachTo: { element: "#button-edit-code", on: "top" },
-      offset: "0 20px"
+      offset: "0 20px",
     },
     {
       title: "What is going on here?",
@@ -98,14 +129,14 @@ export class WatchPageComponent implements OnInit, CanComponentDeactivate, OnCha
         '<strong>"move"</strong> is the action that your luchador will do <strong>10</strong>' +
         " is the intensity of the action",
       attachTo: { element: ".ace-content", on: "left" },
-      offset: "0 20px"
+      offset: "0 20px",
     },
     {
       title: "Let's see some action",
       text: "click save to send the code to the luchador",
       attachTo: { element: "#button-code-editor-save", on: "top" },
-      offset: "0 20px"
-    }
+      offset: "0 20px",
+    },
   ];
 
   ngAfterViewInit() {
@@ -119,6 +150,12 @@ export class WatchPageComponent implements OnInit, CanComponentDeactivate, OnCha
     }
   }
 
+  // possible states of a match
+  onMatchNotReady: Subject<ModelMatch> = new Subject();
+  onMatchRunning: Subject<ModelMatch> = new Subject();
+  onMatchFinished: Subject<ModelMatch> = new Subject();
+  watchSubscription: Subscription;
+
   ngOnInit(): void {
     this.page = this.route.snapshot.url.join("/");
     this.luchador = this.route.snapshot.data.luchador;
@@ -126,23 +163,157 @@ export class WatchPageComponent implements OnInit, CanComponentDeactivate, OnCha
     this.matchID = Number.parseInt(this.route.snapshot.paramMap.get("id"));
     this.gameDefinition = null;
 
-    this.api.privateMatchSingleGet(this.matchID).subscribe(match => {
+    this.onMatchRunning.subscribe((match) => {
+      this.matchPreparing = false;
+      this.matchReady = true;
+      this.startMatch(match);
+    });
+
+    const self = this;
+    this.onMatchNotReady.subscribe((match) => {
+      this.matchPreparing = true;
+
+      if (this.watchSubscription && !this.watchSubscription.closed) {
+        return;
+      }
+
+      // wait for the connection
+      this.watchService.connect().subscribe((ready) => {
+        const details: WatchDetails = {
+          luchadorID: this.luchador.id,
+          matchID: this.matchID,
+        };
+
+        // wait for server notifications about the match state
+        this.watchSubscription = this.watchService
+          .watch(details)
+          .subscribe((message) => {
+            const parsed = JSON.parse(message);
+            console.log("message from match", parsed);
+
+            // ready to go, the server started to send state
+            if (parsed.type == "match-state") {
+              this.watchService.close();
+              this.watchSubscription.unsubscribe();
+
+              console.log(
+                "watchsubscription.closed",
+                this.watchSubscription.closed
+              );
+              self.tryToStartMatch();
+            }
+
+            // to get structure and build model of the message
+            if (parsed.type == "match-created") {
+              this.setMatchNotReadyInfo(parsed.message);
+
+              console.log("match-created update", this.matchNotReadyInfo);
+
+              // we are ready close websocket connection and try to start the match
+              if (this.matchNotReadyInfo.ready) {
+                console.log("we are ready lets start the match");
+                this.watchService.close();
+                this.watchSubscription.unsubscribe();
+                console.log(
+                  "watchsubscription.closed",
+                  this.watchSubscription.closed
+                );
+                self.tryToStartMatch();
+              }
+            }
+          });
+      });
+    });
+
+    this.onMatchFinished.subscribe((match) => {
+      this.matchPreparing = false;
+      this.matchOver = false;
+      this.matchFinished = true;
+
       this.api
         .privateGameDefinitionIdIdGet(match.gameDefinitionID)
-        .subscribe(gameDefinition => {
-          this.gameDefinition = gameDefinition;
-          this.refreshEditor();
-          
-          // only display score if is not tutorial
-          if( gameDefinition.type !== "tutorial"){
-            this.displayScore = true;
-          }
+        .subscribe((gameDefinition) => {
+          this.defineMatchOverTitle(gameDefinition);
         });
     });
+
+    this.tryToStartMatch();
 
     this.matchStateSubject.subscribe((matchState: MatchState) => {
       this.scores = matchState.scores;
     });
+  }
+
+  // data example
+  // { "ready": false, "matchID": 118,
+  //   "minParticipants": 1, "maxParticipants": 10,
+  //   "participants": 1,
+  //   "teamParticipants": [
+  //     { "teamID": 3, "minParticipants": 2, "maxParticipants": 5, "participants": 1 }
+  //   ] }
+  setMatchNotReadyInfo(info: MatchReady) {
+    this.matchNotReadyInfo = info;
+    if (info.ready) {
+      this.notReadyMessage = "Go go go";
+    } else {
+      if (info.teamParticipants && info.teamParticipants.length > 0) {
+        this.notReadyMessage = "Waiting for more participants";
+      } else {
+        this.notReadyMessage = "Assembling all the pieces";
+      }
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this.watchService) {
+      this.watchService.close();
+      console.log("closing connection");
+    }
+  }
+
+  tryToStartMatch() {
+    console.log("try to start the match");
+    this.api.privateMatchSingleGet(this.matchID).subscribe((match) => {
+      // ready!
+      if (match.status == "RUNNING") {
+        this.onMatchRunning.next(match);
+      }
+
+      // trying to watch a match that is not ready
+      if (match.status == "CREATED") {
+        this.onMatchNotReady.next(match);
+      }
+
+      // trying to watch a match that already finished
+      if (match.status == "FINISHED") {
+        this.onMatchFinished.next(match);
+      }
+
+      // old matches without status should be considered finished
+      if (match.status == "") {
+        this.onMatchFinished.next(match);
+      }
+    });
+  }
+
+  defineMatchOverTitle(gameDefinition: ModelGameDefinition) {
+    this.matchOverTitle = "Congratulations!";
+
+    // only display score if is not tutorial
+    if (gameDefinition.type !== "tutorial") {
+      this.displayScore = true;
+      this.matchOverTitle = "End of the Match";
+    }
+  }
+
+  startMatch(match: ModelMatch) {
+    this.api
+      .privateGameDefinitionIdIdGet(match.gameDefinitionID)
+      .subscribe((gameDefinition) => {
+        this.gameDefinition = gameDefinition;
+        this.refreshEditor();
+        this.defineMatchOverTitle(gameDefinition);
+      });
   }
 
   endMatch() {
@@ -187,11 +358,11 @@ export class WatchPageComponent implements OnInit, CanComponentDeactivate, OnCha
 
   /** Loads codes from luchador to the editor, filter by gameDefinition */
   refreshEditor() {
-    if( ! this.gameDefinition){
+    if (!this.gameDefinition) {
       console.warn("gameDefinition not set");
       return;
     }
-    
+
     let loadedCodes = 0;
     this.dirty = false;
 
@@ -225,9 +396,11 @@ export class WatchPageComponent implements OnInit, CanComponentDeactivate, OnCha
   // return suggested code from the current gamedefinition
   // if event not present in the list returns empy code
   getCodeFromGameDefinition(event: string): ModelCode {
-    let result: ModelCode = this.gameDefinition.suggestedCodes.find(element => {
-      return element.event == event;
-    });
+    let result: ModelCode = this.gameDefinition.suggestedCodes.find(
+      (element) => {
+        return element.event == event;
+      }
+    );
 
     if (!result) {
       result = <ModelCode>{ event: event };
@@ -238,11 +411,11 @@ export class WatchPageComponent implements OnInit, CanComponentDeactivate, OnCha
     return result;
   }
 
-  // update the internal list of codes from the editor 
+  // update the internal list of codes from the editor
   updateCode(event: string, script: string) {
-    // console.log("update code", event, script);
     this.dirty = true;
     this.codes[event].script = script;
+    this.cdRef.detectChanges();
   }
 
   save() {
@@ -264,12 +437,10 @@ export class WatchPageComponent implements OnInit, CanComponentDeactivate, OnCha
       }
     }
 
-    this.api.privateLuchadorPut(this.luchador).subscribe(response => {
-      this.alert.infoTop("Luchador updated","DISMISS")
+    this.api.privateLuchadorPut(this.luchador).subscribe((response) => {
+      this.alert.infoTop("Luchador updated", "DISMISS");
       this.dirty = false;
       this.cdRef.detectChanges();
     });
   }
-
-
 }

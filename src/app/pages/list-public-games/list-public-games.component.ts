@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import {
-  DefaultService, ModelUserDetails, ModelMatch,
+  DefaultService, ModelUserDetails, ModelMatch, ModelPlayRequest
 } from "src/app/sdk";
 import { Router } from "@angular/router";
 import { ITourStep, ShepherdNewService } from "src/app/shepherd-new.service";
@@ -73,7 +73,12 @@ export class ListPublicGamesComponent implements OnInit {
   play(matchID: number) {
     this.shepherd.done(this.tour);
 
-    this.api.privatePlayIdPost(matchID).subscribe((match: ModelMatch) => {
+    const playRequest = <ModelPlayRequest>{
+      availableMatchID: matchID,
+      teamID: 0,
+    };
+
+    this.api.privatePlayPost(playRequest).subscribe((match: ModelMatch) => {
       this.router.navigate(["watch", match.id]);
     });
   }

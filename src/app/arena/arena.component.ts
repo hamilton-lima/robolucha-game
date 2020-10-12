@@ -5,6 +5,8 @@ import {
   Input,
   OnChanges,
   SimpleChanges,
+  OnDestroy,
+  AfterViewInit,
 } from "@angular/core";
 import * as BABYLON from "babylonjs";
 import { Luchador3D } from "./luchador3d";
@@ -16,6 +18,7 @@ import {
   Luchador,
   Bullet,
   SceneComponent,
+  MatchEvent,
 } from "../watch-match/watch-match.model";
 import { Bullet3D } from "./bullet3d";
 import { Helper3D } from "./helper3d";
@@ -25,6 +28,7 @@ import { TextureBuilder } from "./texture-builder";
 import { SharedConstants } from "./shared.constants";
 import { ArenaData3D } from "./arena.data3D";
 import { FPSRecorderService, FPSInfo } from "./fps.recorder.service";
+import { AudioService } from "../shared/audio.service";
 
 class SavedCamera {
   target: BABYLON.Vector3;
@@ -36,10 +40,13 @@ class SavedCamera {
   templateUrl: "./arena.component.html",
   styleUrls: ["./arena.component.css"],
 })
-export class ArenaComponent implements OnInit, OnChanges {
+export class ArenaComponent
+  implements OnInit, OnChanges, OnDestroy, AfterViewInit {
   @ViewChild("game") canvas;
   @Input() gameDefinition: GameDefinition;
   @Input() matchStateSubject: Subject<MatchState>;
+  @Input() matchEventSubject: Subject<MatchEvent>;
+
   @Input() debug = false;
   @Input() cameraFollowLuchador = true;
   @Input() currentLuchador: number;
@@ -74,18 +81,17 @@ export class ArenaComponent implements OnInit, OnChanges {
   constructor(
     private builder: TextureBuilder,
     private api: DefaultService,
-    private fpsRecorder: FPSRecorderService
+    private fpsRecorder: FPSRecorderService,
+    private audio: AudioService
   ) {
     this.resetState();
     this.data3D = new ArenaData3D();
   }
 
-  fitToContainer() {
-    // var canvas = this.canvas.nativeElement;
-    // canvas.style.width = "100%";
-    // canvas.style.height = "100%";
-    // canvas.width = canvas.offsetWidth;
-    // canvas.height = canvas.offsetHeight;
+  ngOnDestroy() {
+    if (this.engine) {
+      this.engine.dispose();
+    }
   }
 
   ngOnInit() {
@@ -93,7 +99,10 @@ export class ArenaComponent implements OnInit, OnChanges {
       console.error("currentLuchador missing");
       return;
     }
+    console.log("arena-component nginit");
+  }
 
+  ngAfterViewInit() {
     this.createScene();
   }
 
@@ -161,11 +170,13 @@ export class ArenaComponent implements OnInit, OnChanges {
     this.sceneComponents = [];
   }
 
-  createScene(): void {
-    if (this.engine) {
-      this.engine.dispose();
+  createScene() {
+    if( this.engine){
+      console.log("trying to create babylon engine for the second time");
+      return;
     }
-
+    
+    this.engine = new BABYLON.Engine(this.canvas.nativeElement, true);
     this.resetState();
 
     this.HALF_LUCHADOR = this.convertPosition(
@@ -173,11 +184,18 @@ export class ArenaComponent implements OnInit, OnChanges {
     );
     this.HALF_BULLET = this.convertPosition(this.gameDefinition.bulletSize / 2);
 
-    this.fitToContainer();
-    this.engine = new BABYLON.Engine(this.canvas.nativeElement, true);
-
     this.matchStateSubject.subscribe((matchState: MatchState) => {
       this.nextMatchState = matchState;
+    });
+
+    this.matchEventSubject.subscribe((event: MatchEvent) => {
+      if(event.event == 'KILL'){
+        if(this.currentLuchador == event.componentA){
+           this.audio.kill(this.scene);
+        }else if(this.currentLuchador == event.componentB){
+          this.audio.death(this.scene);
+        }
+      }
     });
 
     if (this.animateSubject) {
@@ -240,6 +258,8 @@ export class ArenaComponent implements OnInit, OnChanges {
     if (this.debug) {
       Helper3D.showAxis(this.scene, 5);
     }
+
+    this.audio.arenaMusic(this.scene);
   }
 
   render(): void {
@@ -311,7 +331,7 @@ export class ArenaComponent implements OnInit, OnChanges {
         // animate luchador owner of the bullet
         const luchador3D = this.luchadores[bullet.owner];
         if (luchador3D) {
-          luchador3D.animateFire();
+          luchador3D.fire();
         }
       }
     });
@@ -394,7 +414,8 @@ export class ArenaComponent implements OnInit, OnChanges {
           vehicleRotation,
           gunRotation,
           45,
-          this.convertPosition(420)
+          this.convertPosition(420),
+          this.audio
           // this.shadowGenerator
         );
 
@@ -497,7 +518,7 @@ export class ArenaComponent implements OnInit, OnChanges {
 
   update(luchador3D: Luchador3D, next: Luchador) {
     if (luchador3D.getHealth() > next.life) {
-      luchador3D.animateHit();
+      luchador3D.hit();
     }
 
     const x = this.convertPosition(next.x);

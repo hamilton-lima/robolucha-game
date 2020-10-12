@@ -14,4 +14,5 @@
 export interface ModelMatchParticipant {
     luchadorID?: number;
     matchID?: number;
+    teamID?: number;
 }

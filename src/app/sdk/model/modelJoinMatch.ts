@@ -14,4 +14,5 @@
 export interface ModelJoinMatch {
     luchadorID?: number;
     matchID?: number;
+    teamID?: number;
 }
