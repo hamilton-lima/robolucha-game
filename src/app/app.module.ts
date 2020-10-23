@@ -57,6 +57,7 @@ import { ActivityListComponent } from "./dashboard/activity-list/activity-list.c
 import { LobbyComponent } from "./lobby/lobby.component";
 import { CantPlayComponent } from "./lobby/cant-play/cant-play.component";
 import { MapsComponent } from './maps/maps.component';
+import { CodeBlocklyComponent } from './code-blockly/code-blockly.component';
 
 // library.add(fas);
 
@@ -182,6 +183,7 @@ export function apiConfigFactory(): Configuration {
     MarkDownComponent,
     LobbyComponent,
     CantPlayComponent,
+    CodeBlocklyComponent,
   ],
   imports: [
     BrowserModule,
@@ -213,6 +215,6 @@ export function apiConfigFactory(): Configuration {
   entryComponents: [
     AuthModalMessageComponent,
     GenericErrorModalMessageComponent,
-  ],
+  ]
 })
 export class AppModule {}

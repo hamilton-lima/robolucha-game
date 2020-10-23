@@ -30,6 +30,11 @@
           </mat-expansion-panel>
 
           <mat-expansion-panel [expanded]="true">
+            <mat-expansion-panel-header> Block </mat-expansion-panel-header>
+            <app-code-blockly></app-code-blockly>
+          </mat-expansion-panel>
+
+          <mat-expansion-panel [expanded]="true">
             <mat-expansion-panel-header> On Repeat </mat-expansion-panel-header>
             <app-code-editor
               [script]="codes.onRepeat.script"
