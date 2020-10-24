@@ -58,6 +58,7 @@ import { LobbyComponent } from "./lobby/lobby.component";
 import { CantPlayComponent } from "./lobby/cant-play/cant-play.component";
 import { MapsComponent } from './maps/maps.component';
 import { CodeBlocklyComponent } from './code-blockly/code-blockly.component';
+import { MapEditorComponent } from './map-editor/map-editor.component';
 
 // library.add(fas);
 
@@ -184,6 +185,7 @@ export function apiConfigFactory(): Configuration {
     LobbyComponent,
     CantPlayComponent,
     CodeBlocklyComponent,
+    MapEditorComponent,
   ],
   imports: [
     BrowserModule,
