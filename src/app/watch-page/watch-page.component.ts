@@ -22,7 +22,7 @@ import {
 import { CanComponentDeactivate } from "../can-deactivate-guard.service";
 import { Subject, Subscription } from "rxjs";
 import { MatchState, Score } from "../watch-match/watch-match.model";
-import { Message } from "../message/message.model";
+import { Message } from "../shared/message/message.model";
 import { CodeEditorPanelComponent } from "../code-editor-panel/code-editor-panel.component";
 import { ShepherdNewService, ITourStep } from "../shepherd-new.service";
 import { EventsService } from "../shared/events.service";

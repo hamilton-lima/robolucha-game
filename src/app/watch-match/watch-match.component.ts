@@ -20,7 +20,7 @@ import { ActivatedRoute } from "@angular/router";
 import { SharedStateService } from "../shared-state.service";
 import { Subscription, Subject } from "rxjs";
 import { MatchState, GameDefinition, MatchEvent } from "./watch-match.model";
-import { Message } from "../message/message.model";
+import { Message } from "../shared/message/message.model";
 import {
   trigger,
   state,
