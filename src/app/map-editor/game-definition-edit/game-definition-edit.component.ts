@@ -1,4 +1,5 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
+import { MatDrawer } from "@angular/material/sidenav";
 import { ActivatedRoute } from "@angular/router";
 import { DefaultService, ModelCode, ModelGameDefinition } from "src/app/sdk";
 import { ModelLuchador } from "src/app/sdk/model/mainLuchador";
@@ -15,6 +16,7 @@ export class GameDefinitionEditComponent implements OnInit {
   luchador: ModelLuchador;
   gameDefinitionID: number;
   gameDefinition: ModelGameDefinition;
+  @ViewChild('drawer') editorDrawer: MatDrawer;
 
   // TODO: Remove this
   codes: ModelCode[] = [];
@@ -27,7 +29,10 @@ export class GameDefinitionEditComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.mediator.onEdit.subscribe((current) => (this.currentEditor = current));
+    this.mediator.onEdit.subscribe((current) => {
+      this.currentEditor = current;
+      this.editorDrawer.open();
+    });
 
     this.page = this.route.snapshot.url.join("/");
     this.luchador = this.route.snapshot.data.luchador;
@@ -45,4 +50,13 @@ export class GameDefinitionEditComponent implements OnInit {
   isBasicInfoCurrent(){
     return this.currentEditor == CurrentEditorEnum.BasicInfo;
   }
+
+  isGameDefinitionCodeCurrent(){
+    return this.currentEditor == CurrentEditorEnum.Codes;
+  }
+
+  isSingleSceneComponentCurrent(){
+    return this.currentEditor == CurrentEditorEnum.SingleSceneComponent;
+  }
+
 }
