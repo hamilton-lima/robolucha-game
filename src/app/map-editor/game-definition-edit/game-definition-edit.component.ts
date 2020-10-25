@@ -17,7 +17,7 @@ export class GameDefinitionEditComponent implements OnInit {
   luchador: ModelLuchador;
   gameDefinitionID: number;
   gameDefinition: ModelGameDefinition;
-  @ViewChild('drawer') editorDrawer: MatDrawer;
+  @ViewChild("drawer") editorDrawer: MatDrawer;
 
   // TODO: Remove this
   codes: ModelCode[] = [];
@@ -47,6 +47,16 @@ export class GameDefinitionEditComponent implements OnInit {
       this.editorDrawer.open();
     });
 
+    this.mediator.onSaveBasicInfo.subscribe((partial) => {
+      if (partial) {
+        Object.keys(partial).forEach((key) => {
+          if (partial.hasOwnProperty(key)) {
+            this.gameDefinition[key] = partial[key];
+          }
+        });
+      }
+    });
+
     this.page = this.route.snapshot.url.join("/");
     this.luchador = this.route.snapshot.data.luchador;
     this.gameDefinitionID = Number.parseInt(
@@ -60,21 +70,20 @@ export class GameDefinitionEditComponent implements OnInit {
       });
   }
 
-  goHome(){
+  goHome() {
     this.events.click(this.page, "home");
     this.router.navigate(["home"]);
   }
 
-  isBasicInfoCurrent(){
+  isBasicInfoCurrent() {
     return this.currentEditor == CurrentEditorEnum.BasicInfo;
   }
 
-  isGameDefinitionCodeCurrent(){
+  isGameDefinitionCodeCurrent() {
     return this.currentEditor == CurrentEditorEnum.Codes;
   }
 
-  isSingleSceneComponentCurrent(){
+  isSingleSceneComponentCurrent() {
     return this.currentEditor == CurrentEditorEnum.SingleSceneComponent;
   }
-
 }
