@@ -8,7 +8,7 @@ import {
 } from "src/app/sdk";
 import { MatDialog } from "@angular/material";
 import { Router } from "@angular/router";
-import { LevelControlService } from "../level-control.service";
+import { LevelControlService } from "src/app/shared/level-control.service";
 import { ModelAvailableMatch } from "src/app/sdk/model/modelAvailableMatch";
 
 @Component({

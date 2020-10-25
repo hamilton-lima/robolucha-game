@@ -7,7 +7,7 @@ import { ITourStep, ShepherdNewService } from "src/app/shepherd-new.service";
 import { UserService } from "src/app/shared/user.service";
 import { timer } from "rxjs";
 import Shepherd from "shepherd.js";
-import { LevelControlService } from "../level-control.service";
+import { LevelControlService } from "src/app/shared/level-control.service";
 import { forkJoin } from 'rxjs';
 import { ModelAvailableMatch } from "src/app/sdk/model/modelAvailableMatch";
 import { ModelLevelGroup } from "src/app/sdk/model/modelLevelGroup";

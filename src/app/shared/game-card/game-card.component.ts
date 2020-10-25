@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output } from "@angular/core";
 import { ModelUserDetails } from "src/app/sdk";
-import { LevelControlService } from "../../level-control.service";
 import { ModelAvailableMatch } from "src/app/sdk/model/modelAvailableMatch";
+import { LevelControlService } from "src/app/shared/level-control.service";
 
 @Component({
   selector: "app-game-card",

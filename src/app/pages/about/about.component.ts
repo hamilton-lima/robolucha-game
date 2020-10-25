@@ -1,16 +1,18 @@
 import { Component, OnInit } from "@angular/core";
+import { AlertService } from "src/app/shared/alert.service";
 import { UserService } from "src/app/shared/user.service";
-import { AlertService } from "../alert.service";
 import { VERSION } from "src/app/version";
 
 @Component({
   selector: "app-about",
   templateUrl: "./about.component.html",
-  styleUrls: ["./about.component.scss"]
+  styleUrls: ["./about.component.scss"],
 })
 export class AboutComponent implements OnInit {
   version = VERSION;
-  constructor(private userService: UserService, private alert: AlertService) {}
+  constructor(
+    private userService: UserService, 
+    private alert: AlertService) {}
 
   ngOnInit() {}
 

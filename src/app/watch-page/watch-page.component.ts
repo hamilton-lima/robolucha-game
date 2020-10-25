@@ -9,7 +9,6 @@ import {
   AfterViewInit,
 } from "@angular/core";
 import {
-  ActivatedRouteSnapshot,
   Router,
   ActivatedRoute,
 } from "@angular/router";
@@ -20,15 +19,7 @@ import {
   ModelCode,
   ModelMatch,
 } from "../sdk";
-import { WatchMatchComponent } from "../watch-match/watch-match.component";
 import { CanComponentDeactivate } from "../can-deactivate-guard.service";
-import {
-  trigger,
-  state,
-  style,
-  transition,
-  animate,
-} from "@angular/animations";
 import { Subject, Subscription } from "rxjs";
 import { MatchState, Score } from "../watch-match/watch-match.model";
 import { Message } from "../message/message.model";
@@ -37,7 +28,7 @@ import { ShepherdNewService, ITourStep } from "../shepherd-new.service";
 import { EventsService } from "../shared/events.service";
 import { UserService } from "../shared/user.service";
 import Shepherd from "shepherd.js";
-import { AlertService } from "../pages/alert.service";
+import { AlertService } from "src/app/shared/alert.service";
 import {
   WatchDetails,
   WatchMatchService,

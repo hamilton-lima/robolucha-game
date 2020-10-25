@@ -1,1 +1,114 @@
-{{gameDefinition | json }}
+<mat-sidenav-container [hasBackdrop]="false">
+  <mat-sidenav
+    #drawer
+    [mode]="'over'"
+    [opened]="true"
+    position="end"
+    class="drawer"
+  >
+    <button mat-icon-button class="mr-2" (click)="drawer.toggle()">
+      <mat-icon svgIcon="arrow-right"></mat-icon>
+    </button>
+
+    <button mat-raised-button class="mr-2" (click)="goHome()">HOME</button>
+
+    <button mat-raised-button [disabled]="!dirty" class="mr-2" (click)="save()">
+      SAVE
+    </button>
+
+    <div class="mt-2 right-panel-scroll">
+      <mat-accordion>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header> Help </mat-expansion-panel-header>
+          <!-- <app-mark-down [fileName]="'help/code_editor_help'"></app-mark-down> -->
+        </mat-expansion-panel>
+
+        <mat-expansion-panel [expanded]="true">
+          <mat-expansion-panel-header> Block </mat-expansion-panel-header>
+          <!-- <app-code-blockly></app-code-blockly> -->
+        </mat-expansion-panel>
+
+        <mat-expansion-panel [expanded]="true">
+          <mat-expansion-panel-header> On Repeat </mat-expansion-panel-header>
+          <app-code-editor
+            [script]="codes.onRepeat.script"
+            (onChange)="updateCode('onRepeat', $event)"
+          >
+          </app-code-editor>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel>
+          <mat-expansion-panel-header> On Start </mat-expansion-panel-header>
+          <app-code-editor
+            [script]="codes.onStart.script"
+            (onChange)="updateCode('onStart', $event)"
+          >
+          </app-code-editor>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel>
+          <mat-expansion-panel-header> On Hit Wall </mat-expansion-panel-header>
+          <app-code-editor
+            [script]="codes.onHitWall.script"
+            (onChange)="updateCode('onHitWall', $event)"
+          >
+          </app-code-editor>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel>
+          <mat-expansion-panel-header> On Found </mat-expansion-panel-header>
+          <app-code-editor
+            [script]="codes.onFound.script"
+            (onChange)="updateCode('onFound', $event)"
+          >
+          </app-code-editor>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            On Got Damage
+          </mat-expansion-panel-header>
+          <app-code-editor
+            [script]="codes.onGotDamage.script"
+            (onChange)="updateCode('onGotDamage', $event)"
+          >
+          </app-code-editor>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            On Hit Other
+          </mat-expansion-panel-header>
+          <app-code-editor
+            [script]="codes.onHitOther.script"
+            (onChange)="updateCode('onHitOther', $event)"
+          >
+          </app-code-editor>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            Code messages
+          </mat-expansion-panel-header>
+          <app-message
+            class="message-panel"
+            [messageSubject]="messageSubject"
+          ></app-message>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  </mat-sidenav>
+
+  <section>
+    <button mat-icon-button class="toogle" (click)="drawer.toggle()">
+      <mat-icon svgIcon="arrow-left"></mat-icon>
+    </button>
+
+    <app-arena
+      [gameDefinition]="gameDefinition"
+      [debug]="true"
+      [currentLuchador]="0"
+    ></app-arena>
+
+  </section>
+</mat-sidenav-container>

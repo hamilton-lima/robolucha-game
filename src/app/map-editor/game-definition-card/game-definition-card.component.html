@@ -16,8 +16,8 @@
     <p id="description">{{ gameDefinition.description }}</p>
   </mat-card-content>
   <mat-card-actions>
-    <app-big-button [minWidth]="'90%'" (click)="edit()" id="edit">
-      <span>EDIT</span>
-    </app-big-button>
+    <button color="accent" (click)="edit()" id="edit" mat-raised-button>
+      EDIT
+    </button>
   </mat-card-actions>
 </mat-card>

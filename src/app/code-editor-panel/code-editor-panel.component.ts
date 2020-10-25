@@ -17,7 +17,7 @@ import { DefaultService } from "../sdk/api/default.service";
 import { ModelLuchador } from "../sdk/model/mainLuchador";
 import { ModelGameDefinition } from "../sdk";
 import { EventsService } from "../shared/events.service";
-import { AlertService } from "../pages/alert.service";
+import { AlertService } from "../shared/alert.service";
 
 
 @Component({

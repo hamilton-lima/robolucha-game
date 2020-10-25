@@ -60,6 +60,9 @@ import { CodeBlocklyComponent } from './code-blockly/code-blockly.component';
 import { MapEditorComponent } from './map-editor/map-editor.component';
 import { GameDefinitionCreateComponent } from "./map-editor/game-definition-create/game-definition-create.component";
 import { GameDefinitionEditComponent } from "./map-editor/game-definition-edit/game-definition-edit.component";
+import { GameDefinitionCardComponent } from "./map-editor/game-definition-card/game-definition-card.component";
+import { GameBackgroundComponent } from "./shared/game-background/game-background.component";
+import { SharedModule } from "./shared/shared.module";
 
 // library.add(fas);
 
@@ -198,6 +201,10 @@ export function apiConfigFactory(): Configuration {
     LobbyComponent,
     CantPlayComponent,
     CodeBlocklyComponent,
+    GameDefinitionCardComponent,
+    GameDefinitionCreateComponent,
+    GameDefinitionEditComponent,
+    MapEditorComponent,
   ],
   imports: [
     BrowserModule,
@@ -213,6 +220,7 @@ export function apiConfigFactory(): Configuration {
     PagesModule,
     DashboardModule,
     MaterialAllComponentsModule,
+    SharedModule
   ],
   providers: [
     LoginActivate,

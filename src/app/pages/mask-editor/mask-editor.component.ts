@@ -1,11 +1,9 @@
 import { Component, OnInit, ChangeDetectorRef, ViewChild, ElementRef } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { Behavior } from "babylonjs";
-import { BehaviorSubject } from "rxjs";
 import { MaskEditorMediator, IMediatorData, FeatureChange } from "./mask-editor.mediator";
 import { CanComponentDeactivate } from "src/app/can-deactivate-guard.service";
 import { ModelGameComponent, DefaultService, ModelConfig } from "src/app/sdk";
-import { AlertService } from "../alert.service";
+import { AlertService } from "src/app/shared/alert.service";
 import Shepherd from "shepherd.js";
 import { ShepherdNewService, ITourStep } from "src/app/shepherd-new.service";
 import { EventsService } from "src/app/shared/events.service";
