@@ -15,6 +15,6 @@ export class BasicInfoComponent implements OnInit {
   ngOnInit() {}
 
   edit(){
-    this.mediator.onEdit.next(CurrentEditorEnum.BasicInfo);
+    this.mediator.onEditBasicInfo.next(this.gameDefinition);
   }
 }

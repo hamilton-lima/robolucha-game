@@ -32,8 +32,18 @@ export class GameDefinitionEditComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.mediator.onEdit.subscribe((current) => {
-      this.currentEditor = current;
+    this.mediator.onEditBasicInfo.subscribe((current) => {
+      this.currentEditor = CurrentEditorEnum.BasicInfo;
+      this.editorDrawer.open();
+    });
+
+    this.mediator.onEditGameDefinitionCode.subscribe((current) => {
+      this.currentEditor = CurrentEditorEnum.Codes;
+      this.editorDrawer.open();
+    });
+
+    this.mediator.onEditSceneComponent.subscribe((current) => {
+      this.currentEditor = CurrentEditorEnum.SingleSceneComponent;
       this.editorDrawer.open();
     });
 
