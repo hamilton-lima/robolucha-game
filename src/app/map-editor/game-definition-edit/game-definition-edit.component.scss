@@ -1,4 +1,10 @@
-.drawer {
+.drawer-left {
+  min-width: 200px;
+  width: 10%;
+  left: 0;
+}
+
+.drawer-right {
   min-width: 700px;
   width: 20%;
   right: 0;

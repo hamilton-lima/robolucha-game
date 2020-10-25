@@ -1,10 +1,24 @@
+
 <mat-sidenav-container [hasBackdrop]="false">
+  <mat-sidenav
+    #drawerLeft
+    [mode]="'side'"
+    [opened]="true"
+    position="start"
+    class="drawer-left"
+  >
+    <button mat-raised-button class="mr-2" (click)="goHome()">HOME</button>
+    <pre>
+      {{ gameDefinition | json }}
+    </pre>
+  </mat-sidenav>
+  
   <mat-sidenav
     #drawer
     [mode]="'over'"
-    [opened]="true"
+    [opened]="false"
     position="end"
-    class="drawer"
+    class="drawer-right"
   >
     <button mat-icon-button class="mr-2" (click)="drawer.toggle()">
       <mat-icon svgIcon="arrow-right"></mat-icon>
