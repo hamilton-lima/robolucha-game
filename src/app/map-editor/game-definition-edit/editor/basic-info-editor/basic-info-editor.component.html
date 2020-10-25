@@ -1,50 +1,126 @@
-<div *ngIf="gameDefinition" class="container">
+<div *ngIf="gameDefinition" class="container" [formGroup]="form">
   <div class="row">
     <div class="col"><span class="title">Basic Information</span></div>
     <div class="col">
-        <button mat-icon-button (click)="edit()">
-          <mat-icon svgIcon="pencil"></mat-icon>
-        </button>
-      </div>
+      <button [disabled]="!form.valid" mat-raised-button (click)="save()">SAVE</button>
+    </div>
   </div>
 
   <div class="row">
-    <div class="col">Name</div>
-    <div class="col">{{ gameDefinition.name }}</div>
+    <div class="col">
+      <mat-form-field class="col-10 mt-3 mx-auto">
+        <mat-label>Name</mat-label>
+        <input
+          type="text"
+          matInput
+          formControlName="name"
+          placeholder="Ex. MY_AMAZING_MAP"
+        />
+        <mat-error *ngIf="form.get('name').hasError('required')">
+          Name is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+    </div>
   </div>
 
   <div class="row">
-    <div class="col">Label</div>
-    <div class="col">{{ gameDefinition.label }}</div>
+    <div class="col">
+      <mat-form-field class="col-10 mt-3 mx-auto">
+        <mat-label>Label</mat-label>
+        <input
+          type="text"
+          matInput
+          formControlName="label"
+          placeholder="Ex. My Amazing map"
+        />
+        <mat-error *ngIf="form.get('label').hasError('required')">
+          Label is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+    </div>
   </div>
 
   <div class="row">
-    <div class="col">Description</div>
-    <div class="col">{{ gameDefinition.description }}</div>
+    <div class="col">
+      <mat-form-field class="col-10 mt-3 mx-auto">
+        <mat-label>Description</mat-label>
+        <input
+          type="text"
+          matInput
+          formControlName="description"
+          placeholder="Ex. More information about this map"
+        />
+      </mat-form-field>
+    </div>
   </div>
 
   <div class="row">
-    <div class="col">Duration</div>
-    <div class="col">{{ gameDefinition.duration }}</div>
+    <div class="col">
+      <mat-form-field class="col-10 mt-3 mx-auto">
+        <mat-label>Duration</mat-label>
+        <input
+          type="text"
+          matInput
+          formControlName="duration"
+          placeholder="Ex. Time in miliseconds"
+        />
+      </mat-form-field>
+    </div>
   </div>
 
   <div class="row">
-    <div class="col">Width</div>
-    <div class="col">{{ gameDefinition.arenaWidth }}</div>
+    <div class="col">
+      <mat-form-field class="col-10 mt-3 mx-auto">
+        <mat-label>Width</mat-label>
+        <input
+          type="text"
+          matInput
+          formControlName="arenaWidth"
+          placeholder="Ex. 1200"
+        />
+      </mat-form-field>
+    </div>
   </div>
 
   <div class="row">
-    <div class="col">Height</div>
-    <div class="col">{{ gameDefinition.arenaHeight }}</div>
+    <div class="col">
+      <mat-form-field class="col-10 mt-3 mx-auto">
+        <mat-label>Height</mat-label>
+        <input
+          type="text"
+          matInput
+          formControlName="arenaHeight"
+          placeholder="Ex. 1200"
+        />
+      </mat-form-field>
+    </div>
   </div>
 
   <div class="row">
-    <div class="col">Min Participants</div>
-    <div class="col">{{ gameDefinition.minParticipants }}</div>
+    <div class="col">
+      <mat-form-field class="col-10 mt-3 mx-auto">
+        <mat-label>Min Participants</mat-label>
+        <input
+          type="text"
+          matInput
+          formControlName="minParticipants"
+          placeholder="Ex. 2"
+        />
+      </mat-form-field>
+    </div>
   </div>
 
   <div class="row">
-    <div class="col">Max Participants</div>
-    <div class="col">{{ gameDefinition.maxParticipants }}</div>
+    <div class="col">
+      <mat-form-field class="col-10 mt-3 mx-auto">
+        <mat-label>Max Participants</mat-label>
+        <input
+          type="text"
+          matInput
+          formControlName="maxParticipants"
+          placeholder="Ex. 20"
+        />
+      </mat-form-field>
+    </div>
   </div>
 </div>

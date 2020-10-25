@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { ModelGameDefinition } from "src/app/sdk";
 import { GameDefinitionEditMediatorService } from "../../game-definition-edit-mediator.service";
 import { CurrentEditorEnum } from "../../game-definition-edit.model";
@@ -11,12 +12,30 @@ import { CurrentEditorEnum } from "../../game-definition-edit.model";
 export class BasicInfoEditorComponent implements OnInit {
   gameDefinition: ModelGameDefinition;
 
-  constructor(private mediator: GameDefinitionEditMediatorService) {
+  form = this.formBuilder.group({
+    name: ['', Validators.required],
+    label: ['', Validators.required],
+    description: [''],
+    duration: [''],
+    arenaWidth: [''],
+    arenaHeight: [''],
+    minParticipants: [''],
+    maxParticipants: [''],
+  });
+
+  constructor(
+    private mediator: GameDefinitionEditMediatorService, 
+    private formBuilder: FormBuilder) {
   }
 
   ngOnInit() {
     this.mediator.onEditBasicInfo.subscribe((gameDefinition) => {
       this.gameDefinition = gameDefinition;
+      this.form.patchValue( gameDefinition);
     });
+  }
+
+  save(){
+
   }
 }
