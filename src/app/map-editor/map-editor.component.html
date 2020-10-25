@@ -20,6 +20,9 @@
         [gameDefinition]="definition"
         (onEdit)="edit($event)"
       ></app-game-definition-card>
+      <div *ngIf="definitions.length == 0">
+        <h3>Click on ADD to create some awesomeness!</h3>
+      </div>
     </div>
   </div>
 </app-game-background>

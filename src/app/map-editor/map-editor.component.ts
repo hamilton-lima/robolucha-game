@@ -13,6 +13,7 @@ export class MapEditorComponent implements OnInit {
   constructor(private api: DefaultService, private router: Router) {}
 
   ngOnInit() {
+    this.definitions = [];
     this.api.privateMapeditorGet().subscribe((result) => {
       this.definitions = result;
     });
