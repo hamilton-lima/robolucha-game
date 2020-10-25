@@ -1,0 +1,23 @@
+<mat-card [attr.id]="componentId">
+  <img
+    mat-card-image
+    src="{{ getImageName() }}"
+    alt="{{ gameDefinition.label }} description image"
+    (error)="imageErrorHandler($event)"
+  />
+  <mat-card-content>
+    <p>
+      <span id="title">{{ gameDefinition.name }}</span
+        ><br />
+        <span id="title">{{ gameDefinition.label }}</span
+          ><br />
+            <span id="type">{{ gameDefinition.type }}</span>
+    </p>
+    <p id="description">{{ gameDefinition.description }}</p>
+  </mat-card-content>
+  <mat-card-actions>
+    <app-big-button [minWidth]="'90%'" (click)="edit()" id="edit">
+      <span>EDIT</span>
+    </app-big-button>
+  </mat-card-actions>
+</mat-card>

@@ -1,0 +1,53 @@
+<app-game-background>
+  <div class="container">
+
+  <div class="row">
+    <div class="col-md-9 pt-4 pb-4">
+      <h1>Create a new map</h1>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <form (submit)="create($event)">
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input
+            class="form-control"
+            type="text"
+            name="name"
+            required
+            minlength="3"
+            maxlength="40"
+          />
+          <label for="label">Label</label>
+          <input
+            class="form-control"
+            type="text"
+            name="label"
+            required
+            minlength="3"
+            maxlength="40"
+          />
+          <label for="description">Description</label>
+          <textarea 
+            class="form-control"
+            name="description"
+            required
+            minlength="3"
+            maxlength="40"
+            lines="6"
+          ></textarea>
+        </div>
+        <div>
+            <button type="submit" mat-raised-button>SAVE</button>
+
+            <button class="ml-2" routerLink="/maps" mat-raised-button>
+              CANCEL
+            </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+</app-game-background>

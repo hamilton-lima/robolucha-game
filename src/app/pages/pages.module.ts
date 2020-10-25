@@ -24,7 +24,10 @@ import { GameBackgroundComponent } from './shared/game-background/game-backgroun
 import { BigButtonComponent } from './shared/big-button/big-button.component';
 import { SharedModule } from "../shared/shared.module";
 import { AboutComponent } from './about/about.component';
-import { MapsComponent } from "../maps/maps.component";
+import { MapEditorComponent } from "../map-editor/map-editor.component";
+import { GameDefinitionCardComponent } from "../map-editor/game-definition-card/game-definition-card.component";
+import { GameDefinitionCreateComponent } from "../map-editor/game-definition-create/game-definition-create.component";
+import { GameDefinitionEditComponent } from "../map-editor/game-definition-edit/game-definition-edit.component";
 
 @NgModule({
   imports: [
@@ -47,7 +50,10 @@ import { MapsComponent } from "../maps/maps.component";
     GameCardComponent,
     JoinClassroomComponent,
     MaskEditorComponent,
-    MapsComponent,
+    MapEditorComponent,
+    GameDefinitionCardComponent,
+    GameDefinitionCreateComponent,
+    GameDefinitionEditComponent,
     LuchadorPreviewComponent,
     MaskEditorDetailComponent,
     ColorPickerComponent,

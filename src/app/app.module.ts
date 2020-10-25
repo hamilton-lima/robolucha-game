@@ -56,9 +56,10 @@ import { MarkDownComponent } from "./mark-down/mark-down.component";
 import { ActivityListComponent } from "./dashboard/activity-list/activity-list.component";
 import { LobbyComponent } from "./lobby/lobby.component";
 import { CantPlayComponent } from "./lobby/cant-play/cant-play.component";
-import { MapsComponent } from './maps/maps.component';
 import { CodeBlocklyComponent } from './code-blockly/code-blockly.component';
 import { MapEditorComponent } from './map-editor/map-editor.component';
+import { GameDefinitionCreateComponent } from "./map-editor/game-definition-create/game-definition-create.component";
+import { GameDefinitionEditComponent } from "./map-editor/game-definition-edit/game-definition-edit.component";
 
 // library.add(fas);
 
@@ -80,7 +81,19 @@ const ROUTES: Routes = [
   },
   {
     path: "maps",
-    component: MapsComponent,
+    component: MapEditorComponent,
+    canActivate: [LoginActivate],
+    resolve: { luchador: LuchadorResolverService },
+  },
+  {
+    path: "maps/create",
+    component: GameDefinitionCreateComponent,
+    canActivate: [LoginActivate],
+    resolve: { luchador: LuchadorResolverService },
+  },
+  {
+    path: "maps/edit/:id",
+    component: GameDefinitionEditComponent,
     canActivate: [LoginActivate],
     resolve: { luchador: LuchadorResolverService },
   },
@@ -185,7 +198,6 @@ export function apiConfigFactory(): Configuration {
     LobbyComponent,
     CantPlayComponent,
     CodeBlocklyComponent,
-    MapEditorComponent,
   ],
   imports: [
     BrowserModule,
