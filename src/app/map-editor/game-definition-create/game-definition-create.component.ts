@@ -17,14 +17,17 @@ export class GameDefinitionCreateComponent implements OnInit {
     const name = event.target.name.value;
     const label = event.target.label.value;
     const description = event.target.description.value;
-    const gameDefinition: ModelGameDefinition = {
-      name: name,
-      label: label,
-      description: description,
-    };
 
-    this.api.privateMapeditorPost(gameDefinition).subscribe((response) => {
-      this.router.navigate(["/maps"]);
-    });
+    this.api.getDefaultGameDefinition().subscribe( gameDefinition =>{
+
+      gameDefinition.name = name;
+      gameDefinition.label = label;
+      gameDefinition.description = description;
+
+      this.api.privateMapeditorPost(gameDefinition).subscribe((response) => {
+        this.router.navigate(["/maps"]);
+      });
+  
+    })
   }
 }
