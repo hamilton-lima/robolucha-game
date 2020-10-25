@@ -7,7 +7,8 @@
     class="drawer-left"
   >
     <button mat-raised-button class="mr-2" (click)="goHome()">HOME</button>
-    <app-basic-info></app-basic-info>
+    <hr>
+    <app-basic-info [gameDefinition]="gameDefinition"></app-basic-info>
     <app-game-definition-code></app-game-definition-code>
     <app-scene-components></app-scene-components>
   </mat-sidenav>

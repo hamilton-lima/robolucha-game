@@ -1,8 +1,9 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { MatDrawer } from "@angular/material/sidenav";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { DefaultService, ModelCode, ModelGameDefinition } from "src/app/sdk";
 import { ModelLuchador } from "src/app/sdk/model/mainLuchador";
+import { EventsService } from "src/app/shared/events.service";
 import { GameDefinitionEditMediatorService } from "./game-definition-edit-mediator.service";
 import { CurrentEditorEnum } from "./game-definition-edit.model";
 
@@ -25,7 +26,9 @@ export class GameDefinitionEditComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private api: DefaultService,
-    private mediator: GameDefinitionEditMediatorService
+    private mediator: GameDefinitionEditMediatorService,
+    private events: EventsService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -45,6 +48,11 @@ export class GameDefinitionEditComponent implements OnInit {
       .subscribe((gameDefinition) => {
         this.gameDefinition = gameDefinition;
       });
+  }
+
+  goHome(){
+    this.events.click(this.page, "home");
+    this.router.navigate(["home"]);
   }
 
   isBasicInfoCurrent(){

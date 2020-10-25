@@ -1,2 +1,50 @@
-<button mat-raised-button (click)="edit()">BASIC</button>
+<div *ngIf="gameDefinition" class="container">
+  <div class="row">
+    <div class="col"><span class="title">Basic Information</span></div>
+    <div class="col">
+        <button mat-icon-button (click)="edit()">
+          <mat-icon svgIcon="pencil"></mat-icon>
+        </button>
+      </div>
+  </div>
 
+  <div class="row">
+    <div class="col">Name</div>
+    <div class="col">{{ gameDefinition.name }}</div>
+  </div>
+
+  <div class="row">
+    <div class="col">Label</div>
+    <div class="col">{{ gameDefinition.label }}</div>
+  </div>
+
+  <div class="row">
+    <div class="col">Description</div>
+    <div class="col">{{ gameDefinition.description }}</div>
+  </div>
+
+  <div class="row">
+    <div class="col">Duration</div>
+    <div class="col">{{ gameDefinition.duration }}</div>
+  </div>
+
+  <div class="row">
+    <div class="col">Width</div>
+    <div class="col">{{ gameDefinition.arenaWidth }}</div>
+  </div>
+
+  <div class="row">
+    <div class="col">Height</div>
+    <div class="col">{{ gameDefinition.arenaHeight }}</div>
+  </div>
+
+  <div class="row">
+    <div class="col">Min Participants</div>
+    <div class="col">{{ gameDefinition.minParticipants }}</div>
+  </div>
+
+  <div class="row">
+    <div class="col">Max Participants</div>
+    <div class="col">{{ gameDefinition.maxParticipants }}</div>
+  </div>
+</div>
