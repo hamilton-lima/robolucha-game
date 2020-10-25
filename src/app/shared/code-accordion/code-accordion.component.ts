@@ -1,14 +1,14 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { Subject } from "rxjs";
-import { Message } from "src/app/message/message.model";
+import { Message } from "src/app/shared/message/message.model";
 import { ModelCode } from "src/app/sdk";
 
 @Component({
-  selector: "app-game-component-code-editor",
-  templateUrl: "./game-component-code-editor.component.html",
-  styleUrls: ["./game-component-code-editor.component.scss"],
+  selector: "app-code-accordion",
+  templateUrl: "./code-accordion.component.html",
+  styleUrls: ["./code-accordion.component.scss"],
 })
-export class GameComponentCodeEditorComponent implements OnInit {
+export class CodeAccordionComponent implements OnInit {
   @Input() codes: ModelCode[];
   @Input() helpFile: string;
   @Input() messageSubject: Subject<Message>;

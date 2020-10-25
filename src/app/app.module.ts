@@ -18,14 +18,12 @@ import { environment } from "src/environments/environment";
 import { Configuration, ConfigurationParameters } from "./sdk/configuration";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { AceEditorModule } from "ng2-ace-editor";
-import { CodeEditorComponent } from "./code-editor/code-editor.component";
 import { LuchadorResolverService } from "./luchador-resolver.service";
 import { WatchMatchComponent } from "./watch-match/watch-match.component";
 import { ArenaComponent } from "./arena/arena.component";
 import { PlaygroundComponent } from "./playground/playground.component";
 import { PlayComponent } from "./play/play.component";
 import { CanDeactivateGuard } from "./can-deactivate-guard.service";
-import { MessageComponent } from "./message/message.component";
 import { ScoreComponent } from "./score/score.component";
 import { ClockComponent } from "./clock/clock.component";
 import { CodeEditorPanelComponent } from "./code-editor-panel/code-editor-panel.component";
@@ -52,18 +50,21 @@ import { StudentListComponent } from "./dashboard/student-list/student-list.comp
 import { GenericErrorModalMessageComponent } from "./interceptor/generic-error-modal-message/generic-error-modal-message.component";
 import { AboutComponent } from "./pages/about/about.component";
 import { EndTutorialGuardService } from "./end-tutorial-guard.service";
-import { MarkDownComponent } from "./mark-down/mark-down.component";
 import { ActivityListComponent } from "./dashboard/activity-list/activity-list.component";
 import { LobbyComponent } from "./lobby/lobby.component";
 import { CantPlayComponent } from "./lobby/cant-play/cant-play.component";
-import { CodeBlocklyComponent } from './code-blockly/code-blockly.component';
+import { CodeBlocklyComponent } from './shared/code-blockly/code-blockly.component';
 import { MapEditorComponent } from './map-editor/map-editor.component';
 import { GameDefinitionCreateComponent } from "./map-editor/game-definition-create/game-definition-create.component";
 import { GameDefinitionEditComponent } from "./map-editor/game-definition-edit/game-definition-edit.component";
 import { GameDefinitionCardComponent } from "./map-editor/game-definition-card/game-definition-card.component";
-import { GameBackgroundComponent } from "./shared/game-background/game-background.component";
 import { SharedModule } from "./shared/shared.module";
-import { GameComponentCodeEditorComponent } from './map-editor/game-definition-edit/editors/game-component-code-editor/game-component-code-editor.component';
+import { SingleSceneComponentEditorComponent } from './map-editor/game-definition-edit/editor/single-scene-component-editor/single-scene-component-editor.component';
+import { BasicInfoEditorComponent } from './map-editor/game-definition-edit/editor/basic-info-editor/basic-info-editor.component';
+import { GameDefinitionCodeEditorComponent } from './map-editor/game-definition-edit/editor/game-definition-code-editor/game-definition-code-editor.component';
+import { BasicInfoComponent } from './map-editor/game-definition-edit/display/basic-info/basic-info.component';
+import { GameDefinitionCodeComponent } from './map-editor/game-definition-edit/display/game-definition-code/game-definition-code.component';
+import { SceneComponentsComponent } from './map-editor/game-definition-edit/display/scene-components/scene-components.component';
 
 // library.add(fas);
 
@@ -185,7 +186,6 @@ export function apiConfigFactory(): Configuration {
     BodyComponent,
     NotFoundComponent,
     LuchadorComponent,
-    CodeEditorComponent,
     WatchMatchComponent,
     ArenaComponent,
     PlaygroundComponent,
@@ -193,20 +193,22 @@ export function apiConfigFactory(): Configuration {
     ScoreComponent,
     ClockComponent,
     CodeEditorPanelComponent,
-    MessageComponent,
     WatchPageComponent,
     MatchCardComponent,
     AuthModalMessageComponent,
     GenericErrorModalMessageComponent,
-    MarkDownComponent,
     LobbyComponent,
     CantPlayComponent,
-    CodeBlocklyComponent,
     GameDefinitionCardComponent,
     GameDefinitionCreateComponent,
     GameDefinitionEditComponent,
     MapEditorComponent,
-    GameComponentCodeEditorComponent,
+    SingleSceneComponentEditorComponent,
+    BasicInfoEditorComponent,
+    GameDefinitionCodeEditorComponent,
+    BasicInfoComponent,
+    GameDefinitionCodeComponent,
+    SceneComponentsComponent,
   ],
   imports: [
     BrowserModule,

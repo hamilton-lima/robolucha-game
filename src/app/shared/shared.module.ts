@@ -8,11 +8,18 @@ import { HeaderComponent } from './header/header.component';
 import { GameCardComponent } from './game-card/game-card.component';
 import { BigButtonComponent } from './big-button/big-button.component';
 import { MaterialAllComponentsModule } from '../material-all-components-module';
+import { CodeAccordionComponent } from './code-accordion/code-accordion.component';
+import { MarkDownComponent } from './mark-down/mark-down.component';
+import { CodeBlocklyComponent } from './code-blockly/code-blockly.component';
+import { CodeEditorComponent } from './code-editor/code-editor.component';
+import { MessageComponent } from './message/message.component';
+import { AceEditorModule } from 'ng2-ace-editor';
 
 @NgModule({
   imports: [
     CommonModule,
     MaterialAllComponentsModule,
+    AceEditorModule,
   ],
   declarations: [
     BigButtonComponent,
@@ -22,6 +29,11 @@ import { MaterialAllComponentsModule } from '../material-all-components-module';
     HomeButtonComponent,
     RoleGuardComponent,
     RoundButtonComponent,
+    CodeAccordionComponent,
+    MarkDownComponent,
+    CodeBlocklyComponent,
+    CodeEditorComponent,
+    MessageComponent
   ],
   exports:[
     BigButtonComponent,
@@ -31,6 +43,11 @@ import { MaterialAllComponentsModule } from '../material-all-components-module';
     HomeButtonComponent,
     RoleGuardComponent,
     RoundButtonComponent,
+    CodeAccordionComponent,
+    MarkDownComponent,
+    CodeBlocklyComponent,
+    CodeEditorComponent,
+    MessageComponent
   ]
 })
 export class SharedModule { }
