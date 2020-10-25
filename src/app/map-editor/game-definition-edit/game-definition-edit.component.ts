@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { DefaultService, ModelGameDefinition } from 'src/app/sdk';
+import { DefaultService, ModelCode, ModelGameDefinition } from 'src/app/sdk';
 import { ModelLuchador } from 'src/app/sdk/model/mainLuchador';
 
 @Component({
@@ -14,6 +14,9 @@ export class GameDefinitionEditComponent implements OnInit {
   luchador: ModelLuchador
   gameDefinitionID: number;
   gameDefinition: ModelGameDefinition;
+  
+  // TODO: Remove this
+  codes: ModelCode[] = [];
 
   constructor(
     private route: ActivatedRoute,

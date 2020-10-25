@@ -184,19 +184,23 @@ export class ArenaComponent
     );
     this.HALF_BULLET = this.convertPosition(this.gameDefinition.bulletSize / 2);
 
-    this.matchStateSubject.subscribe((matchState: MatchState) => {
-      this.nextMatchState = matchState;
-    });
+    if (this.matchStateSubject) {
+      this.matchStateSubject.subscribe((matchState: MatchState) => {
+        this.nextMatchState = matchState;
+      });
+    }
 
-    this.matchEventSubject.subscribe((event: MatchEvent) => {
-      if(event.event == 'KILL'){
-        if(this.currentLuchador == event.componentA){
-           this.audio.kill(this.scene);
-        }else if(this.currentLuchador == event.componentB){
-          this.audio.death(this.scene);
+    if (this.matchEventSubject) {
+      this.matchEventSubject.subscribe((event: MatchEvent) => {
+        if (event.event == "KILL") {
+          if (this.currentLuchador == event.componentA) {
+            this.audio.kill(this.scene);
+          } else if (this.currentLuchador == event.componentB) {
+            this.audio.death(this.scene);
+          }
         }
-      }
-    });
+      });
+    }
 
     if (this.animateSubject) {
       this.animateSubject.subscribe((name) => {

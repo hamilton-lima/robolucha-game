@@ -63,6 +63,7 @@ import { GameDefinitionEditComponent } from "./map-editor/game-definition-edit/g
 import { GameDefinitionCardComponent } from "./map-editor/game-definition-card/game-definition-card.component";
 import { GameBackgroundComponent } from "./shared/game-background/game-background.component";
 import { SharedModule } from "./shared/shared.module";
+import { GameComponentCodeEditorComponent } from './map-editor/game-definition-edit/editors/game-component-code-editor/game-component-code-editor.component';
 
 // library.add(fas);
 
@@ -205,6 +206,7 @@ export function apiConfigFactory(): Configuration {
     GameDefinitionCreateComponent,
     GameDefinitionEditComponent,
     MapEditorComponent,
+    GameComponentCodeEditorComponent,
   ],
   imports: [
     BrowserModule,
