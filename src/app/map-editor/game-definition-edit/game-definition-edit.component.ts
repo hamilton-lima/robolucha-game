@@ -3,6 +3,7 @@ import { MatDrawer } from "@angular/material/sidenav";
 import { ActivatedRoute, Router } from "@angular/router";
 import { DefaultService, ModelCode, ModelGameDefinition } from "src/app/sdk";
 import { ModelLuchador } from "src/app/sdk/model/mainLuchador";
+import { AlertService } from "src/app/shared/alert.service";
 import { EventsService } from "src/app/shared/events.service";
 import { GameDefinitionEditMediatorService } from "./game-definition-edit-mediator.service";
 import { CurrentEditorEnum } from "./game-definition-edit.model";
@@ -17,6 +18,8 @@ export class GameDefinitionEditComponent implements OnInit {
   luchador: ModelLuchador;
   gameDefinitionID: number;
   gameDefinition: ModelGameDefinition;
+  dirty = false;
+
   @ViewChild("drawer") editorDrawer: MatDrawer;
 
   // TODO: Remove this
@@ -28,7 +31,8 @@ export class GameDefinitionEditComponent implements OnInit {
     private api: DefaultService,
     private mediator: GameDefinitionEditMediatorService,
     private events: EventsService,
-    private router: Router
+    private router: Router,
+    private alert: AlertService
   ) {}
 
   ngOnInit() {
@@ -49,9 +53,14 @@ export class GameDefinitionEditComponent implements OnInit {
 
     this.mediator.onSaveBasicInfo.subscribe((partial) => {
       if (partial) {
+        this.dirty = true;
         Object.keys(partial).forEach((key) => {
           if (partial.hasOwnProperty(key)) {
-            this.gameDefinition[key] = partial[key];
+            if (typeof this.gameDefinition[key] === "number"){
+              this.gameDefinition[key] = Number.parseInt(partial[key]);
+            } else {
+              this.gameDefinition[key] = partial[key];
+            }
           }
         });
       }
@@ -66,13 +75,21 @@ export class GameDefinitionEditComponent implements OnInit {
     this.api
       .privateGameDefinitionIdIdGet(this.gameDefinitionID)
       .subscribe((gameDefinition) => {
+        this.dirty = false;
         this.gameDefinition = gameDefinition;
       });
   }
 
-  goHome() {
-    this.events.click(this.page, "home");
-    this.router.navigate(["home"]);
+  save() {
+    this.api.privateMapeditorPut(this.gameDefinition).subscribe((result) => {
+      this.alert.infoTop("Map updated", "DISMISS");
+      this.dirty = false;
+    });
+  }
+
+  goAllMaps() {
+    this.events.click(this.page, "all-maps");
+    this.router.navigate(["maps"]);
   }
 
   isBasicInfoCurrent() {
