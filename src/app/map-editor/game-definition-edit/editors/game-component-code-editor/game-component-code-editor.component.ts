@@ -10,19 +10,21 @@ import { ModelCode } from "src/app/sdk";
 })
 export class GameComponentCodeEditorComponent implements OnInit {
   @Input() codes: ModelCode[];
+  @Input() helpFile: string;
   @Input() messageSubject: Subject<Message>;
 
   constructor() {
     this.codes = [];
+    this.helpFile = "help/code_editor_help";
   }
 
   ngOnInit() {}
 
-  getScript(name : string){
-    const code = this.codes.find( code => code.event == name);
-    if( code ){
+  getScript(name: string) {
+    const code = this.codes.find((code) => code.event == name);
+    if (code) {
       return code.script;
-    } 
-    return '';
+    }
+    return "";
   }
 }

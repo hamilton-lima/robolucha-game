@@ -17,7 +17,10 @@
     </button>
 
     <div class="mt-2 right-panel-scroll">
-      <app-game-component-code-editor [codes]="codes"></app-game-component-code-editor>
+      <app-game-component-code-editor
+        [helpFile]="'help/server_code_editor_help'"
+        [codes]="codes"
+      ></app-game-component-code-editor>
     </div>
   </mat-sidenav>
 
@@ -26,11 +29,11 @@
       <mat-icon svgIcon="arrow-left"></mat-icon>
     </button>
 
-    <app-arena *ngIf="gameDefinition"
+    <app-arena
+      *ngIf="gameDefinition"
       [gameDefinition]="gameDefinition"
       [debug]="true"
       [currentLuchador]="0"
     ></app-arena>
-
   </section>
 </mat-sidenav-container>
