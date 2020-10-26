@@ -1,7 +1,6 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, EventEmitter, OnInit, ViewChild } from "@angular/core";
 import { MatDrawer } from "@angular/material/sidenav";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Subject } from "rxjs";
 import { ArenaComponent } from "src/app/arena/arena.component";
 import { DefaultService, ModelCode, ModelGameDefinition } from "src/app/sdk";
 import { ModelLuchador } from "src/app/sdk/model/mainLuchador";
@@ -26,7 +25,7 @@ export class GameDefinitionEditComponent implements OnInit {
 
   @ViewChild("drawer") editorDrawer: MatDrawer;
   @ViewChild("arena") arena: ArenaComponent;
-  matchStateSubject: Subject<MatchState> = new Subject();
+  matchState = new EventEmitter<MatchState>();
 
   // TODO: Remove this
   codes: ModelCode[] = [];
@@ -45,18 +44,24 @@ export class GameDefinitionEditComponent implements OnInit {
 
   ngOnInit() {
     this.mediator.onEditBasicInfo.subscribe((current) => {
-      this.currentEditor = CurrentEditorEnum.BasicInfo;
-      this.editorDrawer.open();
+      if( current ){
+        this.currentEditor = CurrentEditorEnum.BasicInfo;
+        this.editorDrawer.open();
+      }
     });
 
     this.mediator.onEditGameDefinitionCode.subscribe((current) => {
-      this.currentEditor = CurrentEditorEnum.Codes;
-      this.editorDrawer.open();
+      if( current ){
+        this.currentEditor = CurrentEditorEnum.Codes;
+        this.editorDrawer.open();
+      }
     });
 
     this.mediator.onEditSceneComponent.subscribe((current) => {
-      this.currentEditor = CurrentEditorEnum.SingleSceneComponent;
-      this.editorDrawer.open();
+      if( current ){
+        this.currentEditor = CurrentEditorEnum.SingleSceneComponent;
+        this.editorDrawer.open();
+      }
     });
 
     this.mediator.onUpdateBasicInfo.subscribe((partial) => {
@@ -65,9 +70,9 @@ export class GameDefinitionEditComponent implements OnInit {
       }
     });
 
-    this.mediator.onUpdateSceneComponents.subscribe(updated =>{
-      console.log("updated", updated);
-      this.gameDefinition.sceneComponents = updated.sceneComponents;
+    this.mediator.onUpdateSceneComponents.subscribe(components =>{
+      console.log("updated", components);
+      this.gameDefinition.sceneComponents = components;
       this.refreshMatchState();
       this.dirty = true;
     });
@@ -85,6 +90,10 @@ export class GameDefinitionEditComponent implements OnInit {
         this.gameDefinition = gameDefinition;
         this.refreshMatchState();
       });
+  }
+
+  onArenaReady(){
+    this.refreshMatchState();
   }
 
   updateBasicInfo(partial) {
@@ -123,7 +132,7 @@ export class GameDefinitionEditComponent implements OnInit {
   }
 
   refreshMatchState() {
-    this.matchStateSubject.next(this.builder.build(this.gameDefinition));
+    this.matchState.emit(this.builder.build(this.gameDefinition.sceneComponents));
   }
 
   refreshArenaPreview() {

@@ -1,4 +1,4 @@
-<div *ngIf="gameDefinition" class="container">
+<div *ngIf="components" class="container">
   <div class="row">
     <div class="col"><span class="title">Scene Components</span></div>
     <div class="col">
@@ -8,7 +8,7 @@
     </div>
   </div>
 
-  <div class="row" *ngFor="let component of gameDefinition.sceneComponents">
+  <div class="row" *ngFor="let component of components">
     <div class="col">{{ component.type }}</div>
     <div class="col">{{ component.x }} / {{ component.y }}</div>
     <div class="col">

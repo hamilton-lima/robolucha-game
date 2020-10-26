@@ -1,4 +1,4 @@
-<mat-sidenav-container [hasBackdrop]="false">
+<mat-sidenav-container [hasBackdrop]="false" *ngIf="gameDefinition">
   <mat-sidenav
     #drawerLeft
     [mode]="'side'"
@@ -6,14 +6,20 @@
     position="start"
     class="drawer-left"
   >
-    <button mat-raised-button class="mr-2" (click)="goAllMaps()">ALL MAPS</button>
+    <button mat-raised-button class="mr-2" (click)="goAllMaps()">
+      ALL MAPS
+    </button>
     <button mat-raised-button [disabled]="!dirty" class="mr-2" (click)="save()">
       SAVE
     </button>
     <hr />
     <app-basic-info [gameDefinition]="gameDefinition"></app-basic-info>
-    <app-game-definition-code [gameDefinition]="gameDefinition"></app-game-definition-code>
-    <app-scene-components [gameDefinition]="gameDefinition"></app-scene-components>
+    <app-game-definition-code
+      [gameDefinition]="gameDefinition"
+    ></app-game-definition-code>
+    <app-scene-components
+      [components]="gameDefinition.sceneComponents"
+    ></app-scene-components>
   </mat-sidenav>
 
   <mat-sidenav
@@ -65,11 +71,10 @@
 
     <app-arena
       #arena
-      *ngIf="gameDefinition"
       [gameDefinition]="gameDefinition"
-      [debug]="true"
       [currentLuchador]="0"
       [matchStateSubject]="matchState"
+      (ready)="onArenaReady()"
     ></app-arena>
   </section>
 </mat-sidenav-container>

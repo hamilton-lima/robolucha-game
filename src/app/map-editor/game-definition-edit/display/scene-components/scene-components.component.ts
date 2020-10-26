@@ -9,7 +9,7 @@ import { SceneComponentBuilderService } from "./scene-component-builder.service"
   styleUrls: ["./scene-components.component.scss"],
 })
 export class SceneComponentsComponent implements OnInit {
-  @Input() gameDefinition: ModelGameDefinition;
+  @Input() components: ModelSceneComponent[];
 
   constructor(
     private mediator: GameDefinitionEditMediatorService,
@@ -22,9 +22,9 @@ export class SceneComponentsComponent implements OnInit {
   }
 
   add() {
-    if (this.gameDefinition) {
-      this.gameDefinition.sceneComponents.unshift(this.builder.build());
-      this.mediator.onUpdateSceneComponents.next(this.gameDefinition);
+    if (this.components) {
+      this.components.unshift(this.builder.build());
+      this.mediator.onUpdateSceneComponents.next(this.components);
     }
   }
 }

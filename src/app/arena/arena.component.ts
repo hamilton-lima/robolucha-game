@@ -7,6 +7,8 @@ import {
   SimpleChanges,
   OnDestroy,
   AfterViewInit,
+  Output,
+  EventEmitter
 } from "@angular/core";
 import * as BABYLON from "babylonjs";
 import { Luchador3D } from "./luchador3d";
@@ -53,6 +55,8 @@ export class ArenaComponent
   @Input() animateSubject: Subject<string>;
   @Input() messageFPS: Subject<number>;
   @Input() matchID: number;
+
+  @Output() ready = new EventEmitter<BABYLON.Scene>();
 
   private engine: BABYLON.Engine;
   private scene: BABYLON.Scene;
@@ -191,6 +195,7 @@ export class ArenaComponent
 
     if (this.matchStateSubject) {
       this.matchStateSubject.subscribe((matchState: MatchState) => {
+        console.log("matchstate", matchState);
         this.nextMatchState = matchState;
       });
     }
@@ -248,6 +253,7 @@ export class ArenaComponent
     const builder = new SceneBuilder(this.scene, this.gameDefinition);
     Promise.all([this.updateLuchadores(), builder.build()]).then(() => {
       this.engine.hideLoadingUI();
+      this.ready.emit(this.scene);
       this.render();
     });
 

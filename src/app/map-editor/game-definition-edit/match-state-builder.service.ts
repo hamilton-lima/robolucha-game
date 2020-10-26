@@ -9,12 +9,17 @@ import {
   providedIn: "root",
 })
 export class MatchStateBuilderService {
-  build(gameDefinition: ModelGameDefinition): MatchState {
+  build(components: ModelSceneComponent[]): MatchState {
     const result = <MatchState>{
-      sceneComponents: this.buildSceneComponents(
-        gameDefinition.sceneComponents
-      ),
+      bullets:[],
+      clock: 0,
+      events:[],
+      luchadores:[],
+      punches:[],
+      scores:[],
+      sceneComponents: this.buildSceneComponents(components),
     };
+    console.log("builder", components);
     return result;
   }
 
@@ -22,13 +27,16 @@ export class MatchStateBuilderService {
     sceneComponents: ModelSceneComponent[]
   ): SceneComponent[] {
     const result: SceneComponent[] = [];
+    
+    // to generate temporary scene component IDs
+    let start = (new Date()).getTime();
 
     sceneComponents.forEach((component) => {
       const item = <SceneComponent>{
         alpha: component.alpha,
         color: component.color,
         height: component.height,
-        id: component.id,
+        id: start++,
         rotation: component.rotation,
         type: component.type,
         width: component.width,
