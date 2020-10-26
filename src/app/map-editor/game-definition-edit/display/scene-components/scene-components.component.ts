@@ -27,4 +27,11 @@ export class SceneComponentsComponent implements OnInit {
       this.mediator.onUpdateSceneComponents.next(this.components);
     }
   }
+
+  delete(i){
+    if (this.components) {
+      this.components.splice(i,1);
+      this.mediator.onUpdateSceneComponents.next(this.components);
+    }
+  }
 }

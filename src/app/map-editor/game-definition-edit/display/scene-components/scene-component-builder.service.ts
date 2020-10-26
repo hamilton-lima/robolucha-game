@@ -5,8 +5,8 @@ import { ModelSceneComponent } from 'src/app/sdk';
   providedIn: 'root'
 })
 export class SceneComponentBuilderService {
-  lastX = 0;
-  lastY = 0;
+  x = 0;
+  y = 0;
   readonly WIDTH = 60;
   readonly HEIGHT = 60;
   readonly TYPES =  ["wall", "region"];
@@ -29,13 +29,13 @@ export class SceneComponentBuilderService {
       showInRadar: true,
       type: this.TYPES[this.DEFAULT_TYPE],
       width: this.WIDTH,
-      x: this.lastX + this.WIDTH,
-      y: this.lastY,
+      x: this.x,
+      y: this.y,
       color: "#00FF00"
     }
 
-    this.lastX = result.x;
-    this.lastY = result.y;
+    this.x = result.x + this.WIDTH;
+    this.y = result.y;
     
     return result;
   }
