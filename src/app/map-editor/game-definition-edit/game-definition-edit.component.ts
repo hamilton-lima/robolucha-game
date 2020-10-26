@@ -1,12 +1,13 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { MatDrawer } from "@angular/material/sidenav";
 import { ActivatedRoute, Router } from "@angular/router";
+import { ArenaComponent } from "src/app/arena/arena.component";
 import { DefaultService, ModelCode, ModelGameDefinition } from "src/app/sdk";
 import { ModelLuchador } from "src/app/sdk/model/mainLuchador";
 import { AlertService } from "src/app/shared/alert.service";
 import { EventsService } from "src/app/shared/events.service";
 import { GameDefinitionEditMediatorService } from "./game-definition-edit-mediator.service";
-import { CurrentEditorEnum } from "./game-definition-edit.model";
+import { CurrentEditorEnum, PartialModelGameDefinition } from "./game-definition-edit.model";
 
 @Component({
   selector: "app-game-definition-edit",
@@ -21,10 +22,12 @@ export class GameDefinitionEditComponent implements OnInit {
   dirty = false;
 
   @ViewChild("drawer") editorDrawer: MatDrawer;
-
+  @ViewChild("arena") arena: ArenaComponent;
+  
   // TODO: Remove this
   codes: ModelCode[] = [];
   currentEditor: CurrentEditorEnum;
+  readonly fieldsRequireMapRefresh = ["arenaWidth", "arenaHeight"];
 
   constructor(
     private route: ActivatedRoute,
@@ -53,14 +56,34 @@ export class GameDefinitionEditComponent implements OnInit {
 
     this.mediator.onSaveBasicInfo.subscribe((partial) => {
       if (partial && this.gameDefinition) {
-        this.dirty = true;
+        const updatedFields = [];
+
+        // update fields and track updated ones
         Object.keys(partial).forEach((key) => {
           if (partial.hasOwnProperty(key)) {
             if (typeof this.gameDefinition[key] === "number"){
-              this.gameDefinition[key] = Number.parseInt(partial[key]);
+              const value = Number.parseInt(partial[key]);
+              if( value != this.gameDefinition[key] ){
+                this.gameDefinition[key] = value;
+                updatedFields.push(key);
+              }
             } else {
-              this.gameDefinition[key] = partial[key];
+              if( partial[key] != this.gameDefinition[key] ){
+                this.gameDefinition[key] = partial[key];
+                updatedFields.push(key);
+              }
             }
+          }
+        });
+
+        if( updatedFields.length > 0 ){
+          this.dirty = true;
+        }
+
+        updatedFields.forEach( field => {
+          const found = this.fieldsRequireMapRefresh.find( inner => inner == field);
+          if( found ){
+            this.refreshArenaPreview();
           }
         });
       }
@@ -78,6 +101,13 @@ export class GameDefinitionEditComponent implements OnInit {
         this.dirty = false;
         this.gameDefinition = gameDefinition;
       });
+  }
+
+  refreshArenaPreview(){
+    if( this.gameDefinition){
+      this.arena.dispose();
+      this.arena.createScene();
+    }
   }
 
   save() {

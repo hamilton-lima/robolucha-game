@@ -25,8 +25,8 @@ export class BasicInfoEditorComponent implements OnInit {
     label: ["", Validators.required],
     description: [""],
     duration: [""],
-    arenaWidth: [""],
-    arenaHeight: [""],
+    arenaWidth: ["", { updateOn: "blur" }],
+    arenaHeight: ["", { updateOn: "blur" }],
     minParticipants: [""],
     maxParticipants: [""],
   });
@@ -42,13 +42,14 @@ export class BasicInfoEditorComponent implements OnInit {
       this.form.patchValue(gameDefinition);
     });
 
+    console.log("updateOn", this.form.updateOn);
     this.form.valueChanges.subscribe(() => {
       this.save();
     });
   }
 
   save() {
-    if( this.form.valid ){
+    if (this.form.valid) {
       this.mediator.onSaveBasicInfo.next(
         this.form.value as PartialModelGameDefinition
       );

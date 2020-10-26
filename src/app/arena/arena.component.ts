@@ -89,8 +89,13 @@ export class ArenaComponent
   }
 
   ngOnDestroy() {
+    this.dispose();
+  }
+
+  dispose(){
     if (this.engine) {
       this.engine.dispose();
+      this.engine = null;
     }
   }
 
