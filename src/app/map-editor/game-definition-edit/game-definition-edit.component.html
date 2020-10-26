@@ -1,0 +1,80 @@
+<mat-sidenav-container [hasBackdrop]="false" *ngIf="gameDefinition">
+  <mat-sidenav
+    #drawerLeft
+    [mode]="'side'"
+    [opened]="true"
+    position="start"
+    class="drawer-left"
+  >
+    <button mat-raised-button class="mr-2" (click)="goAllMaps()">
+      ALL MAPS
+    </button>
+    <button mat-raised-button [disabled]="!dirty" class="mr-2" (click)="save()">
+      SAVE
+    </button>
+    <hr />
+    <app-basic-info [gameDefinition]="gameDefinition"></app-basic-info>
+    <app-game-definition-code
+      [gameDefinition]="gameDefinition"
+    ></app-game-definition-code>
+    <app-scene-components
+      [components]="gameDefinition.sceneComponents"
+    ></app-scene-components>
+  </mat-sidenav>
+
+  <mat-sidenav
+    #drawer
+    [mode]="'over'"
+    [opened]="false"
+    position="end"
+    class="drawer-right"
+  >
+    <button mat-icon-button class="mr-2" (click)="drawer.toggle()">
+      <mat-icon svgIcon="arrow-right"></mat-icon>
+    </button>
+
+    <div *ngIf="isBasicInfoCurrent()" class="mt-2 right-panel-scroll">
+      <app-basic-info-editor></app-basic-info-editor>
+    </div>
+
+    <div *ngIf="isGameDefinitionCodeCurrent()" class="mt-2 right-panel-scroll">
+      <app-game-definition-code-editor></app-game-definition-code-editor>
+    </div>
+
+    <div
+      *ngIf="isSingleSceneComponentCurrent()"
+      class="mt-2 right-panel-scroll"
+    >
+      <app-single-scene-component-editor></app-single-scene-component-editor>
+    </div>
+
+    <!-- <div class="mt-2 right-panel-scroll">
+      <button
+        mat-raised-button
+        [disabled]="!dirty"
+        class="mr-2"
+        (click)="save()"
+      >
+        SAVE
+      </button>
+      <app-game-component-code-editor
+        [helpFile]="'help/server_code_editor_help'"
+        [codes]="codes"
+      ></app-game-component-code-editor>
+    </div> -->
+  </mat-sidenav>
+
+  <section>
+    <button mat-icon-button class="toogle" (click)="drawer.toggle()">
+      <mat-icon svgIcon="arrow-left"></mat-icon>
+    </button>
+
+    <app-arena
+      #arena
+      [gameDefinition]="gameDefinition"
+      [currentLuchador]="0"
+      [matchStateSubject]="matchState"
+      (ready)="onArenaReady()"
+    ></app-arena>
+  </section>
+</mat-sidenav-container>

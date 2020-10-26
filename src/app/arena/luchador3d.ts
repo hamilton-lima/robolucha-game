@@ -321,4 +321,9 @@ export class Luchador3D extends Base3D {
 
     return "green";
   }
+
+  getTurret(){
+    return this.turret;
+  }
+
 }

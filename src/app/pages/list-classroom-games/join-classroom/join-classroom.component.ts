@@ -7,8 +7,7 @@ import {
   Output
 } from "@angular/core";
 import { DefaultService, ModelClassroom } from "src/app/sdk";
-import { MatSnackBar, MatDialog } from "@angular/material";
-import { AlertService } from "../../alert.service";
+import { AlertService } from "src/app/shared/alert.service";
 
 @Component({
   selector: "app-join-classroom",

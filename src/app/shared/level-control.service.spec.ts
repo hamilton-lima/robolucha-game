@@ -1,6 +1,5 @@
 import { TestBed, inject } from '@angular/core/testing';
-
-import { LevelControlService } from './level-control.service';
+import { LevelControlService } from "src/app/shared/level-control.service";
 
 describe('LevelControlService', () => {
   beforeEach(() => {

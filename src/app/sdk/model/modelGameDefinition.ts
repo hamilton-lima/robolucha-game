@@ -44,6 +44,7 @@ export interface ModelGameDefinition {
     minParticipants?: number;
     moveSpeed?: number;
     name?: string;
+    ownerUserID?: number;
     punchAngle?: number;
     punchCoolDown?: number;
     punchDamage?: number;

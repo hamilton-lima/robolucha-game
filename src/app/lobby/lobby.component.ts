@@ -1,20 +1,15 @@
-import { Component, ViewChild, OnInit } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import {
   DefaultService,
-  ModelJoinMatch,
   ModelMatch,
   ModelUserDetails,
-  ModelGameDefinition,
   ModelPlayRequest,
   ModelTeam,
 } from "src/app/sdk";
-import { LevelControlService } from "../pages/level-control.service";
-
+import { LevelControlService } from "src/app/shared/level-control.service";
 import { ModelAvailableMatch } from "src/app/sdk/model/modelAvailableMatch";
 import { UserService } from "src/app/shared/user.service";
-
-import { MatTable } from "@angular/material";
 import * as moment from "moment";
 
 export interface IGameData {

@@ -1,0 +1,16 @@
+export const enum CurrentEditorEnum {
+  BasicInfo,
+  Codes,
+  SingleSceneComponent,
+}
+
+export class PartialModelGameDefinition {
+  arenaHeight?: number;
+  arenaWidth?: number;
+  description?: string;
+  duration?: number;
+  label?: string;
+  maxParticipants?: number;
+  minParticipants?: number;
+  name?: string;
+}

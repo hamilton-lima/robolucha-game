@@ -77,11 +77,14 @@ export class MainComponent implements OnInit {
   }
 
   customize() {
+    this.shepherd.done(this.tour);
     this.events.click(this.page, "customize");
     this.router.navigate(["mask"]);
   }
 
   lobby() {
+    this.shepherd.done(this.tour);
+    this.events.click(this.page, "lobby");
     this.router.navigate(["lobby"]);
   }
 
@@ -95,6 +98,12 @@ export class MainComponent implements OnInit {
     this.shepherd.done(this.tour);
     this.events.click(this.page, "forum");
     window.open("https://forum.robolucha.com", "robolucha-forum");
+  }
+
+  maps() {
+    this.shepherd.done(this.tour);
+    this.events.click(this.page, "maps");
+    this.router.navigate(["maps"]);
   }
 
   play(matchID: number) {

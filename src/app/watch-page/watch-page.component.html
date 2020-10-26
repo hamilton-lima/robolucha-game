@@ -22,11 +22,18 @@
         SAVE
       </button>
 
+      <button mat-raised-button class="mr-2" (click)="changeCamera()">CAMERA</button>
+
       <div class="mt-2 right-panel-scroll">
         <mat-accordion>
           <mat-expansion-panel>
             <mat-expansion-panel-header> Help </mat-expansion-panel-header>
             <app-mark-down [fileName]="'help/code_editor_help'"></app-mark-down>
+          </mat-expansion-panel>
+
+          <mat-expansion-panel [expanded]="true">
+            <mat-expansion-panel-header> Block - UNDER TEST</mat-expansion-panel-header>
+            <app-code-blockly></app-code-blockly>
           </mat-expansion-panel>
 
           <mat-expansion-panel [expanded]="true">
@@ -111,6 +118,7 @@
           [gameDefinition]="gameDefinition"
           [luchador]="luchador"
           [matchID]="matchID"
+          [inCameraChangeSubject]="cameraChangeSubject"
           (matchFinished)="endMatch()"
           (matchStateSubject)="updateState($event)"
           (messageSubject)="updateMessage($event)"

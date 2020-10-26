@@ -20,7 +20,7 @@ import { ActivatedRoute } from "@angular/router";
 import { SharedStateService } from "../shared-state.service";
 import { Subscription, Subject } from "rxjs";
 import { MatchState, GameDefinition, MatchEvent } from "./watch-match.model";
-import { Message } from "../message/message.model";
+import { Message } from "../shared/message/message.model";
 import {
   trigger,
   state,
@@ -31,6 +31,7 @@ import {
 import { CanComponentDeactivate } from "../can-deactivate-guard.service";
 import { CodeEditorPanelComponent } from "../code-editor-panel/code-editor-panel.component";
 import { ArenaComponent } from "../arena/arena.component";
+import { CameraChange } from "../arena/camera3-d.service";
 
 @Component({
   selector: "app-watch-match",
@@ -42,11 +43,13 @@ export class WatchMatchComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() gameDefinition: ModelGameDefinition;
   @Input() luchador: ModelGameComponent;
   @Input() matchID: number;
+  @Input() inCameraChangeSubject: Subject<CameraChange>;
 
   @Output() matchFinished = new EventEmitter<boolean>();
   @Output() matchStateSubject = new EventEmitter<MatchState>();
   @Output() messageSubject = new EventEmitter<Message>();
   @Output() matchEventSubject = new EventEmitter<MatchEvent>();
+  @Output() outCameraChangeSubject = new EventEmitter<CameraChange>();
 
   @ViewChild(ArenaComponent) arena: ArenaComponent;
 
@@ -103,6 +106,11 @@ export class WatchMatchComponent implements OnInit, OnDestroy, AfterViewInit {
           return;
         }
       });
+
+      this.inCameraChangeSubject.subscribe((cameraChange: CameraChange) => {
+        this.outCameraChangeSubject.emit(cameraChange);
+      });
+
     });
   }
 

@@ -7,6 +7,8 @@ import {
   SimpleChanges,
   OnDestroy,
   AfterViewInit,
+  Output,
+  EventEmitter
 } from "@angular/core";
 import * as BABYLON from "babylonjs";
 import { Luchador3D } from "./luchador3d";
@@ -29,6 +31,7 @@ import { SharedConstants } from "./shared.constants";
 import { ArenaData3D } from "./arena.data3D";
 import { FPSRecorderService, FPSInfo } from "./fps.recorder.service";
 import { AudioService } from "../shared/audio.service";
+import { Camera3DService, CameraChange } from "./camera3-d.service";
 
 class SavedCamera {
   target: BABYLON.Vector3;
@@ -46,7 +49,8 @@ export class ArenaComponent
   @Input() gameDefinition: GameDefinition;
   @Input() matchStateSubject: Subject<MatchState>;
   @Input() matchEventSubject: Subject<MatchEvent>;
-
+  @Input() cameraChangeSubject: Subject<CameraChange>;
+  
   @Input() debug = false;
   @Input() cameraFollowLuchador = true;
   @Input() currentLuchador: number;
@@ -54,9 +58,12 @@ export class ArenaComponent
   @Input() messageFPS: Subject<number>;
   @Input() matchID: number;
 
+  @Output() ready = new EventEmitter<BABYLON.Scene>();
+
   private engine: BABYLON.Engine;
   private scene: BABYLON.Scene;
   private camera: BABYLON.FreeCamera;
+  private cameraChange : CameraChange = CameraChange.Tower;
   private light: BABYLON.HemisphericLight;
 
   private luchadores: Array<Luchador3D>;
@@ -70,7 +77,6 @@ export class ArenaComponent
   private HALF_LUCHADOR: number;
   private HALF_BULLET: number;
 
-  readonly CAMERA_POSITION = new BABYLON.Vector3(0, 28, -20);
   readonly ROBOLUCHA_SAVED_CAMERA = "robolucha-saved-camera";
   cameraZoom = new BABYLON.Vector3(0, 0, 0);
   cameraZoomLevel = 0;
@@ -82,15 +88,21 @@ export class ArenaComponent
     private builder: TextureBuilder,
     private api: DefaultService,
     private fpsRecorder: FPSRecorderService,
-    private audio: AudioService
+    private audio: AudioService,
+    private cameraService: Camera3DService
   ) {
     this.resetState();
     this.data3D = new ArenaData3D();
   }
 
   ngOnDestroy() {
+    this.dispose();
+  }
+
+  dispose(){
     if (this.engine) {
       this.engine.dispose();
+      this.engine = null;
     }
   }
 
@@ -184,19 +196,31 @@ export class ArenaComponent
     );
     this.HALF_BULLET = this.convertPosition(this.gameDefinition.bulletSize / 2);
 
-    this.matchStateSubject.subscribe((matchState: MatchState) => {
-      this.nextMatchState = matchState;
-    });
+    if (this.matchStateSubject) {
+      this.matchStateSubject.subscribe((matchState: MatchState) => {
+        console.log("matchstate", matchState);
+        this.nextMatchState = matchState;
+      });
+    }
 
-    this.matchEventSubject.subscribe((event: MatchEvent) => {
-      if(event.event == 'KILL'){
-        if(this.currentLuchador == event.componentA){
-           this.audio.kill(this.scene);
-        }else if(this.currentLuchador == event.componentB){
-          this.audio.death(this.scene);
+    if (this.matchEventSubject) {
+      this.matchEventSubject.subscribe((event: MatchEvent) => {
+        if (event.event == "KILL") {
+          if (this.currentLuchador == event.componentA) {
+            this.audio.kill(this.scene);
+          } else if (this.currentLuchador == event.componentB) {
+            this.audio.death(this.scene);
+          }
         }
-      }
-    });
+      });
+    }
+
+    if (this.cameraChangeSubject) {
+      this.cameraChangeSubject.subscribe((cameraChange: CameraChange) => {
+        console.log(cameraChange);
+        this.cameraChange = cameraChange;
+      });
+    }
 
     if (this.animateSubject) {
       this.animateSubject.subscribe((name) => {
@@ -239,12 +263,13 @@ export class ArenaComponent
     const builder = new SceneBuilder(this.scene, this.gameDefinition);
     Promise.all([this.updateLuchadores(), builder.build()]).then(() => {
       this.engine.hideLoadingUI();
+      this.ready.emit(this.scene);
       this.render();
     });
 
     this.camera = new BABYLON.FreeCamera(
       "camera1",
-      this.CAMERA_POSITION,
+      this.cameraService.CAMERA_POSITION,
       this.scene
     );
 
@@ -287,13 +312,26 @@ export class ArenaComponent
   updateCamera(): any {
     if (this.cameraFollowLuchador) {
       const luchador3D = this.luchadores[this.currentLuchador];
-      if (luchador3D) {
-        const position = this.CAMERA_POSITION.add(luchador3D.getPosition());
-        this.camera.position = position;
-        this.camera.setTarget(luchador3D.getPosition());
+      if (luchador3D) {    
+        this.changeCamera(luchador3D);   
       }
     } else {
       this.saveCameraState();
+    }
+  }
+
+  changeCamera(luchador : Luchador3D){
+    if(this.cameraChange == CameraChange.Tower){
+      this.cameraService.towerCamera(this.camera, luchador);
+    }
+    else if (this.cameraChange == CameraChange.FirstPerson){
+      this.cameraService.firstPersonCamera(this.camera, luchador);
+    }
+    else if (this.cameraChange == CameraChange.ThirdPerson){
+      this.cameraService.thirdPersonCamera(this.camera, luchador);
+    }
+    else{
+      this.cameraService.crazyCamera(this.camera, luchador);
     }
   }
 

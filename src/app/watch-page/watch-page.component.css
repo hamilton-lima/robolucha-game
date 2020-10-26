@@ -1,5 +1,5 @@
 .drawer {
-  min-width: 400px;
+  min-width: 700px;
   width: 20%;
   right: 0;
 }
@@ -50,11 +50,6 @@
   z-index: 9999;
   background-color: whitesmoke;
   overflow-y: scroll;
-}
-
-.panel-selector-item {
-  margin-left: 15px;
-  margin-bottom: 15px;
 }
 
 .matchover-alert {
@@ -119,11 +114,6 @@
 
 .btn-round span {
   color: white;
-}
-
-.panel-selector .btn-round {
-  margin-bottom: 20px;
-  z-index: 10000;
 }
 
 .score-last {
