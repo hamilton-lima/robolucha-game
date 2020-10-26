@@ -11,7 +11,8 @@ export class GameDefinitionEditMediatorService {
   onEditGameDefinitionCode: Subject<ModelCode[]> = new BehaviorSubject(null);
   onEditSceneComponent: Subject<ModelSceneComponent> = new BehaviorSubject(null);
 
-  onSaveBasicInfo: Subject<PartialModelGameDefinition> = new BehaviorSubject(null);
+  onUpdateBasicInfo: Subject<PartialModelGameDefinition> = new BehaviorSubject(null);
+  onUpdateSceneComponents: Subject<ModelGameDefinition> = new BehaviorSubject(null);
 
   constructor() { }
 }

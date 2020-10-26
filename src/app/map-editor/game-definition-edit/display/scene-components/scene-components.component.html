@@ -1,1 +1,20 @@
-<button mat-raised-button (click)="edit()">scene component</button>
+<div *ngIf="gameDefinition" class="container">
+  <div class="row">
+    <div class="col"><span class="title">Scene Components</span></div>
+    <div class="col">
+      <button mat-icon-button (click)="add()">
+        <mat-icon svgIcon="plus"></mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <div class="row" *ngFor="let component of gameDefinition.sceneComponents">
+    <div class="col">{{ component.type }}</div>
+    <div class="col">{{ component.x }} / {{ component.y }}</div>
+    <div class="col">
+      <button mat-icon-button (click)="edit(component)">
+        <mat-icon svgIcon="pencil"></mat-icon>
+      </button>
+    </div>
+  </div>
+</div>

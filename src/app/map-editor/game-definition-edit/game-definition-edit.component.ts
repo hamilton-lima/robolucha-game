@@ -54,7 +54,7 @@ export class GameDefinitionEditComponent implements OnInit {
       this.editorDrawer.open();
     });
 
-    this.mediator.onSaveBasicInfo.subscribe((partial) => {
+    this.mediator.onUpdateBasicInfo.subscribe((partial) => {
       if (partial && this.gameDefinition) {
         const updatedFields = [];
 

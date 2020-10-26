@@ -50,7 +50,7 @@ export class BasicInfoEditorComponent implements OnInit {
 
   save() {
     if (this.form.valid) {
-      this.mediator.onSaveBasicInfo.next(
+      this.mediator.onUpdateBasicInfo.next(
         this.form.value as PartialModelGameDefinition
       );
     }
