@@ -52,7 +52,7 @@ export class GameDefinitionEditComponent implements OnInit {
     });
 
     this.mediator.onSaveBasicInfo.subscribe((partial) => {
-      if (partial) {
+      if (partial && this.gameDefinition) {
         this.dirty = true;
         Object.keys(partial).forEach((key) => {
           if (partial.hasOwnProperty(key)) {

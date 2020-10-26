@@ -41,12 +41,17 @@ export class BasicInfoEditorComponent implements OnInit {
       this.gameDefinition = gameDefinition;
       this.form.patchValue(gameDefinition);
     });
+
+    this.form.valueChanges.subscribe(() => {
+      this.save();
+    });
   }
 
   save() {
-    console.log("form.value", this.form.value);
-    this.mediator.onSaveBasicInfo.next(
-      this.form.value as PartialModelGameDefinition
-    );
+    if( this.form.valid ){
+      this.mediator.onSaveBasicInfo.next(
+        this.form.value as PartialModelGameDefinition
+      );
+    }
   }
 }

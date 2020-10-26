@@ -1,9 +1,6 @@
 <div *ngIf="gameDefinition" class="container" [formGroup]="form">
   <div class="row">
     <div class="col"><span class="title">Basic Information</span></div>
-    <div class="col">
-      <button [disabled]="!form.valid" mat-raised-button (click)="save()">SAVE</button>
-    </div>
   </div>
 
   <div class="row">
