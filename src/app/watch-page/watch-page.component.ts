@@ -7,11 +7,11 @@ import {
   ChangeDetectorRef,
   OnDestroy,
   AfterViewInit,
+  EventEmitter,
+  Output,
+  HostListener,
 } from "@angular/core";
-import {
-  Router,
-  ActivatedRoute,
-} from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
 import {
   DefaultService,
   ModelGameDefinition,
@@ -34,6 +34,7 @@ import {
   WatchMatchService,
 } from "../watch-match/watch-match.service";
 import { MatchReady } from "./watch-page.model";
+import { CameraChange } from "../arena/camera3-d.service";
 
 @Component({
   selector: "app-watch-page",
@@ -48,6 +49,9 @@ export class WatchPageComponent
     OnChanges,
     OnDestroy,
     AfterViewInit {
+
+  @Output() cameraChangeSubject = new EventEmitter<CameraChange>();
+  
   constructor(
     private api: DefaultService,
     private route: ActivatedRoute,
@@ -75,6 +79,8 @@ export class WatchPageComponent
 
   page: string;
   tour: Shepherd.Tour;
+
+  currentCamera : number = 0;
 
   matchID: number;
   luchador: ModelGameComponent;
@@ -319,6 +325,29 @@ export class WatchPageComponent
   goHome() {
     this.events.click(this.page, "home");
     this.router.navigate(["home"]);
+  }
+
+  cameras = new Map([
+    [ 0, CameraChange.Tower],
+    [ 1, CameraChange.ThirdPerson],
+    [ 2, CameraChange.FirstPerson],
+    [ 3, CameraChange.Crazy]
+  ]);
+
+  changeCamera(){
+    this.currentCamera++;
+    if(this.currentCamera > 3){
+      this.currentCamera = 0;
+    }
+    this.cameraChangeSubject.emit(this.cameras.get(this.currentCamera));
+  }
+
+  @HostListener('window:keydown', ['$event'])
+  keyEvent(event: KeyboardEvent) {
+
+    if(event.code == "KeyC"){
+      this.changeCamera();
+    }
   }
 
   closeTour() {
