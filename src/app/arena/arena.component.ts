@@ -215,10 +215,12 @@ export class ArenaComponent
       });
     }
 
-    this.cameraChangeSubject.subscribe((cameraChange: CameraChange) => {
-      console.log(cameraChange);
-      this.cameraChange = cameraChange;
-    });
+    if (this.cameraChangeSubject) {
+      this.cameraChangeSubject.subscribe((cameraChange: CameraChange) => {
+        console.log(cameraChange);
+        this.cameraChange = cameraChange;
+      });
+    }
 
     if (this.animateSubject) {
       this.animateSubject.subscribe((name) => {
@@ -320,16 +322,16 @@ export class ArenaComponent
 
   changeCamera(luchador : Luchador3D){
     if(this.cameraChange == CameraChange.Tower){
-      this.cameraService.towerCamera(luchador);
+      this.cameraService.towerCamera(this.camera, luchador);
     }
     else if (this.cameraChange == CameraChange.FirstPerson){
-      this.cameraService.firstPersonCamera(luchador);
+      this.cameraService.firstPersonCamera(this.camera, luchador);
     }
     else if (this.cameraChange == CameraChange.ThirdPerson){
-      this.cameraService.thirdPersonCamera(luchador);
+      this.cameraService.thirdPersonCamera(this.camera, luchador);
     }
     else{
-      this.cameraService.crazyCamera(luchador);
+      this.cameraService.crazyCamera(this.camera, luchador);
     }
   }
 
