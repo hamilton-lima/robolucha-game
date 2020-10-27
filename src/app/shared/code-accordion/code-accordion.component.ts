@@ -13,6 +13,8 @@ export class CodeAccordionComponent implements OnInit {
   @Input() helpFile: string;
   @Input() messageSubject: Subject<Message>;
 
+  dirty: boolean = false;
+
   constructor() {
     this.codes = [];
     this.helpFile = "help/code_editor_help";
@@ -26,5 +28,11 @@ export class CodeAccordionComponent implements OnInit {
       return code.script;
     }
     return "";
+  }
+
+  // update the internal list of codes from the editor
+  updateCode(event: string, script: string) {
+    this.dirty = true;
+    this.codes[event].script = script;
   }
 }
