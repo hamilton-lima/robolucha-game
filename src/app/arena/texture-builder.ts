@@ -377,7 +377,6 @@ export class TextureBuilder {
       images2Load.push(image)
     );
 
-    console.log("out", images2Load);
     return forkJoin(images2Load);
   }
 
@@ -403,7 +402,6 @@ export class TextureBuilder {
     maskEditorCategories.forEach((category) => {
       category.subcategories.forEach((subcategory) => {
         if (subcategory.type == EditorType.shape) {
-          console.log("is shape");
           const fileName = this.luchadorConfigs.getShapeNoDefaultValue(
             configs,
             subcategory.key
@@ -416,7 +414,6 @@ export class TextureBuilder {
       });
     });
 
-    console.log("in", result);
     return result;
   }
 
