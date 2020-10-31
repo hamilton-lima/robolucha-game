@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { ModelConfig } from "../sdk";
-import { Subject, forkJoin } from "rxjs";
+import { Subject, forkJoin, Observable } from "rxjs";
 
 import { LuchadorConfigService } from "../pages/mask-editor/mask-editor-detail/luchador-config.service";
 import {
@@ -91,7 +91,7 @@ export class TextureBuilder {
 
   private readonly maskLayers = { x: 229, y: 65 };
 
-  private buildMask(
+  buildMask(
     configs: ModelConfig[],
     images: Array<HTMLImageElement>
   ): Promise<MaskBuild> {
@@ -219,7 +219,7 @@ export class TextureBuilder {
     });
   }
 
-  private buildCanvasFromColor(
+  buildCanvasFromColor(
     configs: ModelConfig[],
     colorName: string,
     id: string,
@@ -262,7 +262,7 @@ export class TextureBuilder {
     });
   }
 
-  private buildLayerFromColor(
+  buildLayerFromColor(
     configs: ModelConfig[],
     images: Array<HTMLImageElement>,
     imageName: string,
@@ -356,18 +356,7 @@ export class TextureBuilder {
       result.material.specularColor = new BABYLON.Color3(0, 0, 0);
       result.material.ambientColor = new BABYLON.Color3(0.588, 0.588, 0.588);
 
-      let images2Load = [
-        self.loadImage("back"),
-        self.loadImage("face"),
-        self.loadImage("wrist"),
-        self.loadImage("ankle"),
-        self.loadImage("feet"),
-        self.loadImage("base"),
-      ];
-
-      self.addImagesFromShapes(configs, images2Load, maskEditorCategories);
-
-      let sequence = forkJoin(images2Load);
+      let sequence = self.loadImages(configs);
       sequence.subscribe((images: Array<HTMLImageElement>) => {
         if (configs) {
           self
@@ -381,6 +370,21 @@ export class TextureBuilder {
         }
       });
     });
+  }
+
+  // expose load images to allow use of functions that need array of to be tinted images already loaded 
+  loadImages(configs: ModelConfig[]): Observable<HTMLImageElement[]> {
+    let images2Load = [
+      this.loadImage("back"),
+      this.loadImage("face"),
+      this.loadImage("wrist"),
+      this.loadImage("ankle"),
+      this.loadImage("feet"),
+      this.loadImage("base"),
+    ];
+
+    this.addImagesFromShapes(configs, images2Load, maskEditorCategories);
+    return forkJoin(images2Load);
   }
 
   /** Finds all shape image names and create the Loader for each one */

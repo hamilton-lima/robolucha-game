@@ -36,3 +36,8 @@ ngb-accordion .card-header > h5 > button {
 ngb-accordion .card-header {
   padding: 0; /* Just to make sure the <a> fills the whole card header */
 }
+
+.preview {
+  margin-bottom: 10px;;
+  width: 100%;
+}

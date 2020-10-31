@@ -2,6 +2,9 @@
   <!-- left buttons -->
   <div class="col-xs-12 col-4" id="mask-editor-categories-selector">
     <div class="btn-group-vertical" role="group" aria-label="...">
+      <div>
+        <img class="preview" [src]="previewImageData">
+      </div>
       <button
         *ngFor="let item of categories"
         (click)="setCurrent(item.id)"
