@@ -17,6 +17,11 @@ export class DynamicTexture {
   mask: HTMLCanvasElement;
 }
 
+export class ResultWithCache {
+  subjects: Subject<HTMLImageElement>[];
+  cache: String[];
+}
+
 class PartialTextureBuild {
   canvas: HTMLCanvasElement;
   mask: HTMLCanvasElement;
@@ -107,11 +112,7 @@ export class TextureBuilder {
       );
 
       // square background
-      const square = target.buildCanvas(
-        "square",
-        200,
-        200
-      );
+      const square = target.buildCanvas("square", 200, 200);
 
       const faceBackground = target.buildLayerFromColor(
         configs,
@@ -124,7 +125,7 @@ export class TextureBuilder {
         .then((backgrounds) => {
           const result = new MaskBuild();
 
-          result.texturePartial = backgrounds[0];// backgrounds.find((one) => one.id != "square");
+          result.texturePartial = backgrounds[0]; // backgrounds.find((one) => one.id != "square");
           result.square = backgrounds[1]; // backgrounds.find((one) => one.id == "square");
           const faceBackground = backgrounds[2];
 
@@ -156,10 +157,12 @@ export class TextureBuilder {
             "eyes.color"
           );
 
-          let mouthImage = images.find((image) => {
-            return image.name == "mouth.shape";
-          });
-          const mouth = target.image2Canvas(mouthImage);
+          let mouth = target.buildLayerFromColor(
+            configs,
+            images,
+            "mouth.shape",
+            ""
+          );
 
           const promises = [
             maskShape,
@@ -244,8 +247,8 @@ export class TextureBuilder {
 
       resolve(canvas);
     });
-  }  
-  
+  }
+
   private buildCanvas(
     id: string,
     width: number,
@@ -270,13 +273,27 @@ export class TextureBuilder {
   ): Promise<HTMLCanvasElement> {
     const target = this;
 
-    let color = target.getValue(configs, colorName, "#000000");
+    let color = target.getValue(configs, colorName, "");
+    let imageValue = target.getValue(configs, imageName, "");
+
+    // if found the image name in the configs adds correct path
+    if (imageValue) {
+      imageValue = this.fixImageName(imageValue);
+    } else {
+      // if cant find the image in the configs is a reusable image like "base"
+      imageValue = this.fixImageName(imageName);
+    }
+
     const image = images.find((image) => {
-      return image.name == imageName;
+      return image.id == imageValue;
     });
 
     if (image) {
-      return target.tint(image, color);
+      if (color) {
+        return target.tint(image, color);
+      } else {
+        return target.image2Canvas(image);
+      }
     } else {
       let canvas = document.createElement("canvas");
       return Promise.resolve(canvas);
@@ -372,9 +389,21 @@ export class TextureBuilder {
     });
   }
 
-  // expose load images to allow use of functions that need array of to be tinted images already loaded 
+  // expose load images to allow use of functions that need array of to be tinted images already loaded
   loadImages(configs: ModelConfig[]): Observable<HTMLImageElement[]> {
-    let images2Load = [
+    let images2Load: Subject<HTMLImageElement>[] = [];
+    this.loadBaseImages().forEach((image) => images2Load.push(image));
+
+    this.findImagesFromShapes(configs).forEach((image) =>
+      images2Load.push(image)
+    );
+
+    return forkJoin(images2Load);
+  }
+
+  /** Finds all shape image names and create the Loader for each one */
+  loadBaseImages(): Subject<HTMLImageElement>[] {
+    let images2Load: Subject<HTMLImageElement>[] = [
       this.loadImage("back"),
       this.loadImage("face"),
       this.loadImage("wrist"),
@@ -382,18 +411,45 @@ export class TextureBuilder {
       this.loadImage("feet"),
       this.loadImage("base"),
     ];
-
-    this.addImagesFromShapes(configs, images2Load, maskEditorCategories);
-    return forkJoin(images2Load);
+    return images2Load;
   }
 
   /** Finds all shape image names and create the Loader for each one */
-  private addImagesFromShapes(
+  findImagesFromShapesWithCache(
     configs: ModelConfig[],
-    images2Load: Array<Subject<HTMLImageElement>>,
-    categories: Array<CategoryOptions>
-  ) {
-    categories.forEach((category) => {
+    cache: string[]
+  ): ResultWithCache {
+    const result: ResultWithCache = {
+      subjects: [],
+      cache: cache,
+    };
+
+    maskEditorCategories.forEach((category) => {
+      category.subcategories.forEach((subcategory) => {
+        if (subcategory.type == EditorType.shape) {
+          const fileName = this.luchadorConfigs.getShapeNoDefaultValue(
+            configs,
+            subcategory.key
+          );
+
+          const cached = cache.includes(fileName);
+
+          if (fileName && !cached) {
+            result.subjects.push(this.loadImageFromFileName(fileName));
+            result.cache.push(fileName);
+          }
+        }
+      });
+    });
+
+    return result;
+  }
+
+  /** Finds all shape image names and create the Loader for each one */
+  findImagesFromShapes(configs: ModelConfig[]): Subject<HTMLImageElement>[] {
+    const result: Subject<HTMLImageElement>[] = [];
+
+    maskEditorCategories.forEach((category) => {
       category.subcategories.forEach((subcategory) => {
         if (subcategory.type == EditorType.shape) {
           const fileName = this.luchadorConfigs.getShapeNoDefaultValue(
@@ -402,26 +458,33 @@ export class TextureBuilder {
           );
 
           if (fileName) {
-            images2Load.push(
-              this.loadImageFromFileName(fileName, subcategory.key)
-            );
+            result.push(this.loadImageFromFileName(fileName));
           }
         }
       });
     });
+
+    return result;
   }
 
-  private loadImage(name): Subject<HTMLImageElement> {
-    const fileName = "assets/shapes/" + name + ".png";
-    return this.loadImageFromFileName(fileName, name);
+  fixImageName(name: string): string {
+    if (name.endsWith(".png")) {
+      return "assets/shapes/" + name;
+    } else {
+      return "assets/shapes/" + name + ".png";
+    }
   }
 
-  public loadImageFromFileName(fileName, name): Subject<HTMLImageElement> {
+  loadImage(name): Subject<HTMLImageElement> {
+    return this.loadImageFromFileName(this.fixImageName(name));
+  }
+
+  public loadImageFromFileName(fileName): Subject<HTMLImageElement> {
     let result = new Subject<HTMLImageElement>();
     let img = new Image();
-    img.name = name;
-
+    img.id = fileName;
     img.src = fileName;
+
     img.onload = () => {
       result.next(img);
       result.complete();

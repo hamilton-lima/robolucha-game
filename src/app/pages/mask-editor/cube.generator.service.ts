@@ -198,7 +198,7 @@ export class CubeGeneratorService {
 
   generate(name: string) {
     this.textureBuilder
-      .loadImageFromFileName("assets/box2.png", "cube")
+      .loadImageFromFileName("assets/box2.png")
       .subscribe((image) => {
         let pdf = new jspdf("l", "cm", "a4");
 

@@ -1,6 +1,7 @@
 export * from './modelActiveMatch';
 export * from './modelActivity';
 export * from './modelAvailableMatch';
+export * from './modelBulkConfig';
 export * from './modelClassroom';
 export * from './modelCode';
 export * from './modelConfig';
