@@ -72,9 +72,20 @@ export class WallPaperGeneratorService {
       const ctx = canvas.getContext("2d");
       ctx.imageSmoothingEnabled = true;
 
-      // draw masks
-      ctx.drawImage(masks[0], 0, 0);
-      ctx.drawImage(masks[1], 200, 0);
+      let x = 0;
+      let y = 0;
+      let pos = 0;
+
+      for (let w = 0; w < dimension.widthCount; w++) {
+        for (let h = 0; h < dimension.heightCount; h++) {
+          ctx.drawImage(masks[pos], x, y);
+          pos ++
+          x = x + self.maskConfig.width;
+        }
+        x =0;
+        y = y + self.maskConfig.height;
+      }
+      
       resolve(canvas);
     });
   }

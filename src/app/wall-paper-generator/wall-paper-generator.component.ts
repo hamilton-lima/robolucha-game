@@ -29,16 +29,19 @@ export class WallPaperGeneratorComponent implements OnInit {
 
   generate() {
     this.events.click(this.page, "generate-wallpaper");
+
     const list = [];
-    for (let i = 0; i < 10; i++) {
+    const dimension = <WallpaperDimension>{
+      widthCount: 20,
+      heightCount: 15
+    };
+
+    const total = dimension.widthCount * dimension.heightCount;
+    for (let i = 0; i < total; i++) {
       list.push(this.api.privateMaskRandomGet());
     }
 
     forkJoin(list).subscribe((configs: Array<ModelConfig[]>) => {
-      const dimension = <WallpaperDimension>{
-        widthCount: 40,
-        heightCount: 24
-      };
 
       this.service.generate(configs, dimension).then((canvas) => {
         this.previewImageData = canvas.toDataURL("image/png");
