@@ -107,11 +107,7 @@ export class TextureBuilder {
       );
 
       // square background
-      const square = target.buildCanvas(
-        "square",
-        200,
-        200
-      );
+      const square = target.buildCanvas("square", 200, 200);
 
       const faceBackground = target.buildLayerFromColor(
         configs,
@@ -124,7 +120,7 @@ export class TextureBuilder {
         .then((backgrounds) => {
           const result = new MaskBuild();
 
-          result.texturePartial = backgrounds[0];// backgrounds.find((one) => one.id != "square");
+          result.texturePartial = backgrounds[0]; // backgrounds.find((one) => one.id != "square");
           result.square = backgrounds[1]; // backgrounds.find((one) => one.id == "square");
           const faceBackground = backgrounds[2];
 
@@ -244,8 +240,8 @@ export class TextureBuilder {
 
       resolve(canvas);
     });
-  }  
-  
+  }
+
   private buildCanvas(
     id: string,
     width: number,
@@ -372,9 +368,22 @@ export class TextureBuilder {
     });
   }
 
-  // expose load images to allow use of functions that need array of to be tinted images already loaded 
+  // expose load images to allow use of functions that need array of to be tinted images already loaded
   loadImages(configs: ModelConfig[]): Observable<HTMLImageElement[]> {
-    let images2Load = [
+    let images2Load: Subject<HTMLImageElement>[] = [];
+    this.loadBaseImages().forEach((image) => images2Load.push(image));
+
+    this.findImagesFromShapes(configs).forEach((image) =>
+      images2Load.push(image)
+    );
+
+    console.log("out", images2Load);
+    return forkJoin(images2Load);
+  }
+
+  /** Finds all shape image names and create the Loader for each one */
+  loadBaseImages(): Subject<HTMLImageElement>[] {
+    let images2Load: Subject<HTMLImageElement>[] = [
       this.loadImage("back"),
       this.loadImage("face"),
       this.loadImage("wrist"),
@@ -382,36 +391,36 @@ export class TextureBuilder {
       this.loadImage("feet"),
       this.loadImage("base"),
     ];
-
-    this.addImagesFromShapes(configs, images2Load, maskEditorCategories);
-    return forkJoin(images2Load);
+    return images2Load;
   }
 
   /** Finds all shape image names and create the Loader for each one */
-  private addImagesFromShapes(
+  findImagesFromShapes(
     configs: ModelConfig[],
-    images2Load: Array<Subject<HTMLImageElement>>,
-    categories: Array<CategoryOptions>
-  ) {
-    categories.forEach((category) => {
+  ): Subject<HTMLImageElement>[] {
+    const result: Subject<HTMLImageElement>[] = [];
+
+    maskEditorCategories.forEach((category) => {
       category.subcategories.forEach((subcategory) => {
         if (subcategory.type == EditorType.shape) {
+          console.log("is shape");
           const fileName = this.luchadorConfigs.getShapeNoDefaultValue(
             configs,
             subcategory.key
           );
 
           if (fileName) {
-            images2Load.push(
-              this.loadImageFromFileName(fileName, subcategory.key)
-            );
+            result.push(this.loadImageFromFileName(fileName, subcategory.key));
           }
         }
       });
     });
+
+    console.log("in", result);
+    return result;
   }
 
-  private loadImage(name): Subject<HTMLImageElement> {
+  loadImage(name): Subject<HTMLImageElement> {
     const fileName = "assets/shapes/" + name + ".png";
     return this.loadImageFromFileName(fileName, name);
   }
