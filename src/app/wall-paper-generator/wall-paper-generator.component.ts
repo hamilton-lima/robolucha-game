@@ -14,6 +14,7 @@ import { WallpaperConfig, WallpaperDimension, WallPaperGeneratorService } from "
 export class WallPaperGeneratorComponent implements OnInit {
   page: string;
   previewImageData: string = "assets/maps/image-not-found.png";
+  processing = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -29,11 +30,11 @@ export class WallPaperGeneratorComponent implements OnInit {
 
   generate() {
     this.events.click(this.page, "generate-wallpaper");
-
+    this.processing = true;
     const list = [];
     const dimension = <WallpaperDimension>{
-      widthCount: 20,
-      heightCount: 15
+      widthCount: 18,
+      heightCount: 14
     };
 
     const total = dimension.widthCount * dimension.heightCount;
@@ -42,9 +43,10 @@ export class WallPaperGeneratorComponent implements OnInit {
     }
 
     forkJoin(list).subscribe((configs: Array<ModelConfig[]>) => {
-
+      console.log("config loaded", configs);
       this.service.generate(configs, dimension).then((canvas) => {
         this.previewImageData = canvas.toDataURL("image/png");
+        this.processing = false;
       });
       this.cdRef.detectChanges();
     });

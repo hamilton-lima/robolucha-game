@@ -17,6 +17,11 @@ export class DynamicTexture {
   mask: HTMLCanvasElement;
 }
 
+export class ResultWithCache {
+  subjects: Subject<HTMLImageElement>[]
+  cache: String[]
+}
+
 class PartialTextureBuild {
   canvas: HTMLCanvasElement;
   mask: HTMLCanvasElement;
@@ -391,6 +396,37 @@ export class TextureBuilder {
       this.loadImage("base"),
     ];
     return images2Load;
+  }
+
+  /** Finds all shape image names and create the Loader for each one */
+  findImagesFromShapesWithCache(
+    configs: ModelConfig[],
+    cache: string[]
+  ): ResultWithCache {
+    const result: ResultWithCache = {
+      subjects: [],
+      cache: cache
+    };
+
+    maskEditorCategories.forEach((category) => {
+      category.subcategories.forEach((subcategory) => {
+        if (subcategory.type == EditorType.shape) {
+          const fileName = this.luchadorConfigs.getShapeNoDefaultValue(
+            configs,
+            subcategory.key
+          );
+
+          const cached = cache.includes(fileName);
+
+          if (fileName && !cached) {
+            result.subjects.push(this.loadImageFromFileName(fileName, subcategory.key));
+            result.cache.push(fileName);
+          }
+        }
+      });
+    });
+
+    return result;
   }
 
   /** Finds all shape image names and create the Loader for each one */

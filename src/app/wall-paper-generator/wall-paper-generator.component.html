@@ -5,8 +5,12 @@
     </div>
 
     <div class="row pb-3">
-      <div class="col-6">
+      <div class="col-2">
         <button id="random-mask" (click)="generate()" class="mr-2" mat-raised-button>GENERATE</button>
+      </div>
+
+      <div *ngIf="processing" class="col-10 text-left">
+        Creating THE amazing random wallpaper
       </div>
     </div>
 

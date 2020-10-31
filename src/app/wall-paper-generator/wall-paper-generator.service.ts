@@ -33,12 +33,17 @@ export class WallPaperGeneratorService {
     const self = this;
     return new Promise<HTMLCanvasElement>(function (resolve, reject) {
       self.loadAllImages(configs).subscribe((images) => {
+        console.log("images", images);
         const maskBuilders = [];
         configs.forEach((config) =>
           maskBuilders.push(self.generateOneMask(self, config, images))
         );
-        forkJoin(maskBuilders).subscribe((masks) => {
-          resolve(self.assembleWallpaper(self, masks, dimension));
+        const builders = forkJoin(maskBuilders);
+
+        builders.subscribe((masks) => {
+          self.assembleWallpaper(self, masks, dimension).then((wallpaper) => {
+            resolve(wallpaper);
+          });
         });
       });
     });
@@ -48,14 +53,18 @@ export class WallPaperGeneratorService {
     const self = this;
 
     const images2Load = [];
+    let cache = [];
     // base aroung the mask
     images2Load.push(self.textureBuilder.loadImage("base"));
 
     // each mask element image to be tinted
     configs.forEach((config) => {
-      this.textureBuilder
-        .findImagesFromShapes(config)
-        .forEach((image) => images2Load.push(image));
+      const images = this.textureBuilder.findImagesFromShapesWithCache(
+        config,
+        cache
+      );
+      cache = images.cache;
+      images.subjects.forEach((image) => images2Load.push(image));
     });
 
     return forkJoin(images2Load);
@@ -67,10 +76,13 @@ export class WallPaperGeneratorService {
     dimension: WallpaperDimension
   ): Promise<HTMLCanvasElement> {
     return new Promise<HTMLCanvasElement>(function (resolve, reject) {
+      console.log("assemble the final result");
       // build blank canvas
       const canvas = self.buildEmptyCanvas(dimension);
+      console.log("canvas built");
+
       const ctx = canvas.getContext("2d");
-      ctx.imageSmoothingEnabled = true;
+      //ctx.imageSmoothingEnabled = true;
 
       let x = 0;
       let y = 0;
