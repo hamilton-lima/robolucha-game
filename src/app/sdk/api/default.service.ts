@@ -21,6 +21,7 @@ import { Observable }                                        from 'rxjs/Observab
 import { ModelActiveMatch } from '../model/modelActiveMatch';
 import { ModelActivity } from '../model/modelActivity';
 import { ModelAvailableMatch } from '../model/modelAvailableMatch';
+import { ModelBulkConfig } from '../model/modelBulkConfig';
 import { ModelClassroom } from '../model/modelClassroom';
 import { ModelConfig } from '../model/modelConfig';
 import { ModelFindLuchadorWithGamedefinition } from '../model/modelFindLuchadorWithGamedefinition';
@@ -1827,6 +1828,52 @@ export class DefaultService {
         ];
 
         return this.httpClient.get<Array<ModelConfig>>(`${this.basePath}/private/mask-config/${encodeURIComponent(String(id))}`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * create random maskConfig in bulk
+     * 
+     * @param amount Amount of random configs, max 2048
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public privateMaskRandomBulkAmountGet(amount: number, observe?: 'body', reportProgress?: boolean): Observable<Array<ModelBulkConfig>>;
+    public privateMaskRandomBulkAmountGet(amount: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<ModelBulkConfig>>>;
+    public privateMaskRandomBulkAmountGet(amount: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<ModelBulkConfig>>>;
+    public privateMaskRandomBulkAmountGet(amount: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (amount === null || amount === undefined) {
+            throw new Error('Required parameter amount was null or undefined when calling privateMaskRandomBulkAmountGet.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (ApiKeyAuth) required
+        if (this.configuration.apiKeys["Authorization"]) {
+            headers = headers.set('Authorization', this.configuration.apiKeys["Authorization"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        let httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set("Accept", httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json'
+        ];
+
+        return this.httpClient.get<Array<ModelBulkConfig>>(`${this.basePath}/private/mask-random-bulk/${encodeURIComponent(String(amount))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

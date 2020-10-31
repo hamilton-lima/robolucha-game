@@ -1,10 +1,9 @@
 import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { forkJoin } from "rxjs";
-import { DefaultService, ModelConfig, ModelGameComponent } from "../sdk";
-import { AlertService } from "../shared/alert.service";
+import { DefaultService, ModelBulkConfig, ModelConfig, ModelGameComponent } from "../sdk";
 import { EventsService } from "../shared/events.service";
-import { WallpaperConfig, WallpaperDimension, WallPaperGeneratorService } from "./wall-paper-generator.service";
+import { WallpaperDimension, WallPaperGeneratorService } from "./wall-paper-generator.service";
 
 @Component({
   selector: "app-wall-paper-generator",
@@ -38,12 +37,7 @@ export class WallPaperGeneratorComponent implements OnInit {
     };
 
     const total = dimension.widthCount * dimension.heightCount;
-    for (let i = 0; i < total; i++) {
-      list.push(this.api.privateMaskRandomGet());
-    }
-
-    forkJoin(list).subscribe((configs: Array<ModelConfig[]>) => {
-      console.log("config loaded", configs);
+    this.api.privateMaskRandomBulkAmountGet(total).subscribe((configs: Array<ModelBulkConfig>) => {
       this.service.generate(configs, dimension).then((canvas) => {
         this.previewImageData = canvas.toDataURL("image/png");
         this.processing = false;

@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { forkJoin, Observable } from "rxjs";
 import { TextureBuilder } from "../arena/texture-builder";
-import { ModelConfig } from "../sdk";
+import { ModelBulkConfig, ModelConfig } from "../sdk";
 
 export class WallpaperDimension {
   widthCount: number;
@@ -27,16 +27,15 @@ export class WallPaperGeneratorService {
   constructor(private textureBuilder: TextureBuilder) {}
 
   generate(
-    configs: Array<ModelConfig[]>,
+    bulk: Array<ModelBulkConfig>,
     dimension: WallpaperDimension
   ): Promise<HTMLCanvasElement> {
     const self = this;
     return new Promise<HTMLCanvasElement>(function (resolve, reject) {
-      self.loadAllImages(configs).subscribe((images) => {
-        console.log("images", images);
+      self.loadAllImages(bulk).subscribe((images) => {
         const maskBuilders = [];
-        configs.forEach((config) =>
-          maskBuilders.push(self.generateOneMask(self, config, images))
+        bulk.forEach((single) =>
+          maskBuilders.push(self.generateOneMask(self, single.configs, images))
         );
         const builders = forkJoin(maskBuilders);
 
@@ -49,7 +48,9 @@ export class WallPaperGeneratorService {
     });
   }
 
-  loadAllImages(configs: Array<ModelConfig[]>): Observable<HTMLImageElement[]> {
+  loadAllImages(
+    configs: Array<ModelBulkConfig>
+  ): Observable<HTMLImageElement[]> {
     const self = this;
 
     const images2Load = [];
@@ -60,7 +61,7 @@ export class WallPaperGeneratorService {
     // each mask element image to be tinted
     configs.forEach((config) => {
       const images = this.textureBuilder.findImagesFromShapesWithCache(
-        config,
+        config.configs,
         cache
       );
       cache = images.cache;
@@ -76,10 +77,8 @@ export class WallPaperGeneratorService {
     dimension: WallpaperDimension
   ): Promise<HTMLCanvasElement> {
     return new Promise<HTMLCanvasElement>(function (resolve, reject) {
-      console.log("assemble the final result");
       // build blank canvas
       const canvas = self.buildEmptyCanvas(dimension);
-      console.log("canvas built");
 
       const ctx = canvas.getContext("2d");
       //ctx.imageSmoothingEnabled = true;
