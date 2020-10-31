@@ -76,16 +76,16 @@ export class WallPaperGeneratorService {
       let y = 0;
       let pos = 0;
 
-      for (let w = 0; w < dimension.widthCount; w++) {
-        for (let h = 0; h < dimension.heightCount; h++) {
+      for (let h = 0; h < dimension.heightCount; h++) {
+        for (let w = 0; w < dimension.widthCount; w++) {
           ctx.drawImage(masks[pos], x, y);
-          pos ++
+          pos++;
           x = x + self.maskConfig.width;
         }
-        x =0;
+        x = 0;
         y = y + self.maskConfig.height;
       }
-      
+
       resolve(canvas);
     });
   }
