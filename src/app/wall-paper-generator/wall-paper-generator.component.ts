@@ -1,9 +1,17 @@
 import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { forkJoin } from "rxjs";
-import { DefaultService, ModelBulkConfig, ModelConfig, ModelGameComponent } from "../sdk";
+import {
+  DefaultService,
+  ModelBulkConfig,
+  ModelConfig,
+  ModelGameComponent,
+} from "../sdk";
 import { EventsService } from "../shared/events.service";
-import { WallpaperDimension, WallPaperGeneratorService } from "./wall-paper-generator.service";
+import {
+  WallpaperDimension,
+  WallPaperGeneratorService,
+} from "./wall-paper-generator.service";
 
 @Component({
   selector: "app-wall-paper-generator",
@@ -32,17 +40,19 @@ export class WallPaperGeneratorComponent implements OnInit {
     this.processing = true;
     const list = [];
     const dimension = <WallpaperDimension>{
-      widthCount: 18,
-      heightCount: 14
+      widthCount: 20,
+      heightCount: 10,
     };
 
     const total = dimension.widthCount * dimension.heightCount;
-    this.api.privateMaskRandomBulkAmountGet(total).subscribe((configs: Array<ModelBulkConfig>) => {
-      this.service.generate(configs, dimension).then((canvas) => {
-        this.previewImageData = canvas.toDataURL("image/png");
-        this.processing = false;
+    this.api
+      .privateMaskRandomBulkAmountGet(total)
+      .subscribe((bulk: Array<ModelBulkConfig>) => {
+        this.service.generate(bulk, dimension).then((canvas) => {
+          this.previewImageData = canvas.toDataURL("image/png");
+          this.processing = false;
+        });
+        this.cdRef.detectChanges();
       });
-      this.cdRef.detectChanges();
-    });
   }
 }

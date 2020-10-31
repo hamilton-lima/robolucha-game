@@ -18,8 +18,8 @@ export class DynamicTexture {
 }
 
 export class ResultWithCache {
-  subjects: Subject<HTMLImageElement>[]
-  cache: String[]
+  subjects: Subject<HTMLImageElement>[];
+  cache: String[];
 }
 
 class PartialTextureBuild {
@@ -157,10 +157,12 @@ export class TextureBuilder {
             "eyes.color"
           );
 
-          let mouthImage = images.find((image) => {
-            return image.name == "mouth.shape";
-          });
-          const mouth = target.image2Canvas(mouthImage);
+          let mouth = target.buildLayerFromColor(
+            configs,
+            images,
+            "mouth.shape",
+            ""
+          );
 
           const promises = [
             maskShape,
@@ -271,13 +273,27 @@ export class TextureBuilder {
   ): Promise<HTMLCanvasElement> {
     const target = this;
 
-    let color = target.getValue(configs, colorName, "#000000");
+    let color = target.getValue(configs, colorName, "");
+    let imageValue = target.getValue(configs, imageName, "");
+
+    // if found the image name in the configs adds correct path
+    if (imageValue) {
+      imageValue = this.fixImageName(imageValue);
+    } else {
+      // if cant find the image in the configs is a reusable image like "base"
+      imageValue = this.fixImageName(imageName);
+    }
+
     const image = images.find((image) => {
-      return image.name == imageName;
+      return image.id == imageValue;
     });
 
     if (image) {
-      return target.tint(image, color);
+      if (color) {
+        return target.tint(image, color);
+      } else {
+        return target.image2Canvas(image);
+      }
     } else {
       let canvas = document.createElement("canvas");
       return Promise.resolve(canvas);
@@ -405,7 +421,7 @@ export class TextureBuilder {
   ): ResultWithCache {
     const result: ResultWithCache = {
       subjects: [],
-      cache: cache
+      cache: cache,
     };
 
     maskEditorCategories.forEach((category) => {
@@ -419,7 +435,7 @@ export class TextureBuilder {
           const cached = cache.includes(fileName);
 
           if (fileName && !cached) {
-            result.subjects.push(this.loadImageFromFileName(fileName, subcategory.key));
+            result.subjects.push(this.loadImageFromFileName(fileName));
             result.cache.push(fileName);
           }
         }
@@ -430,9 +446,7 @@ export class TextureBuilder {
   }
 
   /** Finds all shape image names and create the Loader for each one */
-  findImagesFromShapes(
-    configs: ModelConfig[],
-  ): Subject<HTMLImageElement>[] {
+  findImagesFromShapes(configs: ModelConfig[]): Subject<HTMLImageElement>[] {
     const result: Subject<HTMLImageElement>[] = [];
 
     maskEditorCategories.forEach((category) => {
@@ -444,7 +458,7 @@ export class TextureBuilder {
           );
 
           if (fileName) {
-            result.push(this.loadImageFromFileName(fileName, subcategory.key));
+            result.push(this.loadImageFromFileName(fileName));
           }
         }
       });
@@ -453,17 +467,24 @@ export class TextureBuilder {
     return result;
   }
 
-  loadImage(name): Subject<HTMLImageElement> {
-    const fileName = "assets/shapes/" + name + ".png";
-    return this.loadImageFromFileName(fileName, name);
+  fixImageName(name: string): string {
+    if (name.endsWith(".png")) {
+      return "assets/shapes/" + name;
+    } else {
+      return "assets/shapes/" + name + ".png";
+    }
   }
 
-  public loadImageFromFileName(fileName, name): Subject<HTMLImageElement> {
+  loadImage(name): Subject<HTMLImageElement> {
+    return this.loadImageFromFileName(this.fixImageName(name));
+  }
+
+  public loadImageFromFileName(fileName): Subject<HTMLImageElement> {
     let result = new Subject<HTMLImageElement>();
     let img = new Image();
-    img.name = name;
-
+    img.id = fileName;
     img.src = fileName;
+
     img.onload = () => {
       result.next(img);
       result.complete();

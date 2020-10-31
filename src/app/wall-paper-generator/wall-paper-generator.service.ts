@@ -108,7 +108,7 @@ export class WallPaperGeneratorService {
     return canvas;
   }
 
-  generateOneMask(self: WallPaperGeneratorService, config, images) {
+  generateOneMask(self: WallPaperGeneratorService, config: ModelConfig[], images: HTMLImageElement[]) {
     return new Promise<HTMLCanvasElement>(function (resolve, reject) {
       // build base canvas as background with the body color
       self.textureBuilder

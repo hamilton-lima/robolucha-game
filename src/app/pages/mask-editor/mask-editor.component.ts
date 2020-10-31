@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef, ViewChild, ElementRef } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { MaskEditorMediator, IMediatorData, FeatureChange } from "./mask-editor.mediator";
 import { CanComponentDeactivate } from "src/app/can-deactivate-guard.service";
 import { ModelGameComponent, DefaultService, ModelConfig } from "src/app/sdk";
@@ -32,6 +32,7 @@ export class MaskEditorComponent implements OnInit, CanComponentDeactivate {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private api: DefaultService,
     private cdRef: ChangeDetectorRef,
     private mediator: MaskEditorMediator,
@@ -171,5 +172,11 @@ export class MaskEditorComponent implements OnInit, CanComponentDeactivate {
 
   cubeIt() {
     this.cube.generate(this.luchador.name);
+  }
+  
+  wallpaper() {
+    this.events.click(this.page, "wallpaper");
+    this.shepherd.done(this.tour);
+    this.router.navigate(["wallpaper"]);
   }
 }
