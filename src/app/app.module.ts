@@ -65,6 +65,7 @@ import { GameDefinitionCodeEditorComponent } from './map-editor/game-definition-
 import { BasicInfoComponent } from './map-editor/game-definition-edit/display/basic-info/basic-info.component';
 import { GameDefinitionCodeComponent } from './map-editor/game-definition-edit/display/game-definition-code/game-definition-code.component';
 import { SceneComponentsComponent } from './map-editor/game-definition-edit/display/scene-components/scene-components.component';
+import { WallPaperGeneratorComponent } from './wall-paper-generator/wall-paper-generator.component';
 
 // library.add(fas);
 
@@ -80,6 +81,13 @@ const ROUTES: Routes = [
   {
     path: "mask",
     component: MaskEditorComponent,
+    canActivate: [LoginActivate],
+    canDeactivate: [CanDeactivateGuard],
+    resolve: { luchador: LuchadorResolverService },
+  },
+  {
+    path: "wallpaper",
+    component: WallPaperGeneratorComponent,
     canActivate: [LoginActivate],
     canDeactivate: [CanDeactivateGuard],
     resolve: { luchador: LuchadorResolverService },
@@ -209,6 +217,7 @@ export function apiConfigFactory(): Configuration {
     BasicInfoComponent,
     GameDefinitionCodeComponent,
     SceneComponentsComponent,
+    WallPaperGeneratorComponent,
   ],
   imports: [
     BrowserModule,
