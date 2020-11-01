@@ -18,26 +18,29 @@ export class GameDefinitionCodeEditorComponent implements OnInit {
   }
 
   getCode(event: string) {
-    if (!this.codes[event]) {
-      return <ModelCode>{
-        event: event,
-        script: "",
-      };
+    const search = this.codes.find((code) => code.event == event);
+
+    if (search) {
+      return search;
     }
 
-    return this.codes[event];
+    return <ModelCode>{
+      event: event,
+      script: "",
+    };
   }
 
   updateCode(event: string, script: string) {
     console.log("udpate code ", event, script);
+    const search = this.codes.find((code) => code.event == event);
 
-    if (!this.codes[event]) {
-      this.codes[event] = <ModelCode>{
+    if (search) {
+      search.script = script;
+    } else {
+      this.codes.push(<ModelCode>{
         event: event,
         script: script,
-      };
-    } else {
-      this.codes[event].script = script;
+      });
     }
 
     this.mediator.onUpdateGameDefinitionCode.next(this.codes);

@@ -79,9 +79,8 @@ export class GameDefinitionEditComponent implements OnInit {
     });
 
     this.mediator.onUpdateGameDefinitionCode.subscribe((codes) => {
-      console.log("updated", codes);
+      console.log("code updated", codes);
       this.gameDefinition.codes = codes;
-      this.refreshMatchState();
       this.dirty = true;
     });
 
@@ -127,6 +126,8 @@ export class GameDefinitionEditComponent implements OnInit {
       }
     });
 
+    console.log("after update basic info", this.gameDefinition.codes);
+
     if (updatedFields.length > 0) {
       this.dirty = true;
     }
@@ -154,7 +155,10 @@ export class GameDefinitionEditComponent implements OnInit {
   }
 
   save() {
+    console.log("save gamedefinition with codes", this.gameDefinition.codes.length, this.gameDefinition.codes);
+    
     this.api.privateMapeditorPut(this.gameDefinition).subscribe((result) => {
+      console.log("after update", result);
       this.alert.infoTop("Map updated", "DISMISS");
       this.dirty = false;
     });
