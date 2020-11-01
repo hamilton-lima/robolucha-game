@@ -96,6 +96,11 @@ export class GameDefinitionEditComponent implements OnInit {
       this.gameDefinition.suggestedCodes = codes;
       this.dirty = true;
     });
+    
+    this.mediator.onUpdateGameComponents.subscribe((components) => {
+      this.gameDefinition.gameComponents = components;
+      this.dirty = true;
+    });
 
     this.page = this.route.snapshot.url.join("/");
     this.luchador = this.route.snapshot.data.luchador;
