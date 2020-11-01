@@ -15,16 +15,16 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let component of components; index as i">
-        <td>{{ component.name }}</td>
-        <td>{{ component.life }}</td>
+      <tr *ngFor="let w of wrapped; index as i">
+        <td>{{ w.component.name }}</td>
+        <td>{{ w.component.life }}</td>
         <td>
-          {{ component.x }}/{{ component.y }}<br />
-          {{ component.angle }}/{{ component.gunAngle }}
+          {{ w.component.x }}/{{ w.component.y }}<br />
+          {{ w.component.angle }}/{{ w.component.gunAngle }}
         </td>
-        <td>{{ formatCodes(component.codes) }}</td>
+        <td>{{ formatCodes(w.component.codes) }}</td>
         <td>
-          <button mat-icon-button (click)="edit(component)">
+          <button mat-icon-button (click)="edit(w)">
             <mat-icon svgIcon="pencil"></mat-icon>
           </button>
           <button mat-icon-button (click)="delete(i)">

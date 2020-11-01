@@ -4,7 +4,10 @@ import {
   ModelGameComponent,
   ModelGameDefinition,
 } from "src/app/sdk";
-import { GameDefinitionEditMediatorService } from "../../game-definition-edit-mediator.service";
+import {
+  GameDefinitionEditMediatorService,
+  ModelGameComponentEditWrapper,
+} from "../../game-definition-edit-mediator.service";
 import { GameComponentBuildService } from "./game-component-build.service";
 
 @Component({
@@ -14,24 +17,43 @@ import { GameComponentBuildService } from "./game-component-build.service";
 })
 export class GameComponentComponent implements OnInit {
   @Input() components: ModelGameComponent[];
+  wrapped: ModelGameComponentEditWrapper[];
 
   constructor(
     private mediator: GameDefinitionEditMediatorService,
     private builder: GameComponentBuildService
   ) {}
-  ngOnInit() {}
+  ngOnInit() {
+    this.wrapped = this.builder.buildWrapperList(this.components);
+    this.mediator.onUpdateGameComponent.subscribe((wrapper) => {
+      // search by id in the list
+      const found = this.wrapped.find((one) => one.id == wrapper.id);
+      if (found) {
+        found.component = wrapper.component;
+
+        // notify list update
+        this.mediator.onUpdateGameComponents.next(
+          this.builder.unWrapList(this.wrapped)
+        );
+      }
+    });
+  }
 
   add() {
-    if (this.components) {
-      this.components.unshift(this.builder.build());
-      this.mediator.onUpdateGameComponents.next(this.components);
+    if (this.wrapped) {
+      this.wrapped.unshift(this.builder.buildWrapper(this.builder.build()));
+      this.mediator.onUpdateGameComponents.next(
+        this.builder.unWrapList(this.wrapped)
+      );
     }
   }
 
   delete(i) {
-    if (this.components) {
-      this.components.splice(i, 1);
-      this.mediator.onUpdateGameComponents.next(this.components);
+    if (this.wrapped) {
+      this.wrapped.splice(i, 1);
+      this.mediator.onUpdateGameComponents.next(
+        this.builder.unWrapList(this.wrapped)
+      );
     }
   }
 
@@ -49,7 +71,7 @@ export class GameComponentComponent implements OnInit {
     return result;
   }
 
-  edit(component: ModelGameComponent){
-      this.mediator.onEditGameComponent.next(component);
+  edit(component: ModelGameComponentEditWrapper) {
+    this.mediator.onEditGameComponent.next(component);
   }
 }
