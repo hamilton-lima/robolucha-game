@@ -27,15 +27,18 @@ export class GameComponentComponent implements OnInit {
     this.wrapped = this.builder.buildWrapperList(this.components);
     this.mediator.onUpdateGameComponent.subscribe((wrapper) => {
       // search by id in the list
-      const found = this.wrapped.find((one) => one.id == wrapper.id);
-      if (found) {
-        found.component = wrapper.component;
+      for(let key in this.wrapped){
+        if( this.wrapped[key].id == wrapper.id){
+          this.wrapped[key].component = wrapper.component;
+          console.log("found and updated", this.wrapped[key]);
 
-        // notify list update
-        this.mediator.onUpdateGameComponents.next(
-          this.builder.unWrapList(this.wrapped)
-        );
+          this.mediator.onUpdateGameComponents.next(
+            this.builder.unWrapList(this.wrapped)
+          );
+          break;
+        }
       }
+
     });
   }
 

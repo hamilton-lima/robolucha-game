@@ -81,5 +81,6 @@ export class GameComponentEditorComponent implements OnInit {
 
   updateCode(codes: ModelCode[]){
     this.codes = codes;
+    this.save();
   }
 }

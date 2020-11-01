@@ -32,7 +32,7 @@ export class GameDefinitionEditMediatorService {
   onUpdateSceneComponents: Subject<ModelSceneComponent[]> = new Subject();
   onUpdateGameDefinitionCode: Subject<ModelCode[]> = new Subject();
   onUpdateSuggestedCode: Subject<ModelCode[]> = new Subject();
-  onUpdateGameComponents: Subject<ModelGameDefinition[]> = new Subject();
+  onUpdateGameComponents: Subject<ModelGameComponent[]> = new Subject();
   onUpdateGameComponent: Subject<ModelGameComponentEditWrapper> = new Subject();
   constructor() {}
 }
