@@ -28,15 +28,11 @@ export class MatchStateBuilderService {
   ): SceneComponent[] {
     const result: SceneComponent[] = [];
     
-    // to generate temporary scene component IDs
-    let start = (new Date()).getTime();
-
     sceneComponents.forEach((component) => {
       const item = <SceneComponent>{
         alpha: component.alpha,
         color: component.color,
         height: component.height,
-        id: start++,
         rotation: component.rotation,
         type: component.type,
         width: component.width,
