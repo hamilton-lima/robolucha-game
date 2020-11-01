@@ -48,7 +48,7 @@ export class GameDefinitionEditComponent implements OnInit {
     private router: Router,
     private alert: AlertService,
     private builder: MatchStateBuilderService,
-    private cdRef: ChangeDetectorRef,
+    private cdRef: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -114,6 +114,7 @@ export class GameDefinitionEditComponent implements OnInit {
 
     this.mediator.onUpdateGameComponents.subscribe((components) => {
       this.gameDefinition.gameComponents = components;
+      this.refreshMatchState();
       this.dirty = true;
     });
 
@@ -177,7 +178,10 @@ export class GameDefinitionEditComponent implements OnInit {
 
   refreshMatchState() {
     this.matchState.emit(
-      this.builder.build(this.gameDefinition.sceneComponents)
+      this.builder.build(
+        this.gameDefinition.sceneComponents,
+        this.gameDefinition.gameComponents
+      )
     );
   }
 
