@@ -71,6 +71,13 @@ export class GameDefinitionEditComponent implements OnInit {
         this.editorDrawer.open();
       }
     });
+    
+    this.mediator.onEditGameComponent.subscribe((current) => {
+      if( current && this.editorDrawer){
+        this.currentEditor = CurrentEditorEnum.GameComponent;
+        this.editorDrawer.open();
+      }
+    });
 
     this.mediator.onUpdateBasicInfo.subscribe((partial) => {
       if (partial && this.gameDefinition) {
@@ -201,5 +208,9 @@ export class GameDefinitionEditComponent implements OnInit {
 
   isGameDefinitionSuggestedCodeCurrent() {
     return this.currentEditor == CurrentEditorEnum.SuggestedCode;
+  }
+
+  isGameComponentCurrent() {
+    return this.currentEditor == CurrentEditorEnum.GameComponent;
   }
 }

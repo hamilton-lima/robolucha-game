@@ -57,6 +57,10 @@
       <app-game-definition-suggested-code-editor></app-game-definition-suggested-code-editor>
     </div>
 
+    <div *ngIf="isGameComponentCurrent()" class="mt-2 right-panel-scroll">
+      <app-game-component-editor></app-game-component-editor>
+    </div>
+
     <div
       *ngIf="isSingleSceneComponentCurrent()"
       class="mt-2 right-panel-scroll"

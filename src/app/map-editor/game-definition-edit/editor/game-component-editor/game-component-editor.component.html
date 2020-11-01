@@ -1,0 +1,75 @@
+<div *ngIf="component" class="container" [formGroup]="form">
+  <div class="row">
+    <div class="col"><span class="title">NPC</span></div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <mat-form-field class="col-10 mt-3 mx-auto">
+        <mat-label>Name</mat-label>
+        <input
+          type="text"
+          matInput
+          formControlName="name"
+          placeholder="Ex. Average Joe"
+        />
+        <mat-error *ngIf="form.get('name').hasError('required')">
+          Name is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <mat-form-field class="col-10 mt-3 mx-auto">
+        <mat-label>Life</mat-label>
+        <input
+          type="text"
+          matInput
+          formControlName="life"
+          placeholder="Ex. 20"
+        />
+        <mat-error *ngIf="form.get('life').hasError('required')">
+          Life is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <mat-form-field class="col-10 mt-3 mx-auto">
+        <mat-label>Angle</mat-label>
+        <input type="text" matInput formControlName="angle" />
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <mat-form-field class="col-10 mt-3 mx-auto">
+        <mat-label>Gun angle</mat-label>
+        <input type="text" matInput formControlName="gunAngle" />
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <mat-form-field class="col-10 mt-3 mx-auto">
+        <mat-label>X</mat-label>
+        <input type="text" matInput formControlName="x" />
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <mat-form-field class="col-10 mt-3 mx-auto">
+        <mat-label>Y</mat-label>
+        <input type="text" matInput formControlName="y" />
+      </mat-form-field>
+    </div>
+  </div>
+</div>

@@ -48,4 +48,8 @@ export class GameComponentComponent implements OnInit {
     });
     return result;
   }
+
+  edit(component: ModelGameComponent){
+      this.mediator.onEditGameComponent.next(component);
+  }
 }

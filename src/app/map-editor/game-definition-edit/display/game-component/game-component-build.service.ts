@@ -19,7 +19,6 @@ export class GameComponentBuildService {
       gunAngle: 270,
       x: this.x,
       y: this.y,
-      color: "#00FF00"
     }
 
     this.x = result.x + this.WIDTH;
