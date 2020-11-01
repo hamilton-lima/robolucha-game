@@ -27,9 +27,6 @@ import { CanDeactivateGuard } from "./can-deactivate-guard.service";
 import { ScoreComponent } from "./score/score.component";
 import { ClockComponent } from "./clock/clock.component";
 import { CodeEditorPanelComponent } from "./code-editor-panel/code-editor-panel.component";
-// import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
-// import { library } from "@fortawesome/fontawesome-svg-core";
-// import { fas } from "@fortawesome/free-solid-svg-icons";
 import { WatchPageComponent } from "./watch-page/watch-page.component";
 import { NgxSpinnerModule } from "ngx-spinner";
 import { MatchCardComponent } from "./play/match-card/match-card.component";
@@ -66,8 +63,7 @@ import { BasicInfoComponent } from './map-editor/game-definition-edit/display/ba
 import { GameDefinitionCodeComponent } from './map-editor/game-definition-edit/display/game-definition-code/game-definition-code.component';
 import { SceneComponentsComponent } from './map-editor/game-definition-edit/display/scene-components/scene-components.component';
 import { WallPaperGeneratorComponent } from './wall-paper-generator/wall-paper-generator.component';
-
-// library.add(fas);
+import { GameDefinitionSuggestedCodeEditorComponent } from './map-editor/game-definition-edit/editor/game-definition-suggested-code-editor/game-definition-suggested-code-editor.component';
 
 const ROUTES: Routes = [
   { path: "", redirectTo: "/home", pathMatch: "full" },
@@ -218,6 +214,7 @@ export function apiConfigFactory(): Configuration {
     GameDefinitionCodeComponent,
     SceneComponentsComponent,
     WallPaperGeneratorComponent,
+    GameDefinitionSuggestedCodeEditorComponent,
   ],
   imports: [
     BrowserModule,

@@ -13,13 +13,20 @@
       SAVE
     </button>
     <hr />
-    <app-basic-info [gameDefinition]="gameDefinition"></app-basic-info>
-    <app-game-definition-code
-      [gameDefinition]="gameDefinition"
-    ></app-game-definition-code>
-    <app-scene-components
-      [components]="gameDefinition.sceneComponents"
-    ></app-scene-components>
+
+    <mat-accordion multi="true">
+      <app-basic-info [gameDefinition]="gameDefinition"></app-basic-info>
+    
+      <app-game-definition-code
+        [gameDefinition]="gameDefinition"
+      ></app-game-definition-code>
+      
+      <app-scene-components
+        [components]="gameDefinition.sceneComponents"
+      ></app-scene-components>
+  
+    </mat-accordion>
+  
   </mat-sidenav>
 
   <mat-sidenav
@@ -41,6 +48,10 @@
       <app-game-definition-code-editor></app-game-definition-code-editor>
     </div>
 
+    <div *ngIf="isGameDefinitionSuggestedCodeCurrent()" class="mt-2 right-panel-scroll">
+      <app-game-definition-suggested-code-editor></app-game-definition-suggested-code-editor>
+    </div>
+
     <div
       *ngIf="isSingleSceneComponentCurrent()"
       class="mt-2 right-panel-scroll"
@@ -48,20 +59,6 @@
       <app-single-scene-component-editor></app-single-scene-component-editor>
     </div>
 
-    <!-- <div class="mt-2 right-panel-scroll">
-      <button
-        mat-raised-button
-        [disabled]="!dirty"
-        class="mr-2"
-        (click)="save()"
-      >
-        SAVE
-      </button>
-      <app-game-component-code-editor
-        [helpFile]="'help/server_code_editor_help'"
-        [codes]="codes"
-      ></app-game-component-code-editor>
-    </div> -->
   </mat-sidenav>
 
   <section>

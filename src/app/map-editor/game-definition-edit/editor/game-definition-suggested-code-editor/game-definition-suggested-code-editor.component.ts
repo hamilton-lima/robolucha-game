@@ -4,12 +4,11 @@ import { CodeAcordionEventEditor } from "src/app/shared/code-accordion/code-acco
 import { GameDefinitionEditMediatorService } from "../../game-definition-edit-mediator.service";
 
 @Component({
-  selector: "app-game-definition-code-editor",
-  templateUrl: "./game-definition-code-editor.component.html",
-  styleUrls: ["./game-definition-code-editor.component.scss"],
+  selector: "app-game-definition-suggested-code-editor",
+  templateUrl: "./game-definition-suggested-code-editor.component.html",
+  styleUrls: ["./game-definition-suggested-code-editor.component.scss"],
 })
-export class GameDefinitionCodeEditorComponent implements OnInit {
-
+export class GameDefinitionSuggestedCodeEditorComponent implements OnInit {
   codes: ModelCode[];
   helpFile: string;
   editors: CodeAcordionEventEditor[];
@@ -21,16 +20,18 @@ export class GameDefinitionCodeEditorComponent implements OnInit {
     this.editors = [
       { event: "onRepeat", label: "On repeat" },
       { event: "onStart", label: "On start" },
+      { event: "onHitWall", label: "On hit wall" },
+      { event: "onFound", label: "On found" },
+      { event: "onGotDamage", label: "On got damage" },
       { event: "onHitOther", label: "On hit other" },
     ];
 
-    this.mediator.onEditGameDefinitionCode.subscribe((codes) => {
+    this.mediator.onEditGameDefinitionSuggestedCode.subscribe((codes) => {
       this.codes = codes;
     });
   }
 
   updateCode(codes: ModelCode[]) {
-    this.mediator.onUpdateGameDefinitionCode.next(this.codes);
+    this.mediator.onUpdateSuggestedCode.next(this.codes);
   }
-
 }

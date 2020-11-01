@@ -14,12 +14,15 @@ import { PartialModelGameDefinition } from "./game-definition-edit.model";
 export class GameDefinitionEditMediatorService {
   onEditBasicInfo: Subject<ModelGameDefinition> = new BehaviorSubject(null);
   onEditGameDefinitionCode: Subject<ModelCode[]> = new BehaviorSubject(null);
+  onEditGameDefinitionSuggestedCode: Subject<ModelCode[]> = new BehaviorSubject(null);
   onEditSceneComponent: Subject<ModelSceneComponent> = new BehaviorSubject(
     null
   );
 
   onUpdateBasicInfo: Subject<PartialModelGameDefinition> = new Subject();
   onUpdateSceneComponents: Subject<ModelSceneComponent[]> = new Subject();
+  onUpdateGameDefinitionCode: Subject<ModelCode[]> = new Subject();
+  onUpdateSuggestedCode: Subject<ModelCode[]> = new Subject();
 
   constructor() {}
 }

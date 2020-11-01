@@ -4,65 +4,16 @@
     <app-mark-down [fileName]="helpFile"></app-mark-down>
   </mat-expansion-panel>
 
-  <mat-expansion-panel [expanded]="true">
+  <!-- <mat-expansion-panel [expanded]="true">
     <mat-expansion-panel-header> Block </mat-expansion-panel-header>
     <app-code-blockly></app-code-blockly>
-  </mat-expansion-panel>
+  </mat-expansion-panel> -->
 
-  <mat-expansion-panel [expanded]="true">
-    <mat-expansion-panel-header> On Repeat </mat-expansion-panel-header>
+  <mat-expansion-panel *ngFor="let editor of editors" [expanded]="true">
+    <mat-expansion-panel-header>{{ editor.label }}</mat-expansion-panel-header>
     <app-code-editor
-      [script]="getScript('onRepeat')"
-      (onChange)="updateCode('onRepeat', $event)"
-    >
-    </app-code-editor>
-  </mat-expansion-panel>
-
-  <mat-expansion-panel>
-    <mat-expansion-panel-header> On Start </mat-expansion-panel-header>
-    <app-code-editor
-      [script]="getScript('onStart')"
-      (onChange)="updateCode('onStart', $event)"
-    >
-    </app-code-editor>
-  </mat-expansion-panel>
-
-  <mat-expansion-panel>
-    <mat-expansion-panel-header> On Hit Wall </mat-expansion-panel-header>
-    <app-code-editor
-      [script]="getScript('onHitWall')"
-      (onChange)="updateCode('onHitWall', $event)"
-    >
-    </app-code-editor>
-  </mat-expansion-panel>
-
-  <mat-expansion-panel>
-    <mat-expansion-panel-header> On Found </mat-expansion-panel-header>
-    <app-code-editor
-      [script]="getScript('onFound')"
-      (onChange)="updateCode('onFound', $event)"
-    >
-    </app-code-editor>
-  </mat-expansion-panel>
-
-  <mat-expansion-panel>
-    <mat-expansion-panel-header>
-      On Got Damage
-    </mat-expansion-panel-header>
-    <app-code-editor
-      [script]="getScript('onGotDamage')"
-      (onChange)="updateCode('onGotDamage', $event)"
-    >
-    </app-code-editor>
-  </mat-expansion-panel>
-
-  <mat-expansion-panel>
-    <mat-expansion-panel-header>
-      On Hit Other
-    </mat-expansion-panel-header>
-    <app-code-editor
-      [script]="getScript('onHitOther')"
-      (onChange)="updateCode('onHitOther', $event)"
+      [script]="getScript(editor.event)"
+      (onChange)="updateCode(editor.event, $event)"
     >
     </app-code-editor>
   </mat-expansion-panel>

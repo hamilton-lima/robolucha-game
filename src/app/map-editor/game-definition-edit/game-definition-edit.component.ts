@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, EventEmitter, OnInit, ViewChild } from "@angular/core";
 import { MatDrawer } from "@angular/material/sidenav";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ArenaComponent } from "src/app/arena/arena.component";
@@ -39,27 +39,35 @@ export class GameDefinitionEditComponent implements OnInit {
     private events: EventsService,
     private router: Router,
     private alert: AlertService,
-    private builder: MatchStateBuilderService
+    private builder: MatchStateBuilderService,
+    private cdRef: ChangeDetectorRef,
   ) {}
 
   ngOnInit() {
     this.mediator.onEditBasicInfo.subscribe((current) => {
-      if( current ){
+      if( current && this.editorDrawer){
         this.currentEditor = CurrentEditorEnum.BasicInfo;
         this.editorDrawer.open();
       }
     });
 
     this.mediator.onEditGameDefinitionCode.subscribe((current) => {
-      if( current ){
+      if( current && this.editorDrawer){
         this.currentEditor = CurrentEditorEnum.Codes;
         this.editorDrawer.open();
       }
     });
 
     this.mediator.onEditSceneComponent.subscribe((current) => {
-      if( current ){
+      if( current && this.editorDrawer){
         this.currentEditor = CurrentEditorEnum.SingleSceneComponent;
+        this.editorDrawer.open();
+      }
+    });
+
+    this.mediator.onEditGameDefinitionSuggestedCode.subscribe((current) => {
+      if( current && this.editorDrawer){
+        this.currentEditor = CurrentEditorEnum.SuggestedCode;
         this.editorDrawer.open();
       }
     });
@@ -77,6 +85,18 @@ export class GameDefinitionEditComponent implements OnInit {
       this.dirty = true;
     });
 
+    this.mediator.onUpdateGameDefinitionCode.subscribe((codes) => {
+      console.log("code updated", codes);
+      this.gameDefinition.codes = codes;
+      this.dirty = true;
+    });
+
+    this.mediator.onUpdateSuggestedCode.subscribe((codes) => {
+      console.log("code updated", codes);
+      this.gameDefinition.suggestedCodes = codes;
+      this.dirty = true;
+    });
+
     this.page = this.route.snapshot.url.join("/");
     this.luchador = this.route.snapshot.data.luchador;
     this.gameDefinitionID = Number.parseInt(
@@ -88,6 +108,8 @@ export class GameDefinitionEditComponent implements OnInit {
       .subscribe((gameDefinition) => {
         this.dirty = false;
         this.gameDefinition = gameDefinition;
+
+        this.cdRef.detectChanges();
         this.refreshMatchState();
       });
   }
@@ -117,6 +139,8 @@ export class GameDefinitionEditComponent implements OnInit {
       }
     });
 
+    console.log("after update basic info", this.gameDefinition.codes);
+
     if (updatedFields.length > 0) {
       this.dirty = true;
     }
@@ -144,7 +168,10 @@ export class GameDefinitionEditComponent implements OnInit {
   }
 
   save() {
+    console.log("save gamedefinition with codes", this.gameDefinition.codes.length, this.gameDefinition.codes);
+    
     this.api.privateMapeditorPut(this.gameDefinition).subscribe((result) => {
+      console.log("after update", result);
       this.alert.infoTop("Map updated", "DISMISS");
       this.dirty = false;
     });
@@ -165,5 +192,9 @@ export class GameDefinitionEditComponent implements OnInit {
 
   isSingleSceneComponentCurrent() {
     return this.currentEditor == CurrentEditorEnum.SingleSceneComponent;
+  }
+
+  isGameDefinitionSuggestedCodeCurrent() {
+    return this.currentEditor == CurrentEditorEnum.SuggestedCode;
   }
 }
