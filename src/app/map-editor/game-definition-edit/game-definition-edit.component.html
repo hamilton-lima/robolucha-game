@@ -13,13 +13,20 @@
       SAVE
     </button>
     <hr />
-    <app-basic-info [gameDefinition]="gameDefinition"></app-basic-info>
-    <app-game-definition-code
-      [gameDefinition]="gameDefinition"
-    ></app-game-definition-code>
-    <app-scene-components
-      [components]="gameDefinition.sceneComponents"
-    ></app-scene-components>
+
+    <mat-accordion multi="true">
+      <app-basic-info [gameDefinition]="gameDefinition"></app-basic-info>
+    
+      <app-game-definition-code
+        [gameDefinition]="gameDefinition"
+      ></app-game-definition-code>
+      
+      <app-scene-components
+        [components]="gameDefinition.sceneComponents"
+      ></app-scene-components>
+  
+    </mat-accordion>
+  
   </mat-sidenav>
 
   <mat-sidenav

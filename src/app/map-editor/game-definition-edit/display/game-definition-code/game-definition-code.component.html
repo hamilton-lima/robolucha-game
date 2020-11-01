@@ -1,23 +1,26 @@
-<div *ngIf="gameDefinition" class="container">
-  <div class="row">
-    <div class="col"><span class="title">Map Code</span></div>
+<mat-expansion-panel *ngIf="gameDefinition" [expanded]="true">
+  <mat-expansion-panel-header>
+    <mat-panel-title> Map Custom code </mat-panel-title>
+    <mat-panel-description> </mat-panel-description>
+  </mat-expansion-panel-header>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-4">Map Code</div>
+      <div class="col-8 text-left">{{ showGameCode() }}</div>
+    </div>
+
+    <div class="row">
+      <div class="col-4">Suggested Code</div>
+      <div class="col-8 text-left">{{ showSuggestedCode() }}</div>
+    </div>
+
   </div>
 
-  <div class="row">
-    <div class="col">Map code</div>
-    <div class="col">
-      <button mat-icon-button (click)="editGame()">
-        <mat-icon svgIcon="pencil"></mat-icon>
-      </button>
-    </div>
-  </div>
-  
-  <div class="row">
-    <div class="col">Player suggested code</div>
-    <div class="col">
-      <button mat-icon-button (click)="editSuggested()">
-        <mat-icon svgIcon="pencil"></mat-icon>
-      </button>
-    </div>
-  </div>
-</div>
+  <mat-action-row>
+    <button mat-button (click)="editGame()">EDIT</button>
+    <button mat-button (click)="editSuggested()">EDIT SUGGESTED</button>
+  </mat-action-row>
+</mat-expansion-panel>
+
+

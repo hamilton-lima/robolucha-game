@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { GameDefinitionEditMediatorService } from "src/app/map-editor/game-definition-edit/game-definition-edit-mediator.service";
-import { ModelGameDefinition } from "src/app/sdk";
+import { ModelCode, ModelGameDefinition } from "src/app/sdk";
 
 @Component({
   selector: "app-game-definition-code",
@@ -18,6 +18,26 @@ export class GameDefinitionCodeComponent implements OnInit {
   }
 
   editSuggested() {
-    this.mediator.onEditGameDefinitionSuggestedCode.next(this.gameDefinition.suggestedCodes);
+    this.mediator.onEditGameDefinitionSuggestedCode.next(
+      this.gameDefinition.suggestedCodes
+    );
+  }
+
+  showGameCode() {
+    return this.formatCodes(this.gameDefinition.codes);
+  }
+
+  showSuggestedCode() {
+    return this.formatCodes(this.gameDefinition.suggestedCodes);
+  }
+
+  formatCodes(codes: ModelCode[]) {
+    let result = [];
+    codes.forEach((code) => {
+      if (code && code.script) {
+        result.push(code.event);
+      }
+    });
+    return result;
   }
 }
