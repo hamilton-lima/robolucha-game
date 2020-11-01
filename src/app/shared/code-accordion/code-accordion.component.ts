@@ -28,7 +28,11 @@ export class CodeAccordionComponent implements OnInit {
     this.helpFile = "help/code_editor_help";
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    if(!this.codes){
+      this.codes = [];
+    }
+  }
 
   getScript(name: string) {
     const code = this.codes.find((code) => code.event == name);
