@@ -65,6 +65,13 @@ export class GameDefinitionEditComponent implements OnInit {
       }
     });
 
+    this.mediator.onEditGameDefinitionSuggestedCode.subscribe((current) => {
+      if( current && this.editorDrawer){
+        this.currentEditor = CurrentEditorEnum.SuggestedCode;
+        this.editorDrawer.open();
+      }
+    });
+
     this.mediator.onUpdateBasicInfo.subscribe((partial) => {
       if (partial && this.gameDefinition) {
         this.updateBasicInfo(partial);
@@ -81,6 +88,12 @@ export class GameDefinitionEditComponent implements OnInit {
     this.mediator.onUpdateGameDefinitionCode.subscribe((codes) => {
       console.log("code updated", codes);
       this.gameDefinition.codes = codes;
+      this.dirty = true;
+    });
+
+    this.mediator.onUpdateSuggestedCode.subscribe((codes) => {
+      console.log("code updated", codes);
+      this.gameDefinition.suggestedCodes = codes;
       this.dirty = true;
     });
 
@@ -179,5 +192,9 @@ export class GameDefinitionEditComponent implements OnInit {
 
   isSingleSceneComponentCurrent() {
     return this.currentEditor == CurrentEditorEnum.SingleSceneComponent;
+  }
+
+  isGameDefinitionSuggestedCodeCurrent() {
+    return this.currentEditor == CurrentEditorEnum.SuggestedCode;
   }
 }

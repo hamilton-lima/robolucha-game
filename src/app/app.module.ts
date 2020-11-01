@@ -63,6 +63,7 @@ import { BasicInfoComponent } from './map-editor/game-definition-edit/display/ba
 import { GameDefinitionCodeComponent } from './map-editor/game-definition-edit/display/game-definition-code/game-definition-code.component';
 import { SceneComponentsComponent } from './map-editor/game-definition-edit/display/scene-components/scene-components.component';
 import { WallPaperGeneratorComponent } from './wall-paper-generator/wall-paper-generator.component';
+import { GameDefinitionSuggestedCodeEditorComponent } from './map-editor/game-definition-edit/editor/game-definition-suggested-code-editor/game-definition-suggested-code-editor.component';
 
 const ROUTES: Routes = [
   { path: "", redirectTo: "/home", pathMatch: "full" },
@@ -213,6 +214,7 @@ export function apiConfigFactory(): Configuration {
     GameDefinitionCodeComponent,
     SceneComponentsComponent,
     WallPaperGeneratorComponent,
+    GameDefinitionSuggestedCodeEditorComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,7 +1,12 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { Subject } from "rxjs";
 import { Message } from "src/app/shared/message/message.model";
 import { ModelCode } from "src/app/sdk";
+
+export class CodeAcordionEventEditor {
+  label: string
+  event: string
+}
 
 @Component({
   selector: "app-code-accordion",
@@ -10,8 +15,11 @@ import { ModelCode } from "src/app/sdk";
 })
 export class CodeAccordionComponent implements OnInit {
   @Input() codes: ModelCode[];
+  @Input() editors: CodeAcordionEventEditor[];
   @Input() helpFile: string;
   @Input() messageSubject: Subject<Message>;
+
+  @Output() update: EventEmitter<ModelCode[]> = new EventEmitter();
 
   dirty: boolean = false;
 
@@ -30,9 +38,19 @@ export class CodeAccordionComponent implements OnInit {
     return "";
   }
 
-  // update the internal list of codes from the editor
   updateCode(event: string, script: string) {
-    this.dirty = true;
-    this.codes[event].script = script;
+    console.log("udpate code ", event, script);
+    const search = this.codes.find((code) => code.event == event);
+
+    if (search) {
+      search.script = script;
+    } else {
+      this.codes.push(<ModelCode>{
+        event: event,
+        script: script,
+      });
+    }
+
+    this.update.emit(this.codes);
   }
 }

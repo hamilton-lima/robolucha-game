@@ -13,7 +13,11 @@ export class GameDefinitionCodeComponent implements OnInit {
   constructor(private mediator: GameDefinitionEditMediatorService) {}
   ngOnInit() {}
 
-  edit() {
+  editGame() {
     this.mediator.onEditGameDefinitionCode.next(this.gameDefinition.codes);
+  }
+
+  editSuggested() {
+    this.mediator.onEditGameDefinitionSuggestedCode.next(this.gameDefinition.suggestedCodes);
   }
 }

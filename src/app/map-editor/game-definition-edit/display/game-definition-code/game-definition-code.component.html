@@ -1,1 +1,23 @@
-<button mat-raised-button (click)="edit()">game def code</button>
+<div *ngIf="gameDefinition" class="container">
+  <div class="row">
+    <div class="col"><span class="title">Map Code</span></div>
+  </div>
+
+  <div class="row">
+    <div class="col">Map code</div>
+    <div class="col">
+      <button mat-icon-button (click)="editGame()">
+        <mat-icon svgIcon="pencil"></mat-icon>
+      </button>
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="col">Player suggested code</div>
+    <div class="col">
+      <button mat-icon-button (click)="editSuggested()">
+        <mat-icon svgIcon="pencil"></mat-icon>
+      </button>
+    </div>
+  </div>
+</div>
