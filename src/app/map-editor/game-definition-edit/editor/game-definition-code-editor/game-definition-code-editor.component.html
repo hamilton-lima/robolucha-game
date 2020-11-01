@@ -1,3 +1,36 @@
-<p>
-  game-definition-code-editor works!
-</p>
+<mat-accordion>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header> Help </mat-expansion-panel-header>
+    <app-mark-down [fileName]="'help/server_code_editor_help'"></app-mark-down>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header> On Repeat </mat-expansion-panel-header>
+    <app-code-editor
+      [script]="getCode('onRepeat').script"
+      (onChange)="updateCode('onRepeat', $event)"
+    >
+    </app-code-editor>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel>
+    <mat-expansion-panel-header> On Start </mat-expansion-panel-header>
+    <app-code-editor
+      [script]="getCode('onStart').script"
+      (onChange)="updateCode('onStart', $event)"
+    >
+    </app-code-editor>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      On Hit Other
+    </mat-expansion-panel-header>
+    <app-code-editor
+      [script]="getCode('onHitOther').script"
+      (onChange)="updateCode('onHitOther', $event)"
+    >
+    </app-code-editor>
+  </mat-expansion-panel>
+
+</mat-accordion>

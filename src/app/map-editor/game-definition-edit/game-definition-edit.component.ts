@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, EventEmitter, OnInit, ViewChild } from "@angular/core";
 import { MatDrawer } from "@angular/material/sidenav";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ArenaComponent } from "src/app/arena/arena.component";
@@ -39,26 +39,27 @@ export class GameDefinitionEditComponent implements OnInit {
     private events: EventsService,
     private router: Router,
     private alert: AlertService,
-    private builder: MatchStateBuilderService
+    private builder: MatchStateBuilderService,
+    private cdRef: ChangeDetectorRef,
   ) {}
 
   ngOnInit() {
     this.mediator.onEditBasicInfo.subscribe((current) => {
-      if( current ){
+      if( current && this.editorDrawer){
         this.currentEditor = CurrentEditorEnum.BasicInfo;
         this.editorDrawer.open();
       }
     });
 
     this.mediator.onEditGameDefinitionCode.subscribe((current) => {
-      if( current ){
+      if( current && this.editorDrawer){
         this.currentEditor = CurrentEditorEnum.Codes;
         this.editorDrawer.open();
       }
     });
 
     this.mediator.onEditSceneComponent.subscribe((current) => {
-      if( current ){
+      if( current && this.editorDrawer){
         this.currentEditor = CurrentEditorEnum.SingleSceneComponent;
         this.editorDrawer.open();
       }
@@ -77,6 +78,13 @@ export class GameDefinitionEditComponent implements OnInit {
       this.dirty = true;
     });
 
+    this.mediator.onUpdateGameDefinitionCode.subscribe((codes) => {
+      console.log("updated", codes);
+      this.gameDefinition.codes = codes;
+      this.refreshMatchState();
+      this.dirty = true;
+    });
+
     this.page = this.route.snapshot.url.join("/");
     this.luchador = this.route.snapshot.data.luchador;
     this.gameDefinitionID = Number.parseInt(
@@ -88,6 +96,8 @@ export class GameDefinitionEditComponent implements OnInit {
       .subscribe((gameDefinition) => {
         this.dirty = false;
         this.gameDefinition = gameDefinition;
+
+        this.cdRef.detectChanges();
         this.refreshMatchState();
       });
   }
