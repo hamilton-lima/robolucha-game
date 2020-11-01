@@ -22,7 +22,7 @@
           {{ w.component.x }}/{{ w.component.y }}<br />
           {{ w.component.angle }}/{{ w.component.gunAngle }}
         </td>
-        <td>{{ formatCodes(w.component.codes) }}</td>
+        <td class="codes">{{ formatCodes(w.component.codes) }}</td>
         <td>
           <button mat-icon-button (click)="edit(w)">
             <mat-icon svgIcon="pencil"></mat-icon>

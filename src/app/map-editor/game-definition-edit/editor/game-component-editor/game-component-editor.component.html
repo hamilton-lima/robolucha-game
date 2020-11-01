@@ -72,4 +72,15 @@
       </mat-form-field>
     </div>
   </div>
+
+  <div class="row">
+    <div class="col">
+      <app-code-accordion
+        [codes]="codes"
+        [helpFile]="helpFile"
+        [editors]="editors"
+        (update)="updateCode($event)"
+      ></app-code-accordion>
+    </div>
+  </div>
 </div>

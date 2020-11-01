@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
-import { ModelGameComponent } from "src/app/sdk";
+import { ModelCode, ModelGameComponent } from "src/app/sdk";
 import {
   GameDefinitionEditMediatorService,
   ModelGameComponentEditWrapper,
@@ -24,6 +24,10 @@ export class GameComponentEditorComponent implements OnInit {
     y: ["", [Validators.required, Validators.pattern("^[0-9]*$")]],
   });
 
+  helpFile: string;
+  editors: { event: string; label: string; }[];
+  codes: ModelCode[];
+
   constructor(
     private mediator: GameDefinitionEditMediatorService,
     private formBuilder: FormBuilder
@@ -34,6 +38,7 @@ export class GameComponentEditorComponent implements OnInit {
       (wrapper: ModelGameComponentEditWrapper) => {
         this.id = wrapper.id;
         this.component = wrapper.component;
+        this.codes = this.component.codes;
         this.form.patchValue(this.component);
       }
     );
@@ -41,6 +46,17 @@ export class GameComponentEditorComponent implements OnInit {
     this.form.valueChanges.subscribe(() => {
       this.save();
     });
+
+    this.helpFile = "help/server_code_editor_help";
+    this.editors = [
+      { event: "onRepeat", label: "On repeat" },
+      { event: "onStart", label: "On start" },
+      { event: "onHitWall", label: "On hit wall" },
+      { event: "onFound", label: "On found" },
+      { event: "onGotDamage", label: "On got damage" },
+      { event: "onHitOther", label: "On hit other" },
+    ];
+
   }
 
   save() {
@@ -52,6 +68,7 @@ export class GameComponentEditorComponent implements OnInit {
         gunAngle: Number.parseInt(this.form.get("gunAngle").value),
         x: Number.parseInt(this.form.get("x").value),
         y: Number.parseInt(this.form.get("y").value),
+        codes: this.codes
       };
 
       const value = <ModelGameComponentEditWrapper>{
@@ -60,5 +77,9 @@ export class GameComponentEditorComponent implements OnInit {
       };
       this.mediator.onUpdateGameComponent.next(value);
     }
+  }
+
+  updateCode(codes: ModelCode[]){
+    this.codes = codes;
   }
 }
