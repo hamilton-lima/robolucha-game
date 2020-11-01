@@ -1,0 +1,41 @@
+<mat-expansion-panel [expanded]="true">
+  <mat-expansion-panel-header>
+    <mat-panel-title> NPCs </mat-panel-title>
+    <mat-panel-description> </mat-panel-description>
+  </mat-expansion-panel-header>
+
+  <table class="scene-component-table">
+    <thead>
+      <tr>
+        <th width="20%">Name</th>
+        <th width="10%">Life</th>
+        <th width="30%">X / Y<br />Angle / Gun angle</th>
+        <th width="20%">Codes</th>
+        <th width="20%">&nbsp;</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let w of wrapped; index as i">
+        <td>{{ w.component.name }}</td>
+        <td>{{ w.component.life }}</td>
+        <td>
+          {{ w.component.x }}/{{ w.component.y }}<br />
+          {{ w.component.angle }}/{{ w.component.gunAngle }}
+        </td>
+        <td class="codes">{{ formatCodes(w.component.codes) }}</td>
+        <td>
+          <button mat-icon-button (click)="edit(w)">
+            <mat-icon svgIcon="pencil"></mat-icon>
+          </button>
+          <button mat-icon-button (click)="delete(i)">
+            <mat-icon svgIcon="delete"></mat-icon>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <mat-action-row>
+    <button mat-button (click)="add()">ADD</button>
+  </mat-action-row>
+</mat-expansion-panel>

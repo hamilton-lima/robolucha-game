@@ -16,17 +16,19 @@
 
     <mat-accordion multi="true">
       <app-basic-info [gameDefinition]="gameDefinition"></app-basic-info>
-    
+
       <app-game-definition-code
         [gameDefinition]="gameDefinition"
       ></app-game-definition-code>
-      
+
+      <app-game-component
+        [components]="gameDefinition.gameComponents"
+      ></app-game-component>
+
       <app-scene-components
         [components]="gameDefinition.sceneComponents"
       ></app-scene-components>
-  
     </mat-accordion>
-  
   </mat-sidenav>
 
   <mat-sidenav
@@ -48,8 +50,15 @@
       <app-game-definition-code-editor></app-game-definition-code-editor>
     </div>
 
-    <div *ngIf="isGameDefinitionSuggestedCodeCurrent()" class="mt-2 right-panel-scroll">
+    <div
+      *ngIf="isGameDefinitionSuggestedCodeCurrent()"
+      class="mt-2 right-panel-scroll"
+    >
       <app-game-definition-suggested-code-editor></app-game-definition-suggested-code-editor>
+    </div>
+
+    <div *ngIf="isGameComponentCurrent()" class="mt-2 right-panel-scroll">
+      <app-game-component-editor></app-game-component-editor>
     </div>
 
     <div
@@ -58,7 +67,6 @@
     >
       <app-single-scene-component-editor></app-single-scene-component-editor>
     </div>
-
   </mat-sidenav>
 
   <section>
