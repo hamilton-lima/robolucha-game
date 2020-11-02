@@ -108,10 +108,8 @@ export class ArenaComponent
 
   ngOnInit() {
     if (!this.currentLuchador) {
-      console.error("currentLuchador missing");
       return;
     }
-    console.log("arena-component nginit");
   }
 
   ngAfterViewInit() {
@@ -198,7 +196,6 @@ export class ArenaComponent
 
     if (this.matchStateSubject) {
       this.matchStateSubject.subscribe((matchState: MatchState) => {
-        console.log("matchstate", matchState);
         this.nextMatchState = matchState;
       });
     }
