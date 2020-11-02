@@ -16,10 +16,17 @@ export class SingleSceneComponentEditorComponent implements OnInit {
   form = this.formBuilder.group({
     type: ["", Validators.required],
     color: ["", Validators.required],
-    x: ["", [Validators.required, Validators.pattern("^[0-9]*$")]],
-    y: ["", [Validators.required, Validators.pattern("^[0-9]*$")]],
-    width: ["", [Validators.required, Validators.pattern("^[0-9]*$")]],
-    height: ["", [Validators.required, Validators.pattern("^[0-9]*$")]],
+    x: [0, [Validators.required, Validators.pattern("^[0-9]*$")]],
+    y: [0, [Validators.required, Validators.pattern("^[0-9]*$")]],
+    width: [0, [Validators.required, Validators.pattern("^[0-9]*$")]],
+    height: [0, [Validators.required, Validators.pattern("^[0-9]*$")]],
+    alpha: [0, [Validators.required, Validators.min(0), Validators.max(1)]],
+    blockMovement: [false],
+    colider: [false],
+    life: [0, [Validators.required, Validators.pattern("^[0-9]*$")]],
+    respawn: [false],
+    rotation: [0, [Validators.required, Validators.min(0), Validators.max(360)]],
+    showInRadar: [false],
   });
 
   helpFile: string;
@@ -59,13 +66,20 @@ export class SingleSceneComponentEditorComponent implements OnInit {
 
   save() {
     if (this.form.valid) {
-      const component = <ModelGameComponent>{
+      const component = <ModelSceneComponent>{
         type: this.form.get("type").value,
         color: this.form.get("color").value,
-        x: Number.parseInt(this.form.get("x").value),
-        y: Number.parseInt(this.form.get("y").value),
-        width: Number.parseInt(this.form.get("width").value),
-        height: Number.parseInt(this.form.get("height").value),
+        x: this.form.get("x").value,
+        y: this.form.get("y").value,
+        width: this.form.get("width").value,
+        height: this.form.get("height").value,
+        alpha: this.form.get("alpha").value,
+        blockMovement: this.form.get("blockMovement").value,
+        colider: this.form.get("colider").value,
+        life: this.form.get("life").value,
+        respawn: this.form.get("respawn").value,
+        rotation: this.form.get("rotation").value,
+        showInRadar: this.form.get("showInRadar").value,
         codes: this.codes
       };
 

@@ -16,7 +16,7 @@
     </thead>
     <tbody>
       <tr *ngFor="let w of wrapped; index as i">
-        <td>{{w.component.type}}</td>
+        <td>{{w.component.type}} {{formatBlock(w)}}</td>
         <td><span [ngStyle]="{'color': w.component.color}">&#9724;</span> {{w.component.color}}</td>
         <td>{{w.component.x}}/{{w.component.y}}</td>
         <td>{{w.component.width}}/{{w.component.height}}</td>

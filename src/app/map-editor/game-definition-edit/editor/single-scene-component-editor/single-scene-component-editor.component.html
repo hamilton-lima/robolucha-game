@@ -59,6 +59,75 @@
 
   <div class="row">
     <div class="col">
+      <mat-form-field class="col-10 mt-3 mx-auto">
+        <mat-label>Alpha</mat-label>
+        <input type="text" matInput formControlName="alpha" />
+        <mat-error
+          *ngIf="
+            form.get('alpha').hasError('min') ||
+            form.get('alpha').hasError('max')
+          "
+        >
+          Alpha values should be from 0 to 1.
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <div class="col mt-3 mx-auto">
+        <mat-checkbox formControlName="blockMovement"
+          >Block Movement</mat-checkbox
+        >
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <div class="col mt-3 mx-auto">
+        <mat-checkbox formControlName="colider">Colider</mat-checkbox>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <div class="col mt-3 mx-auto">
+        <mat-checkbox formControlName="respawn">Respawn</mat-checkbox>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <div class="col mt-3 mx-auto">
+        <mat-checkbox formControlName="showInRadar">Show in radar</mat-checkbox>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <mat-form-field class="col mt-3 mx-auto">
+        <mat-label>Life</mat-label>
+        <input type="text" matInput formControlName="life" />
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <mat-form-field class="col mt-3 mx-auto">
+        <mat-label>Rotation</mat-label>
+        <input type="text" matInput formControlName="rotation" />
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
       <app-code-accordion
         [codes]="codes"
         [helpFile]="helpFile"

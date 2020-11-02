@@ -3,10 +3,7 @@ import {
   GameDefinitionEditMediatorService,
   ModelSceneComponentEditWrapper,
 } from "src/app/map-editor/game-definition-edit/game-definition-edit-mediator.service";
-import {
-  ModelCode,
-  ModelSceneComponent,
-} from "src/app/sdk";
+import { ModelCode, ModelSceneComponent } from "src/app/sdk";
 import { SceneComponentBuilderService } from "./scene-component-builder.service";
 
 @Component({
@@ -76,5 +73,13 @@ export class SceneComponentsComponent implements OnInit {
 
   edit(component: ModelSceneComponentEditWrapper) {
     this.mediator.onEditSceneComponent.next(component);
+  }
+
+  formatBlock(wrapper: ModelSceneComponentEditWrapper): string {
+    if (wrapper && wrapper.component && wrapper.component.blockMovement) {
+      return "blocks";
+    }
+
+    return "";
   }
 }
