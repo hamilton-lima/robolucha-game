@@ -2,9 +2,7 @@ import { Injectable } from "@angular/core";
 import { ModelSceneComponent } from "src/app/sdk";
 import { ModelSceneComponentEditWrapper } from "../../game-definition-edit-mediator.service";
 
-@Injectable({
-  providedIn: "root",
-})
+@Injectable()
 export class SceneComponentBuilderService {
   x = 0;
   y = 0;

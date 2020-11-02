@@ -3,9 +3,7 @@ import { ModelGameComponent } from "src/app/sdk";
 import { nameByRace } from "fantasy-name-generator";
 import { ModelGameComponentEditWrapper } from "../../game-definition-edit-mediator.service";
 
-@Injectable({
-  providedIn: "root",
-})
+@Injectable()
 export class GameComponentBuildService {
   x = 200;
   y = 120;

@@ -10,6 +10,7 @@ import { SceneComponentBuilderService } from "./scene-component-builder.service"
   selector: "app-scene-components",
   templateUrl: "./scene-components.component.html",
   styleUrls: ["./scene-components.component.scss"],
+  providers: [SceneComponentBuilderService]
 })
 export class SceneComponentsComponent implements OnInit {
   @Input() components: ModelSceneComponent[];
