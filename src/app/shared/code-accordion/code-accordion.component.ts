@@ -4,8 +4,8 @@ import { Message } from "src/app/shared/message/message.model";
 import { ModelCode } from "src/app/sdk";
 
 export class CodeAcordionEventEditor {
-  label: string
-  event: string
+  label: string;
+  event: string;
 }
 
 @Component({
@@ -29,7 +29,7 @@ export class CodeAccordionComponent implements OnInit {
   }
 
   ngOnInit() {
-    if(!this.codes){
+    if (!this.codes) {
       this.codes = [];
     }
   }
@@ -56,5 +56,10 @@ export class CodeAccordionComponent implements OnInit {
     }
 
     this.update.emit(this.codes);
+  }
+
+  isExpanded(i) {
+    // expand first element by default
+    return i == 0;
   }
 }
