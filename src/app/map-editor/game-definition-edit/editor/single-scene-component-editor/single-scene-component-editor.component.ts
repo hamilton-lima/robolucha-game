@@ -25,7 +25,6 @@ export class SingleSceneComponentEditorComponent implements OnInit {
     colider: [false],
     life: [0, Validators.required],
     respawn: [false],
-    rotation: [0, [Validators.required, Validators.min(0), Validators.max(360)]],
     showInRadar: [false],
   });
 
@@ -78,7 +77,6 @@ export class SingleSceneComponentEditorComponent implements OnInit {
         colider: this.form.get("colider").value,
         life: Number.parseInt(this.form.get("life").value),
         respawn: this.form.get("respawn").value,
-        rotation: Number.parseInt(this.form.get("rotation").value),
         showInRadar: this.form.get("showInRadar").value,
         codes: this.codes
       };

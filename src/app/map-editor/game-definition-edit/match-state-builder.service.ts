@@ -50,13 +50,14 @@ export class MatchStateBuilderService {
     sceneComponents: ModelSceneComponent[]
   ): SceneComponent[] {
     const result: SceneComponent[] = [];
+    let pos = 1;
 
     sceneComponents.forEach((component) => {
       const item = <SceneComponent>{
+        id: pos++,
         alpha: component.alpha,
         color: component.color,
         height: component.height,
-        rotation: component.rotation,
         type: component.type,
         width: component.width,
         x: component.x,
