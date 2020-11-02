@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import { RotationGizmo } from "babylonjs";
 import {
   ModelGameComponent,
   ModelGameDefinition,
@@ -58,6 +59,7 @@ export class MatchStateBuilderService {
         height: component.height,
         type: component.type,
         width: component.width,
+        rotation: component.rotation,
         x: component.x,
         y: component.y,
       };

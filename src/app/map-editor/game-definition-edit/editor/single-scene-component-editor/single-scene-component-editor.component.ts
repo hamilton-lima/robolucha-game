@@ -31,6 +31,7 @@ export class SingleSceneComponentEditorComponent implements OnInit {
     blockMovement: [false],
     colider: [false],
     life: [0, Validators.required],
+    rotation: [0, Validators.required],
     respawn: [false],
     showInRadar: [false],
   });
@@ -70,6 +71,7 @@ export class SingleSceneComponentEditorComponent implements OnInit {
   save() {
     if (this.form.valid) {
       const component = <ModelSceneComponent>{
+        id: this.component.id,
         type: this.form.get("type").value,
         color: this.form.get("color").value,
         x: Number.parseInt(this.form.get("x").value),
@@ -80,6 +82,7 @@ export class SingleSceneComponentEditorComponent implements OnInit {
         blockMovement: this.form.get("blockMovement").value,
         colider: this.form.get("colider").value,
         life: Number.parseInt(this.form.get("life").value),
+        rotation: Number.parseInt(this.form.get("rotation").value),
         respawn: this.form.get("respawn").value,
         showInRadar: this.form.get("showInRadar").value,
         codes: this.codes,

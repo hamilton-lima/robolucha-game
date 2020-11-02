@@ -62,6 +62,7 @@ export class GameComponentEditorComponent implements OnInit {
   save() {
     if (this.form.valid) {
       const component = <ModelGameComponent>{
+        id: this.component.id,
         name: this.form.get("name").value,
         life: Number.parseInt(this.form.get("life").value),
         angle: Number.parseInt(this.form.get("angle").value),
