@@ -1,15 +1,22 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
-import { ModelCode, ModelGameComponent, ModelSceneComponent } from 'src/app/sdk';
-import { GameDefinitionEditMediatorService, ModelGameComponentEditWrapper, ModelSceneComponentEditWrapper } from '../../game-definition-edit-mediator.service';
+import { Component, OnInit } from "@angular/core";
+import { FormBuilder, Validators } from "@angular/forms";
+import {
+  ModelCode,
+  ModelGameComponent,
+  ModelSceneComponent,
+} from "src/app/sdk";
+import {
+  GameDefinitionEditMediatorService,
+  ModelGameComponentEditWrapper,
+  ModelSceneComponentEditWrapper,
+} from "../../game-definition-edit-mediator.service";
 
 @Component({
-  selector: 'app-single-scene-component-editor',
-  templateUrl: './single-scene-component-editor.component.html',
-  styleUrls: ['./single-scene-component-editor.component.scss']
+  selector: "app-single-scene-component-editor",
+  templateUrl: "./single-scene-component-editor.component.html",
+  styleUrls: ["./single-scene-component-editor.component.scss"],
 })
 export class SingleSceneComponentEditorComponent implements OnInit {
-
   id: number;
   component: ModelSceneComponent;
 
@@ -28,8 +35,16 @@ export class SingleSceneComponentEditorComponent implements OnInit {
     showInRadar: [false],
   });
 
-  helpFile: string;
-  editors: { event: string; label: string; }[];
+  helpFile: string = "help/code_editor_help";
+  editors: { event: string; label: string }[] = [
+    { event: "onRepeat", label: "On repeat" },
+    { event: "onStart", label: "On start" },
+    { event: "onHitWall", label: "On hit wall" },
+    { event: "onFound", label: "On found" },
+    { event: "onGotDamage", label: "On got damage" },
+    { event: "onHitOther", label: "On hit other" },
+  ];
+
   codes: ModelCode[];
 
   constructor(
@@ -50,17 +65,6 @@ export class SingleSceneComponentEditorComponent implements OnInit {
     this.form.valueChanges.subscribe(() => {
       this.save();
     });
-
-    this.helpFile = "help/code_editor_help";
-    this.editors = [
-      { event: "onRepeat", label: "On repeat" },
-      { event: "onStart", label: "On start" },
-      { event: "onHitWall", label: "On hit wall" },
-      { event: "onFound", label: "On found" },
-      { event: "onGotDamage", label: "On got damage" },
-      { event: "onHitOther", label: "On hit other" },
-    ];
-
   }
 
   save() {
@@ -78,7 +82,7 @@ export class SingleSceneComponentEditorComponent implements OnInit {
         life: Number.parseInt(this.form.get("life").value),
         respawn: this.form.get("respawn").value,
         showInRadar: this.form.get("showInRadar").value,
-        codes: this.codes
+        codes: this.codes,
       };
 
       const value = <ModelSceneComponentEditWrapper>{
@@ -89,9 +93,8 @@ export class SingleSceneComponentEditorComponent implements OnInit {
     }
   }
 
-  updateCode(codes: ModelCode[]){
+  updateCode(codes: ModelCode[]) {
     this.codes = codes;
     this.save();
   }
-
 }
