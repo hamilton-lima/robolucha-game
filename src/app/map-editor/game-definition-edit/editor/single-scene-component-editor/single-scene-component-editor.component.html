@@ -7,7 +7,10 @@
     <div class="col">
       <mat-form-field class="col-10 mt-3 mx-auto">
         <mat-label>Type</mat-label>
-        <input type="text" matInput formControlName="type" />
+        <mat-select matInput formControlName="type">
+          <mat-option value="wall">Wall</mat-option>
+          <mat-option value="region">Region</mat-option>
+        </mat-select>
       </mat-form-field>
     </div>
   </div>
