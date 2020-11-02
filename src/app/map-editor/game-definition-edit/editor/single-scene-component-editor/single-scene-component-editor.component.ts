@@ -2,12 +2,10 @@ import { Component, OnInit } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
 import {
   ModelCode,
-  ModelGameComponent,
   ModelSceneComponent,
 } from "src/app/sdk";
 import {
   GameDefinitionEditMediatorService,
-  ModelGameComponentEditWrapper,
   ModelSceneComponentEditWrapper,
 } from "../../game-definition-edit-mediator.service";
 

@@ -19,7 +19,8 @@
     <div class="col">
       <mat-form-field class="col-10 mt-3 mx-auto">
         <mat-label>Color</mat-label>
-        <input type="text" matInput formControlName="color" />
+        <input type="text" matInput formControlName="color" [value]="form.get('color').value"/>
+        <input type="color" matInput formControlName="color" [value]="form.get('color').value"/>
       </mat-form-field>
     </div>
   </div>
