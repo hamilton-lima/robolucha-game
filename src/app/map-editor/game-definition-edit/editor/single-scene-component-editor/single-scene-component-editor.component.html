@@ -1,23 +1,70 @@
-<p>
-  single-scene-component-editor works!
-</p>
+<div *ngIf="component" class="container" [formGroup]="form">
+  <div class="row">
+    <div class="col"><span class="title">Scene component</span></div>
+  </div>
 
- <!-- ModelSceneComponent {
-  alpha?: number;
-  blockMovement?: boolean;
-  codes?: Array<ModelCode>;
-  colider?: boolean;
-  color?: string;
-  gameDefinition?: number;
-  height?: number;
-  id?: number;
-  life?: number;
-  respawn?: boolean;
-  rotation?: number;
-  showInRadar?: boolean;
-  type?: string;
-  width?: number;
-  x?: number;
-  y?: number;
-}
- -->
+  <div class="row">
+    <div class="col">
+      <mat-form-field class="col-10 mt-3 mx-auto">
+        <mat-label>Type</mat-label>
+        <input type="text" matInput formControlName="type" />
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <mat-form-field class="col-10 mt-3 mx-auto">
+        <mat-label>Color</mat-label>
+        <input type="text" matInput formControlName="color" />
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <mat-form-field class="col-10 mt-3 mx-auto">
+        <mat-label>X</mat-label>
+        <input type="text" matInput formControlName="x" />
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <mat-form-field class="col-10 mt-3 mx-auto">
+        <mat-label>Y</mat-label>
+        <input type="text" matInput formControlName="y" />
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <mat-form-field class="col-10 mt-3 mx-auto">
+        <mat-label>Width</mat-label>
+        <input type="text" matInput formControlName="width" />
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <mat-form-field class="col-10 mt-3 mx-auto">
+        <mat-label>Height</mat-label>
+        <input type="text" matInput formControlName="height" />
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <app-code-accordion
+        [codes]="codes"
+        [helpFile]="helpFile"
+        [editors]="editors"
+        (update)="updateCode($event)"
+      ></app-code-accordion>
+    </div>
+  </div>
+</div>
