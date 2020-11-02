@@ -1,6 +1,9 @@
 import { Component, Input, OnInit } from "@angular/core";
-import { GameDefinitionEditMediatorService } from "src/app/map-editor/game-definition-edit/game-definition-edit-mediator.service";
-import { ModelGameDefinition, ModelSceneComponent } from "src/app/sdk";
+import {
+  GameDefinitionEditMediatorService,
+  ModelSceneComponentEditWrapper,
+} from "src/app/map-editor/game-definition-edit/game-definition-edit-mediator.service";
+import { ModelCode, ModelSceneComponent } from "src/app/sdk";
 import { SceneComponentBuilderService } from "./scene-component-builder.service";
 
 @Component({
@@ -15,23 +18,68 @@ export class SceneComponentsComponent implements OnInit {
     private mediator: GameDefinitionEditMediatorService,
     private builder: SceneComponentBuilderService
   ) {}
-  ngOnInit() {}
 
-  edit(sceneComponent: ModelSceneComponent) {
-    this.mediator.onEditSceneComponent.next(sceneComponent);
+  wrapped: ModelSceneComponentEditWrapper[];
+
+  ngOnInit() {
+    this.wrapped = this.builder.buildWrapperList(this.components);
+    this.mediator.onUpdateSceneComponent.subscribe((wrapper) => {
+      // search by id in the list
+      for (let key in this.wrapped) {
+        if (this.wrapped[key].id == wrapper.id) {
+          this.wrapped[key].component = wrapper.component;
+          console.log("found and updated", this.wrapped[key]);
+
+          this.mediator.onUpdateSceneComponents.next(
+            this.builder.unWrapList(this.wrapped)
+          );
+          break;
+        }
+      }
+    });
   }
 
   add() {
-    if (this.components) {
-      this.components.unshift(this.builder.build());
-      this.mediator.onUpdateSceneComponents.next(this.components);
+    if (this.wrapped) {
+      this.wrapped.unshift(this.builder.buildWrapper(this.builder.build()));
+      this.mediator.onUpdateSceneComponents.next(
+        this.builder.unWrapList(this.wrapped)
+      );
     }
   }
 
-  delete(i){
-    if (this.components) {
-      this.components.splice(i,1);
-      this.mediator.onUpdateSceneComponents.next(this.components);
+  delete(i: number) {
+    if (this.wrapped) {
+      this.wrapped.splice(i, 1);
+      this.mediator.onUpdateSceneComponents.next(
+        this.builder.unWrapList(this.wrapped)
+      );
     }
+  }
+
+  formatCodes(codes: ModelCode[]) {
+    if (!codes) {
+      return "";
+    }
+
+    let result = [];
+    codes.forEach((code) => {
+      if (code && code.script) {
+        result.push(code.event);
+      }
+    });
+    return result;
+  }
+
+  edit(component: ModelSceneComponentEditWrapper) {
+    this.mediator.onEditSceneComponent.next(component);
+  }
+
+  formatBlock(wrapper: ModelSceneComponentEditWrapper): string {
+    if (wrapper && wrapper.component && wrapper.component.blockMovement) {
+      return "blocks";
+    }
+
+    return "";
   }
 }
