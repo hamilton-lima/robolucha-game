@@ -32,10 +32,9 @@ export class MatchStateBuilderService {
   }
 
   buildGameComponents(gameComponents: ModelGameComponent[]): Luchador[] {
-    let pos = 1;
     return gameComponents.map((component) => {
       return <Luchador>{
-        id: pos++,
+        id: component.id,
         name: component.name,
         x: component.x,
         y: component.y,
@@ -50,11 +49,10 @@ export class MatchStateBuilderService {
     sceneComponents: ModelSceneComponent[]
   ): SceneComponent[] {
     const result: SceneComponent[] = [];
-    let pos = 1;
 
     sceneComponents.forEach((component) => {
       const item = <SceneComponent>{
-        id: pos++,
+        id: component.id,
         alpha: component.alpha,
         color: component.color,
         height: component.height,

@@ -15,7 +15,9 @@ export class GameComponentBuildService {
   constructor() {}
 
   build(): ModelGameComponent {
+    const tempID = (new Date()).getTime() * -1;
     const result = <ModelGameComponent>{
+      id: tempID,
       name: this.randomName(),
       isNPC: true,
       life: 20,

@@ -21,7 +21,10 @@ export class SceneComponentBuilderService {
   }
 
   build(): ModelSceneComponent {
+    const tempID = (new Date()).getTime() * -1;
+
     const result = <ModelSceneComponent>{
+      id: tempID,
       alpha: 1,
       blockMovement: true,
       codes: [],
