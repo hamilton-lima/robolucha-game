@@ -7,7 +7,7 @@ import {
 } from "@angular/core";
 import { MatDrawer } from "@angular/material/sidenav";
 import { ActivatedRoute, Router } from "@angular/router";
-import { ArenaComponent } from "src/app/arena/arena.component";
+import { ArenaComponent, Pickable } from "src/app/arena/arena.component";
 import { DefaultService, ModelCode, ModelGameDefinition } from "src/app/sdk";
 import { ModelLuchador } from "src/app/sdk/model/mainLuchador";
 import { AlertService } from "src/app/shared/alert.service";
@@ -256,5 +256,9 @@ export class GameDefinitionEditComponent implements OnInit {
 
   isGameComponentCurrent() {
     return this.currentEditor == CurrentEditorEnum.GameComponent;
+  }
+
+  pick(target: Pickable){
+    console.log('clicked on ', target );    
   }
 }

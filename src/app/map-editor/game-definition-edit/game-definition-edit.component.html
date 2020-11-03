@@ -81,6 +81,7 @@
       [matchStateSubject]="matchState"
       [cameraFollowLuchador]="false"
       (ready)="onArenaReady()"
+      (onPick)="pick($event)"
     ></app-arena>
   </section>
 </mat-sidenav-container>

@@ -1,6 +1,5 @@
 import * as BABYLON from "babylonjs";
 import { Base3D } from "./base3D";
-import { Helper3D } from "./helper3d";
 
 export class SceneComponent3D extends Base3D {
   rotation: number;
@@ -9,6 +8,8 @@ export class SceneComponent3D extends Base3D {
   originalW: number;
   originalH: number;
   color: string;
+  name: string;
+  id: number;
 
   constructor(
     id: number,
@@ -22,7 +23,9 @@ export class SceneComponent3D extends Base3D {
     alpha: number
   ) {
     super();
-    const name = "component:" + id;
+    this.id = id;
+    this.name = "component:" + id;
+
     this.originalH = h;
     this.originalW = w;
     this.scene = scene;
@@ -45,20 +48,26 @@ export class SceneComponent3D extends Base3D {
     this.mesh.material = boxMaterial;
   }
 
-  buildMesh(scene: BABYLON.Scene, type: string, w: number, h: number) {
+  buildMesh(scene: BABYLON.Scene, type: string, w: number, h: number): BABYLON.Mesh {
+    let result: BABYLON.Mesh;
+
     if (type == "wall") {
-      return BABYLON.MeshBuilder.CreateBox(
-        name,
+      result = BABYLON.MeshBuilder.CreateBox(
+        this.name,
         { width: w, height: h, depth: 3 },
         scene
       );
     } else {
-      return BABYLON.MeshBuilder.CreatePlane(
-        name,
+      result = BABYLON.MeshBuilder.CreatePlane(
+        this.name,
         { width: w, height: h },
         scene
       );
     }
+
+    result.id = this.id.toString();
+    result.isPickable = true;
+    return result;
   }
 
   setType(type: string) {

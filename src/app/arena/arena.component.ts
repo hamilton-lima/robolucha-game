@@ -8,7 +8,7 @@ import {
   OnDestroy,
   AfterViewInit,
   Output,
-  EventEmitter
+  EventEmitter,
 } from "@angular/core";
 import * as BABYLON from "babylonjs";
 import { Luchador3D } from "./luchador3d";
@@ -38,6 +38,11 @@ class SavedCamera {
   position: BABYLON.Vector3;
 }
 
+export class Pickable {
+  id: number;
+  name: string;
+}
+
 @Component({
   selector: "app-arena",
   templateUrl: "./arena.component.html",
@@ -50,7 +55,7 @@ export class ArenaComponent
   @Input() matchStateSubject: Subject<MatchState>;
   @Input() matchEventSubject: Subject<MatchEvent>;
   @Input() cameraChangeSubject: Subject<CameraChange>;
-  
+
   @Input() debug = false;
   @Input() cameraFollowLuchador = true;
   @Input() currentLuchador: number;
@@ -59,11 +64,12 @@ export class ArenaComponent
   @Input() matchID: number;
 
   @Output() ready = new EventEmitter<BABYLON.Scene>();
+  @Output() onPick = new EventEmitter<Pickable>();
 
   private engine: BABYLON.Engine;
   private scene: BABYLON.Scene;
   private camera: BABYLON.FreeCamera;
-  private cameraChange : CameraChange = CameraChange.Tower;
+  private cameraChange: CameraChange = CameraChange.Tower;
   private light: BABYLON.HemisphericLight;
 
   private luchadores: Array<Luchador3D>;
@@ -99,7 +105,7 @@ export class ArenaComponent
     this.dispose();
   }
 
-  dispose(){
+  dispose() {
     if (this.engine) {
       this.engine.dispose();
       this.engine = null;
@@ -181,11 +187,11 @@ export class ArenaComponent
   }
 
   createScene() {
-    if( this.engine){
+    if (this.engine) {
       console.warn("Trying to create babylon engine for the second time");
       return;
     }
-    
+
     this.engine = new BABYLON.Engine(this.canvas.nativeElement, true);
     this.resetState();
 
@@ -241,6 +247,20 @@ export class ArenaComponent
     this.engine.loadingUIText = "Loading the arena";
 
     this.scene = new BABYLON.Scene(this.engine);
+    
+    // emit event when element is clicked
+    this.scene.onPointerObservable.add(
+      (info: BABYLON.PointerInfo, state: BABYLON.EventState) => {
+        if (info.type == BABYLON.PointerEventTypes.POINTERUP) {
+          if (info.pickInfo.pickedMesh) {
+            this.onPick.emit(<Pickable>{
+              id: Number.parseInt(info.pickInfo.pickedMesh.id),
+              name: info.pickInfo.pickedMesh.name,
+            });
+          }
+        }
+      }
+    );
 
     const lightPosition = new BABYLON.Vector3(10, 10, -15);
     this.light = new BABYLON.HemisphericLight(
@@ -308,25 +328,22 @@ export class ArenaComponent
   updateCamera(): any {
     if (this.cameraFollowLuchador) {
       const luchador3D = this.luchadores[this.currentLuchador];
-      if (luchador3D) {    
-        this.changeCamera(luchador3D);   
+      if (luchador3D) {
+        this.changeCamera(luchador3D);
       }
     } else {
       this.saveCameraState();
     }
   }
 
-  changeCamera(luchador : Luchador3D){
-    if(this.cameraChange == CameraChange.Tower){
+  changeCamera(luchador: Luchador3D) {
+    if (this.cameraChange == CameraChange.Tower) {
       this.cameraService.towerCamera(this.camera, luchador);
-    }
-    else if (this.cameraChange == CameraChange.FirstPerson){
+    } else if (this.cameraChange == CameraChange.FirstPerson) {
       this.cameraService.firstPersonCamera(this.camera, luchador);
-    }
-    else if (this.cameraChange == CameraChange.ThirdPerson){
+    } else if (this.cameraChange == CameraChange.ThirdPerson) {
       this.cameraService.thirdPersonCamera(this.camera, luchador);
-    }
-    else{
+    } else {
       this.cameraService.crazyCamera(this.camera, luchador);
     }
   }
