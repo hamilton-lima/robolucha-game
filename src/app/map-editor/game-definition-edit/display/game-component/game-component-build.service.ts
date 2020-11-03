@@ -1,7 +1,6 @@
 import { Injectable } from "@angular/core";
 import { ModelGameComponent } from "src/app/sdk";
 import { nameByRace } from "fantasy-name-generator";
-import { ModelGameComponentEditWrapper } from "../../game-definition-edit-mediator.service";
 
 @Injectable()
 export class GameComponentBuildService {
@@ -13,7 +12,7 @@ export class GameComponentBuildService {
   constructor() {}
 
   build(): ModelGameComponent {
-    const tempID = (new Date()).getTime() * -1;
+    const tempID = new Date().getTime() * -1;
     const result = <ModelGameComponent>{
       id: tempID,
       name: this.randomName(),
@@ -35,25 +34,5 @@ export class GameComponentBuildService {
     const name = nameByRace("elf", { gender: "female" });
     console.log("name", name);
     return name;
-  }
-
-  // Build list with local ID to allow reference for edit
-  buildWrapperList(
-    gameComponents: ModelGameComponent[]
-  ): ModelGameComponentEditWrapper[] {
-    return gameComponents.map((component) => this.buildWrapper(component));
-  }
-
-  buildWrapper(component: ModelGameComponent): ModelGameComponentEditWrapper {
-    return <ModelGameComponentEditWrapper>{
-      id: this.id++,
-      component: component,
-    };
-  }
-
-  unWrapList(
-    wrapped: ModelGameComponentEditWrapper[]
-  ): ModelGameComponent[] {
-    return wrapped.map((w) => w.component);
   }
 }

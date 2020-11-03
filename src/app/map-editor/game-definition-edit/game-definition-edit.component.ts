@@ -13,10 +13,8 @@ import { ModelLuchador } from "src/app/sdk/model/mainLuchador";
 import { AlertService } from "src/app/shared/alert.service";
 import { EventsService } from "src/app/shared/events.service";
 import { MatchState } from "src/app/watch-match/watch-match.model";
-import { GameComponentBuildService } from "./display/game-component/game-component-build.service";
 import {
   GameDefinitionEditMediatorService,
-  ModelGameComponentEditWrapper,
 } from "./game-definition-edit-mediator.service";
 import { CurrentEditorEnum } from "./game-definition-edit.model";
 import { MatchStateBuilderService } from "./match-state-builder.service";

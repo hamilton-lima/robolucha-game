@@ -188,8 +188,13 @@ export class Luchador3D extends Base3D {
     charLoader.then(mesh => {
       mesh.parent = self.turret;
       self.character = mesh;
+      
+      mesh.id = "" + self.id;
+      mesh.isPickable = true;
+      mesh.name = self.getName();
+
       // shadowGenerator.addShadowCaster(mesh, true);
-      self.character.id = self.getName() + ".character";
+      // self.character.id = self.getName() + ".character";
       material.then(result => (self.character.material = result));
 
       self.createIdle();
@@ -281,7 +286,7 @@ export class Luchador3D extends Base3D {
   }
 
   getName(): string {
-    return "luchador" + this.id;
+    return "gamecomponent:" + this.id;
   }
 
   getHealth() {

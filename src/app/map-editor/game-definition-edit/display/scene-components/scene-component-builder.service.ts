@@ -1,6 +1,5 @@
 import { Injectable } from "@angular/core";
 import { ModelSceneComponent } from "src/app/sdk";
-import { ModelSceneComponentEditWrapper } from "../../game-definition-edit-mediator.service";
 
 @Injectable()
 export class SceneComponentBuilderService {
@@ -19,7 +18,7 @@ export class SceneComponentBuilderService {
   }
 
   build(): ModelSceneComponent {
-    const tempID = (new Date()).getTime() * -1;
+    const tempID = new Date().getTime() * -1;
 
     const result = <ModelSceneComponent>{
       id: tempID,
@@ -43,23 +42,5 @@ export class SceneComponentBuilderService {
     this.y = result.y;
 
     return result;
-  }
-
-  // Build list with local ID to allow reference for edit
-  buildWrapperList(
-    gameComponents: ModelSceneComponent[]
-  ): ModelSceneComponentEditWrapper[] {
-    return gameComponents.map((component) => this.buildWrapper(component));
-  }
-
-  buildWrapper(component: ModelSceneComponent): ModelSceneComponentEditWrapper {
-    return <ModelSceneComponentEditWrapper>{
-      id: this.id++,
-      component: component,
-    };
-  }
-
-  unWrapList(wrapped: ModelSceneComponentEditWrapper[]): ModelSceneComponent[] {
-    return wrapped.map((w) => w.component);
   }
 }

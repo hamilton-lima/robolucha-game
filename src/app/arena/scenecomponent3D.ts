@@ -24,7 +24,7 @@ export class SceneComponent3D extends Base3D {
   ) {
     super();
     this.id = id;
-    this.name = "component:" + id;
+    this.name = "scenecomponent:" + id;
 
     this.originalH = h;
     this.originalW = w;

@@ -1,8 +1,5 @@
 import { Component, Input, OnInit } from "@angular/core";
-import {
-  GameDefinitionEditMediatorService,
-  ModelSceneComponentEditWrapper,
-} from "src/app/map-editor/game-definition-edit/game-definition-edit-mediator.service";
+import { GameDefinitionEditMediatorService } from "src/app/map-editor/game-definition-edit/game-definition-edit-mediator.service";
 import { ModelCode, ModelSceneComponent } from "src/app/sdk";
 import { SceneComponentBuilderService } from "./scene-component-builder.service";
 
@@ -10,30 +7,24 @@ import { SceneComponentBuilderService } from "./scene-component-builder.service"
   selector: "app-scene-components",
   templateUrl: "./scene-components.component.html",
   styleUrls: ["./scene-components.component.scss"],
-  providers: [SceneComponentBuilderService]
+  providers: [SceneComponentBuilderService],
 })
 export class SceneComponentsComponent implements OnInit {
-  @Input() components: ModelSceneComponent[];
+  @Input() components: ModelSceneComponent[] = [];
 
   constructor(
     private mediator: GameDefinitionEditMediatorService,
     private builder: SceneComponentBuilderService
   ) {}
 
-  wrapped: ModelSceneComponentEditWrapper[];
-
   ngOnInit() {
-    this.wrapped = this.builder.buildWrapperList(this.components);
-    this.mediator.onUpdateSceneComponent.subscribe((wrapper) => {
+    this.mediator.onUpdateSceneComponent.subscribe((component) => {
       // search by id in the list
-      for (let key in this.wrapped) {
-        if (this.wrapped[key].id == wrapper.id) {
-          this.wrapped[key].component = wrapper.component;
-          console.log("found and updated", this.wrapped[key]);
+      for (let key in this.components) {
+        if (this.components[key].id == component.id) {
+          this.components[key] = component;
 
-          this.mediator.onUpdateSceneComponents.next(
-            this.builder.unWrapList(this.wrapped)
-          );
+          this.mediator.onUpdateSceneComponents.next(this.components);
           break;
         }
       }
@@ -41,21 +32,13 @@ export class SceneComponentsComponent implements OnInit {
   }
 
   add() {
-    if (this.wrapped) {
-      this.wrapped.unshift(this.builder.buildWrapper(this.builder.build()));
-      this.mediator.onUpdateSceneComponents.next(
-        this.builder.unWrapList(this.wrapped)
-      );
-    }
+    this.components.unshift(this.builder.build());
+    this.mediator.onUpdateSceneComponents.next(this.components);
   }
 
   delete(i: number) {
-    if (this.wrapped) {
-      this.wrapped.splice(i, 1);
-      this.mediator.onUpdateSceneComponents.next(
-        this.builder.unWrapList(this.wrapped)
-      );
-    }
+    this.components.splice(i, 1);
+    this.mediator.onUpdateSceneComponents.next(this.components);
   }
 
   formatCodes(codes: ModelCode[]) {
@@ -72,12 +55,12 @@ export class SceneComponentsComponent implements OnInit {
     return result;
   }
 
-  edit(component: ModelSceneComponentEditWrapper) {
+  edit(component: ModelSceneComponent) {
     this.mediator.onEditSceneComponent.next(component);
   }
 
-  formatBlock(wrapper: ModelSceneComponentEditWrapper): string {
-    if (wrapper && wrapper.component && wrapper.component.blockMovement) {
+  formatBlock(component: ModelSceneComponent): string {
+    if (component && component.blockMovement) {
       return "blocks";
     }
 

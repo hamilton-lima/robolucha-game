@@ -1,64 +1,43 @@
 import { Component, Input, OnInit } from "@angular/core";
-import {
-  ModelCode,
-  ModelGameComponent,
-  ModelGameDefinition,
-} from "src/app/sdk";
-import {
-  GameDefinitionEditMediatorService,
-  ModelGameComponentEditWrapper,
-} from "../../game-definition-edit-mediator.service";
+import { ModelCode, ModelGameComponent } from "src/app/sdk";
+import { GameDefinitionEditMediatorService } from "../../game-definition-edit-mediator.service";
 import { GameComponentBuildService } from "./game-component-build.service";
 
 @Component({
   selector: "app-game-component",
   templateUrl: "./game-component.component.html",
   styleUrls: ["./game-component.component.scss"],
-  providers: [GameComponentBuildService]
+  providers: [GameComponentBuildService],
 })
 export class GameComponentComponent implements OnInit {
-  @Input() components: ModelGameComponent[];
-  wrapped: ModelGameComponentEditWrapper[];
+  @Input() components: ModelGameComponent[] = [];
 
   constructor(
     private mediator: GameDefinitionEditMediatorService,
     private builder: GameComponentBuildService
   ) {}
   ngOnInit() {
-    this.wrapped = this.builder.buildWrapperList(this.components);
-    this.mediator.onUpdateGameComponent.subscribe((wrapper) => {
+    this.mediator.onUpdateGameComponent.subscribe((component) => {
       // search by id in the list
-      for(let key in this.wrapped){
-        if( this.wrapped[key].id == wrapper.id){
-          this.wrapped[key].component = wrapper.component;
-          console.log("found and updated", this.wrapped[key]);
+      for (let key in this.components) {
+        if (this.components[key].id == component.id) {
+          this.components[key] = component;
 
-          this.mediator.onUpdateGameComponents.next(
-            this.builder.unWrapList(this.wrapped)
-          );
+          this.mediator.onUpdateGameComponents.next(this.components);
           break;
         }
       }
-
     });
   }
 
   add() {
-    if (this.wrapped) {
-      this.wrapped.unshift(this.builder.buildWrapper(this.builder.build()));
-      this.mediator.onUpdateGameComponents.next(
-        this.builder.unWrapList(this.wrapped)
-      );
-    }
+    this.components.unshift(this.builder.build());
+    this.mediator.onUpdateGameComponents.next(this.components);
   }
 
   delete(i) {
-    if (this.wrapped) {
-      this.wrapped.splice(i, 1);
-      this.mediator.onUpdateGameComponents.next(
-        this.builder.unWrapList(this.wrapped)
-      );
-    }
+    this.components.splice(i, 1);
+    this.mediator.onUpdateGameComponents.next(this.components);
   }
 
   formatCodes(codes: ModelCode[]) {
@@ -75,7 +54,7 @@ export class GameComponentComponent implements OnInit {
     return result;
   }
 
-  edit(component: ModelGameComponentEditWrapper) {
+  edit(component: ModelGameComponent) {
     this.mediator.onEditGameComponent.next(component);
   }
 }

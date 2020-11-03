@@ -6,18 +6,7 @@ import {
   ModelGameDefinition,
   ModelSceneComponent,
 } from "src/app/sdk";
-import { MatchState } from "src/app/watch-match/watch-match.model";
 import { PartialModelGameDefinition } from "./game-definition-edit.model";
-
-export class ModelGameComponentEditWrapper {
-  id: number;
-  component: ModelGameComponent;
-}
-
-export class ModelSceneComponentEditWrapper {
-  id: number;
-  component: ModelSceneComponent;
-}
 
 @Injectable({
   providedIn: "root",
@@ -28,22 +17,18 @@ export class GameDefinitionEditMediatorService {
   onEditGameDefinitionSuggestedCode: Subject<ModelCode[]> = new BehaviorSubject(
     null
   );
-  onEditSceneComponent: Subject<
-    ModelSceneComponentEditWrapper
-  > = new BehaviorSubject(null);
-  onEditGameComponent: Subject<
-    ModelGameComponentEditWrapper
-  > = new BehaviorSubject(null);
+  onEditSceneComponent: Subject<ModelSceneComponent> = new BehaviorSubject(
+    null
+  );
+  onEditGameComponent: Subject<ModelGameComponent> = new BehaviorSubject(null);
 
   onUpdateBasicInfo: Subject<PartialModelGameDefinition> = new Subject();
   onUpdateSceneComponents: Subject<ModelSceneComponent[]> = new Subject();
-  onUpdateSceneComponent: Subject<
-    ModelSceneComponentEditWrapper
-  > = new Subject();
+  onUpdateSceneComponent: Subject<ModelSceneComponent> = new Subject();
 
   onUpdateGameDefinitionCode: Subject<ModelCode[]> = new Subject();
   onUpdateSuggestedCode: Subject<ModelCode[]> = new Subject();
   onUpdateGameComponents: Subject<ModelGameComponent[]> = new Subject();
-  onUpdateGameComponent: Subject<ModelGameComponentEditWrapper> = new Subject();
+  onUpdateGameComponent: Subject<ModelGameComponent> = new Subject();
   constructor() {}
 }

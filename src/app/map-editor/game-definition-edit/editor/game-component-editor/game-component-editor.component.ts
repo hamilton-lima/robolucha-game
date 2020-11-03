@@ -1,10 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
 import { ModelCode, ModelGameComponent } from "src/app/sdk";
-import {
-  GameDefinitionEditMediatorService,
-  ModelGameComponentEditWrapper,
-} from "../../game-definition-edit-mediator.service";
+import { GameDefinitionEditMediatorService } from "../../game-definition-edit-mediator.service";
 
 @Component({
   selector: "app-game-component-editor",
@@ -24,8 +21,16 @@ export class GameComponentEditorComponent implements OnInit {
     y: ["", [Validators.required, Validators.pattern("^[0-9]*$")]],
   });
 
-  helpFile: string;
-  editors: { event: string; label: string; }[];
+  helpFile: string = "help/server_code_editor_help";
+  editors: { event: string; label: string }[] = [
+    { event: "onRepeat", label: "On repeat" },
+    { event: "onStart", label: "On start" },
+    { event: "onHitWall", label: "On hit wall" },
+    { event: "onFound", label: "On found" },
+    { event: "onGotDamage", label: "On got damage" },
+    { event: "onHitOther", label: "On hit other" },
+  ];
+
   codes: ModelCode[];
 
   constructor(
@@ -35,9 +40,9 @@ export class GameComponentEditorComponent implements OnInit {
 
   ngOnInit() {
     this.mediator.onEditGameComponent.subscribe(
-      (wrapper: ModelGameComponentEditWrapper) => {
-        this.id = wrapper.id;
-        this.component = wrapper.component;
+      (component: ModelGameComponent) => {
+        this.id = component.id;
+        this.component = component;
         this.codes = this.component.codes;
         this.form.patchValue(this.component);
       }
@@ -46,17 +51,6 @@ export class GameComponentEditorComponent implements OnInit {
     this.form.valueChanges.subscribe(() => {
       this.save();
     });
-
-    this.helpFile = "help/server_code_editor_help";
-    this.editors = [
-      { event: "onRepeat", label: "On repeat" },
-      { event: "onStart", label: "On start" },
-      { event: "onHitWall", label: "On hit wall" },
-      { event: "onFound", label: "On found" },
-      { event: "onGotDamage", label: "On got damage" },
-      { event: "onHitOther", label: "On hit other" },
-    ];
-
   }
 
   save() {
@@ -69,18 +63,14 @@ export class GameComponentEditorComponent implements OnInit {
         gunAngle: Number.parseInt(this.form.get("gunAngle").value),
         x: Number.parseInt(this.form.get("x").value),
         y: Number.parseInt(this.form.get("y").value),
-        codes: this.codes
+        codes: this.codes,
       };
 
-      const value = <ModelGameComponentEditWrapper>{
-        id: this.id,
-        component: component,
-      };
-      this.mediator.onUpdateGameComponent.next(value);
+      this.mediator.onUpdateGameComponent.next(component);
     }
   }
 
-  updateCode(codes: ModelCode[]){
+  updateCode(codes: ModelCode[]) {
     this.codes = codes;
     this.save();
   }

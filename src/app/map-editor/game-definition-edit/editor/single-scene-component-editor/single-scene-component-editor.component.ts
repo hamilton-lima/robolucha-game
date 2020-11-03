@@ -1,13 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
-import {
-  ModelCode,
-  ModelSceneComponent,
-} from "src/app/sdk";
-import {
-  GameDefinitionEditMediatorService,
-  ModelSceneComponentEditWrapper,
-} from "../../game-definition-edit-mediator.service";
+import { ModelCode, ModelSceneComponent } from "src/app/sdk";
+import { GameDefinitionEditMediatorService } from "../../game-definition-edit-mediator.service";
 
 @Component({
   selector: "app-single-scene-component-editor",
@@ -53,9 +47,9 @@ export class SingleSceneComponentEditorComponent implements OnInit {
 
   ngOnInit() {
     this.mediator.onEditSceneComponent.subscribe(
-      (wrapper: ModelSceneComponentEditWrapper) => {
-        this.id = wrapper.id;
-        this.component = wrapper.component;
+      (component: ModelSceneComponent) => {
+        this.id = component.id;
+        this.component = component;
         this.codes = this.component.codes;
         this.form.patchValue(this.component);
       }
@@ -86,11 +80,7 @@ export class SingleSceneComponentEditorComponent implements OnInit {
         codes: this.codes,
       };
 
-      const value = <ModelSceneComponentEditWrapper>{
-        id: this.id,
-        component: component,
-      };
-      this.mediator.onUpdateSceneComponent.next(value);
+      this.mediator.onUpdateSceneComponent.next(component);
     }
   }
 
