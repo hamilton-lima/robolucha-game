@@ -6,7 +6,11 @@ export class Helper3D {
 
   static readonly ANGLE2RADIAN = Math.PI / 180;
   public static angle2radian(angle: number): number {
-    return angle * Helper3D.ANGLE2RADIAN;
+    if( angle ){
+      return angle * Helper3D.ANGLE2RADIAN;
+    } else {
+      return 0;
+    }
   }
 
   public static addLabelToMesh(

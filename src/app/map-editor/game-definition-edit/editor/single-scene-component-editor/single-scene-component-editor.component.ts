@@ -1,15 +1,20 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
-import { ModelCode, ModelGameComponent, ModelSceneComponent } from 'src/app/sdk';
-import { GameDefinitionEditMediatorService, ModelGameComponentEditWrapper, ModelSceneComponentEditWrapper } from '../../game-definition-edit-mediator.service';
+import { Component, OnInit } from "@angular/core";
+import { FormBuilder, Validators } from "@angular/forms";
+import {
+  ModelCode,
+  ModelSceneComponent,
+} from "src/app/sdk";
+import {
+  GameDefinitionEditMediatorService,
+  ModelSceneComponentEditWrapper,
+} from "../../game-definition-edit-mediator.service";
 
 @Component({
-  selector: 'app-single-scene-component-editor',
-  templateUrl: './single-scene-component-editor.component.html',
-  styleUrls: ['./single-scene-component-editor.component.scss']
+  selector: "app-single-scene-component-editor",
+  templateUrl: "./single-scene-component-editor.component.html",
+  styleUrls: ["./single-scene-component-editor.component.scss"],
 })
 export class SingleSceneComponentEditorComponent implements OnInit {
-
   id: number;
   component: ModelSceneComponent;
 
@@ -24,13 +29,21 @@ export class SingleSceneComponentEditorComponent implements OnInit {
     blockMovement: [false],
     colider: [false],
     life: [0, Validators.required],
+    rotation: [0, Validators.required],
     respawn: [false],
-    rotation: [0, [Validators.required, Validators.min(0), Validators.max(360)]],
     showInRadar: [false],
   });
 
-  helpFile: string;
-  editors: { event: string; label: string; }[];
+  helpFile: string = "help/code_editor_help";
+  editors: { event: string; label: string }[] = [
+    { event: "onRepeat", label: "On repeat" },
+    { event: "onStart", label: "On start" },
+    { event: "onHitWall", label: "On hit wall" },
+    { event: "onFound", label: "On found" },
+    { event: "onGotDamage", label: "On got damage" },
+    { event: "onHitOther", label: "On hit other" },
+  ];
+
   codes: ModelCode[];
 
   constructor(
@@ -51,22 +64,12 @@ export class SingleSceneComponentEditorComponent implements OnInit {
     this.form.valueChanges.subscribe(() => {
       this.save();
     });
-
-    this.helpFile = "help/code_editor_help";
-    this.editors = [
-      { event: "onRepeat", label: "On repeat" },
-      { event: "onStart", label: "On start" },
-      { event: "onHitWall", label: "On hit wall" },
-      { event: "onFound", label: "On found" },
-      { event: "onGotDamage", label: "On got damage" },
-      { event: "onHitOther", label: "On hit other" },
-    ];
-
   }
 
   save() {
     if (this.form.valid) {
       const component = <ModelSceneComponent>{
+        id: this.component.id,
         type: this.form.get("type").value,
         color: this.form.get("color").value,
         x: Number.parseInt(this.form.get("x").value),
@@ -77,10 +80,10 @@ export class SingleSceneComponentEditorComponent implements OnInit {
         blockMovement: this.form.get("blockMovement").value,
         colider: this.form.get("colider").value,
         life: Number.parseInt(this.form.get("life").value),
-        respawn: this.form.get("respawn").value,
         rotation: Number.parseInt(this.form.get("rotation").value),
+        respawn: this.form.get("respawn").value,
         showInRadar: this.form.get("showInRadar").value,
-        codes: this.codes
+        codes: this.codes,
       };
 
       const value = <ModelSceneComponentEditWrapper>{
@@ -91,9 +94,8 @@ export class SingleSceneComponentEditorComponent implements OnInit {
     }
   }
 
-  updateCode(codes: ModelCode[]){
+  updateCode(codes: ModelCode[]) {
     this.codes = codes;
     this.save();
   }
-
 }

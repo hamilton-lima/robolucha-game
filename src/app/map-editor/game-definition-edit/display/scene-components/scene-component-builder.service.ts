@@ -2,9 +2,7 @@ import { Injectable } from "@angular/core";
 import { ModelSceneComponent } from "src/app/sdk";
 import { ModelSceneComponentEditWrapper } from "../../game-definition-edit-mediator.service";
 
-@Injectable({
-  providedIn: "root",
-})
+@Injectable()
 export class SceneComponentBuilderService {
   x = 0;
   y = 0;
@@ -21,7 +19,10 @@ export class SceneComponentBuilderService {
   }
 
   build(): ModelSceneComponent {
+    const tempID = (new Date()).getTime() * -1;
+
     const result = <ModelSceneComponent>{
+      id: tempID,
       alpha: 1,
       blockMovement: true,
       codes: [],

@@ -97,7 +97,7 @@ const ROUTES: Routes = [
     resolve: { luchador: LuchadorResolverService },
   },
   {
-    path: "maps/create",
+    path: "maps/create/:counter",
     component: GameDefinitionCreateComponent,
     canActivate: [LoginActivate],
     resolve: { luchador: LuchadorResolverService },

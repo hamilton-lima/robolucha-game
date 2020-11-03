@@ -203,11 +203,34 @@ export class GameDefinitionEditComponent implements OnInit {
       this.gameDefinition.codes
     );
 
-    this.api.privateMapeditorPut(this.gameDefinition).subscribe((result) => {
-      console.log("after update", result);
+    const body = this.removeTemporaryIDs();
+
+    this.api.privateMapeditorPut(body).subscribe((result) => {
       this.alert.infoTop("Map updated", "DISMISS");
       this.dirty = false;
     });
+  }
+
+  removeTemporaryIDs() {
+    // clone
+    const result: ModelGameDefinition = Object.assign({}, this.gameDefinition);
+
+    // remove temporary IDs
+    result.sceneComponents = this.gameDefinition.sceneComponents.map((c) => {
+      if (c.id < 0) {
+        c.id = 0;
+      }
+      return c;
+    });
+
+    result.gameComponents = this.gameDefinition.gameComponents.map((c) => {
+      if (c.id < 0) {
+        c.id = 0;
+      }
+      return c;
+    });
+
+    return result;
   }
 
   goAllMaps() {

@@ -9,7 +9,7 @@
     <app-code-blockly></app-code-blockly>
   </mat-expansion-panel> -->
 
-  <mat-expansion-panel *ngFor="let editor of editors" [expanded]="true">
+  <mat-expansion-panel *ngFor="let editor of editors; index as i" [expanded]="isExpanded(i)">
     <mat-expansion-panel-header>{{ editor.label }}</mat-expansion-panel-header>
     <app-code-editor
       [script]="getScript(editor.event)"

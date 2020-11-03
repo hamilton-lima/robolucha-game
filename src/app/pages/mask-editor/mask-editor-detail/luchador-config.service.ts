@@ -4,12 +4,12 @@ import { NMSColor } from "../color-picker/nmscolor";
 import { ShapeConfig } from "../shape-picker/shape-config";
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class LuchadorConfigService {
   constructor(private nmsColor: NMSColor, private shapeConfig: ShapeConfig) {}
 
-  getColor(configs: ModelConfig [], key: string) {
+  getColor(configs: ModelConfig[], key: string) {
     let found = configs.find((config: ModelConfig) => {
       return config.key == key;
     });
@@ -18,7 +18,7 @@ export class LuchadorConfigService {
     return result;
   }
 
-  getColorLabel(configs: ModelConfig [], key: string) {
+  getColorLabel(configs: ModelConfig[], key: string) {
     const color = this.getColor(configs, key);
     return this.nmsColor.getColorName(color) + " (" + color + ")";
   }
@@ -26,7 +26,7 @@ export class LuchadorConfigService {
   readonly EMPTY =
     "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
 
-  getShape(configs: ModelConfig [], key: string) {
+  getShape(configs: ModelConfig[], key: string) {
     let found = configs.find((config: ModelConfig) => {
       return config.key == key;
     });
@@ -35,7 +35,11 @@ export class LuchadorConfigService {
     return result;
   }
 
-  getShapeNoDefaultValue(configs: ModelConfig [], key: string) {
+  getShapeNoDefaultValue(configs: ModelConfig[], key: string) {
+    if (!configs) {
+      return "";
+    }
+
     let found = configs.find((config: ModelConfig) => {
       return config.key == key;
     });
@@ -44,7 +48,7 @@ export class LuchadorConfigService {
     return result;
   }
 
-  getShapeName(configs: ModelConfig [], key: string) {
+  getShapeName(configs: ModelConfig[], key: string) {
     let found = configs.find((config: ModelConfig) => {
       return config.key == key;
     });

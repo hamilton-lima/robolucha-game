@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import { RotationGizmo } from "babylonjs";
 import {
   ModelGameComponent,
   ModelGameDefinition,
@@ -32,10 +33,9 @@ export class MatchStateBuilderService {
   }
 
   buildGameComponents(gameComponents: ModelGameComponent[]): Luchador[] {
-    let pos = 1;
     return gameComponents.map((component) => {
       return <Luchador>{
-        id: pos++,
+        id: component.id,
         name: component.name,
         x: component.x,
         y: component.y,
@@ -53,12 +53,13 @@ export class MatchStateBuilderService {
 
     sceneComponents.forEach((component) => {
       const item = <SceneComponent>{
+        id: component.id,
         alpha: component.alpha,
         color: component.color,
         height: component.height,
-        rotation: component.rotation,
         type: component.type,
         width: component.width,
+        rotation: component.rotation,
         x: component.x,
         y: component.y,
       };

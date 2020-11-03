@@ -108,10 +108,8 @@ export class ArenaComponent
 
   ngOnInit() {
     if (!this.currentLuchador) {
-      console.error("currentLuchador missing");
       return;
     }
-    console.log("arena-component nginit");
   }
 
   ngAfterViewInit() {
@@ -184,7 +182,7 @@ export class ArenaComponent
 
   createScene() {
     if( this.engine){
-      console.log("trying to create babylon engine for the second time");
+      console.warn("Trying to create babylon engine for the second time");
       return;
     }
     
@@ -198,7 +196,6 @@ export class ArenaComponent
 
     if (this.matchStateSubject) {
       this.matchStateSubject.subscribe((matchState: MatchState) => {
-        console.log("matchstate", matchState);
         this.nextMatchState = matchState;
       });
     }
@@ -217,7 +214,6 @@ export class ArenaComponent
 
     if (this.cameraChangeSubject) {
       this.cameraChangeSubject.subscribe((cameraChange: CameraChange) => {
-        console.log(cameraChange);
         this.cameraChange = cameraChange;
       });
     }
@@ -575,9 +571,14 @@ export class ArenaComponent
       this.convertPosition(component.height / 2);
     const width = this.convertPosition(component.width);
     const height = this.convertPosition(component.height);
+    const rotation = Helper3D.angle2radian(component.rotation);
+
     component3D.moveTo(x, z);
+    component3D.rotate(rotation);
     component3D.resize(width, height);
     component3D.setColor(component.color);
+    component3D.setType(component.type);
+    component3D.setAlpha(component.alpha);
   }
 
   updateBullet(bullet3D: Bullet3D, next: Bullet) {

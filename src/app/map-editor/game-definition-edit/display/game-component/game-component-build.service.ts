@@ -3,9 +3,7 @@ import { ModelGameComponent } from "src/app/sdk";
 import { nameByRace } from "fantasy-name-generator";
 import { ModelGameComponentEditWrapper } from "../../game-definition-edit-mediator.service";
 
-@Injectable({
-  providedIn: "root",
-})
+@Injectable()
 export class GameComponentBuildService {
   x = 200;
   y = 120;
@@ -15,7 +13,9 @@ export class GameComponentBuildService {
   constructor() {}
 
   build(): ModelGameComponent {
+    const tempID = (new Date()).getTime() * -1;
     const result = <ModelGameComponent>{
+      id: tempID,
       name: this.randomName(),
       isNPC: true,
       life: 20,

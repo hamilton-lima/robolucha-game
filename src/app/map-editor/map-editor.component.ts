@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { Router } from "@angular/router";
+import { NavigationExtras, Router } from "@angular/router";
 import { DefaultService, ModelGameDefinition } from "../sdk";
 
 @Component({
@@ -17,6 +17,10 @@ export class MapEditorComponent implements OnInit {
     this.api.privateMapeditorGet().subscribe((result) => {
       this.definitions = result;
     });
+  }
+
+  create() {
+    this.router.navigate(["maps/create", this.definitions.length]);
   }
 
   edit(id) {

@@ -14,6 +14,7 @@ import { GameComponentBuildService } from "./game-component-build.service";
   selector: "app-game-component",
   templateUrl: "./game-component.component.html",
   styleUrls: ["./game-component.component.scss"],
+  providers: [GameComponentBuildService]
 })
 export class GameComponentComponent implements OnInit {
   @Input() components: ModelGameComponent[];
