@@ -234,12 +234,14 @@ export class ArenaComponent
 
     if (this.messageFPS) {
       this.messageFPS.subscribe((fps) => {
-        const info: FPSInfo = {
-          matchID: this.matchID,
-          messages: fps,
-          engine3D: this.engine.getFps(),
-        };
-        this.fpsRecorder.record(info);
+        if(this.engine){
+          const info: FPSInfo = {
+            matchID: this.matchID,
+            messages: fps,
+            engine3D: this.engine.getFps(),
+          };
+          this.fpsRecorder.record(info);
+        }
       });
     }
 
@@ -407,7 +409,7 @@ export class ArenaComponent
         const width = this.convertPosition(component.width);
         const height = this.convertPosition(component.height);
         const length = this.convertPosition(component.length);
-        console.log( 'create component', width, height, length);
+
         // create new SceneComponent3D
         const newComponent = new SceneComponent3D(
           component.id,
