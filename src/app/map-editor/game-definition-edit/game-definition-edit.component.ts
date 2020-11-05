@@ -175,9 +175,6 @@ export class GameDefinitionEditComponent implements OnInit {
   }
 
   refreshMatchState() {
-    // force remove all scene and NPC from the arena
-    this.matchState.emit(this.builder.build([], []));
-
     this.matchState.emit(
       this.builder.build(
         this.gameDefinition.sceneComponents,

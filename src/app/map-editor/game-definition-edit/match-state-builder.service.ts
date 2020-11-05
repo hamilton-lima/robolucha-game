@@ -56,12 +56,14 @@ export class MatchStateBuilderService {
         id: component.id,
         alpha: component.alpha,
         color: component.color,
-        height: component.height,
         type: component.type,
         width: component.width,
+        height: component.height,
+        length: component.length,
         rotation: component.rotation,
         x: component.x,
         y: component.y,
+        z: component.z,
       };
       result.push(item);
     });

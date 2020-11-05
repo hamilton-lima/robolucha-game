@@ -234,12 +234,14 @@ export class ArenaComponent
 
     if (this.messageFPS) {
       this.messageFPS.subscribe((fps) => {
-        const info: FPSInfo = {
-          matchID: this.matchID,
-          messages: fps,
-          engine3D: this.engine.getFps(),
-        };
-        this.fpsRecorder.record(info);
+        if(this.engine){
+          const info: FPSInfo = {
+            matchID: this.matchID,
+            messages: fps,
+            engine3D: this.engine.getFps(),
+          };
+          this.fpsRecorder.record(info);
+        }
       });
     }
 
@@ -406,6 +408,8 @@ export class ArenaComponent
         const rotation = Helper3D.angle2radian(component.rotation);
         const width = this.convertPosition(component.width);
         const height = this.convertPosition(component.height);
+        const length = this.convertPosition(component.length);
+
         // create new SceneComponent3D
         const newComponent = new SceneComponent3D(
           component.id,
@@ -413,6 +417,7 @@ export class ArenaComponent
           position,
           width,
           height,
+          length,
           rotation,
           component.type,
           component.color,
@@ -512,10 +517,12 @@ export class ArenaComponent
     result.x =
       this.convertPosition(component.x) +
       this.convertPosition(component.width / 2);
-    result.y = this.COMPONENT_DEFAULT_Y;
+    result.y =
+      this.convertPosition(component.z) +
+      this.convertPosition(component.height / 2);
     result.z =
       this.convertPosition(component.y) +
-      this.convertPosition(component.height / 2);
+      this.convertPosition(component.length / 2);
     return result;
   }
 
@@ -580,19 +587,15 @@ export class ArenaComponent
   }
 
   updateComponent(component3D: SceneComponent3D, component: SceneComponent) {
-    const x =
-      this.convertPosition(component.x) +
-      this.convertPosition(component.width / 2);
-    const z =
-      this.convertPosition(component.y) +
-      this.convertPosition(component.height / 2);
+    const position = this.calculateComponentPosition(component);
     const width = this.convertPosition(component.width);
     const height = this.convertPosition(component.height);
+    const length = this.convertPosition(component.length);
     const rotation = Helper3D.angle2radian(component.rotation);
-
-    component3D.moveTo(x, z);
+    
+    component3D.moveToXYZ(position);
     component3D.rotate(rotation);
-    component3D.resize(width, height);
+    component3D.resize(width, height, length);
     component3D.setColor(component.color);
     component3D.setType(component.type);
     component3D.setAlpha(component.alpha);
