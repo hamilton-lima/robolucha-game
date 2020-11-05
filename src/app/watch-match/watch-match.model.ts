@@ -17,8 +17,10 @@ export interface SceneComponent {
   id: number;
   x: number;
   y: number;
+  z: number;
   width: number;
   height: number;
+  length: number;
   rotation: number;
   type: string;
   color: string;

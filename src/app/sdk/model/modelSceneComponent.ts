@@ -21,6 +21,7 @@ export interface ModelSceneComponent {
     gameDefinition?: number;
     height?: number;
     id?: number;
+    length?: number;
     life?: number;
     respawn?: boolean;
     rotation?: number;
@@ -29,4 +30,5 @@ export interface ModelSceneComponent {
     width?: number;
     x?: number;
     y?: number;
+    z?: number;
 }
