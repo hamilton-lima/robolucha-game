@@ -7,6 +7,7 @@ export class SceneComponentBuilderService {
   y = 0;
   readonly WIDTH = 60;
   readonly HEIGHT = 60;
+  readonly LENGTH = 60;
   readonly TYPES = ["wall", "region"];
   readonly DEFAULT_TYPE = 0;
   id = 1;
@@ -33,8 +34,10 @@ export class SceneComponentBuilderService {
       showInRadar: true,
       type: this.TYPES[this.DEFAULT_TYPE],
       width: this.WIDTH,
+      length: this.LENGTH,
       x: this.x,
       y: this.y,
+      z: 0,
       color: "#00FF00",
     };
 
