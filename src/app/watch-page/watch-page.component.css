@@ -12,6 +12,17 @@
   width: 100%;
 }
 
+.navigation {
+  z-index: 5;
+  position: absolute;
+  left: 1%;
+  top: 1%;
+}
+
+.navigation-button {
+  background-color: whitesmoke;
+}
+
 .toogle {
   z-index: 5;
   position: absolute;

@@ -11,8 +11,6 @@
         <mat-icon svgIcon="arrow-right"></mat-icon>
       </button>
 
-      <button mat-raised-button class="mr-2" (click)="goHome()">HOME</button>
-
       <button
         mat-raised-button
         [disabled]="!dirty"
@@ -22,8 +20,6 @@
         GO!
       </button>
 
-      <button mat-raised-button class="mr-2" (click)="changeCamera()">CAMERA</button>
-
       <div class="mt-2 right-panel-scroll">
         <mat-accordion>
           <mat-expansion-panel>
@@ -32,7 +28,9 @@
           </mat-expansion-panel>
 
           <mat-expansion-panel [expanded]="true">
-            <mat-expansion-panel-header> Block - UNDER TEST</mat-expansion-panel-header>
+            <mat-expansion-panel-header>
+              Block - UNDER TEST</mat-expansion-panel-header
+            >
             <app-code-blockly></app-code-blockly>
           </mat-expansion-panel>
 
@@ -113,6 +111,7 @@
       <button mat-icon-button class="toogle" (click)="drawer.toggle()">
         <mat-icon svgIcon="arrow-left"></mat-icon>
       </button>
+
       <div *ngIf="gameDefinition">
         <app-watch-match
           [gameDefinition]="gameDefinition"
@@ -129,7 +128,28 @@
   </mat-sidenav-container>
 
   <app-clock class="clock" [matchStateSubject]="matchStateSubject"></app-clock>
-  <app-score *ngIf="displayScore" class="score" [scores]="scores"></app-score>
+
+  <div class="navigation no-gutters">
+    <div class="row">
+      <div class="col-2">
+        <button mat-icon-button class="navigation-button mr-1" (click)="goHome()">
+          <mat-icon svgIcon="menu"></mat-icon>
+        </button>
+        <br />
+        <button
+          mat-icon-button
+          class="navigation-button mt-2"
+          (click)="changeCamera()"
+        >
+          <mat-icon svgIcon="camera"></mat-icon>
+        </button>
+      </div>
+      <div class="col" *ngIf="displayScore">
+        <app-score [scores]="scores"></app-score>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <div class="p-3 matchover-alert" *ngIf="matchOver">
