@@ -91,13 +91,7 @@ export class MainComponent implements OnInit {
   help() {
     this.shepherd.done(this.tour);
     this.events.click(this.page, "help");
-    window.open("https://docs.robolucha.com", "robolucha-docs");
-  }
-
-  forum() {
-    this.shepherd.done(this.tour);
-    this.events.click(this.page, "forum");
-    window.open("https://forum.robolucha.com", "robolucha-forum");
+    window.open("https://www.robolucha.com/play", "robolucha-docs");
   }
 
   maps() {
