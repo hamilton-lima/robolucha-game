@@ -14,6 +14,7 @@ export * from './modelMatch';
 export * from './modelMatchMetric';
 export * from './modelMatchParticipant';
 export * from './modelMatchScore';
+export * from './modelNarrativeDefinition';
 export * from './modelPageEventRequest';
 export * from './modelPlayRequest';
 export * from './modelSceneComponent';
