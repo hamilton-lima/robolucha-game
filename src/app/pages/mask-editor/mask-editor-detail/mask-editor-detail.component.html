@@ -1,6 +1,6 @@
 <div class="row">
   <!-- left buttons -->
-  <div class="col-xs-12 col-4" id="mask-editor-categories-selector">
+  <div class="col-lg-4 col-md-4 col-sm-12 mb-2" id="mask-editor-categories-selector">
     <div class="btn-group-vertical" role="group" aria-label="...">
       <div>
         <img class="preview" [src]="previewImageData">
@@ -20,7 +20,7 @@
     </div>
   </div>
   <ng-container *ngFor="let category of categories">
-    <div *ngIf="isCurrent(category.id)" class="col-xs-12 col-8">
+    <div *ngIf="isCurrent(category.id)" class="col-lg-8 col-md-8 col-sm-12 mb-2">
       <ngb-accordion
         [closeOthers]="true"
         activeIds="{{ category.subcategories[0].key }}"
