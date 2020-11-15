@@ -47,46 +47,50 @@ export class GameDefinitionEditComponent implements OnInit {
     private cdRef: ChangeDetectorRef
   ) {}
 
+  refreshEditorDrawer(nextEditor: CurrentEditorEnum) {
+    if (this.currentEditor == nextEditor) {
+      this.currentEditor = nextEditor;
+      this.editorDrawer.toggle();
+    } else {
+      this.currentEditor = nextEditor;
+      this.editorDrawer.open();
+    }
+  }
+
   ngOnInit() {
     this.mediator.onEditBasicInfo.subscribe((current) => {
       if (current && this.editorDrawer) {
-        this.currentEditor = CurrentEditorEnum.BasicInfo;
-        this.editorDrawer.toggle();
+        this.refreshEditorDrawer(CurrentEditorEnum.BasicInfo);
       }
     });
 
     this.mediator.onEditGameDefinitionCode.subscribe((current) => {
       if (current && this.editorDrawer) {
-        this.currentEditor = CurrentEditorEnum.Codes;
-        this.editorDrawer.toggle();
+        this.refreshEditorDrawer(CurrentEditorEnum.Codes);
       }
     });
 
     this.mediator.onEditSceneComponent.subscribe((current) => {
       if (current && this.editorDrawer) {
-        this.currentEditor = CurrentEditorEnum.SingleSceneComponent;
-        this.editorDrawer.toggle();
+        this.refreshEditorDrawer(CurrentEditorEnum.SingleSceneComponent);
       }
     });
 
     this.mediator.onEditGameDefinitionSuggestedCode.subscribe((current) => {
       if (current && this.editorDrawer) {
-        this.currentEditor = CurrentEditorEnum.SuggestedCode;
-        this.editorDrawer.toggle();
+        this.refreshEditorDrawer(CurrentEditorEnum.SuggestedCode);
       }
     });
 
     this.mediator.onEditGameComponent.subscribe((current) => {
       if (current && this.editorDrawer) {
-        this.currentEditor = CurrentEditorEnum.GameComponent;
-        this.editorDrawer.toggle();
+        this.refreshEditorDrawer(CurrentEditorEnum.GameComponent);
       }
     });
 
     this.mediator.onEditNarrative.subscribe((current) => {
       if (current && this.editorDrawer) {
-        this.currentEditor = CurrentEditorEnum.Narrative;
-        this.editorDrawer.toggle();
+        this.refreshEditorDrawer(CurrentEditorEnum.Narrative);
       }
     });
 
@@ -167,8 +171,6 @@ export class GameDefinitionEditComponent implements OnInit {
         }
       }
     });
-
-    console.log("after update basic info", this.gameDefinition.codes);
 
     if (updatedFields.length > 0) {
       this.dirty = true;

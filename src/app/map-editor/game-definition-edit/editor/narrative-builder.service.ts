@@ -26,6 +26,9 @@ export class NarrativeBuilderService {
       id: tempID,
       type: this.TYPES[this.DEFAULT_TYPE],
       event: this.EVENTS[this.DEFAULT_EVENT],
+      text: "",
+      sortOrder: "0",
+      mediaID: ""
     };
 
     return result;

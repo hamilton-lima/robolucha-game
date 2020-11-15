@@ -28,7 +28,6 @@ export class NarrativeEditorComponent implements OnInit {
   ngOnInit() {
     this.mediator.onEditNarrative.subscribe(
       (narrative: ModelNarrativeDefinition) => {
-        console.log('narrative edit', narrative);
         this.id = narrative.id;
         this.narrative = narrative;
         this.form.patchValue(this.narrative);
