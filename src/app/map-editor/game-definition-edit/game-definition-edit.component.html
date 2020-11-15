@@ -17,6 +17,8 @@
     <mat-accordion multi="true">
       <app-basic-info [gameDefinition]="gameDefinition"></app-basic-info>
 
+      <app-narrative [narratives]="gameDefinition.narrativeDefinitions"></app-narrative>
+
       <app-game-definition-code
         [gameDefinition]="gameDefinition"
       ></app-game-definition-code>

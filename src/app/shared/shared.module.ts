@@ -14,6 +14,7 @@ import { CodeBlocklyComponent } from './code-blockly/code-blockly.component';
 import { CodeEditorComponent } from './code-editor/code-editor.component';
 import { MessageComponent } from './message/message.component';
 import { AceEditorModule } from 'ng2-ace-editor';
+import { FileUploadComponent } from './file-upload/file-upload.component';
 
 @NgModule({
   imports: [
@@ -33,7 +34,8 @@ import { AceEditorModule } from 'ng2-ace-editor';
     MarkDownComponent,
     CodeBlocklyComponent,
     CodeEditorComponent,
-    MessageComponent
+    MessageComponent,
+    FileUploadComponent
   ],
   exports:[
     BigButtonComponent,
@@ -47,7 +49,8 @@ import { AceEditorModule } from 'ng2-ace-editor';
     MarkDownComponent,
     CodeBlocklyComponent,
     CodeEditorComponent,
-    MessageComponent
+    MessageComponent,
+    FileUploadComponent
   ]
 })
 export class SharedModule { }
