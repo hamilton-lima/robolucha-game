@@ -19,7 +19,7 @@
         <td>{{narrative.event}}</td>
         <td>{{narrative.type}}</td>
         <td>{{narrative.sortOrder}}</td>
-        <td>{{narrative.text}} {{narrative.mediaID}}</td>
+        <td>{{formatContent(narrative)}}</td>
         <td>
           <button mat-icon-button (click)="edit(narrative)">
             <mat-icon svgIcon="pencil"></mat-icon>

@@ -1,15 +1,14 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { ModelGameDefinition, ModelNarrativeDefinition } from 'src/app/sdk';
-import { NarrativeBuilderService } from '../../editor/narrative-builder.service';
-import { GameDefinitionEditMediatorService } from '../../game-definition-edit-mediator.service';
+import { Component, Input, OnInit } from "@angular/core";
+import { ModelGameDefinition, ModelNarrativeDefinition } from "src/app/sdk";
+import { NarrativeBuilderService } from "../../editor/narrative-builder.service";
+import { GameDefinitionEditMediatorService } from "../../game-definition-edit-mediator.service";
 
 @Component({
-  selector: 'app-narrative',
-  templateUrl: './narrative.component.html',
-  styleUrls: ['./narrative.component.scss']
+  selector: "app-narrative",
+  templateUrl: "./narrative.component.html",
+  styleUrls: ["./narrative.component.scss"],
 })
 export class NarrativeComponent implements OnInit {
-
   @Input() narratives: Array<ModelNarrativeDefinition>;
 
   constructor(
@@ -17,7 +16,7 @@ export class NarrativeComponent implements OnInit {
     private builder: NarrativeBuilderService
   ) {}
 
-  edit(narrative: ModelNarrativeDefinition){
+  edit(narrative: ModelNarrativeDefinition) {
     this.mediator.onEditNarrative.next(narrative);
   }
 
@@ -45,4 +44,14 @@ export class NarrativeComponent implements OnInit {
     this.mediator.onUpdateNarrativeDefinitions.next(this.narratives);
   }
 
+  formatContent(narrative: ModelNarrativeDefinition) {
+    let result = "";
+    if (narrative.text) {
+      result = result + "TXT ";
+    }
+    if (narrative.mediaID) {
+      result = result + "IMG";
+    }
+    return result;
+  }
 }
