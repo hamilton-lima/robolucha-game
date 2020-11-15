@@ -44,7 +44,7 @@ export class NarrativeEditorComponent implements OnInit {
 
   save() {
     if (this.form.valid) {
-      const component = <ModelNarrativeDefinition>{
+      const narrative = <ModelNarrativeDefinition>{
         id: this.narrative.id,
         event: this.form.get("event").value,
         type: this.form.get("type").value,
@@ -52,7 +52,7 @@ export class NarrativeEditorComponent implements OnInit {
         sortOrder: this.form.get("sortOrder").value
       };
 
-      this.mediator.onUpdateGameComponent.next(component);
+      this.mediator.onUpdateNarrative.next(narrative);
     }
   }
 
