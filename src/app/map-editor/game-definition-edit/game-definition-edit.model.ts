@@ -3,7 +3,8 @@ export const enum CurrentEditorEnum {
   Codes,
   SingleSceneComponent,
   SuggestedCode,
-  GameComponent
+  GameComponent,
+  Narrative
 }
 
 export class PartialModelGameDefinition {

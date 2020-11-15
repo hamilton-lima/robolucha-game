@@ -10,8 +10,8 @@
         <th width="20%">Event</th>
         <th width="20%">Type</th>
         <th width="20%">Sort order</th>
-        <th width="30%">Content</th>
-        <th width="10%">&nbsp;</th>
+        <th width="20%">Content</th>
+        <th width="20%">&nbsp;</th>
       </tr>
     </thead>
     <tbody>
@@ -21,7 +21,7 @@
         <td>{{narrative.sortOrder}}</td>
         <td>{{narrative.text}} {{narrative.mediaID}}</td>
         <td>
-          <button mat-icon-button (click)="edit(component)">
+          <button mat-icon-button (click)="edit(narrative)">
             <mat-icon svgIcon="pencil"></mat-icon>
           </button>
           <button mat-icon-button (click)="delete(i)">

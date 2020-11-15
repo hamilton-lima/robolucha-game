@@ -83,6 +83,13 @@ export class GameDefinitionEditComponent implements OnInit {
       }
     });
 
+    this.mediator.onEditNarrative.subscribe((current) => {
+      if (current && this.editorDrawer) {
+        this.currentEditor = CurrentEditorEnum.Narrative;
+        this.editorDrawer.open();
+      }
+    });
+
     this.mediator.onUpdateBasicInfo.subscribe((partial) => {
       if (partial && this.gameDefinition) {
         this.updateBasicInfo(partial);
@@ -253,6 +260,10 @@ export class GameDefinitionEditComponent implements OnInit {
 
   isGameComponentCurrent() {
     return this.currentEditor == CurrentEditorEnum.GameComponent;
+  }
+
+  isNarrativeCurrent() {
+    return this.currentEditor == CurrentEditorEnum.Narrative;
   }
 
   pick(target: Pickable) {
