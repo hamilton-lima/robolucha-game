@@ -51,44 +51,42 @@ export class GameDefinitionEditComponent implements OnInit {
     this.mediator.onEditBasicInfo.subscribe((current) => {
       if (current && this.editorDrawer) {
         this.currentEditor = CurrentEditorEnum.BasicInfo;
-        this.editorDrawer.open();
+        this.editorDrawer.toggle();
       }
     });
 
     this.mediator.onEditGameDefinitionCode.subscribe((current) => {
       if (current && this.editorDrawer) {
         this.currentEditor = CurrentEditorEnum.Codes;
-        this.editorDrawer.open();
+        this.editorDrawer.toggle();
       }
     });
 
     this.mediator.onEditSceneComponent.subscribe((current) => {
       if (current && this.editorDrawer) {
         this.currentEditor = CurrentEditorEnum.SingleSceneComponent;
-        this.editorDrawer.open();
+        this.editorDrawer.toggle();
       }
     });
 
     this.mediator.onEditGameDefinitionSuggestedCode.subscribe((current) => {
       if (current && this.editorDrawer) {
         this.currentEditor = CurrentEditorEnum.SuggestedCode;
-        this.editorDrawer.open();
+        this.editorDrawer.toggle();
       }
     });
 
     this.mediator.onEditGameComponent.subscribe((current) => {
       if (current && this.editorDrawer) {
         this.currentEditor = CurrentEditorEnum.GameComponent;
-        this.editorDrawer.open();
+        this.editorDrawer.toggle();
       }
     });
 
     this.mediator.onEditNarrative.subscribe((current) => {
       if (current && this.editorDrawer) {
-        console.log('game def edit - change editor', current, this.currentEditor);
         this.currentEditor = CurrentEditorEnum.Narrative;
-        this.editorDrawer.open();
-        console.log('game def edit - change editor', current, this.currentEditor);
+        this.editorDrawer.toggle();
       }
     });
 
