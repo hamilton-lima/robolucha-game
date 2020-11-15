@@ -18,6 +18,7 @@ export class NarrativeComponent implements OnInit {
   ) {}
 
   edit(narrative: ModelNarrativeDefinition){
+    console.log('narrative component display', narrative);
     this.mediator.onEditNarrative.next(narrative);
   }
 

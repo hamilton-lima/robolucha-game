@@ -4,11 +4,11 @@ import { ModelNarrativeDefinition } from 'src/app/sdk';
 import { GameDefinitionEditMediatorService } from '../../game-definition-edit-mediator.service';
 
 @Component({
-  selector: 'app-narrative',
-  templateUrl: './narrative.component.html',
-  styleUrls: ['./narrative.component.scss']
+  selector: 'app-narrative-editor',
+  templateUrl: './narrative-editor.component.html',
+  styleUrls: ['./narrative-editor.component.scss']
 })
-export class NarrativeComponent implements OnInit {
+export class NarrativeEditorComponent implements OnInit {
 
   id: number;
   narrative: ModelNarrativeDefinition;

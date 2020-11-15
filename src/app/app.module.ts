@@ -67,6 +67,7 @@ import { GameDefinitionSuggestedCodeEditorComponent } from './map-editor/game-de
 import { GameComponentComponent } from './map-editor/game-definition-edit/display/game-component/game-component.component';
 import { GameComponentEditorComponent } from './map-editor/game-definition-edit/editor/game-component-editor/game-component-editor.component';
 import { NarrativeComponent } from './map-editor/game-definition-edit/display/narrative/narrative.component';
+import { NarrativeEditorComponent } from "./map-editor/game-definition-edit/editor/narrative/narrative-editor.component";
 
 const ROUTES: Routes = [
   { path: "", redirectTo: "/home", pathMatch: "full" },
@@ -221,6 +222,7 @@ export function apiConfigFactory(): Configuration {
     GameComponentComponent,
     GameComponentEditorComponent,
     NarrativeComponent,
+    NarrativeEditorComponent,
   ],
   imports: [
     BrowserModule,

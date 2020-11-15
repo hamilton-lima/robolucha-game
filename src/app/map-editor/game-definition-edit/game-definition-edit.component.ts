@@ -85,8 +85,10 @@ export class GameDefinitionEditComponent implements OnInit {
 
     this.mediator.onEditNarrative.subscribe((current) => {
       if (current && this.editorDrawer) {
+        console.log('game def edit - change editor', current, this.currentEditor);
         this.currentEditor = CurrentEditorEnum.Narrative;
         this.editorDrawer.open();
+        console.log('game def edit - change editor', current, this.currentEditor);
       }
     });
 
