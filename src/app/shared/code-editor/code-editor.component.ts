@@ -18,7 +18,8 @@ export class CodeEditorComponent implements OnInit {
 
   @Input() script = '';
   @Input() eventId: string;
-  showBlockly = true;
+  @Input() showBlockly = false;
+
   @Output() onChange = new EventEmitter<string>();
   constructor() {}
 
@@ -29,7 +30,4 @@ export class CodeEditorComponent implements OnInit {
     this.onChange.next( event );
   }
 
-  toggle() {
-    this.showBlockly = !this.showBlockly;
-  }
 }

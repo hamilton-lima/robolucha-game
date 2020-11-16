@@ -5,6 +5,7 @@
 export const environment = {
   production: false,
   BASE_PATH:'http://localhost:5000',
+  UPLOAD_BASEPATH:'http://localhost:1337/upload',
   PUBLISHER:'ws://localhost:5001/ws'
 };
 

@@ -11,6 +11,7 @@
  */
 import { ModelCode } from './modelCode';
 import { ModelGameComponent } from './modelGameComponent';
+import { ModelNarrativeDefinition } from './modelNarrativeDefinition';
 import { ModelSceneComponent } from './modelSceneComponent';
 import { ModelTeamDefinition } from './modelTeamDefinition';
 
@@ -44,6 +45,7 @@ export interface ModelGameDefinition {
     minParticipants?: number;
     moveSpeed?: number;
     name?: string;
+    narrativeDefinitions?: Array<ModelNarrativeDefinition>;
     ownerUserID?: number;
     punchAngle?: number;
     punchCoolDown?: number;

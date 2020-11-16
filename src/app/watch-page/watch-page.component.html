@@ -32,6 +32,7 @@
             <app-code-editor eventId="repeat"
               [script]="codes.onRepeat.script"
               (onChange)="updateCode('onRepeat', $event)"
+              [showBlockly]="displayBlocks"
             >
             </app-code-editor>
           </mat-expansion-panel>
@@ -41,6 +42,7 @@
             <app-code-editor eventId="start"
               [script]="codes.onStart.script"
               (onChange)="updateCode('onStart', $event)"
+              [showBlockly]="displayBlocks"
             >
             </app-code-editor>
           </mat-expansion-panel>
@@ -52,6 +54,7 @@
             <app-code-editor eventId="hitWall"
               [script]="codes.onHitWall.script"
               (onChange)="updateCode('onHitWall', $event)"
+              [showBlockly]="displayBlocks"
             >
             </app-code-editor>
           </mat-expansion-panel>
@@ -61,6 +64,7 @@
             <app-code-editor eventId="found"
               [script]="codes.onFound.script"
               (onChange)="updateCode('onFound', $event)"
+              [showBlockly]="displayBlocks"
             >
             </app-code-editor>
           </mat-expansion-panel>
@@ -72,6 +76,7 @@
             <app-code-editor eventId="gotDamage"
               [script]="codes.onGotDamage.script"
               (onChange)="updateCode('onGotDamage', $event)"
+              [showBlockly]="displayBlocks"
             >
             </app-code-editor>
           </mat-expansion-panel>
@@ -83,6 +88,7 @@
             <app-code-editor eventId="hitOther"
               [script]="codes.onHitOther.script"
               (onChange)="updateCode('onHitOther', $event)"
+              [showBlockly]="displayBlocks"
             >
             </app-code-editor>
           </mat-expansion-panel>

@@ -4,6 +4,7 @@ import {
   ModelCode,
   ModelGameComponent,
   ModelGameDefinition,
+  ModelNarrativeDefinition,
   ModelSceneComponent,
 } from "src/app/sdk";
 import { PartialModelGameDefinition } from "./game-definition-edit.model";
@@ -21,6 +22,9 @@ export class GameDefinitionEditMediatorService {
     null
   );
   onEditGameComponent: Subject<ModelGameComponent> = new BehaviorSubject(null);
+  onEditNarrative: Subject<ModelNarrativeDefinition> = new BehaviorSubject(
+    null
+  );
 
   onUpdateBasicInfo: Subject<PartialModelGameDefinition> = new Subject();
   onUpdateSceneComponents: Subject<ModelSceneComponent[]> = new Subject();
@@ -28,7 +32,14 @@ export class GameDefinitionEditMediatorService {
 
   onUpdateGameDefinitionCode: Subject<ModelCode[]> = new Subject();
   onUpdateSuggestedCode: Subject<ModelCode[]> = new Subject();
+
   onUpdateGameComponents: Subject<ModelGameComponent[]> = new Subject();
   onUpdateGameComponent: Subject<ModelGameComponent> = new Subject();
+
+  onUpdateNarrative: Subject<ModelNarrativeDefinition> = new Subject();
+  onUpdateNarrativeDefinitions: Subject<
+    ModelNarrativeDefinition[]
+  > = new Subject();
+
   constructor() {}
 }

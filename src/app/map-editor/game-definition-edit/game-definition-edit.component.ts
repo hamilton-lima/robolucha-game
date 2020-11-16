@@ -13,9 +13,7 @@ import { ModelLuchador } from "src/app/sdk/model/mainLuchador";
 import { AlertService } from "src/app/shared/alert.service";
 import { EventsService } from "src/app/shared/events.service";
 import { MatchState } from "src/app/watch-match/watch-match.model";
-import {
-  GameDefinitionEditMediatorService,
-} from "./game-definition-edit-mediator.service";
+import { GameDefinitionEditMediatorService } from "./game-definition-edit-mediator.service";
 import { CurrentEditorEnum } from "./game-definition-edit.model";
 import { MatchStateBuilderService } from "./match-state-builder.service";
 
@@ -49,39 +47,50 @@ export class GameDefinitionEditComponent implements OnInit {
     private cdRef: ChangeDetectorRef
   ) {}
 
+  refreshEditorDrawer(nextEditor: CurrentEditorEnum) {
+    if (this.currentEditor == nextEditor) {
+      this.currentEditor = nextEditor;
+      this.editorDrawer.toggle();
+    } else {
+      this.currentEditor = nextEditor;
+      this.editorDrawer.open();
+    }
+  }
+
   ngOnInit() {
     this.mediator.onEditBasicInfo.subscribe((current) => {
       if (current && this.editorDrawer) {
-        this.currentEditor = CurrentEditorEnum.BasicInfo;
-        this.editorDrawer.open();
+        this.refreshEditorDrawer(CurrentEditorEnum.BasicInfo);
       }
     });
 
     this.mediator.onEditGameDefinitionCode.subscribe((current) => {
       if (current && this.editorDrawer) {
-        this.currentEditor = CurrentEditorEnum.Codes;
-        this.editorDrawer.open();
+        this.refreshEditorDrawer(CurrentEditorEnum.Codes);
       }
     });
 
     this.mediator.onEditSceneComponent.subscribe((current) => {
       if (current && this.editorDrawer) {
-        this.currentEditor = CurrentEditorEnum.SingleSceneComponent;
-        this.editorDrawer.open();
+        this.refreshEditorDrawer(CurrentEditorEnum.SingleSceneComponent);
       }
     });
 
     this.mediator.onEditGameDefinitionSuggestedCode.subscribe((current) => {
       if (current && this.editorDrawer) {
-        this.currentEditor = CurrentEditorEnum.SuggestedCode;
-        this.editorDrawer.open();
+        this.refreshEditorDrawer(CurrentEditorEnum.SuggestedCode);
       }
     });
 
     this.mediator.onEditGameComponent.subscribe((current) => {
       if (current && this.editorDrawer) {
-        this.currentEditor = CurrentEditorEnum.GameComponent;
-        this.editorDrawer.open();
+        this.refreshEditorDrawer(CurrentEditorEnum.GameComponent);
+      }
+    });
+
+    this.mediator.onEditNarrative.subscribe((current) => {
+      if (current && this.editorDrawer) {
+        this.refreshEditorDrawer(CurrentEditorEnum.Narrative);
       }
     });
 
@@ -113,6 +122,11 @@ export class GameDefinitionEditComponent implements OnInit {
     this.mediator.onUpdateGameComponents.subscribe((components) => {
       this.gameDefinition.gameComponents = components;
       this.refreshMatchState();
+      this.dirty = true;
+    });
+
+    this.mediator.onUpdateNarrativeDefinitions.subscribe((narratives) => {
+      this.gameDefinition.narrativeDefinitions = narratives;
       this.dirty = true;
     });
 
@@ -157,8 +171,6 @@ export class GameDefinitionEditComponent implements OnInit {
         }
       }
     });
-
-    console.log("after update basic info", this.gameDefinition.codes);
 
     if (updatedFields.length > 0) {
       this.dirty = true;
@@ -210,20 +222,19 @@ export class GameDefinitionEditComponent implements OnInit {
     // clone
     const result: ModelGameDefinition = Object.assign({}, this.gameDefinition);
 
-    // remove temporary IDs
-    result.sceneComponents = this.gameDefinition.sceneComponents.map((c) => {
+    const removeID = function (c: any) {
       if (c.id < 0) {
         c.id = 0;
       }
       return c;
-    });
+    };
 
-    result.gameComponents = this.gameDefinition.gameComponents.map((c) => {
-      if (c.id < 0) {
-        c.id = 0;
-      }
-      return c;
-    });
+    // remove temporary IDs
+    result.sceneComponents = this.gameDefinition.sceneComponents.map(removeID);
+    result.gameComponents = this.gameDefinition.gameComponents.map(removeID);
+    result.narrativeDefinitions = this.gameDefinition.narrativeDefinitions.map(
+      removeID
+    );
 
     return result;
   }
@@ -253,7 +264,11 @@ export class GameDefinitionEditComponent implements OnInit {
     return this.currentEditor == CurrentEditorEnum.GameComponent;
   }
 
-  pick(target: Pickable){
-    console.log('clicked on ', target );    
+  isNarrativeCurrent() {
+    return this.currentEditor == CurrentEditorEnum.Narrative;
+  }
+
+  pick(target: Pickable) {
+    console.log("clicked on ", target);
   }
 }

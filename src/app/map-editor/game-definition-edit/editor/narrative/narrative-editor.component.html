@@ -1,0 +1,58 @@
+<!-- *ngIf="narrative" -->
+<div class="container" [formGroup]="form">
+  <div class="row">
+    <div class="col"><span class="title">Narrative</span></div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <mat-form-field class="col-10 mt-3 mx-auto">
+        <mat-label>Event</mat-label>
+        <mat-select matInput formControlName="event">
+          <mat-option value="onStart">On start</mat-option>
+          <mat-option value="onEnd">On end</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <mat-form-field class="col-10 mt-3 mx-auto">
+        <mat-label>Type</mat-label>
+        <mat-select matInput formControlName="type">
+          <mat-option value="image">Image</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <mat-form-field class="col-10 mt-3 mx-auto">
+        <mat-label>Sort order</mat-label>
+        <input type="text" matInput formControlName="sortOrder" />
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <mat-form-field class="col-10 mt-3 mx-auto">
+        <mat-label>Text</mat-label>
+        <textarea
+          matInput
+          formControlName="text"
+          name="text"
+          lines="10"
+        ></textarea>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col"><app-file-upload 
+      formControlName="file"></app-file-upload><br>
+      <img [src]="preview"></div>
+  </div>
+</div>

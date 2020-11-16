@@ -1,0 +1,38 @@
+<mat-expansion-panel *ngIf="narratives" [expanded]="true">
+  <mat-expansion-panel-header>
+    <mat-panel-title> Narrative </mat-panel-title>
+    <mat-panel-description> </mat-panel-description>
+  </mat-expansion-panel-header>
+
+  <table class="narrative-table">
+    <thead>
+      <tr>
+        <th width="20%">Event</th>
+        <th width="20%">Type</th>
+        <th width="20%">Sort order</th>
+        <th width="20%">Content</th>
+        <th width="20%">&nbsp;</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let narrative of narratives; index as i">
+        <td>{{narrative.event}}</td>
+        <td>{{narrative.type}}</td>
+        <td>{{narrative.sortOrder}}</td>
+        <td>{{formatContent(narrative)}}</td>
+        <td>
+          <button mat-icon-button (click)="edit(narrative)">
+            <mat-icon svgIcon="pencil"></mat-icon>
+          </button>
+          <button mat-icon-button (click)="delete(i)">
+            <mat-icon svgIcon="delete"></mat-icon>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <mat-action-row>
+    <button mat-button (click)="add()">ADD</button>
+  </mat-action-row>
+</mat-expansion-panel>

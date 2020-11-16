@@ -42,7 +42,6 @@ export class BasicInfoEditorComponent implements OnInit {
       this.form.patchValue(gameDefinition);
     });
 
-    console.log("updateOn", this.form.updateOn);
     this.form.valueChanges.subscribe(() => {
       this.save();
     });
