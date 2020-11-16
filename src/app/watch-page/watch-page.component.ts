@@ -51,7 +51,7 @@ export class WatchPageComponent
     AfterViewInit {
 
   @Output() cameraChangeSubject = new EventEmitter<CameraChange>();
-  
+
   constructor(
     private api: DefaultService,
     private route: ActivatedRoute,
@@ -439,7 +439,6 @@ export class WatchPageComponent
   }
 
   save() {
-    // apply the changes to the luchador object
     for (var event in this.codes) {
       // get codes from luchador for event + gamedefinition
       let code = this.luchador.codes.find((code: ModelCode) => {
@@ -448,13 +447,15 @@ export class WatchPageComponent
           code.gameDefinition == this.codes[event].gameDefinition
         );
       });
-
       // if exists updates the luchador with working code
+
       if (code) {
         code.script = this.codes[event].script;
       } else {
         this.luchador.codes.push(this.codes[event]);
       }
+      // apply the changes to the luchador object
+      console.log('saving...',this.codes[event].script)
     }
 
     this.api.privateLuchadorPut(this.luchador).subscribe((response) => {

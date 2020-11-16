@@ -28,15 +28,8 @@
           </mat-expansion-panel>
 
           <mat-expansion-panel [expanded]="true">
-            <mat-expansion-panel-header>
-              Block - UNDER TEST</mat-expansion-panel-header
-            >
-            <app-code-blockly></app-code-blockly>
-          </mat-expansion-panel>
-
-          <mat-expansion-panel [expanded]="true">
             <mat-expansion-panel-header> On Repeat </mat-expansion-panel-header>
-            <app-code-editor
+            <app-code-editor eventId="repeat"
               [script]="codes.onRepeat.script"
               (onChange)="updateCode('onRepeat', $event)"
             >
@@ -45,7 +38,7 @@
 
           <mat-expansion-panel>
             <mat-expansion-panel-header> On Start </mat-expansion-panel-header>
-            <app-code-editor
+            <app-code-editor eventId="start"
               [script]="codes.onStart.script"
               (onChange)="updateCode('onStart', $event)"
             >
@@ -56,7 +49,7 @@
             <mat-expansion-panel-header>
               On Hit Wall
             </mat-expansion-panel-header>
-            <app-code-editor
+            <app-code-editor eventId="hitWall"
               [script]="codes.onHitWall.script"
               (onChange)="updateCode('onHitWall', $event)"
             >
@@ -65,7 +58,7 @@
 
           <mat-expansion-panel>
             <mat-expansion-panel-header> On Found </mat-expansion-panel-header>
-            <app-code-editor
+            <app-code-editor eventId="found"
               [script]="codes.onFound.script"
               (onChange)="updateCode('onFound', $event)"
             >
@@ -76,7 +69,7 @@
             <mat-expansion-panel-header>
               On Got Damage
             </mat-expansion-panel-header>
-            <app-code-editor
+            <app-code-editor eventId="gotDamage"
               [script]="codes.onGotDamage.script"
               (onChange)="updateCode('onGotDamage', $event)"
             >
@@ -87,7 +80,7 @@
             <mat-expansion-panel-header>
               On Hit Other
             </mat-expansion-panel-header>
-            <app-code-editor
+            <app-code-editor eventId="hitOther"
               [script]="codes.onHitOther.script"
               (onChange)="updateCode('onHitOther', $event)"
             >
