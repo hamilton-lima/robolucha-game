@@ -1,6 +1,6 @@
 // https://developers.google.com/blockly/guides/create-custom-blocks/define-blocks
 
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 declare var Blockly: any;
@@ -17,18 +17,17 @@ export class CodeBlocklyComponent implements OnInit {
   @Input() eventId: string;
   @Output() codeChanged = new EventEmitter<string>();
 
-
   constructor(
     private route: ActivatedRoute,
     private router: Router,
+    private cdRef: ChangeDetectorRef,
   ) {
-    this.title = 'Create Visual Program';
   }
 
   ngAfterViewInit(): void {
     const toolbox = `
       <xml>
-        <category name="Commands" collapsed="false">
+        <category name="Commands" expanded="true">
             <block type="move" />
             <block type="fire" />
             <block type="turn" />
@@ -69,6 +68,7 @@ export class CodeBlocklyComponent implements OnInit {
     this.workspace = Blockly.inject(this.eventId, { toolbox });
     this.workspace.addChangeListener(this.update.bind(this));
     this.defineVariables();
+    this.cdRef.detectChanges();
   }
 
   ngOnInit() {
