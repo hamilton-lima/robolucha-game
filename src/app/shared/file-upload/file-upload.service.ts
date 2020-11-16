@@ -1,7 +1,6 @@
-import { HttpClient, HttpEventType } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Subject } from "rxjs";
-import { environment } from "src/environments/environment";
+import { DefaultService, ModelMedia, ModelMediaRequest } from "src/app/sdk";
 import { FileUploadResponse } from "./file-upload.model";
 
 export interface FileUploadMonitor {
@@ -13,42 +12,14 @@ export interface FileUploadMonitor {
   providedIn: "root",
 })
 export class FileUploadService {
-  constructor(private http: HttpClient) {}
+  constructor(private api: DefaultService) {}
 
-  findOne(id: string): Subject<FileUploadResponse> {
-    const result:Subject<FileUploadResponse> = new Subject();
+  upload(request: ModelMediaRequest): Subject<ModelMedia> {
+    const result = new Subject<ModelMedia>();
 
-    this.http
-      .get(environment.UPLOAD_BASEPATH + "/files/" + id)
-      .subscribe((event) => {
-          result.next(event as FileUploadResponse);
-      });
-
-    return result;
-  }
-
-
-  upload(data: FormData): FileUploadMonitor {
-    const result = <FileUploadMonitor>{
-      response: new Subject(),
-      progress: new Subject(),
-    };
-
-    this.http
-      .post(environment.UPLOAD_BASEPATH, data, {
-        observe: "events",
-        reportProgress: true,
-      })
-      .subscribe((event) => {
-        if (event.type === HttpEventType.UploadProgress) {
-          const progress = Math.round((100 * event.loaded) / event.total);
-          result.progress.next(progress);
-        }
-
-        if (event.type === HttpEventType.Response) {
-          result.response.next(event.body[0] as FileUploadResponse);
-        }
-      });
+    this.api.privateMediaPost(request).subscribe((media) => {
+      result.next(media);
+    });
 
     return result;
   }

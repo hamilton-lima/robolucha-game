@@ -27,8 +27,8 @@ export class NarrativeBuilderService {
       type: this.TYPES[this.DEFAULT_TYPE],
       event: this.EVENTS[this.DEFAULT_EVENT],
       text: "",
-      sortOrder: "0",
-      mediaID: ""
+      sortOrder: 0,
+      media: null
     };
 
     return result;

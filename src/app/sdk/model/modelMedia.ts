@@ -9,15 +9,13 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { ModelMedia } from './modelMedia';
 
 
-export interface ModelNarrativeDefinition {
-    event?: string;
-    gameDefinition?: number;
+export interface ModelMedia {
+    fileName?: string;
     id?: number;
-    media?: ModelMedia;
-    sortOrder?: number;
-    text?: string;
-    type?: string;
+    narrativeDefinition?: number;
+    thumbnail?: string;
+    url?: string;
+    userID?: number;
 }

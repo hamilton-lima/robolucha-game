@@ -49,8 +49,8 @@ export class NarrativeComponent implements OnInit {
     if (narrative.text) {
       result = result + "TXT ";
     }
-    if (narrative.mediaID) {
-      result = result + "IMG";
+    if (narrative.media) {
+      result = result + narrative.media.fileName;
     }
     return result;
   }
