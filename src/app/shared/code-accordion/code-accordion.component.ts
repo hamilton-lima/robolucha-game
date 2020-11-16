@@ -1,7 +1,7 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { Subject } from "rxjs";
-import { Message } from "src/app/shared/message/message.model";
-import { ModelCode } from "src/app/sdk";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Subject } from 'rxjs';
+import { Message } from 'src/app/shared/message/message.model';
+import { ModelCode } from 'src/app/sdk';
 
 export class CodeAcordionEventEditor {
   label: string;
@@ -9,9 +9,9 @@ export class CodeAcordionEventEditor {
 }
 
 @Component({
-  selector: "app-code-accordion",
-  templateUrl: "./code-accordion.component.html",
-  styleUrls: ["./code-accordion.component.scss"],
+  selector: 'app-code-accordion',
+  templateUrl: './code-accordion.component.html',
+  styleUrls: ['./code-accordion.component.scss'],
 })
 export class CodeAccordionComponent implements OnInit {
   @Input() codes: ModelCode[];
@@ -21,11 +21,11 @@ export class CodeAccordionComponent implements OnInit {
 
   @Output() update: EventEmitter<ModelCode[]> = new EventEmitter();
 
-  dirty: boolean = false;
+  dirty = false;
 
   constructor() {
     this.codes = [];
-    this.helpFile = "help/code_editor_help";
+    this.helpFile = 'help/code_editor_help';
   }
 
   ngOnInit() {
@@ -39,11 +39,11 @@ export class CodeAccordionComponent implements OnInit {
     if (code) {
       return code.script;
     }
-    return "";
+    return '';
   }
 
   updateCode(event: string, script: string) {
-    console.log("udpate code ", event, script);
+    console.log('udpate code ', event, script);
     const search = this.codes.find((code) => code.event == event);
 
     if (search) {
@@ -62,4 +62,5 @@ export class CodeAccordionComponent implements OnInit {
     // expand first element by default
     return i == 0;
   }
+
 }

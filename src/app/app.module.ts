@@ -50,7 +50,6 @@ import { EndTutorialGuardService } from "./end-tutorial-guard.service";
 import { ActivityListComponent } from "./dashboard/activity-list/activity-list.component";
 import { LobbyComponent } from "./lobby/lobby.component";
 import { CantPlayComponent } from "./lobby/cant-play/cant-play.component";
-import { CodeBlocklyComponent } from './shared/code-blockly/code-blockly.component';
 import { MapEditorComponent } from './map-editor/map-editor.component';
 import { GameDefinitionCreateComponent } from "./map-editor/game-definition-create/game-definition-create.component";
 import { GameDefinitionEditComponent } from "./map-editor/game-definition-edit/game-definition-edit.component";

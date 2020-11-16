@@ -1,9 +1,33 @@
-<div
-  ace-editor
-  class="editor"
-  [options]="options"
-  [text]="script"
-  [theme]="'solarized_light'"
-  [mode]="'lua'"
-  (textChanged)="onEditorChange($event)"
-></div>
+<div>
+
+  <div [hidden]="!showBlockly">
+<!--    <button-->
+<!--      class="btn btn-primary align-bottom "-->
+<!--      (click)="toggle()"-->
+<!--      style="margin-bottom: 5px"-->
+<!--    >-->
+<!--      Code-->
+<!--    </button>-->
+    <div>
+      <app-code-blockly eventId="{{eventId}}" (codeChanged)="onEditorChange($event)"> </app-code-blockly>
+    </div>
+  </div>
+
+  <div [hidden]="showBlockly">
+    <button
+      class="btn btn-primary align-bottom"
+      (click)="toggle()"
+      style="margin-bottom: 5px"
+    >
+      Blockly
+    </button>  <div
+      ace-editor
+      class="editor"
+      [options]="options"
+      [text]="script"
+      [theme]="'solarized_light'"
+      [mode]="'lua'"
+      (textChanged)="onEditorChange($event)"
+    ></div>
+  </div>
+</div>
