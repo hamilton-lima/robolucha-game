@@ -12,8 +12,8 @@ declare var Blockly: any;
 })
 export class CodeBlocklyComponent implements OnInit {
 
-  title: string;
   workspace: any;
+
   @Input() eventId: string;
   @Output() codeChanged = new EventEmitter<string>();
 
