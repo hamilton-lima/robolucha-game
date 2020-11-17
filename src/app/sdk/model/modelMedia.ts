@@ -13,6 +13,7 @@
 
 export interface ModelMedia {
     fileName?: string;
+    gameDefinition?: number;
     id?: number;
     narrativeDefinition?: number;
     thumbnail?: string;
