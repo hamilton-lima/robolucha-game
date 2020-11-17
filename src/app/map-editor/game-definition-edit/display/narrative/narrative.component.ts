@@ -44,14 +44,4 @@ export class NarrativeComponent implements OnInit {
     this.mediator.onUpdateNarrativeDefinitions.next(this.narratives);
   }
 
-  formatContent(narrative: ModelNarrativeDefinition) {
-    let result = "";
-    if (narrative.text) {
-      result = result + "TXT ";
-    }
-    if (narrative.media) {
-      result = result + narrative.media.fileName;
-    }
-    return result;
-  }
-}
+ }
