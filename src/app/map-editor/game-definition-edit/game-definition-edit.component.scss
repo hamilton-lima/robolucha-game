@@ -4,6 +4,14 @@
   left: 0;
 }
 
+.screenshot {
+  z-index: 5;
+  position: absolute;
+  left: 1%;
+  top: 1%;
+  background-color: whitesmoke;
+}
+
 .drawer-right {
   min-width: 500px;
   width: 20%;
@@ -25,6 +33,7 @@
   top: 1%;
   background-color: whitesmoke;
 }
+
 
 .message-panel {
   left: 0;

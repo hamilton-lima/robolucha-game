@@ -16,10 +16,17 @@
     </thead>
     <tbody>
       <tr *ngFor="let narrative of narratives; index as i">
-        <td>{{narrative.event}}</td>
-        <td>{{narrative.type}}</td>
-        <td>{{narrative.sortOrder}}</td>
-        <td>{{formatContent(narrative)}}</td>
+        <td>{{ narrative.event }}</td>
+        <td>{{ narrative.type }}</td>
+        <td>{{ narrative.sortOrder }}</td>
+        <td>
+          <img
+            class="thumbnail"
+            *ngIf="narrative.media.thumbnail"
+            [src]="narrative.media.thumbnail"
+          />
+          <mat-icon *ngIf="narrative.text" svgIcon="card-text-outline"></mat-icon>
+        </td>
         <td>
           <button mat-icon-button (click)="edit(narrative)">
             <mat-icon svgIcon="pencil"></mat-icon>

@@ -44,7 +44,7 @@
           matInput
           formControlName="text"
           name="text"
-          lines="10"
+          rows="10"
         ></textarea>
       </mat-form-field>
     </div>
@@ -53,6 +53,6 @@
   <div class="row">
     <div class="col"><app-file-upload 
       formControlName="file"></app-file-upload><br>
-      <img [src]="preview"></div>
+      <img class="preview" [src]="preview"></div>
   </div>
 </div>

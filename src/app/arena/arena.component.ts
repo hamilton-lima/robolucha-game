@@ -191,8 +191,11 @@ export class ArenaComponent
       console.warn("Trying to create babylon engine for the second time");
       return;
     }
-
-    this.engine = new BABYLON.Engine(this.canvas.nativeElement, true);
+    
+    this.engine = new BABYLON.Engine(this.canvas.nativeElement, true, {
+      preserveDrawingBuffer: true,
+      stencil: true,
+    });
     this.resetState();
 
     this.HALF_LUCHADOR = this.convertPosition(
@@ -234,7 +237,7 @@ export class ArenaComponent
 
     if (this.messageFPS) {
       this.messageFPS.subscribe((fps) => {
-        if(this.engine){
+        if (this.engine) {
           const info: FPSInfo = {
             matchID: this.matchID,
             messages: fps,
@@ -249,7 +252,7 @@ export class ArenaComponent
     this.engine.loadingUIText = "Loading the arena";
 
     this.scene = new BABYLON.Scene(this.engine);
-    
+
     // emit event when element is clicked
     this.scene.onPointerObservable.add(
       (info: BABYLON.PointerInfo, state: BABYLON.EventState) => {
@@ -592,7 +595,7 @@ export class ArenaComponent
     const height = this.convertPosition(component.height);
     const length = this.convertPosition(component.length);
     const rotation = Helper3D.angle2radian(component.rotation);
-    
+
     component3D.moveToXYZ(position);
     component3D.rotate(rotation);
     component3D.resize(width, height, length);
@@ -643,5 +646,9 @@ export class ArenaComponent
       }
     }
     return value;
+  }
+
+  getScreenShot(callback: (data: string)=> void){
+    BABYLON.Tools.CreateScreenshot(this.engine, this.camera, 800, callback);
   }
 }

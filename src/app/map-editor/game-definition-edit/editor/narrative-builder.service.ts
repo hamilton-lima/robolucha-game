@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ModelNarrativeDefinition } from 'src/app/sdk';
+import { ModelMedia, ModelNarrativeDefinition } from 'src/app/sdk';
 
 @Injectable({
   providedIn: 'root'
@@ -27,8 +27,8 @@ export class NarrativeBuilderService {
       type: this.TYPES[this.DEFAULT_TYPE],
       event: this.EVENTS[this.DEFAULT_EVENT],
       text: "",
-      sortOrder: "0",
-      mediaID: ""
+      sortOrder: 0,
+      media: <ModelMedia>{}
     };
 
     return result;

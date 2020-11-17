@@ -1,8 +1,10 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
-import { ModelNarrativeDefinition } from "src/app/sdk";
+import { ModelMediaRequest, ModelNarrativeDefinition } from "src/app/sdk";
 import { GameDefinitionEditMediatorService } from "../../game-definition-edit-mediator.service";
 import { FileUploadService } from "src/app/shared/file-upload/file-upload.service";
+import { Subject } from "rxjs";
+import { FormUtilsService } from "src/app/shared/form-utils.service";
 
 @Component({
   selector: "app-narrative-editor",
@@ -26,7 +28,8 @@ export class NarrativeEditorComponent implements OnInit {
   constructor(
     private mediator: GameDefinitionEditMediatorService,
     private formBuilder: FormBuilder,
-    private uploader: FileUploadService
+    private uploader: FileUploadService,
+    private formUtil: FormUtilsService,
   ) {}
 
   ngOnInit() {
@@ -35,12 +38,9 @@ export class NarrativeEditorComponent implements OnInit {
         this.id = narrative.id;
         this.narrative = narrative;
         this.form.patchValue(this.narrative);
-        console.log('mediaID', narrative.mediaID);
 
-        if( narrative.mediaID ){
-          this.uploader.findOne(narrative.mediaID).subscribe( response =>{
-            this.preview = response.formats.thumbnail.url;
-          });
+        if (narrative.media && narrative.media.thumbnail) {
+          this.preview = narrative.media.thumbnail;
         } else {
           this.preview = this.NOTFOUND_IMAGE;
         }
@@ -58,14 +58,13 @@ export class NarrativeEditorComponent implements OnInit {
 
   save() {
     if (this.form.valid) {
-
       const narrative = <ModelNarrativeDefinition>{
         id: this.narrative.id,
         event: this.form.get("event").value,
         type: this.form.get("type").value,
         text: this.form.get("text").value,
-        mediaID: this.narrative.mediaID,
-        sortOrder: this.form.get("sortOrder").value,
+        media: this.narrative.media,
+        sortOrder: Number.parseInt(this.form.get("sortOrder").value),
       };
 
       this.mediator.onUpdateNarrative.next(narrative);
@@ -73,17 +72,19 @@ export class NarrativeEditorComponent implements OnInit {
   }
 
   uploadImage() {
-    const formData = new FormData();
-    formData.append("files", this.form.get("file").value);
-    const monitor = this.uploader.upload(formData);
+    const file: File = this.form.get("file").value;
 
-    monitor.progress.subscribe((progress) => console.log("progress", progress));
-
-    monitor.response.subscribe((response) => {
-      console.log('response', response );
-      this.preview = response.formats.thumbnail.url;
-      this.narrative.mediaID = response.id.toString();
-      this.save();
+    this.formUtil.fileInputToBase64(file).subscribe(base64 =>{
+      const request = <ModelMediaRequest>{
+        base64Data: base64,
+        fileName: file.name
+      }
+      this.uploader.upload(request).subscribe(media =>{
+        console.log('media', media);
+        this.narrative.media = media;
+        this.preview = media.thumbnail;
+        this.save();
+      });
     });
   }
 }
