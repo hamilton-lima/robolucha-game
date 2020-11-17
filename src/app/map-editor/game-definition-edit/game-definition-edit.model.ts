@@ -1,3 +1,5 @@
+import { ModelMedia } from "src/app/sdk";
+
 export const enum CurrentEditorEnum {
   BasicInfo,
   Codes,
@@ -16,4 +18,5 @@ export class PartialModelGameDefinition {
   maxParticipants?: number;
   minParticipants?: number;
   name?: string;
+  media?: ModelMedia;
 }

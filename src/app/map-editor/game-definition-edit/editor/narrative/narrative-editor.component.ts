@@ -4,6 +4,7 @@ import { ModelMediaRequest, ModelNarrativeDefinition } from "src/app/sdk";
 import { GameDefinitionEditMediatorService } from "../../game-definition-edit-mediator.service";
 import { FileUploadService } from "src/app/shared/file-upload/file-upload.service";
 import { Subject } from "rxjs";
+import { FormUtilsService } from "src/app/shared/form-utils.service";
 
 @Component({
   selector: "app-narrative-editor",
@@ -27,7 +28,8 @@ export class NarrativeEditorComponent implements OnInit {
   constructor(
     private mediator: GameDefinitionEditMediatorService,
     private formBuilder: FormBuilder,
-    private uploader: FileUploadService
+    private uploader: FileUploadService,
+    private formUtil: FormUtilsService,
   ) {}
 
   ngOnInit() {
@@ -36,7 +38,6 @@ export class NarrativeEditorComponent implements OnInit {
         this.id = narrative.id;
         this.narrative = narrative;
         this.form.patchValue(this.narrative);
-        console.log("mediaID", narrative.media);
 
         if (narrative.media) {
           this.preview = narrative.media.thumbnail;
@@ -57,8 +58,6 @@ export class NarrativeEditorComponent implements OnInit {
 
   save() {
     if (this.form.valid) {
-      console.log('saving narrative form', this.narrative);
-
       const narrative = <ModelNarrativeDefinition>{
         id: this.narrative.id,
         event: this.form.get("event").value,
@@ -72,22 +71,10 @@ export class NarrativeEditorComponent implements OnInit {
     }
   }
 
-  fileInputToBase64(file): Subject<string> {
-    const result = new Subject<string>();
-    const reader = new FileReader();
-
-    reader.onloadend = function () {
-      result.next(reader.result.toString());
-    };
-
-    reader.readAsDataURL(file);
-    return result;
-  }
-
   uploadImage() {
     const file: File = this.form.get("file").value;
 
-    this.fileInputToBase64(file).subscribe(base64 =>{
+    this.formUtil.fileInputToBase64(file).subscribe(base64 =>{
       const request = <ModelMediaRequest>{
         base64Data: base64,
         fileName: file.name
