@@ -95,6 +95,7 @@ export class NarrativeEditorComponent implements OnInit {
       this.uploader.upload(request).subscribe(media =>{
         console.log('media', media);
         this.narrative.media = media;
+        this.preview = media.thumbnail;
         this.save();
       });
     });
