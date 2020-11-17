@@ -8,10 +8,16 @@ import {
 import { MatDrawer } from "@angular/material/sidenav";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ArenaComponent, Pickable } from "src/app/arena/arena.component";
-import { DefaultService, ModelCode, ModelGameDefinition } from "src/app/sdk";
+import {
+  DefaultService,
+  ModelCode,
+  ModelGameDefinition,
+  ModelMediaRequest,
+} from "src/app/sdk";
 import { ModelLuchador } from "src/app/sdk/model/mainLuchador";
 import { AlertService } from "src/app/shared/alert.service";
 import { EventsService } from "src/app/shared/events.service";
+import { FileUploadService } from "src/app/shared/file-upload/file-upload.service";
 import { MatchState } from "src/app/watch-match/watch-match.model";
 import { GameDefinitionEditMediatorService } from "./game-definition-edit-mediator.service";
 import { CurrentEditorEnum } from "./game-definition-edit.model";
@@ -44,7 +50,8 @@ export class GameDefinitionEditComponent implements OnInit {
     private router: Router,
     private alert: AlertService,
     private builder: MatchStateBuilderService,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    private uploader: FileUploadService
   ) {}
 
   refreshEditorDrawer(nextEditor: CurrentEditorEnum) {
@@ -270,5 +277,22 @@ export class GameDefinitionEditComponent implements OnInit {
 
   pick(target: Pickable) {
     console.log("clicked on ", target);
+  }
+
+  screenshot() {
+    console.log("ask screenshot");
+    const subject = this.arena.getScreenShot((data) => {
+      console.log("screenshot data");
+
+      const request = <ModelMediaRequest>{
+        base64Data: data,
+        fileName: "screenshot.png",
+      };
+      this.uploader.upload(request).subscribe((media) => {
+        this.gameDefinition.media = media;
+        console.log('media', media);
+        this.dirty = true;
+      });
+    });
   }
 }

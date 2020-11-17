@@ -39,7 +39,7 @@ export class NarrativeEditorComponent implements OnInit {
         this.narrative = narrative;
         this.form.patchValue(this.narrative);
 
-        if (narrative.media) {
+        if (narrative.media && narrative.media.thumbnail) {
           this.preview = narrative.media.thumbnail;
         } else {
           this.preview = this.NOTFOUND_IMAGE;
