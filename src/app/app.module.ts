@@ -107,6 +107,7 @@ const ROUTES: Routes = [
     path: "maps/edit/:id",
     component: GameDefinitionEditComponent,
     canActivate: [LoginActivate],
+    canDeactivate: [CanDeactivateGuard],    
     resolve: { luchador: LuchadorResolverService },
   },
   {

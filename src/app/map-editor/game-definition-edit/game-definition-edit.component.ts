@@ -295,4 +295,14 @@ export class GameDefinitionEditComponent implements OnInit {
       });
     });
   }
+
+  canDeactivate() {
+    if (this.dirty) {
+      return window.confirm(
+        "You have unsaved changes to your map. Are you sure you want to leave?"
+      );
+    }
+    return true;
+  }
+
 }
