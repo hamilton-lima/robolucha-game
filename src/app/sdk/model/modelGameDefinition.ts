@@ -11,6 +11,7 @@
  */
 import { ModelCode } from './modelCode';
 import { ModelGameComponent } from './modelGameComponent';
+import { ModelMedia } from './modelMedia';
 import { ModelNarrativeDefinition } from './modelNarrativeDefinition';
 import { ModelSceneComponent } from './modelSceneComponent';
 import { ModelTeamDefinition } from './modelTeamDefinition';
@@ -39,6 +40,7 @@ export interface ModelGameDefinition {
     maxFireDamage?: number;
     maxLevel?: number;
     maxParticipants?: number;
+    media?: ModelMedia;
     minFireAmount?: number;
     minFireDamage?: number;
     minLevel?: number;
