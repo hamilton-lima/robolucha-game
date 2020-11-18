@@ -31,7 +31,7 @@ export class CodeBlocklyComponent implements OnInit {
   ) {}
 
   ngAfterViewInit(): void {
-    timer(10).subscribe((done) => {
+    timer(500).subscribe((done) => {
       const toolbox = this.service.defaultToolbox();
       this.declareCommands();
       this.workspace = Blockly.inject(this.eventId, { toolbox });
