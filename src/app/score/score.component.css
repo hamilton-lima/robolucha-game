@@ -8,6 +8,7 @@
 .table td {
   padding: 3px;
   border: none;
+  font-size: small;
 }
 
 thead {

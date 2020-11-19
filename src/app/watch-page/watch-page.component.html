@@ -126,8 +126,6 @@
     </section>
   </mat-sidenav-container>
 
-  <app-clock class="clock" [matchStateSubject]="matchStateSubject"></app-clock>
-
   <div class="navigation no-gutters">
     <div class="row">
       <div class="col-2">
@@ -143,8 +141,13 @@
           <mat-icon svgIcon="camera-switch"></mat-icon>
         </button>
       </div>
-      <div class="col" *ngIf="displayScore">
-        <app-score [scores]="scores"></app-score>
+      <div class="col ml-3" >
+        <div class="mb-1">
+          <app-clock class="clock" [matchStateSubject]="matchStateSubject"></app-clock>
+        </div>
+        <div *ngIf="displayScore">
+          <app-score  [scores]="scores"></app-score>
+        </div>
       </div>
     </div>
   </div>
