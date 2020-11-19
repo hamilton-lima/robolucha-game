@@ -139,7 +139,6 @@ export class WatchPageComponent
   ];
 
   ngAfterViewInit() {
-    console.log("after view init");
     const user = this.userService.getUser();
 
     if (!user.settings.playedTutorial) {
@@ -188,17 +187,11 @@ export class WatchPageComponent
           .watch(details)
           .subscribe((message) => {
             const parsed = JSON.parse(message);
-            console.log("message from match", parsed);
 
             // ready to go, the server started to send state
             if (parsed.type == "match-state") {
               this.watchService.close();
               this.watchSubscription.unsubscribe();
-
-              console.log(
-                "watchsubscription.closed",
-                this.watchSubscription.closed
-              );
               self.tryToStartMatch();
             }
 
@@ -206,17 +199,10 @@ export class WatchPageComponent
             if (parsed.type == "match-created") {
               this.setMatchNotReadyInfo(parsed.message);
 
-              console.log("match-created update", this.matchNotReadyInfo);
-
               // we are ready close websocket connection and try to start the match
               if (this.matchNotReadyInfo.ready) {
-                console.log("we are ready lets start the match");
                 this.watchService.close();
                 this.watchSubscription.unsubscribe();
-                console.log(
-                  "watchsubscription.closed",
-                  this.watchSubscription.closed
-                );
                 self.tryToStartMatch();
               }
             }
@@ -255,6 +241,7 @@ export class WatchPageComponent
     if (info.ready) {
       this.notReadyMessage = "Go go go";
     } else {
+      // the match HAS team participants information
       if (info.teamParticipants && info.teamParticipants.length > 0) {
         this.notReadyMessage = "Waiting for more participants";
       } else {
@@ -266,12 +253,10 @@ export class WatchPageComponent
   ngOnDestroy(): void {
     if (this.watchService) {
       this.watchService.close();
-      console.log("closing connection");
     }
   }
 
   tryToStartMatch() {
-    console.log("try to start the match");
     this.api.privateMatchSingleGet(this.matchID).subscribe((match) => {
       // ready!
       if (match.status == "RUNNING") {
@@ -382,7 +367,6 @@ export class WatchPageComponent
   /** Loads codes from luchador to the editor, filter by gameDefinition */
   refreshEditor() {
     if (!this.gameDefinition) {
-      console.warn("gameDefinition not set");
       return;
     }
 
@@ -457,8 +441,6 @@ export class WatchPageComponent
       } else {
         this.luchador.codes.push(this.codes[event]);
       }
-      // apply the changes to the luchador object
-      console.log('saving...',this.codes[event].script)
     }
 
     this.api.privateLuchadorPut(this.luchador).subscribe((response) => {
