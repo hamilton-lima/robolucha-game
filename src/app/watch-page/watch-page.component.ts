@@ -157,6 +157,7 @@ export class WatchPageComponent
   ngOnInit(): void {
     this.page = this.route.snapshot.url.join("/");
     this.luchador = this.route.snapshot.data.luchador;
+    this.gameDefinition = this.route.snapshot.data.gameDefinition;
 
     this.matchID = Number.parseInt(this.route.snapshot.paramMap.get("id"));
     this.gameDefinition = null;
