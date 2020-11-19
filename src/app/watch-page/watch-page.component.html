@@ -183,9 +183,9 @@
   </mat-card>
 </div>
 
-<div class="p-3 matchover-finished" *ngIf="matchFinished">
+<div class="p-3 matchover-link-invalid" *ngIf="matchLinkInvalid">
   <mat-card>
-    <mat-card-title><h1>This match is over</h1></mat-card-title>
+    <mat-card-title><h1>This link is not valid anymore, this match is over</h1></mat-card-title>
     <mat-card-content></mat-card-content>
     <mat-card-actions>
       <button mat-raised-button class="mb-2" (click)="goBack()">

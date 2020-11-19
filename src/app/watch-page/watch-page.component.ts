@@ -66,7 +66,7 @@ export class WatchPageComponent
 
   matchReady = false;
   notReadyMessage = "";
-  matchFinished = false;
+  matchLinkInvalid = false;
   matchOver = false;
 
   matchNotReadyInfo: MatchReady;
@@ -227,7 +227,7 @@ export class WatchPageComponent
     this.onMatchFinished.subscribe((match) => {
       this.matchPreparing = false;
       this.matchOver = false;
-      this.matchFinished = true;
+      this.matchLinkInvalid = true;
 
       this.api
         .privateGameDefinitionIdIdGet(match.gameDefinitionID)
