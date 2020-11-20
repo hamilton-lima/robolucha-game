@@ -12,6 +12,7 @@
 
 
 export interface ModelCode {
+    blockly?: string;
     event?: string;
     exception?: string;
     gameDefinition?: number;
