@@ -1,12 +1,6 @@
 // https://developers.google.com/blockly/guides/create-custom-blocks/define-blocks
 
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-} from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { timer } from "rxjs";
 import { BlocklyService } from "./code-blockly.service";
@@ -36,25 +30,10 @@ export class CodeBlocklyComponent implements OnInit {
       this.declareCommands();
       this.workspace = Blockly.inject(this.eventId, { toolbox });
       this.workspace.addChangeListener(this.update.bind(this));
-      this.defineVariables();
     });
   }
 
   ngOnInit() {}
-
-  defineVariables() {
-    this.workspace.createVariable("id");
-    this.workspace.createVariable("name");
-    this.workspace.createVariable("x");
-    this.workspace.createVariable("y");
-    this.workspace.createVariable("life");
-    this.workspace.createVariable("angle");
-    this.workspace.createVariable("gunAngle");
-    this.workspace.createVariable("fireCooldown");
-    this.workspace.createVariable("k");
-    this.workspace.createVariable("d");
-    this.workspace.createVariable("score");
-  }
 
   declareCommands() {
     // debug	message	string
@@ -107,38 +86,66 @@ export class CodeBlocklyComponent implements OnInit {
         // debug	message	string
         type: "debug",
         message0: "debug %1",
-        args0: [{ type: "input_value", name: "VALUE" }],
+        args0: [{ type: "input_value", name: "VALUE", check: "String" }],
         previousStatement: null,
         nextStatement: null,
         colour: 355,
       },
       {
-        type: "me",
+        type: "me_number",
         message0: "me.%1",
-        output: null,
+        output: "Number",
+        colour: 260,
         args0: [
           {
             type: "field_dropdown",
             name: "ME_FIELD",
             options: [
-              ["name", "name"],
-              ["x", "x"],
-              ["y", "y"],
-            ]
-          }
-        ]
+              ["x", ".x"],
+              ["y", ".y"],
+              ["life", ".life"],
+              ["angle", ".angle"],
+              ["gunAngle", ".gunAngle"],
+              ["fireCooldown", ".fireCooldown"],
+              ["fireCooldown", ".fireCooldown"],
+              ["kills", ".k"],
+              ["deaths", ".d"],
+              ["score", ".score"],
+            ],
+          },
+        ],
+      },
+      {
+        type: "me_string",
+        message0: "me.%1",
+        output: "String",
+        colour: 290,
+        args0: [
+          {
+            type: "field_dropdown",
+            name: "ME_FIELD",
+            options: [
+              ["all", ""],
+              ["id", ".id"],
+              ["name", ".name"],
+            ],
+          },
+        ],
       },
     ]);
 
-    Blockly.Lua["me"] = function (block) {
-      const value = Blockly.Lua.valueToCode(
-        block,
-        "ME_FIELD",
-        Blockly.Lua.ORDER_ATOMIC
-      );
-      const field = block.getFieldValue('ME_FIELD')
-      console.log('value from me', block, value, field );
-      return `me.${field}`;
+    Blockly.Lua["me_string"] = function (block) {
+      const field = block.getFieldValue("ME_FIELD");
+      console.log("value from me", field);
+      const result = `me${field}`;
+      return [result, Blockly.Lua.ORDER_ATOMIC];
+    };
+
+    Blockly.Lua["me_number"] = function (block) {
+      const field = block.getFieldValue("ME_FIELD");
+      console.log("value from me", field);
+      const result = `me${field}`;
+      return [result, Blockly.Lua.ORDER_ATOMIC];
     };
 
     Blockly.Lua["move"] = function (block) {
@@ -193,7 +200,7 @@ export class CodeBlocklyComponent implements OnInit {
 
   update(): void {
     const code = Blockly.Lua.workspaceToCode();
-    console.log('code', code);
+    console.log("code", code);
     this.codeChanged.next(code);
   }
 }

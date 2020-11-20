@@ -14,14 +14,18 @@ export class BlocklyService {
               <block type="turnGun" />
               <block type="reset" />
               <block type="debug" />
-              <block type="me" />
               <block type="math_number"></block>
               <block type="math_arithmetic"></block>
           </category>
-  
-          <category name="Variables" custom="VARIABLE"></category>
+         
+          <category name="Luchador">
+             <block type="me_string" />
+             <block type="me_number" />
+          </category>
           <sep></sep>
   
+          <category name="Variables" custom="VARIABLE"></category>
+
           <category name="Math">
             <block type="math_number"></block>
             <block type="math_arithmetic"></block>
