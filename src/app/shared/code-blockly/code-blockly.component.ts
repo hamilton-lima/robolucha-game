@@ -22,6 +22,7 @@ export class CodeBlocklyComponent implements OnInit {
   workspace: any;
 
   @Input() eventId: string;
+  @Output() code: string;
   @Output() codeChanged = new EventEmitter<string>();
 
   constructor(
@@ -165,8 +166,7 @@ export class CodeBlocklyComponent implements OnInit {
   }
 
   update(): void {
-    const code = Blockly.Lua.workspaceToCode();
-    console.log('code', code);
-    this.codeChanged.next(code);
+    this.code = Blockly.Lua.workspaceToCode(this.workspace);
+    this.codeChanged.next(this.code);
   }
 }

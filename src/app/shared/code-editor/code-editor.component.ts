@@ -26,8 +26,11 @@ export class CodeEditorComponent implements OnInit {
   ngOnInit() {}
 
   onEditorChange(event) {
-    console.log('event',event)
     this.onChange.next( event );
+  }
+
+  toggle() {
+    this.showBlockly = !this.showBlockly;
   }
 
 }
