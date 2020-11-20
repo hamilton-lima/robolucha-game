@@ -14,6 +14,9 @@ export class BlocklyService {
               <block type="turnGun" />
               <block type="reset" />
               <block type="debug" />
+              <block type="me" />
+              <block type="math_number"></block>
+              <block type="math_arithmetic"></block>
           </category>
   
           <category name="Variables" custom="VARIABLE"></category>

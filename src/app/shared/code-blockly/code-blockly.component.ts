@@ -112,7 +112,34 @@ export class CodeBlocklyComponent implements OnInit {
         nextStatement: null,
         colour: 355,
       },
+      {
+        type: "me",
+        message0: "me.%1",
+        output: null,
+        args0: [
+          {
+            type: "field_dropdown",
+            name: "ME_FIELD",
+            options: [
+              ["name", "name"],
+              ["x", "x"],
+              ["y", "y"],
+            ]
+          }
+        ]
+      },
     ]);
+
+    Blockly.Lua["me"] = function (block) {
+      const value = Blockly.Lua.valueToCode(
+        block,
+        "ME_FIELD",
+        Blockly.Lua.ORDER_ATOMIC
+      );
+      const field = block.getFieldValue('ME_FIELD')
+      console.log('value from me', block, value, field );
+      return `me.${field}`;
+    };
 
     Blockly.Lua["move"] = function (block) {
       const value = Blockly.Lua.valueToCode(
