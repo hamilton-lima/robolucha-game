@@ -5,6 +5,7 @@ import {
   OnDestroy,
   OnInit,
   Output,
+  ViewChild,
 } from "@angular/core";
 import { timer } from "rxjs";
 import { BlocklyService } from "./code-blockly.service";
@@ -21,13 +22,15 @@ export class CodeBlocklyComponent implements OnInit {
 
   // generate unique ID for each component
   static nextId = 0;
-  id = `blockly-${CodeBlocklyComponent.nextId++}`;
+  id:string;
 
   @Input() blocklyDefinition: string;
   @Input() useOther = false;
   @Output() codeChanged = new EventEmitter<CodeEditorEvent>();
 
-  constructor(private service: BlocklyService) {}
+  constructor(private service: BlocklyService) {
+    this.id = `blockly-${CodeBlocklyComponent.nextId++}`;
+  }
 
   ngAfterViewInit(): void {
     timer(500).subscribe((done) => {

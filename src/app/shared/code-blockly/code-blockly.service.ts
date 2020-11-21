@@ -22,10 +22,11 @@ export class BlocklyService {
     }
     const workspace = Blockly.inject(id, { toolbox });
     workspace.addChangeListener(onChange);
+    return workspace;
   }
 
   setXML(xml: string, workspace: any) {
-    console.log("set XML", xml);
+    console.log("set XML", workspace);
     if (xml) {
       Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xml), workspace);
     } else {
@@ -34,11 +35,11 @@ export class BlocklyService {
         workspace
       );
     }
-
-    return workspace;
+    console.log("set XML AFTER ", xml, workspace);
   }
 
   getXML(workspace) {
+    console.log("get XML", workspace);
     const dom = Blockly.Xml.workspaceToDom(workspace);
     const xml = Blockly.Xml.domToText(dom);
     return xml;
