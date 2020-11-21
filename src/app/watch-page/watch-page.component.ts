@@ -440,6 +440,7 @@ export class WatchPageComponent
     this.dirty = true;
     this.codes[event].script = codeEditorEvent.code;
     this.codes[event].blockly = codeEditorEvent.blocklyDefinition
+    console.log("blockDefinition: ",this.codes[event].blockly)
     this.cdRef.detectChanges();
 
   }

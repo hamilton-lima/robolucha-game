@@ -23,7 +23,10 @@ export class CodeBlocklyComponent implements OnInit {
   workspace: any;
 
   @Input() eventId: string;
-  @Output() codeChanged = new EventEmitter<string>();
+  @Output() codeChanged = new EventEmitter<CodeEditorEvent>();
+  @Input() blocklyDefinition: string;
+  @Input() useOther = false;
+  @Output() code : string
 
   constructor(
     private route: ActivatedRoute,
@@ -34,16 +37,21 @@ export class CodeBlocklyComponent implements OnInit {
   ngAfterViewInit(): void {
     timer(500).subscribe((done) => {
       console.log("definition: ",this.blocklyDefinition)
-      const toolbox = this.service.defaultToolbox();
+      let toolbox;
+
+      if( this.useOther){
+        toolbox = this.service.getToolboxWithOption();
+      } else {
+        toolbox = this.service.getToolbox();
+      }
+
       this.declareCommands();
       this.workspace = Blockly.inject(this.eventId, { toolbox });
       this.workspace.addChangeListener(this.update.bind(this));
-
+      if(this.blocklyDefinition) {
+        Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(this.blocklyDefinition), this.workspace);
+      }
     });
-
-    // var xmlText = '<xml xmlns="https://developers.google.com/blockly/xml">' +
-    //   '<block type="math_number"></block></xml>';
-    // Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xmlText), workspace);
   }
 
   ngOnInit() {}
