@@ -17,6 +17,7 @@ export class CodeBlocklyComponent implements OnInit {
 
   @Input() eventId: string;
   @Output() codeChanged = new EventEmitter<string>();
+  @Input() useOther: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -26,10 +27,18 @@ export class CodeBlocklyComponent implements OnInit {
 
   ngAfterViewInit(): void {
     timer(500).subscribe((done) => {
-      const toolbox = this.service.getToolbox();
+      let toolbox;
+
+      if( this.useOther){
+        toolbox = this.service.getToolboxWithOption();
+      } else {
+        toolbox = this.service.getToolbox();
+      }
+
       this.declareCommands();
       this.workspace = Blockly.inject(this.eventId, { toolbox });
       this.workspace.addChangeListener(this.update.bind(this));
+
     });
   }
 
