@@ -372,7 +372,6 @@ export class WatchPageComponent
 
     let loadedCodes = 0;
     this.dirty = false;
-   console.log("codes",this.codes)
     for (var event in this.codes) {
       // get codes from luchador for event + gamedefinition
       let code = this.luchador.codes.find((code: ModelCode) => {
@@ -423,9 +422,7 @@ export class WatchPageComponent
     this.dirty = true;
     this.codes[event].script = codeEditorEvent.code;
     this.codes[event].blockly = codeEditorEvent.blocklyDefinition
-    console.log("blockDefinition: ",this.codes[event].blockly)
     this.cdRef.detectChanges();
-
   }
 
   save() {
