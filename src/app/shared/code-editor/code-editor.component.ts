@@ -12,14 +12,6 @@ export interface CodeEditorEvent {
   styleUrls: ["./code-editor.component.css"],
 })
 export class CodeEditorComponent implements OnInit {
-  options: any = {
-    maxLines: 15,
-    minLines: 15,
-    printMargin: false,
-    fontSize: 20,
-  };
-
-  @Input() eventId: string;
   @Input() useOther = false;
 
   _code: ModelCode;

@@ -1,16 +1,14 @@
-// https://developers.google.com/blockly/guides/create-custom-blocks/define-blocks
-
 import {
   Component,
   EventEmitter,
   Input,
+  OnDestroy,
   OnInit,
   Output,
 } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
 import { timer } from "rxjs";
 import { BlocklyService } from "./code-blockly.service";
-import {CodeEditorEvent} from '../code-editor/code-editor.component';
+import { CodeEditorEvent } from "../code-editor/code-editor.component";
 
 declare var Blockly: any;
 
@@ -19,37 +17,45 @@ declare var Blockly: any;
   templateUrl: "./code-blockly.component.html",
   styleUrls: ["./code-blockly.component.scss"],
 })
-export class CodeBlocklyComponent implements OnInit {
+export class CodeBlocklyComponent implements OnInit, OnDestroy {
   workspace: any;
+  code: string;
 
-  @Input() eventId: string;
-  @Output() codeChanged = new EventEmitter<CodeEditorEvent>();
+  // generate unique ID for each component
+  static nextId = 0;
+  id = `blockly-${CodeBlocklyComponent.nextId++}`;
+
   @Input() blocklyDefinition: string;
   @Input() useOther = false;
-  @Output() code : string
+  @Output() codeChanged = new EventEmitter<CodeEditorEvent>();
 
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private service: BlocklyService
-  ) {}
+  constructor(private service: BlocklyService) {}
+
+  ngOnDestroy(): void {
+    // releases blockly from memory
+    if (this.workspace) {
+      this.workspace.dispose();
+    }
+  }
 
   ngAfterViewInit(): void {
     timer(500).subscribe((done) => {
-      console.log("definition: ",this.blocklyDefinition)
       let toolbox;
 
-      if( this.useOther){
+      if (this.useOther) {
         toolbox = this.service.getToolboxWithOption();
       } else {
         toolbox = this.service.getToolbox();
       }
 
       this.declareCommands();
-      this.workspace = Blockly.inject(this.eventId, { toolbox });
+      this.workspace = Blockly.inject(this.id, { toolbox });
       this.workspace.addChangeListener(this.update.bind(this));
-      if(this.blocklyDefinition) {
-        Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(this.blocklyDefinition), this.workspace);
+      if (this.blocklyDefinition) {
+        Blockly.Xml.domToWorkspace(
+          Blockly.Xml.textToDom(this.blocklyDefinition),
+          this.workspace
+        );
       }
     });
   }
@@ -272,13 +278,11 @@ export class CodeBlocklyComponent implements OnInit {
 
   update(): void {
     this.code = Blockly.Lua.workspaceToCode(this.workspace);
-    const dom  = Blockly.Xml.workspaceToDom(this.workspace);
+    const dom = Blockly.Xml.workspaceToDom(this.workspace);
     const blocklyDefinition = Blockly.Xml.domToText(dom);
-    this.codeChanged.next(
-      {
-        code: this.code,
-        blocklyDefinition
-      } as CodeEditorEvent
-    );
+    this.codeChanged.next({
+      code: this.code,
+      blocklyDefinition,
+    } as CodeEditorEvent);
   }
 }
