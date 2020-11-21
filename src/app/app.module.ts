@@ -49,23 +49,24 @@ import { EndTutorialGuardService } from "./end-tutorial-guard.service";
 import { ActivityListComponent } from "./dashboard/activity-list/activity-list.component";
 import { LobbyComponent } from "./lobby/lobby.component";
 import { CantPlayComponent } from "./lobby/cant-play/cant-play.component";
-import { MapEditorComponent } from './map-editor/map-editor.component';
+import { MapEditorComponent } from "./map-editor/map-editor.component";
 import { GameDefinitionCreateComponent } from "./map-editor/game-definition-create/game-definition-create.component";
 import { GameDefinitionEditComponent } from "./map-editor/game-definition-edit/game-definition-edit.component";
 import { GameDefinitionCardComponent } from "./map-editor/game-definition-card/game-definition-card.component";
 import { SharedModule } from "./shared/shared.module";
-import { SingleSceneComponentEditorComponent } from './map-editor/game-definition-edit/editor/single-scene-component-editor/single-scene-component-editor.component';
-import { BasicInfoEditorComponent } from './map-editor/game-definition-edit/editor/basic-info-editor/basic-info-editor.component';
-import { GameDefinitionCodeEditorComponent } from './map-editor/game-definition-edit/editor/game-definition-code-editor/game-definition-code-editor.component';
-import { BasicInfoComponent } from './map-editor/game-definition-edit/display/basic-info/basic-info.component';
-import { GameDefinitionCodeComponent } from './map-editor/game-definition-edit/display/game-definition-code/game-definition-code.component';
-import { SceneComponentsComponent } from './map-editor/game-definition-edit/display/scene-components/scene-components.component';
-import { WallPaperGeneratorComponent } from './wall-paper-generator/wall-paper-generator.component';
-import { GameDefinitionSuggestedCodeEditorComponent } from './map-editor/game-definition-edit/editor/game-definition-suggested-code-editor/game-definition-suggested-code-editor.component';
-import { GameComponentComponent } from './map-editor/game-definition-edit/display/game-component/game-component.component';
-import { GameComponentEditorComponent } from './map-editor/game-definition-edit/editor/game-component-editor/game-component-editor.component';
-import { NarrativeComponent } from './map-editor/game-definition-edit/display/narrative/narrative.component';
+import { SingleSceneComponentEditorComponent } from "./map-editor/game-definition-edit/editor/single-scene-component-editor/single-scene-component-editor.component";
+import { BasicInfoEditorComponent } from "./map-editor/game-definition-edit/editor/basic-info-editor/basic-info-editor.component";
+import { GameDefinitionCodeEditorComponent } from "./map-editor/game-definition-edit/editor/game-definition-code-editor/game-definition-code-editor.component";
+import { BasicInfoComponent } from "./map-editor/game-definition-edit/display/basic-info/basic-info.component";
+import { GameDefinitionCodeComponent } from "./map-editor/game-definition-edit/display/game-definition-code/game-definition-code.component";
+import { SceneComponentsComponent } from "./map-editor/game-definition-edit/display/scene-components/scene-components.component";
+import { WallPaperGeneratorComponent } from "./wall-paper-generator/wall-paper-generator.component";
+import { GameDefinitionSuggestedCodeEditorComponent } from "./map-editor/game-definition-edit/editor/game-definition-suggested-code-editor/game-definition-suggested-code-editor.component";
+import { GameComponentComponent } from "./map-editor/game-definition-edit/display/game-component/game-component.component";
+import { GameComponentEditorComponent } from "./map-editor/game-definition-edit/editor/game-component-editor/game-component-editor.component";
+import { NarrativeComponent } from "./map-editor/game-definition-edit/display/narrative/narrative.component";
 import { NarrativeEditorComponent } from "./map-editor/game-definition-edit/editor/narrative/narrative-editor.component";
+import { GameDefinitionFromMatchIDResolverService } from "./gamedefinition-from-match-id-resolver";
 
 const ROUTES: Routes = [
   { path: "", redirectTo: "/home", pathMatch: "full" },
@@ -106,7 +107,7 @@ const ROUTES: Routes = [
     path: "maps/edit/:id",
     component: GameDefinitionEditComponent,
     canActivate: [LoginActivate],
-    canDeactivate: [CanDeactivateGuard],    
+    canDeactivate: [CanDeactivateGuard],
     resolve: { luchador: LuchadorResolverService },
   },
   {
@@ -130,7 +131,10 @@ const ROUTES: Routes = [
     component: WatchPageComponent,
     canActivate: [LoginActivate],
     canDeactivate: [CanDeactivateGuard, EndTutorialGuardService],
-    resolve: { luchador: LuchadorResolverService },
+    resolve: {
+      luchador: LuchadorResolverService,
+      gameDefinition: GameDefinitionFromMatchIDResolverService,
+    },
   },
   {
     path: "public",
@@ -236,7 +240,7 @@ export function apiConfigFactory(): Configuration {
     PagesModule,
     DashboardModule,
     MaterialAllComponentsModule,
-    SharedModule
+    SharedModule,
   ],
   providers: [
     LoginActivate,
@@ -253,6 +257,6 @@ export function apiConfigFactory(): Configuration {
   entryComponents: [
     AuthModalMessageComponent,
     GenericErrorModalMessageComponent,
-  ]
+  ],
 })
 export class AppModule {}

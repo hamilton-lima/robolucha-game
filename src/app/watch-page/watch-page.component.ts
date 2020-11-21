@@ -67,7 +67,7 @@ export class WatchPageComponent
 
   matchReady = false;
   notReadyMessage = "";
-  matchFinished = false;
+  matchLinkInvalid = false;
   matchOver = false;
 
   matchNotReadyInfo: MatchReady;
@@ -86,7 +86,6 @@ export class WatchPageComponent
   matchID: number;
   luchador: ModelGameComponent;
   gameDefinition: ModelGameDefinition;
-  displayBlocks = false;
 
   readonly matchStateSubject = new Subject<MatchState>();
   readonly messageSubject = new Subject<Message>();
@@ -140,7 +139,6 @@ export class WatchPageComponent
   ];
 
   ngAfterViewInit() {
-    console.log("after view init");
     const user = this.userService.getUser();
 
     if (!user.settings.playedTutorial) {
@@ -159,6 +157,7 @@ export class WatchPageComponent
   ngOnInit(): void {
     this.page = this.route.snapshot.url.join("/");
     this.luchador = this.route.snapshot.data.luchador;
+    this.gameDefinition = this.route.snapshot.data.gameDefinition;
 
     this.matchID = Number.parseInt(this.route.snapshot.paramMap.get("id"));
     this.gameDefinition = null;
@@ -189,17 +188,11 @@ export class WatchPageComponent
           .watch(details)
           .subscribe((message) => {
             const parsed = JSON.parse(message);
-            console.log("message from match", parsed);
 
             // ready to go, the server started to send state
             if (parsed.type == "match-state") {
               this.watchService.close();
               this.watchSubscription.unsubscribe();
-
-              console.log(
-                "watchsubscription.closed",
-                this.watchSubscription.closed
-              );
               self.tryToStartMatch();
             }
 
@@ -207,17 +200,10 @@ export class WatchPageComponent
             if (parsed.type == "match-created") {
               this.setMatchNotReadyInfo(parsed.message);
 
-              console.log("match-created update", this.matchNotReadyInfo);
-
               // we are ready close websocket connection and try to start the match
               if (this.matchNotReadyInfo.ready) {
-                console.log("we are ready lets start the match");
                 this.watchService.close();
                 this.watchSubscription.unsubscribe();
-                console.log(
-                  "watchsubscription.closed",
-                  this.watchSubscription.closed
-                );
                 self.tryToStartMatch();
               }
             }
@@ -228,7 +214,7 @@ export class WatchPageComponent
     this.onMatchFinished.subscribe((match) => {
       this.matchPreparing = false;
       this.matchOver = false;
-      this.matchFinished = true;
+      this.matchLinkInvalid = true;
 
       this.api
         .privateGameDefinitionIdIdGet(match.gameDefinitionID)
@@ -256,6 +242,7 @@ export class WatchPageComponent
     if (info.ready) {
       this.notReadyMessage = "Go go go";
     } else {
+      // the match HAS team participants information
       if (info.teamParticipants && info.teamParticipants.length > 0) {
         this.notReadyMessage = "Waiting for more participants";
       } else {
@@ -267,12 +254,10 @@ export class WatchPageComponent
   ngOnDestroy(): void {
     if (this.watchService) {
       this.watchService.close();
-      console.log("closing connection");
     }
   }
 
   tryToStartMatch() {
-    console.log("try to start the match");
     this.api.privateMatchSingleGet(this.matchID).subscribe((match) => {
       // ready!
       if (match.status == "RUNNING") {
@@ -311,7 +296,6 @@ export class WatchPageComponent
       .privateGameDefinitionIdIdGet(match.gameDefinitionID)
       .subscribe((gameDefinition) => {
         this.gameDefinition = gameDefinition;
-        this.displayBlocks = gameDefinition.type == "tutorial";
         this.refreshEditor();
         this.defineMatchOverTitle(gameDefinition);
       });
@@ -383,13 +367,11 @@ export class WatchPageComponent
   /** Loads codes from luchador to the editor, filter by gameDefinition */
   refreshEditor() {
     if (!this.gameDefinition) {
-      console.warn("gameDefinition not set");
       return;
     }
 
     let loadedCodes = 0;
     this.dirty = false;
-   console.log("codes",this.codes)
     for (var event in this.codes) {
       // get codes from luchador for event + gamedefinition
       let code = this.luchador.codes.find((code: ModelCode) => {
@@ -440,9 +422,7 @@ export class WatchPageComponent
     this.dirty = true;
     this.codes[event].script = codeEditorEvent.code;
     this.codes[event].blockly = codeEditorEvent.blocklyDefinition
-    console.log("blockDefinition: ",this.codes[event].blockly)
     this.cdRef.detectChanges();
-
   }
 
   save() {
@@ -461,8 +441,6 @@ export class WatchPageComponent
       } else {
         this.luchador.codes.push(this.codes[event]);
       }
-      // apply the changes to the luchador object
-      console.log('saving...',this.codes[event].script)
     }
 
     this.api.privateLuchadorPut(this.luchador).subscribe((response) => {

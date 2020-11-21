@@ -1,9 +1,8 @@
 <div>
   <app-code-blockly
     [useOther]="useOther"
-    eventId="{{ eventId }}"
-    (codeChanged)="onEditorChange($event)"
     [blocklyDefinition]="code.blockly"
+    (codeChanged)="onEditorChange($event)"
   >
   </app-code-blockly>
 </div>
