@@ -4,47 +4,106 @@ import { Injectable } from "@angular/core";
   providedIn: "root",
 })
 export class BlocklyService {
-  defaultToolbox() {
-    const toolbox = `
-        <xml>
-          <category name="Commands" colour="%{BKY_PROCEDURES_HUE}">
-              <block type="math_number" />
-              <block type="move" />
-              <block type="fire" />
-              <block type="turn" />
-              <block type="turnGun" />
-              <block type="reset" />
-              <block type="debug" />
-          </category>
 
-          <category name="Variables" custom="VARIABLE" colour="%{BKY_VARIABLES_HUE}" />
-          <sep />
+  readonly defaultToolbox = `
+  <xml>
+    <category name="Commands" expanded="true">
+        <block type="move" />
+        <block type="fire" />
+        <block type="turn" />
+        <block type="turnGun" />
+        <block type="reset" />
+        <block type="debug" />
+        <block type="math_number"></block>
+        <block type="math_arithmetic"></block>
+    </category>
+   
+    <category name="Luchador">
+      <block type="me_string" />
+      <block type="me_number" />
+    </category>
+    <sep></sep>
 
-          <category name="Math" colour="%{BKY_MATH_HUE}">
-            <block type="math_number"/>
-            <block type="math_arithmetic" />
-            <block type="math_single" />
-            <block type="math_constant" />
-            <block type="math_random_int" />
-          </category>
+    <category name="Variables" custom="VARIABLE"></category>
 
-          <category name="Control" colour="%{BKY_LOOPS_HUE}">
-            <block type="controls_if" />
-            <block type="controls_ifelse"/>
-            <block type="controls_whileUntil"/>
-            <block type="controls_for"/>
-            <block type="controls_forEach"/>
-            <block type="controls_flow_statements"/>
-          </category>
+    <category name="Math">
+      <block type="math_number"></block>
+      <block type="math_arithmetic"></block>
+      <block type="math_single"></block>
+      <block type="math_constant"></block>
+      <block type="math_random_int"></block>
+    </category>
 
-          <category name="Logic" colour="%{BKY_LOGIC_HUE}">
-            <block type="logic_compare"/>
-            <block type="logic_operation"/>
-            <block type="logic_boolean"/>
-            <block type="logic_negate"/>
-          </category>
-        </xml>`;
+    <category name="Control">
+      <block type="controls_if"></block>
+      <block type="controls_ifelse"></block>
+      <block type="controls_whileUntil"></block>
+      <block type="controls_for"></block>
+      <block type="controls_forEach"></block>
+      <block type="controls_flow_statements"></block>
+    </category>
 
-    return toolbox;
+    <category name="Logic">
+      <block type="logic_compare"></block>
+      <block type="logic_operation"></block>
+      <block type="logic_boolean"></block>
+      <block type="logic_negate"></block>
+    </category>
+  </xml>`;
+
+  readonly toolBoxWithOther = `
+  <xml>
+    <category name="Commands" expanded="true">
+        <block type="move" />
+        <block type="fire" />
+        <block type="turn" />
+        <block type="turnGun" />
+        <block type="reset" />
+        <block type="debug" />
+        <block type="math_number"></block>
+        <block type="math_arithmetic"></block>
+    </category>
+   
+    <category name="Luchador">
+      <block type="me_string" />
+      <block type="me_number" />
+      <block type="other_string" />
+      <block type="other_number" />
+    </category>
+    <sep></sep>
+
+    <category name="Variables" custom="VARIABLE"></category>
+
+    <category name="Math">
+      <block type="math_number"></block>
+      <block type="math_arithmetic"></block>
+      <block type="math_single"></block>
+      <block type="math_constant"></block>
+      <block type="math_random_int"></block>
+    </category>
+
+    <category name="Control">
+      <block type="controls_if"></block>
+      <block type="controls_ifelse"></block>
+      <block type="controls_whileUntil"></block>
+      <block type="controls_for"></block>
+      <block type="controls_forEach"></block>
+      <block type="controls_flow_statements"></block>
+    </category>
+
+    <category name="Logic">
+      <block type="logic_compare"></block>
+      <block type="logic_operation"></block>
+      <block type="logic_boolean"></block>
+      <block type="logic_negate"></block>
+    </category>
+  </xml>`;
+
+  getToolbox() {
+    return this.defaultToolbox;
+  }
+
+  getToolboxWithOption() {
+    return this.toolBoxWithOther;
   }
 }

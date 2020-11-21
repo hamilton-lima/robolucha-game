@@ -1,29 +1,15 @@
-<div  class="flex-container">
-  <div [hidden]="!showBlockly">
-    <button
-      class="btn btn-primary align-bottom "
-      (click)="toggle()"
-      style="margin-bottom: 5px"
-    >
-      Code
-    </button>
-    <app-code-blockly eventId="{{eventId}}" (codeChanged)="onEditorChange($event)" [blocklyDefinition]="code.blockly"></app-code-blockly>
+<div>
 
+  <div [hidden]="!showBlockly">
+      <app-code-blockly [useOther]="useOther" eventId="{{eventId}}" (codeChanged)="onEditorChange($event)"></app-code-blockly>
   </div>
 
   <div [hidden]="showBlockly">
-    <button
-      class="btn btn-primary align-bottom "
-      (click)="toggle()"
-      style="margin-bottom: 5px"
-    >
-      Blockly
-    </button>
     <div
       ace-editor
       class="editor"
       [options]="options"
-      [text]="code.script"
+      [text]="script"
       [theme]="'solarized_light'"
       [mode]="'lua'"
       (textChanged)="onEditorChange($event)"

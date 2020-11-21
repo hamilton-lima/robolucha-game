@@ -62,6 +62,7 @@
           <mat-expansion-panel>
             <mat-expansion-panel-header> On Found </mat-expansion-panel-header>
             <app-code-editor eventId="found"
+              [useOther]="true"
               [code]="codes.onFound"
               (onChange)="updateCode('onFound', $event)"
               [showBlockly]="displayBlocks"
@@ -86,6 +87,7 @@
               On Hit Other
             </mat-expansion-panel-header>
             <app-code-editor eventId="hitOther"
+              [useOther]="true"
               [code]="codes.onHitOther"
               (onChange)="updateCode('onHitOther', $event)"
               [showBlockly]="displayBlocks"

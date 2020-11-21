@@ -23,9 +23,7 @@ export class CodeBlocklyComponent implements OnInit {
   workspace: any;
 
   @Input() eventId: string;
-  @Input() blocklyDefinition: string;
-  @Output() code: string;
-  @Output() codeChanged = new EventEmitter<CodeEditorEvent>();
+  @Output() codeChanged = new EventEmitter<string>();
 
   constructor(
     private route: ActivatedRoute,
@@ -40,7 +38,7 @@ export class CodeBlocklyComponent implements OnInit {
       this.declareCommands();
       this.workspace = Blockly.inject(this.eventId, { toolbox });
       this.workspace.addChangeListener(this.update.bind(this));
-      this.defineVariables();
+
     });
 
     // var xmlText = '<xml xmlns="https://developers.google.com/blockly/xml">' +
@@ -49,20 +47,6 @@ export class CodeBlocklyComponent implements OnInit {
   }
 
   ngOnInit() {}
-
-  defineVariables() {
-    this.workspace.createVariable("id");
-    this.workspace.createVariable("name");
-    this.workspace.createVariable("x");
-    this.workspace.createVariable("y");
-    this.workspace.createVariable("life");
-    this.workspace.createVariable("angle");
-    this.workspace.createVariable("gunAngle");
-    this.workspace.createVariable("fireCooldown");
-    this.workspace.createVariable("k");
-    this.workspace.createVariable("d");
-    this.workspace.createVariable("score");
-  }
 
   declareCommands() {
     // debug	message	string
@@ -97,7 +81,7 @@ export class CodeBlocklyComponent implements OnInit {
       {
         //turnGun	degrees	number (-360 to 360)
         type: "turnGun",
-        message0: "Turn gun %1",
+        message0: "turn gun %1",
         args0: [{ type: "input_value", name: "VALUE", check: "Number" }],
         previousStatement: null,
         nextStatement: null,
@@ -115,12 +99,118 @@ export class CodeBlocklyComponent implements OnInit {
         // debug	message	string
         type: "debug",
         message0: "debug %1",
-        args0: [{ type: "input_value", name: "VALUE" }],
+        args0: [{ type: "input_value", name: "VALUE", check: "String" }],
         previousStatement: null,
         nextStatement: null,
         colour: 355,
       },
+      {
+        type: "me_string",
+        message0: "me.%1",
+        output: "String",
+        colour: 290,
+        args0: [
+          {
+            type: "field_dropdown",
+            name: "ME_STRING_FIELD",
+            options: [
+              ["all", ""],
+              ["id", ".id"],
+              ["name", ".name"],
+            ],
+          },
+        ],
+      },
+      {
+        type: "me_number",
+        message0: "me.%1",
+        output: "Number",
+        colour: 260,
+        args0: [
+          {
+            type: "field_dropdown",
+            name: "ME_NUMBER_FIELD",
+            options: [
+              ["x", ".x"],
+              ["y", ".y"],
+              ["life", ".life"],
+              ["angle", ".angle"],
+              ["gunAngle", ".gunAngle"],
+              ["fireCooldown", ".fireCooldown"],
+              ["fireCooldown", ".fireCooldown"],
+              ["kills", ".k"],
+              ["deaths", ".d"],
+              ["score", ".score"],
+            ],
+          },
+        ],
+      },
+      {
+        type: "other_string",
+        message0: "other.%1",
+        output: "String",
+        colour: 290,
+        args0: [
+          {
+            type: "field_dropdown",
+            name: "OTHER_STRING_FIELD",
+            options: [
+              ["all", ""],
+              ["id", ".id"],
+              ["name", ".name"],
+            ],
+          },
+        ],
+      },
+      {
+        type: "other_number",
+        message0: "other.%1",
+        output: "Number",
+        colour: 260,
+        args0: [
+          {
+            type: "field_dropdown",
+            name: "OTHER_NUMBER_FIELD",
+            options: [
+              ["x", ".x"],
+              ["y", ".y"],
+              ["life", ".life"],
+              ["angle", ".angle"],
+              ["gunAngle", ".gunAngle"],
+              ["fireCooldown", ".fireCooldown"],
+              ["fireCooldown", ".fireCooldown"],
+              ["kills", ".k"],
+              ["deaths", ".d"],
+              ["score", ".score"],
+            ],
+          },
+        ],
+      },
     ]);
+
+    Blockly.Lua["me_string"] = function (block) {
+      const field = block.getFieldValue("ME_STRING_FIELD");
+      const result = `me${field}`;
+      return [result, Blockly.Lua.ORDER_ATOMIC];
+    };
+
+    Blockly.Lua["me_number"] = function (block) {
+      const field = block.getFieldValue("ME_NUMBER_FIELD");
+      const result = `me${field}`;
+      return [result, Blockly.Lua.ORDER_ATOMIC];
+    };
+
+    Blockly.Lua["other_string"] = function (block) {
+      const field = block.getFieldValue("OTHER_STRING_FIELD");
+      const result = `other${field}`;
+      return [result, Blockly.Lua.ORDER_ATOMIC];
+    };
+
+    Blockly.Lua["other_number"] = function (block) {
+      const field = block.getFieldValue("OTHER_NUMBER_FIELD");
+      const result = `other${field}`;
+      return [result, Blockly.Lua.ORDER_ATOMIC];
+    };
 
     Blockly.Lua["move"] = function (block) {
       const value = Blockly.Lua.valueToCode(

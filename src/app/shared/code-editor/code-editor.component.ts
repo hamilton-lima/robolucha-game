@@ -26,6 +26,7 @@ export class CodeEditorComponent implements OnInit {
   @Input() code: ModelCode;
   @Input() eventId: string;
   @Input() showBlockly = false;
+  @Input() useOther = false;
 
   @Output() onChange = new EventEmitter<CodeEditorEvent>();
   constructor() {}
