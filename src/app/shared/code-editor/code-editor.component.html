@@ -1,18 +1,20 @@
 <div>
 
-  <div [hidden]="!showBlockly">
-      <app-code-blockly [useOther]="useOther" eventId="{{eventId}}" (codeChanged)="onEditorChange($event)"></app-code-blockly>
+  <div >
+      <app-code-blockly [useOther]="useOther" eventId="{{eventId}}" (codeChanged)="onEditorChange($event)" [blocklyDefinition]="code.blockly">
+
+      </app-code-blockly>
   </div>
 
-  <div [hidden]="showBlockly">
-    <div
-      ace-editor
-      class="editor"
-      [options]="options"
-      [text]="script"
-      [theme]="'solarized_light'"
-      [mode]="'lua'"
-      (textChanged)="onEditorChange($event)"
-    ></div>
-  </div>
+<!--  <div [hidden]="showBlockly">-->
+<!--    <div-->
+<!--      ace-editor-->
+<!--      class="editor"-->
+<!--      [options]="options"-->
+<!--      [text]="script"-->
+<!--      [theme]="'solarized_light'"-->
+<!--      [mode]="'lua'"-->
+<!--      (textChanged)="onEditorChange($event)"-->
+<!--    ></div>-->
+<!--  </div>-->
 </div>

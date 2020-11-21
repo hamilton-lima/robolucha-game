@@ -34,12 +34,12 @@ export class CodeAccordionComponent implements OnInit {
     }
   }
 
-  getScript(name: string) {
+  getCode(name: string) {
     const code = this.codes.find((code) => code.event == name);
     if (code) {
-      return code.script;
+      return code;
     }
-    return '';
+    return  null;
   }
 
   updateCode(event: string, script: string) {

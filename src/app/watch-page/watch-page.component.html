@@ -30,7 +30,7 @@
           <mat-expansion-panel [expanded]="true">
             <mat-expansion-panel-header> On Repeat </mat-expansion-panel-header>
             <app-code-editor eventId="repeat"
-              [script]="codes.onRepeat.script"
+              [code]="codes.onRepeat"
               (onChange)="updateCode('onRepeat', $event)"
               [showBlockly]="displayBlocks"
             >
@@ -40,7 +40,7 @@
           <mat-expansion-panel>
             <mat-expansion-panel-header> On Start </mat-expansion-panel-header>
             <app-code-editor eventId="start"
-              [script]="codes.onStart.script"
+              [code]="codes.onStart"
               (onChange)="updateCode('onStart', $event)"
               [showBlockly]="displayBlocks"
             >
@@ -52,7 +52,7 @@
               On Hit Wall
             </mat-expansion-panel-header>
             <app-code-editor eventId="hitWall"
-              [script]="codes.onHitWall.script"
+              [code]="codes.onHitWall"
               (onChange)="updateCode('onHitWall', $event)"
               [showBlockly]="displayBlocks"
             >
@@ -63,7 +63,7 @@
             <mat-expansion-panel-header> On Found </mat-expansion-panel-header>
             <app-code-editor eventId="found"
               [useOther]="true"
-              [script]="codes.onFound.script"
+              [code]="codes.onFound"
               (onChange)="updateCode('onFound', $event)"
               [showBlockly]="displayBlocks"
             >
@@ -75,7 +75,7 @@
               On Got Damage
             </mat-expansion-panel-header>
             <app-code-editor eventId="gotDamage"
-              [script]="codes.onGotDamage.script"
+              [code]="codes.onGotDamage"
               (onChange)="updateCode('onGotDamage', $event)"
               [showBlockly]="displayBlocks"
             >
@@ -88,7 +88,7 @@
             </mat-expansion-panel-header>
             <app-code-editor eventId="hitOther"
               [useOther]="true"
-              [script]="codes.onHitOther.script"
+              [code]="codes.onHitOther"
               (onChange)="updateCode('onHitOther', $event)"
               [showBlockly]="displayBlocks"
             >

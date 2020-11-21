@@ -1,9 +1,16 @@
 // https://developers.google.com/blockly/guides/create-custom-blocks/define-blocks
 
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+} from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { timer } from "rxjs";
 import { BlocklyService } from "./code-blockly.service";
+import {CodeEditorEvent} from '../code-editor/code-editor.component';
 
 declare var Blockly: any;
 
@@ -16,8 +23,10 @@ export class CodeBlocklyComponent implements OnInit {
   workspace: any;
 
   @Input() eventId: string;
-  @Output() codeChanged = new EventEmitter<string>();
-  @Input() useOther: boolean = false;
+  @Output() codeChanged = new EventEmitter<CodeEditorEvent>();
+  @Input() blocklyDefinition: string;
+  @Input() useOther = false;
+  @Output() code : string
 
   constructor(
     private route: ActivatedRoute,
@@ -27,6 +36,7 @@ export class CodeBlocklyComponent implements OnInit {
 
   ngAfterViewInit(): void {
     timer(500).subscribe((done) => {
+      console.log("definition: ",this.blocklyDefinition)
       let toolbox;
 
       if( this.useOther){
@@ -38,7 +48,9 @@ export class CodeBlocklyComponent implements OnInit {
       this.declareCommands();
       this.workspace = Blockly.inject(this.eventId, { toolbox });
       this.workspace.addChangeListener(this.update.bind(this));
-
+      if(this.blocklyDefinition) {
+        Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(this.blocklyDefinition), this.workspace);
+      }
     });
   }
 
@@ -259,7 +271,14 @@ export class CodeBlocklyComponent implements OnInit {
   }
 
   update(): void {
-    const code = Blockly.Lua.workspaceToCode();
-    this.codeChanged.next(code);
+    this.code = Blockly.Lua.workspaceToCode(this.workspace);
+    const dom  = Blockly.Xml.workspaceToDom(this.workspace);
+    const blocklyDefinition = Blockly.Xml.domToText(dom);
+    this.codeChanged.next(
+      {
+        code: this.code,
+        blocklyDefinition
+      } as CodeEditorEvent
+    );
   }
 }
