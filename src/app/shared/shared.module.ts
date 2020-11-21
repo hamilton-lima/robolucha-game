@@ -13,14 +13,12 @@ import { MarkDownComponent } from './mark-down/mark-down.component';
 import { CodeBlocklyComponent } from './code-blockly/code-blockly.component';
 import { CodeEditorComponent } from './code-editor/code-editor.component';
 import { MessageComponent } from './message/message.component';
-import { AceEditorModule } from 'ng2-ace-editor';
 import { FileUploadComponent } from './file-upload/file-upload.component';
 
 @NgModule({
   imports: [
     CommonModule,
     MaterialAllComponentsModule,
-    AceEditorModule,
   ],
   declarations: [
     BigButtonComponent,
