@@ -86,7 +86,6 @@ export class WatchPageComponent
   matchID: number;
   luchador: ModelGameComponent;
   gameDefinition: ModelGameDefinition;
-  displayBlocks = false;
 
   readonly matchStateSubject = new Subject<MatchState>();
   readonly messageSubject = new Subject<Message>();
@@ -297,7 +296,6 @@ export class WatchPageComponent
       .privateGameDefinitionIdIdGet(match.gameDefinitionID)
       .subscribe((gameDefinition) => {
         this.gameDefinition = gameDefinition;
-        this.displayBlocks = gameDefinition.type == "tutorial";
         this.refreshEditor();
         this.defineMatchOverTitle(gameDefinition);
       });
