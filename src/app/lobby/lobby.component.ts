@@ -76,7 +76,6 @@ export class LobbyComponent implements OnInit {
           .subscribe((matches: ModelMatch[]) => {
             this.availableMatches.forEach((avaiableMatch) => {
               for (let activeMatch of matches) {
-                console.log("match", activeMatch);
                 if (avaiableMatch.matchID === activeMatch.availableMatchID) {
                   avaiableMatch.participants = activeMatch.participants.length;
                   
