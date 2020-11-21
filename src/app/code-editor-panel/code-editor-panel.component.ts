@@ -18,6 +18,7 @@ import { ModelLuchador } from "../sdk/model/mainLuchador";
 import { ModelGameDefinition } from "../sdk";
 import { EventsService } from "../shared/events.service";
 import { AlertService } from "../shared/alert.service";
+import {CodeEditorEvent} from '../shared/code-editor/code-editor.component';
 
 
 @Component({
@@ -33,7 +34,7 @@ export class CodeEditorPanelComponent implements OnInit, OnChanges {
   page:string;
 
   @Input() gameDefinition: ModelGameDefinition;
-  @Output() onSave = new EventEmitter<string>();
+  @Output() onSave = new EventEmitter<CodeEditorEvent>();
 
   constructor(
     private route: ActivatedRoute,
@@ -73,7 +74,7 @@ export class CodeEditorPanelComponent implements OnInit, OnChanges {
       console.warn("gameDefinition not set in code-editor-panel");
       return;
     }
-    
+
     let loadedCodes = 0;
     this.dirty = false;
 
@@ -120,7 +121,7 @@ export class CodeEditorPanelComponent implements OnInit, OnChanges {
     return result;
   }
 
-  // update the internal list of codes from the editor 
+  // update the internal list of codes from the editor
   updateCode(event: string, script: string) {
     // console.log("update code", event, script);
     this.dirty = true;

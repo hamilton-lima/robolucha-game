@@ -35,6 +35,7 @@ import {
 } from "../watch-match/watch-match.service";
 import { MatchReady } from "./watch-page.model";
 import { CameraChange } from "../arena/camera3-d.service";
+import {CodeEditorEvent} from '../shared/code-editor/code-editor.component';
 
 @Component({
   selector: "app-watch-page",
@@ -86,7 +87,7 @@ export class WatchPageComponent
   luchador: ModelGameComponent;
   gameDefinition: ModelGameDefinition;
   displayBlocks = false;
-  
+
   readonly matchStateSubject = new Subject<MatchState>();
   readonly messageSubject = new Subject<Message>();
   scores: Score[] = [];
@@ -388,7 +389,7 @@ export class WatchPageComponent
 
     let loadedCodes = 0;
     this.dirty = false;
-
+   console.log("codes",this.codes)
     for (var event in this.codes) {
       // get codes from luchador for event + gamedefinition
       let code = this.luchador.codes.find((code: ModelCode) => {
@@ -435,10 +436,12 @@ export class WatchPageComponent
   }
 
   // update the internal list of codes from the editor
-  updateCode(event: string, script: string) {
+  updateCode(event: string, codeEditorEvent: CodeEditorEvent) {
     this.dirty = true;
-    this.codes[event].script = script;
+    this.codes[event].script = codeEditorEvent.code;
+    this.codes[event].blockly = codeEditorEvent.blocklyDefinition
     this.cdRef.detectChanges();
+
   }
 
   save() {

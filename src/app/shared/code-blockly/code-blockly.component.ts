@@ -10,6 +10,7 @@ import {
 import { ActivatedRoute, Router } from "@angular/router";
 import { timer } from "rxjs";
 import { BlocklyService } from "./code-blockly.service";
+import {CodeEditorEvent} from '../code-editor/code-editor.component';
 
 declare var Blockly: any;
 
@@ -22,8 +23,9 @@ export class CodeBlocklyComponent implements OnInit {
   workspace: any;
 
   @Input() eventId: string;
+  @Input() blocklyDefinition: string;
   @Output() code: string;
-  @Output() codeChanged = new EventEmitter<string>();
+  @Output() codeChanged = new EventEmitter<CodeEditorEvent>();
 
   constructor(
     private route: ActivatedRoute,
@@ -33,12 +35,17 @@ export class CodeBlocklyComponent implements OnInit {
 
   ngAfterViewInit(): void {
     timer(500).subscribe((done) => {
+      console.log("definition: ",this.blocklyDefinition)
       const toolbox = this.service.defaultToolbox();
       this.declareCommands();
       this.workspace = Blockly.inject(this.eventId, { toolbox });
       this.workspace.addChangeListener(this.update.bind(this));
       this.defineVariables();
     });
+
+    // var xmlText = '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    //   '<block type="math_number"></block></xml>';
+    // Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xmlText), workspace);
   }
 
   ngOnInit() {}
@@ -167,6 +174,13 @@ export class CodeBlocklyComponent implements OnInit {
 
   update(): void {
     this.code = Blockly.Lua.workspaceToCode(this.workspace);
-    this.codeChanged.next(this.code);
+    const dom  = Blockly.Xml.workspaceToDom(this.workspace);
+    const blocklyDefinition = Blockly.Xml.domToText(dom);
+    this.codeChanged.next(
+      {
+        code: this.code,
+        blocklyDefinition
+      } as CodeEditorEvent
+    );
   }
 }

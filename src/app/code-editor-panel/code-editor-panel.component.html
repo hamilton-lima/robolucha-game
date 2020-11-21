@@ -6,7 +6,7 @@
         <ng-template ngbTabContent>
           <div>
             <app-code-editor
-              [script]="codes.onRepeat.script"
+              [code]="codes.onRepeat"
               (onChange)="updateCode('onRepeat', $event)"
             ></app-code-editor>
           </div>
@@ -16,7 +16,7 @@
         <ng-template ngbTabContent>
           <div>
             <app-code-editor
-              [script]="codes.onStart.script"
+              [code]="codes.onStart"
               (onChange)="updateCode('onStart', $event)"
             ></app-code-editor>
           </div>
@@ -26,7 +26,7 @@
         <ng-template ngbTabContent>
           <div>
             <app-code-editor
-              [script]="codes.onGotDamage.script"
+              [code]="codes.onGotDamage"
               (onChange)="updateCode('onGotDamage', $event)"
             ></app-code-editor>
           </div>
@@ -37,7 +37,7 @@
         <ng-template ngbTabContent>
           <div>
             <app-code-editor
-              [script]="codes.onFound.script"
+              [code]="codes.onFound"
               (onChange)="updateCode('onFound', $event)"
             ></app-code-editor>
           </div>
@@ -47,7 +47,7 @@
         <ng-template ngbTabContent>
           <div>
             <app-code-editor
-              [script]="codes.onHitOther.script"
+              [code]="codes.onHitOther"
               (onChange)="updateCode('onHitOther', $event)"
             ></app-code-editor>
           </div>
@@ -57,7 +57,7 @@
         <ng-template ngbTabContent>
           <div>
             <app-code-editor
-              [script]="codes.onHitWall.script"
+              [code]="codes.onHitWall"
               (onChange)="updateCode('onHitWall', $event)"
             ></app-code-editor>
           </div>
