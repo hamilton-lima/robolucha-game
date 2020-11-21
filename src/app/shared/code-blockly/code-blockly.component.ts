@@ -32,6 +32,7 @@ export class CodeBlocklyComponent implements OnInit, OnDestroy {
   constructor(private service: BlocklyService) {}
 
   ngOnDestroy(): void {
+    console.log('destroy ', this.id, this.workspace);
     // releases blockly from memory
     if (this.workspace) {
       this.workspace.dispose();

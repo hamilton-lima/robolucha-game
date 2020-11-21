@@ -38,7 +38,6 @@ export class CodeAccordionComponent implements OnInit {
   getCode(name: string) {
     const code = this.codes.find((code) => code.event == name);
     if (code) {
-      console.log('code accordion - getcode ', name, code);
       return code;
     }
     return  null;
