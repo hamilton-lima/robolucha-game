@@ -158,7 +158,7 @@ export class BlocklyService {
         // move	distance	number (greater than 0)
         type: "move",
         message0: "move %1",
-        args0: [{ type: "input_value", name: "VALUE", check: "Number" }],
+        args0: [{ type: "input_value", name: "MOVE_VALUE", check: "Number" }],
         previousStatement: null,
         nextStatement: null,
         colour: 355,
@@ -167,7 +167,7 @@ export class BlocklyService {
         // fire	strength	number (0 to 10)
         type: "fire",
         message0: "fire %1",
-        args0: [{ type: "input_value", name: "VALUE", check: "Number" }],
+        args0: [{ type: "input_value", name: "FIRE_VALUE", check: "Number" }],
         previousStatement: null,
         nextStatement: null,
         colour: 355,
@@ -176,7 +176,7 @@ export class BlocklyService {
         // turn	degrees	number (-360 to 360)
         type: "turn",
         message0: "turn %1",
-        args0: [{ type: "input_value", name: "VALUE", check: "Number" }],
+        args0: [{ type: "input_value", name: "TURN_VALUE", check: "Number" }],
         previousStatement: null,
         nextStatement: null,
         colour: 355,
@@ -185,7 +185,7 @@ export class BlocklyService {
         //turnGun	degrees	number (-360 to 360)
         type: "turnGun",
         message0: "turn gun %1",
-        args0: [{ type: "input_value", name: "VALUE", check: "Number" }],
+        args0: [{ type: "input_value", name: "TURNGUN_VALUE", check: "Number" }],
         previousStatement: null,
         nextStatement: null,
         colour: 355,
@@ -202,7 +202,7 @@ export class BlocklyService {
         // debug	message	string
         type: "debug",
         message0: "debug %1",
-        args0: [{ type: "input_value", name: "VALUE", check: "String" }],
+        args0: [{ type: "input_value", name: "DEBUG_VALUE", check: "String" }],
         previousStatement: null,
         nextStatement: null,
         colour: 355,
@@ -318,7 +318,7 @@ export class BlocklyService {
     Blockly.Lua["move"] = function (block) {
       const value = Blockly.Lua.valueToCode(
         block,
-        "VALUE",
+        "MOVE_VALUE",
         Blockly.Lua.ORDER_ATOMIC
       );
       return `move(${value})\n`;
@@ -327,7 +327,7 @@ export class BlocklyService {
     Blockly.Lua["fire"] = function (block) {
       const value = Blockly.Lua.valueToCode(
         block,
-        "VALUE",
+        "FIRE_VALUE",
         Blockly.Lua.ORDER_ATOMIC
       );
       return `fire(${value})\n`;
@@ -336,7 +336,7 @@ export class BlocklyService {
     Blockly.Lua["turn"] = function (block) {
       const value = Blockly.Lua.valueToCode(
         block,
-        "VALUE",
+        "TURN_VALUE",
         Blockly.Lua.ORDER_ATOMIC
       );
       return `turn(${value})\n`;
@@ -345,7 +345,7 @@ export class BlocklyService {
     Blockly.Lua["turnGun"] = function (block) {
       const value = Blockly.Lua.valueToCode(
         block,
-        "VALUE",
+        "TURNGUN_VALUE",
         Blockly.Lua.ORDER_ATOMIC
       );
       return `turnGun(${value})\n`;
@@ -358,7 +358,7 @@ export class BlocklyService {
     Blockly.Lua["debug"] = function (block) {
       const value = Blockly.Lua.valueToCode(
         block,
-        "VALUE",
+        "DEBUG_VALUE",
         Blockly.Lua.ORDER_ATOMIC
       );
       return `debug(${value})\n`;
