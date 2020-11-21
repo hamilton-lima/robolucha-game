@@ -9,6 +9,9 @@ export class BlocklyService {
     this.setup();
   }
 
+  readonly emptyXML =
+    '<xml xmlns="https://developers.google.com/blockly/xml"></xml>';
+
   inject(id: string, useOther: boolean, onChange: any) {
     let toolbox;
 
@@ -19,22 +22,29 @@ export class BlocklyService {
     }
     const workspace = Blockly.inject(id, { toolbox });
     workspace.addChangeListener(onChange);
-    return workspace;
   }
 
   setXML(xml: string, workspace: any) {
+    console.log("set XML", xml);
     if (xml) {
       Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xml), workspace);
+    } else {
+      Blockly.Xml.domToWorkspace(
+        Blockly.Xml.textToDom(this.emptyXML),
+        workspace
+      );
     }
+
+    return workspace;
   }
 
-  getXML(workspace){
+  getXML(workspace) {
     const dom = Blockly.Xml.workspaceToDom(workspace);
     const xml = Blockly.Xml.domToText(dom);
     return xml;
   }
 
-  getCode(workspace){
+  getCode(workspace) {
     const code = Blockly.Lua.workspaceToCode(workspace);
     return code;
   }

@@ -29,14 +29,6 @@ export class CodeBlocklyComponent implements OnInit {
 
   constructor(private service: BlocklyService) {}
 
-  // ngOnDestroy(): void {
-  //   console.log('destroy ', this.id, this.workspace);
-  //   // releases blockly from memory
-  //   if (this.workspace) {
-  //     this.workspace.dispose();
-  //   }
-  // }
-
   ngAfterViewInit(): void {
     timer(500).subscribe((done) => {
       this.workspace = this.service.inject(
@@ -51,6 +43,7 @@ export class CodeBlocklyComponent implements OnInit {
   ngOnInit() {}
 
   update(): void {
+    console.log('update()');
     this.code = this.service.getCode(this.workspace);
     const blocklyDefinition = this.service.getXML(this.workspace);
 
