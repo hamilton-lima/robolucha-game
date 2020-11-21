@@ -18,7 +18,7 @@ export class BlocklyService {
     if (useOther) {
       toolbox = this.getToolboxWithOption();
     } else {
-      toolbox = this.getToolbox();
+      toolbox = this.getToolboxDefault();
     }
     const workspace = Blockly.inject(id, { toolbox });
     workspace.addChangeListener(onChange);
@@ -50,107 +50,105 @@ export class BlocklyService {
     return code;
   }
 
-  readonly defaultToolbox = `
-  <xml>
-    <category name="Commands" colour="%{BKY_PROCEDURES_HUE}">
-        <block type="move" />
-        <block type="fire" />
-        <block type="turn" />
-        <block type="turnGun" />
-        <block type="reset" />
-        <block type="debug" />
-        <block type="math_number" />
-        <block type="math_arithmetic" />
-    </category>
-
-    <category name="Luchador" colour="260">
-      <block type="me_string" />
-      <block type="me_number" />
-    </category>
-    <sep></sep>
-
-    <category name="Variables" custom="VARIABLE" colour="%{BKY_VARIABLES_HUE}" />
-
-    <category name="Math" colour="%{BKY_MATH_HUE}">
+  readonly commands = `
+  <category name="Commands" colour="%{BKY_PROCEDURES_HUE}">
+      <block type="move" />
+      <block type="fire" />
+      <block type="turn" />
+      <block type="turnGun" />
+      <block type="reset" />
+      <block type="debug" />
       <block type="math_number" />
       <block type="math_arithmetic" />
-      <block type="math_single" />
-      <block type="math_constant" />
-      <block type="math_random_int" />
-    </category>
+  </category>
+  `;
 
-    <category name="Control" colour="%{BKY_LOOPS_HUE}" >
-      <block type="controls_if" />
-      <block type="controls_ifelse"/>
-      <block type="controls_whileUntil"/>
-      <block type="controls_for"/>
-      <block type="controls_forEach"/>
-      <block type="controls_flow_statements"/>
-    </category>
+  readonly luchador = `
+  <category name="Luchador" colour="260">
+    <block type="me_string" />
+    <block type="me_number" />
+  </category>
+  `;
 
-    <category name="Logic" colour="%{BKY_LOGIC_HUE}">
-      <block type="logic_compare"/>
-      <block type="logic_operation"/>
-      <block type="logic_boolean"/>
-      <block type="logic_negate"/>
-    </category>
-  </xml>`;
+  readonly luchadorWithOther = `
+  <category name="Luchador" colour="260">
+    <block type="me_string" />
+    <block type="me_number" />
+    <block type="other_string" />
+    <block type="other_number" />
+  </category>
+  `;
 
-  readonly toolBoxWithOther = `
-    <xml>
-    <category name="Commands" colour="%{BKY_PROCEDURES_HUE}">
-        <block type="move" />
-        <block type="fire" />
-        <block type="turn" />
-        <block type="turnGun" />
-        <block type="reset" />
-        <block type="debug" />
-        <block type="math_number" />
-        <block type="math_arithmetic" />
-    </category>
+  readonly separator = `
+  <sep></sep>
+  `;
 
-    <category name="Luchador" colour="260">
-      <block type="me_string" />
-      <block type="me_number" />
-      <block type="other_string" />
-      <block type="other_number" />
+  readonly variables = `
+  <category name="Variables" custom="VARIABLE" colour="%{BKY_VARIABLES_HUE}" />
+  `;
 
-    </category>
-    <sep></sep>
+  readonly math = `
+  <category name="Math" colour="%{BKY_MATH_HUE}">
+    <block type="math_number" />
+    <block type="math_arithmetic" />
+    <block type="math_single" />
+    <block type="math_constant" />
+    <block type="math_random_int" />
+  </category>
+  `;
 
-    <category name="Variables" custom="VARIABLE" colour="%{BKY_VARIABLES_HUE}" />
+  readonly control = `
+  <category name="Control" colour="%{BKY_LOOPS_HUE}" >
+    <block type="controls_if" />
+    <block type="controls_ifelse"/>
+    <block type="controls_whileUntil"/>
+    <block type="controls_for"/>
+    <block type="controls_forEach"/>
+    <block type="controls_flow_statements"/>
+  </category>
+  `;
 
-    <category name="Math" colour="%{BKY_MATH_HUE}">
-      <block type="math_number" />
-      <block type="math_arithmetic" />
-      <block type="math_single" />
-      <block type="math_constant" />
-      <block type="math_random_int" />
-    </category>
+  readonly logic = `
+  <category name="Logic" colour="%{BKY_LOGIC_HUE}">
+    <block type="logic_compare"/>
+    <block type="logic_operation"/>
+    <block type="logic_boolean"/>
+    <block type="logic_negate"/>
+  </category>
+  `;
 
-    <category name="Control" colour="%{BKY_LOOPS_HUE}" >
-      <block type="controls_if" />
-      <block type="controls_ifelse"/>
-      <block type="controls_whileUntil"/>
-      <block type="controls_for"/>
-      <block type="controls_forEach"/>
-      <block type="controls_flow_statements"/>
-    </category>
+  readonly toolboxDefault = [
+    this.commands,
+    this.luchador,
+    this.separator,
+    this.variables,
+    this.math,
+    this.control,
+    this.logic,
+  ];
 
-    <category name="Logic" colour="%{BKY_LOGIC_HUE}">
-      <block type="logic_compare"/>
-      <block type="logic_operation"/>
-      <block type="logic_boolean"/>
-      <block type="logic_negate"/>
-    </category>
-  </xml>`;
+  readonly toolboxWithOther = [
+    this.commands,
+    this.luchadorWithOther,
+    this.separator,
+    this.variables,
+    this.math,
+    this.control,
+    this.logic,
+  ];
 
-  getToolbox() {
-    return this.defaultToolbox;
+  getToolboxXML(data: string[]) {
+    const xml = data.join("\n");
+    const result = `<xml>${xml}</xml>`;
+    return result;
   }
 
   getToolboxWithOption() {
-    return this.toolBoxWithOther;
+    return this.getToolboxXML(this.toolboxWithOther);
+  }
+
+  getToolboxDefault() {
+    return this.getToolboxXML(this.toolboxDefault);
   }
 
   setup() {
