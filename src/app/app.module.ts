@@ -17,7 +17,6 @@ import { ApiModule } from "./sdk/api.module";
 import { environment } from "src/environments/environment";
 import { Configuration, ConfigurationParameters } from "./sdk/configuration";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
-import { AceEditorModule } from "ng2-ace-editor";
 import { LuchadorResolverService } from "./luchador-resolver.service";
 import { WatchMatchComponent } from "./watch-match/watch-match.component";
 import { ArenaComponent } from "./arena/arena.component";
@@ -232,7 +231,6 @@ export function apiConfigFactory(): Configuration {
     ApiModule.forRoot(apiConfigFactory),
     RouterModule.forRoot(ROUTES, { useHash: true }),
     NgbModule,
-    AceEditorModule,
     BrowserAnimationsModule,
     NgxSpinnerModule,
     PagesModule,
