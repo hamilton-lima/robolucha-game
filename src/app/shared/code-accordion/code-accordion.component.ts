@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Subject } from 'rxjs';
 import { Message } from 'src/app/shared/message/message.model';
 import { ModelCode } from 'src/app/sdk';
+import { CodeEditorEvent } from '../code-editor/code-editor.component';
 
 export class CodeAcordionEventEditor {
   label: string;
@@ -37,21 +38,23 @@ export class CodeAccordionComponent implements OnInit {
   getCode(name: string) {
     const code = this.codes.find((code) => code.event == name);
     if (code) {
+      console.log('code accordion - getcode ', name, code);
       return code;
     }
     return  null;
   }
 
-  updateCode(event: string, script: string) {
-    console.log('udpate code ', event, script);
+  updateCode(event: string, value: CodeEditorEvent) {
     const search = this.codes.find((code) => code.event == event);
 
     if (search) {
-      search.script = script;
+      search.script = value.code;
+      search.blockly = value.blocklyDefinition;
     } else {
       this.codes.push(<ModelCode>{
         event: event,
-        script: script,
+        script: value.code,
+        blockly: value.blocklyDefinition,
       });
     }
 
