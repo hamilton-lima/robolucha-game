@@ -19,6 +19,7 @@ export class CodeEditorComponent implements OnInit {
   @Input() script = '';
   @Input() eventId: string;
   @Input() showBlockly = false;
+  @Input() useOther = false;
 
   @Output() onChange = new EventEmitter<string>();
   constructor() {}
