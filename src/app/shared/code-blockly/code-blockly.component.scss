@@ -8,14 +8,16 @@
   flex-wrap: nowrap;
 }
 
-textarea {
+.code-output {
   width: 200px;
   height: 550px;
   background-color: #FFFBE5;
   border-style: none;
-  padding: 5px;
+  padding: 10px;
   font-family: Monaco, Menlo, "Ubuntu Mono", Consolas, source-code-pro,
   monospace;
+  font-size: large;
+  overflow-y: scroll;
 }
 
 
