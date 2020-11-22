@@ -1,19 +1,32 @@
-import { Injectable } from "@angular/core";
+import { Injectable, Renderer2, RendererFactory2 } from "@angular/core";
 
 declare var Blockly: any;
 
-@Injectable({
-  providedIn: "root",
-})
+@Injectable({ providedIn: "root" })
 export class BlocklyService {
-  constructor() {
+  private renderer: Renderer2;
+
+  constructor(private factory: RendererFactory2) {
+    // Renderer2 needs to be created manually as there is no provider by default
+    this.renderer = factory.createRenderer(null, null);
     this.setup();
+    this.forceEmptyInject();
+  }
+
+  // force first injection of blockly to prevent issues when loading for the first time
+  forceEmptyInject() {
+    const cache = this.renderer.createElement("div");
+    const id = "blocklycache";
+    this.renderer.setProperty(cache, "id", id);
+    this.renderer.setStyle(cache, "display", "none");
+    this.renderer.appendChild(document.body, cache);
+    this.inject(id);
   }
 
   readonly emptyXML =
     '<xml xmlns="https://developers.google.com/blockly/xml"></xml>';
 
-  inject(id: string, useOther: boolean, onChange: any) {
+  inject(id: string, useOther: boolean = false, onChange: () => void = null) {
     let toolbox;
 
     if (useOther) {
@@ -25,7 +38,10 @@ export class BlocklyService {
     const blocklyDiv = document.getElementById(id);
     const workspace = Blockly.inject(blocklyDiv, { toolbox: toolbox });
 
-    workspace.addChangeListener(onChange);
+    if (onChange) {
+      workspace.addChangeListener(onChange);
+    }
+
     return workspace;
   }
 
@@ -140,7 +156,7 @@ export class BlocklyService {
 
   getToolboxXML(data: string[]) {
     const xml = data.join("\n");
-    const result = `<xml>${xml}</xml>`;
+    const result = `<xml id="toolbox" style="display: none">${xml}</xml>`;
     return result;
   }
 
@@ -186,7 +202,9 @@ export class BlocklyService {
         //turnGun	degrees	number (-360 to 360)
         type: "turnGun",
         message0: "turn gun %1",
-        args0: [{ type: "input_value", name: "TURNGUN_VALUE", check: "Number" }],
+        args0: [
+          { type: "input_value", name: "TURNGUN_VALUE", check: "Number" },
+        ],
         previousStatement: null,
         nextStatement: null,
         colour: 355,
