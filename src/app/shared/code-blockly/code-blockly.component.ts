@@ -46,7 +46,6 @@ export class CodeBlocklyComponent implements OnInit {
   ngOnInit() {}
 
   update(): void {
-    console.log('update()');
     this.code = this.service.getCode(this.workspace);
     const blocklyDefinition = this.service.getXML(this.workspace);
 
