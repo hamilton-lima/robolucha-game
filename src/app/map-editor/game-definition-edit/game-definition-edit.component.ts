@@ -211,12 +211,6 @@ export class GameDefinitionEditComponent implements OnInit {
   }
 
   save() {
-    console.log(
-      "save gamedefinition with codes",
-      this.gameDefinition.codes.length,
-      this.gameDefinition.codes
-    );
-
     const body = this.removeTemporaryIDs();
 
     this.api.privateMapeditorPut(body).subscribe((result) => {
