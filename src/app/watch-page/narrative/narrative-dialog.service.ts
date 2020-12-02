@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { MatDialog } from "@angular/material";
 import { ModelNarrativeDefinition } from "src/app/sdk";
-import { NARRATIVE_EVENT_START } from "src/app/shared/consts";
+import { NARRATIVE_EVENT_END, NARRATIVE_EVENT_START } from "src/app/shared/consts";
 import {
   NarrativeDialogComponent,
   NarrativeDialogData,
@@ -18,7 +18,7 @@ export class NarrativeDialogService {
   }
 
   onEnd(narratives: ModelNarrativeDefinition[]): void {
-    this.show(narratives, NARRATIVE_EVENT_START);
+    this.show(narratives, NARRATIVE_EVENT_END);
   }
 
   show(narratives: ModelNarrativeDefinition[], event: string): void {
