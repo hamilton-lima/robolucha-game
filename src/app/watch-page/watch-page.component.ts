@@ -141,7 +141,6 @@ export class WatchPageComponent
 
   ngAfterViewInit() {
     const user = this.userService.getUser();
-    this.narrative.onStart(this.gameDefinition.narrativeDefinitions);
 
     if (!user.settings.playedTutorial) {
       user.settings.playedTutorial = true;
@@ -161,6 +160,7 @@ export class WatchPageComponent
     this.page = this.route.snapshot.url.join("/");
     this.luchador = this.route.snapshot.data.luchador;
     this.gameDefinition = this.route.snapshot.data.gameDefinition;
+    this.narrative.onStart(this.gameDefinition.narrativeDefinitions);
 
     this.matchID = Number.parseInt(this.route.snapshot.paramMap.get("id"));
     this.gameDefinition = null;
