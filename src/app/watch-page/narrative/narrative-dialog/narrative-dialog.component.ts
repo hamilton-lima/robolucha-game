@@ -13,7 +13,8 @@ export interface NarrativeDialogData {
   styleUrls: ["./narrative-dialog.component.scss"],
 })
 export class NarrativeDialogComponent implements OnInit {
-  
+  position = 0;
+
   constructor(
     public dialogRef: MatDialogRef<NarrativeDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: NarrativeDialogData
@@ -25,5 +26,21 @@ export class NarrativeDialogComponent implements OnInit {
 
   onNoClick(): void {
     this.dialogRef.close();
+  }
+
+  back() {
+    if (this.position - 1 < 0) {
+      this.position = 0;
+    } else {
+      this.position--;
+    }
+  }
+
+  next() {
+    if (this.position + 1 >= this.data.narratives.length) {
+      this.dialogRef.close();
+    } else {
+      this.position++;
+    }
   }
 }
