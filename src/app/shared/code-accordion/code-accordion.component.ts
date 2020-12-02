@@ -3,10 +3,12 @@ import { Subject } from 'rxjs';
 import { Message } from 'src/app/shared/message/message.model';
 import { ModelCode } from 'src/app/sdk';
 import { CodeEditorEvent } from '../code-editor/code-editor.component';
+import { BlocklyConfig } from '../code-blockly/code-blockly.service';
 
 export class CodeAcordionEventEditor {
   label: string;
   event: string;
+  config: BlocklyConfig
 }
 
 @Component({

@@ -59,7 +59,7 @@
           <mat-expansion-panel>
             <mat-expansion-panel-header> On Found </mat-expansion-panel-header>
             <app-code-editor eventId="found"
-              [useOther]="true"
+              [config]="useOther"
               [code]="codes.onFound"
               (onChange)="updateCode('onFound', $event)"
             >
@@ -71,6 +71,7 @@
               On Got Damage
             </mat-expansion-panel-header>
             <app-code-editor eventId="gotDamage"
+              [config]="useOther"
               [code]="codes.onGotDamage"
               (onChange)="updateCode('onGotDamage', $event)"
             >
@@ -82,7 +83,7 @@
               On Hit Other
             </mat-expansion-panel-header>
             <app-code-editor eventId="hitOther"
-              [useOther]="true"
+              [config]="useOther"
               [code]="codes.onHitOther"
               (onChange)="updateCode('onHitOther', $event)"
             >

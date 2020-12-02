@@ -35,7 +35,9 @@ import {
 } from "../watch-match/watch-match.service";
 import { MatchReady } from "./watch-page.model";
 import { CameraChange } from "../arena/camera3-d.service";
-import {CodeEditorEvent} from '../shared/code-editor/code-editor.component';
+import { CodeEditorEvent } from "../shared/code-editor/code-editor.component";
+import { NarrativeDialogService } from "./narrative/narrative-dialog.service";
+import { BlocklyConfig } from "../shared/code-blockly/code-blockly.service";
 
 @Component({
   selector: "app-watch-page",
@@ -50,7 +52,6 @@ export class WatchPageComponent
     OnChanges,
     OnDestroy,
     AfterViewInit {
-
   @Output() cameraChangeSubject = new EventEmitter<CameraChange>();
 
   constructor(
@@ -62,7 +63,8 @@ export class WatchPageComponent
     private cdRef: ChangeDetectorRef,
     private alert: AlertService,
     private router: Router,
-    private watchService: WatchMatchService
+    private watchService: WatchMatchService,
+    private narrative: NarrativeDialogService
   ) {}
 
   matchReady = false;
@@ -81,11 +83,12 @@ export class WatchPageComponent
   page: string;
   tour: Shepherd.Tour;
 
-  currentCamera : number = 0;
+  currentCamera: number = 0;
 
   matchID: number;
   luchador: ModelGameComponent;
   gameDefinition: ModelGameDefinition;
+  useOther = BlocklyConfig.DefaultWithOther;
 
   readonly matchStateSubject = new Subject<MatchState>();
   readonly messageSubject = new Subject<Message>();
@@ -144,7 +147,8 @@ export class WatchPageComponent
     if (!user.settings.playedTutorial) {
       user.settings.playedTutorial = true;
       this.userService.updateSettings(user.settings);
-      this.tour = this.shepherd.show(this.steps);
+      // TODO: Fix sequence of tutorials
+      // this.tour = this.shepherd.show(this.steps);
     }
   }
 
@@ -158,6 +162,7 @@ export class WatchPageComponent
     this.page = this.route.snapshot.url.join("/");
     this.luchador = this.route.snapshot.data.luchador;
     this.gameDefinition = this.route.snapshot.data.gameDefinition;
+    this.narrative.onStart(this.gameDefinition.narrativeDefinitions);
 
     this.matchID = Number.parseInt(this.route.snapshot.paramMap.get("id"));
     this.gameDefinition = null;
@@ -303,6 +308,9 @@ export class WatchPageComponent
 
   endMatch() {
     this.matchOver = true;
+    if (!this.displayScore) {
+      this.narrative.onEnd(this.gameDefinition.narrativeDefinitions);
+    }
   }
 
   goBack() {
@@ -316,24 +324,23 @@ export class WatchPageComponent
   }
 
   cameras = new Map([
-    [ 0, CameraChange.Tower],
-    [ 1, CameraChange.ThirdPerson],
-    [ 2, CameraChange.FirstPerson],
-    [ 3, CameraChange.Crazy]
+    [0, CameraChange.Tower],
+    [1, CameraChange.ThirdPerson],
+    [2, CameraChange.FirstPerson],
+    [3, CameraChange.Crazy],
   ]);
 
-  changeCamera(){
+  changeCamera() {
     this.currentCamera++;
-    if(this.currentCamera > 3){
+    if (this.currentCamera > 3) {
       this.currentCamera = 0;
     }
     this.cameraChangeSubject.emit(this.cameras.get(this.currentCamera));
   }
 
-  @HostListener('window:keydown', ['$event'])
+  @HostListener("window:keydown", ["$event"])
   keyEvent(event: KeyboardEvent) {
-
-    if(event.code == "KeyC"){
+    if (event.code == "KeyC") {
       this.changeCamera();
     }
   }
@@ -421,7 +428,7 @@ export class WatchPageComponent
   updateCode(event: string, codeEditorEvent: CodeEditorEvent) {
     this.dirty = true;
     this.codes[event].script = codeEditorEvent.code;
-    this.codes[event].blockly = codeEditorEvent.blocklyDefinition
+    this.codes[event].blockly = codeEditorEvent.blocklyDefinition;
     this.cdRef.detectChanges();
   }
 

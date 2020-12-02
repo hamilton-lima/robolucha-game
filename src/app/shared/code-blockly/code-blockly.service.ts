@@ -2,11 +2,30 @@ import { Injectable, Renderer2, RendererFactory2 } from "@angular/core";
 
 declare var Blockly: any;
 
+export enum BlocklyConfig {
+  Default,
+  DefaultWithOther,
+  SceneComponent,
+  SceneComponentWithOther,
+}
+
 @Injectable({ providedIn: "root" })
 export class BlocklyService {
   private renderer: Renderer2;
 
+  private configResolution;
+  
   constructor(private factory: RendererFactory2) {
+    this.configResolution = new Map([
+      [BlocklyConfig.Default, this.getToolboxDefault()],
+      [BlocklyConfig.DefaultWithOther, this.getToolboxDefault()],
+      [BlocklyConfig.SceneComponent, this.getToolboxSceneComponent()],
+      [
+        BlocklyConfig.SceneComponentWithOther,
+        this.getToolboxSceneComponentWithOther(),
+      ],
+    ]);
+  
     // Renderer2 needs to be created manually as there is no provider by default
     this.renderer = factory.createRenderer(null, null);
     this.setup();
@@ -26,14 +45,13 @@ export class BlocklyService {
   readonly emptyXML =
     '<xml xmlns="https://developers.google.com/blockly/xml"></xml>';
 
-  inject(id: string, useOther: boolean = false, onChange: () => void = null) {
-    let toolbox;
-
-    if (useOther) {
-      toolbox = this.getToolboxWithOption();
-    } else {
-      toolbox = this.getToolboxDefault();
-    }
+  inject(
+    id: string,
+    editorConfig: BlocklyConfig = BlocklyConfig.Default,
+    onChange: () => void = null
+  ) {
+    // call function to build the toolbox based on the config
+    const toolbox = this.configResolution.get(editorConfig);
 
     const blocklyDiv = document.getElementById(id);
     const workspace = Blockly.inject(blocklyDiv, { toolbox: toolbox });
@@ -80,6 +98,15 @@ export class BlocklyService {
   </category>
   `;
 
+  readonly commandsSceneComponent = `
+  <category name="Commands" colour="%{BKY_PROCEDURES_HUE}">
+      <block type="endGame" />
+      <block type="addDamage" />
+      <block type="math_number" />
+      <block type="math_arithmetic" />
+  </category>
+  `;
+
   readonly luchador = `
   <category name="Luchador" colour="260">
     <block type="me_string" />
@@ -91,6 +118,13 @@ export class BlocklyService {
   <category name="Luchador" colour="260">
     <block type="me_string" />
     <block type="me_number" />
+    <block type="other_string" />
+    <block type="other_number" />
+  </category>
+  `;
+
+  readonly sceneOther = `
+  <category name="Luchador" colour="260">
     <block type="other_string" />
     <block type="other_number" />
   </category>
@@ -154,6 +188,25 @@ export class BlocklyService {
     this.logic,
   ];
 
+  readonly toolboxSceneComponent = [
+    this.commandsSceneComponent,
+    this.separator,
+    this.variables,
+    this.math,
+    this.control,
+    this.logic,
+  ];
+
+  readonly toolboxSceneComponentWithOther = [
+    this.commandsSceneComponent,
+    this.sceneOther,
+    this.separator,
+    this.variables,
+    this.math,
+    this.control,
+    this.logic,
+  ];
+
   getToolboxXML(data: string[]) {
     const xml = data.join("\n");
     const result = `<xml id="toolbox" style="display: none">${xml}</xml>`;
@@ -166,6 +219,14 @@ export class BlocklyService {
 
   getToolboxDefault() {
     return this.getToolboxXML(this.toolboxDefault);
+  }
+
+  getToolboxSceneComponent() {
+    return this.getToolboxXML(this.toolboxSceneComponent);
+  }
+
+  getToolboxSceneComponentWithOther() {
+    return this.getToolboxXML(this.toolboxSceneComponentWithOther);
   }
 
   setup() {
@@ -227,6 +288,32 @@ export class BlocklyService {
         colour: 355,
       },
       {
+        type: "addDamage",
+        message0: "add damage %1 %2",
+        args0: [
+          {
+            type: "input_value",
+            name: "ADD_DAMAGE_LUCHADOR_VALUE",
+            check: "Number",
+          },
+          {
+            type: "input_value",
+            name: "ADD_DAMAGE_AMOUNT_VALUE",
+            check: "Number",
+          },
+        ],
+        previousStatement: null,
+        nextStatement: null,
+        colour: 355,
+      },
+      {
+        type: "endGame",
+        message0: "endGame",
+        previousStatement: null,
+        nextStatement: null,
+        colour: 355,
+      },
+      {
         type: "me_string",
         message0: "me.%1",
         output: "String",
@@ -237,7 +324,6 @@ export class BlocklyService {
             name: "ME_STRING_FIELD",
             options: [
               ["all", ""],
-              ["id", ".id"],
               ["name", ".name"],
             ],
           },
@@ -253,6 +339,7 @@ export class BlocklyService {
             type: "field_dropdown",
             name: "ME_NUMBER_FIELD",
             options: [
+              ["id", ".id"],
               ["x", ".x"],
               ["y", ".y"],
               ["life", ".life"],
@@ -278,7 +365,6 @@ export class BlocklyService {
             name: "OTHER_STRING_FIELD",
             options: [
               ["all", ""],
-              ["id", ".id"],
               ["name", ".name"],
             ],
           },
@@ -294,6 +380,7 @@ export class BlocklyService {
             type: "field_dropdown",
             name: "OTHER_NUMBER_FIELD",
             options: [
+              ["id", ".id"],
               ["x", ".x"],
               ["y", ".y"],
               ["life", ".life"],
@@ -381,6 +468,25 @@ export class BlocklyService {
         Blockly.Lua.ORDER_ATOMIC
       );
       return `debug(${value})\n`;
+    };
+
+    Blockly.Lua["addDamage"] = function (block) {
+      const luchadorID = Blockly.Lua.valueToCode(
+        block,
+        "ADD_DAMAGE_LUCHADOR_VALUE",
+        Blockly.Lua.ORDER_ATOMIC
+      );
+      const amount = Blockly.Lua.valueToCode(
+        block,
+        "ADD_DAMAGE_AMOUNT_VALUE",
+        Blockly.Lua.ORDER_ATOMIC
+      );
+
+      return `addDamage(${luchadorID}, ${amount})\n`;
+    };
+
+    Blockly.Lua["endGame"] = function (block) {
+      return `endGame()\n`;
     };
   }
 }

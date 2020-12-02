@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 import { ModelCode } from "src/app/sdk";
+import { BlocklyConfig } from "../code-blockly/code-blockly.service";
 
 export interface CodeEditorEvent {
   code: string;
@@ -12,7 +13,7 @@ export interface CodeEditorEvent {
   styleUrls: ["./code-editor.component.css"],
 })
 export class CodeEditorComponent implements OnInit {
-  @Input() useOther = false;
+  @Input() config: BlocklyConfig;
 
   _code: ModelCode;
   get code(): ModelCode {

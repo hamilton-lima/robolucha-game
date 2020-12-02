@@ -67,6 +67,7 @@ import { GameComponentEditorComponent } from "./map-editor/game-definition-edit/
 import { NarrativeComponent } from "./map-editor/game-definition-edit/display/narrative/narrative.component";
 import { NarrativeEditorComponent } from "./map-editor/game-definition-edit/editor/narrative/narrative-editor.component";
 import { GameDefinitionFromMatchIDResolverService } from "./gamedefinition-from-match-id-resolver";
+import { NarrativeDialogComponent } from './watch-page/narrative/narrative-dialog/narrative-dialog.component';
 
 const ROUTES: Routes = [
   { path: "", redirectTo: "/home", pathMatch: "full" },
@@ -226,6 +227,7 @@ export function apiConfigFactory(): Configuration {
     GameComponentEditorComponent,
     NarrativeComponent,
     NarrativeEditorComponent,
+    NarrativeDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -257,6 +259,7 @@ export function apiConfigFactory(): Configuration {
   entryComponents: [
     AuthModalMessageComponent,
     GenericErrorModalMessageComponent,
+    NarrativeDialogComponent,
   ],
 })
 export class AppModule {}
