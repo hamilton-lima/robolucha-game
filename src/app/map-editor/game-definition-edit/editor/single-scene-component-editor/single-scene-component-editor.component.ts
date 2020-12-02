@@ -1,6 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
 import { ModelCode, ModelSceneComponent } from "src/app/sdk";
+import { CodeAcordionEventEditor } from "src/app/shared/code-accordion/code-accordion.component";
+import { BlocklyConfig } from "src/app/shared/code-blockly/code-blockly.service";
 import { GameDefinitionEditMediatorService } from "../../game-definition-edit-mediator.service";
 
 @Component({
@@ -31,13 +33,27 @@ export class SingleSceneComponentEditorComponent implements OnInit {
   });
 
   helpFile: string = "help/code_editor_help";
-  editors: { event: string; label: string }[] = [
-    { event: "onRepeat", label: "On repeat" },
-    { event: "onStart", label: "On start" },
-    { event: "onHitWall", label: "On hit wall" },
-    { event: "onFound", label: "On found" },
-    { event: "onGotDamage", label: "On got damage" },
-    { event: "onHitOther", label: "On hit other" },
+  editors: CodeAcordionEventEditor[] = [
+    {
+      event: "onRepeat",
+      label: "On repeat",
+      config: BlocklyConfig.SceneComponent,
+    },
+    {
+      event: "onStart",
+      label: "On start",
+      config: BlocklyConfig.SceneComponent,
+    },
+    {
+      event: "onGotDamage",
+      label: "On got damage",
+      config: BlocklyConfig.SceneComponentWithOther,
+    },
+    {
+      event: "onHitOther",
+      label: "On hit other",
+      config: BlocklyConfig.SceneComponentWithOther,
+    },
   ];
 
   codes: ModelCode[];

@@ -37,6 +37,7 @@ import { MatchReady } from "./watch-page.model";
 import { CameraChange } from "../arena/camera3-d.service";
 import { CodeEditorEvent } from "../shared/code-editor/code-editor.component";
 import { NarrativeDialogService } from "./narrative/narrative-dialog.service";
+import { BlocklyConfig } from "../shared/code-blockly/code-blockly.service";
 
 @Component({
   selector: "app-watch-page",
@@ -87,6 +88,7 @@ export class WatchPageComponent
   matchID: number;
   luchador: ModelGameComponent;
   gameDefinition: ModelGameDefinition;
+  useOther = BlocklyConfig.DefaultWithOther;
 
   readonly matchStateSubject = new Subject<MatchState>();
   readonly messageSubject = new Subject<Message>();

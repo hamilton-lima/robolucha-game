@@ -7,6 +7,7 @@
   <mat-expansion-panel *ngFor="let editor of editors; index as i" [expanded]="isExpanded(i)">
     <mat-expansion-panel-header>{{ editor.label }}</mat-expansion-panel-header>
     <app-code-editor
+      [config]="editor.config"
       [code]="getCode(editor.event)"
       (onChange)="updateCode(editor.event, $event)"
     >

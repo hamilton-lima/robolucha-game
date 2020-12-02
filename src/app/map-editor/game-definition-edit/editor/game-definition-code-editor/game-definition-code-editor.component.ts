@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { ModelCode } from "src/app/sdk";
 import { CodeAcordionEventEditor } from "src/app/shared/code-accordion/code-accordion.component";
+import { BlocklyConfig } from "src/app/shared/code-blockly/code-blockly.service";
 import { GameDefinitionEditMediatorService } from "../../game-definition-edit-mediator.service";
 
 @Component({
@@ -19,9 +20,8 @@ export class GameDefinitionCodeEditorComponent implements OnInit {
   ngOnInit() {
     this.helpFile = "help/server_code_editor_help";
     this.editors = [
-      { event: "onRepeat", label: "On repeat" },
-      { event: "onStart", label: "On start" },
-      { event: "onHitOther", label: "On hit other" },
+      { event: "onRepeat", label: "On repeat", config: BlocklyConfig.SceneComponent },
+      { event: "onStart", label: "On start", config: BlocklyConfig.SceneComponent },
     ];
 
     this.mediator.onEditGameDefinitionCode.subscribe((codes) => {
