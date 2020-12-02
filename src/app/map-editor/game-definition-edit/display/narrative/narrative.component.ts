@@ -1,9 +1,6 @@
 import { Component, Input, OnInit } from "@angular/core";
-import { ModelGameDefinition, ModelNarrativeDefinition } from "src/app/sdk";
-import {
-  NarrativeDialogService,
-  NarrativeServiceService,
-} from "src/app/watch-page/narrative/narrative-dialog.service";
+import { ModelNarrativeDefinition } from "src/app/sdk";
+import { NarrativeDialogService } from "src/app/watch-page/narrative/narrative-dialog.service";
 import { NarrativeBuilderService } from "../../editor/narrative-builder.service";
 import { GameDefinitionEditMediatorService } from "../../game-definition-edit-mediator.service";
 
