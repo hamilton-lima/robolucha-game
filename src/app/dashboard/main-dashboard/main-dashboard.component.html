@@ -1,5 +1,11 @@
 <mat-sidenav-container fullscreen>
-  <mat-sidenav #sidenav="matSidenav" class="app-sidenav">
+  <mat-sidenav
+    [mode]="'side'"
+    [opened]="true"
+    position="start"
+    #sidenav="matSidenav"
+    class="app-sidenav"
+  >
     <mat-toolbar>
       <span>Links</span>
       <span class="toolbar-spacer"></span>
@@ -20,7 +26,6 @@
         </h2>
       </a>
       <mat-divider></mat-divider>
-      <!-- <h2 matSubheader>Docs</h2> -->
 
       <a mat-list-item (click)="classrooms()">
         <h2 matLine>Classrooms</h2>
@@ -28,7 +33,6 @@
       <a mat-list-item (click)="activities()">
         <h2 matLine>Activities</h2>
       </a>
-
     </mat-nav-list>
   </mat-sidenav>
 
@@ -41,9 +45,7 @@
     </mat-toolbar>
 
     <div class="app-content">
-      <app-role-guard role="dashboard_user">
         <router-outlet></router-outlet>
-      </app-role-guard>
     </div>
     <br />
     <br />
