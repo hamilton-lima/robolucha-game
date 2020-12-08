@@ -68,6 +68,7 @@ import { NarrativeComponent } from "./map-editor/game-definition-edit/display/na
 import { NarrativeEditorComponent } from "./map-editor/game-definition-edit/editor/narrative/narrative-editor.component";
 import { GameDefinitionFromMatchIDResolverService } from "./gamedefinition-from-match-id-resolver";
 import { NarrativeDialogComponent } from './watch-page/narrative/narrative-dialog/narrative-dialog.component';
+import { JoinClassroomComponent } from "./pages/list-classroom-games/join-classroom/join-classroom.component";
 
 const ROUTES: Routes = [
   { path: "", redirectTo: "/home", pathMatch: "full" },
@@ -158,6 +159,12 @@ const ROUTES: Routes = [
   {
     path: "home",
     component: MainComponent,
+    canActivate: [LoginActivate],
+    resolve: { luchador: LuchadorResolverService },
+  },
+  {
+    path: "join",
+    component: JoinClassroomComponent,
     canActivate: [LoginActivate],
     resolve: { luchador: LuchadorResolverService },
   },
