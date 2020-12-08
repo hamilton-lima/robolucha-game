@@ -31,4 +31,8 @@ export class ClassroomListComponent implements OnInit {
   listStudents(id){
       this.router.navigate(["/dashboard/classroom-students/", id]);
   }
+
+  listAssignments(id){
+    console.log("list assignments");
+  }
 }
