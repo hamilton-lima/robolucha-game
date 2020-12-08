@@ -15,7 +15,18 @@
     </mat-toolbar>
 
     <mat-nav-list>
-      <a mat-list-item href="http://docs.robolucha.com" target="_blank">
+      <a mat-list-item (click)="classrooms()">
+        <h2 matLine>Classrooms</h2>
+      </a>
+      <a mat-list-item (click)="activities()">
+        <h2 matLine>Activities</h2>
+      </a>
+    </mat-nav-list>
+
+    <mat-divider></mat-divider>
+
+    <mat-nav-list>
+      <a mat-list-item href="https://www.robolucha.com/play" target="_blank">
         <h2 matLine>
           <mat-icon svgIcon="help-circle-outline"></mat-icon> Help
         </h2>
@@ -25,15 +36,8 @@
           <mat-icon svgIcon="play-circle-outline"></mat-icon> Play
         </h2>
       </a>
-      <mat-divider></mat-divider>
-
-      <a mat-list-item (click)="classrooms()">
-        <h2 matLine>Classrooms</h2>
-      </a>
-      <a mat-list-item (click)="activities()">
-        <h2 matLine>Activities</h2>
-      </a>
     </mat-nav-list>
+    
   </mat-sidenav>
 
   <mat-sidenav-content>
@@ -45,7 +49,7 @@
     </mat-toolbar>
 
     <div class="app-content">
-        <router-outlet></router-outlet>
+      <router-outlet></router-outlet>
     </div>
     <br />
     <br />
