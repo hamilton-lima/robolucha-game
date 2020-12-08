@@ -100,6 +100,12 @@ export class MainComponent implements OnInit {
     this.router.navigate(["maps"]);
   }
 
+  dashboard() {
+    this.shepherd.done(this.tour);
+    this.events.click(this.page, "dashboard");
+    this.router.navigate(["dashboard"]);
+  }
+
   play(matchID: number) {
     const playRequest = <ModelPlayRequest>{
       availableMatchID: matchID,

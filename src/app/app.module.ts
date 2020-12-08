@@ -243,6 +243,7 @@ export function apiConfigFactory(): Configuration {
     DashboardModule,
     MaterialAllComponentsModule,
     SharedModule,
+    DashboardModule
   ],
   providers: [
     LoginActivate,
