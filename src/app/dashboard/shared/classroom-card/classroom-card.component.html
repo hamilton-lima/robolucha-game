@@ -5,8 +5,12 @@
   <mat-card-content>
     <p>Access Code: {{ classroom.accessCode }}</p>
     <div>
-        <button class="m-1" mat-raised-button>Students</button>
-        <button class="m-1" mat-raised-button>Assignments</button>
+      <button class="m-1" mat-raised-button (click)="triggerOnStudents()">
+        Students
+      </button>
+      <button class="m-1" mat-raised-button (click)="triggerOnAssignments()">
+        Assignments
+      </button>
     </div>
   </mat-card-content>
 </mat-card>

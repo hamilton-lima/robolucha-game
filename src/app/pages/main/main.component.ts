@@ -12,6 +12,8 @@ import { EventsService } from "src/app/shared/events.service";
 import { UserService } from "src/app/shared/user.service";
 import Shepherd from "shepherd.js";
 import { ModelAvailableMatch } from "src/app/sdk/model/modelAvailableMatch";
+import { MatDialog } from "@angular/material";
+import { JoinClassroomComponent } from "../list-classroom-games/join-classroom/join-classroom.component";
 
 @Component({
   selector: "app-main",
@@ -33,7 +35,8 @@ export class MainComponent implements OnInit {
     private route: ActivatedRoute,
     private shepherd: ShepherdNewService,
     private events: EventsService,
-    private userService: UserService
+    private userService: UserService,
+    public dialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -98,6 +101,18 @@ export class MainComponent implements OnInit {
     this.shepherd.done(this.tour);
     this.events.click(this.page, "maps");
     this.router.navigate(["maps"]);
+  }
+
+  dashboard() {
+    this.shepherd.done(this.tour);
+    this.events.click(this.page, "dashboard");
+    this.router.navigate(["dashboard"]);
+  }
+
+  join() {
+    this.shepherd.done(this.tour);
+    this.events.click(this.page, "join");
+    const dialogRef = this.dialog.open(JoinClassroomComponent);
   }
 
   play(matchID: number) {
