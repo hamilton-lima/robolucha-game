@@ -11,6 +11,16 @@
     </div>
 
     <div class="row">
+      <div class="col">
+        <img
+          class="thumbnail"
+          *ngIf="gameDefinition.media.thumbnail"
+          [src]="gameDefinition.media.thumbnail"
+        />
+      </div>
+    </div>
+
+    <div class="row">
       <div class="col">Label</div>
       <div class="col">{{ gameDefinition.label }}</div>
     </div>
@@ -46,15 +56,10 @@
     </div>
 
     <div class="row">
-      <div class="col">Media</div>
-      <div class="col">
-        <img
-          class="thumbnail"
-          *ngIf="gameDefinition.media.thumbnail"
-          [src]="gameDefinition.media.thumbnail"
-        />
-      </div>
+      <div class="col">Next map</div>
+      <div class="col">{{ nextLabel() }}</div>
     </div>
+
   </div>
 
   <mat-action-row>
