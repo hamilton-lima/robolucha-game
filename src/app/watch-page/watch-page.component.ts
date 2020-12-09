@@ -309,7 +309,7 @@ export class WatchPageComponent
   endMatch() {
     this.matchOver = true;
     if (!this.displayScore) {
-      this.narrative.onEnd(this.gameDefinition.narrativeDefinitions);
+      this.narrative.onEnd(this.gameDefinition);
     }
   }
 

@@ -20,7 +20,10 @@ export class MapEditorService {
 
   setGameDefinitions(definitions: ModelGameDefinition[]) {
     console.log("set", definitions);
-    this.definitions = definitions;
+    // only NO multiplayer types are alowed
+    this.definitions = definitions.filter(
+      (definition) => definition.type != "multiplayer"
+    );
   }
 
   getGameDefinitions() {
