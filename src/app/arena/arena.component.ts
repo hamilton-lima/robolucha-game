@@ -41,6 +41,8 @@ class SavedCamera {
 export class Pickable {
   id: number;
   name: string;
+  point: BABYLON.Vector3;
+  event:string;
 }
 
 @Component({
@@ -186,11 +188,14 @@ export class ArenaComponent
     this.sceneComponents = [];
   }
 
+  
+
   createScene() {
     if (this.engine) {
       console.warn("Trying to create babylon engine for the second time");
       return;
     }
+    
     
     this.engine = new BABYLON.Engine(this.canvas.nativeElement, true, {
       preserveDrawingBuffer: true,
@@ -252,20 +257,129 @@ export class ArenaComponent
     this.engine.loadingUIText = "Loading the arena";
 
     this.scene = new BABYLON.Scene(this.engine);
+    var scene = this.scene;
+    var engine = this.engine;
+    var startingPoint;
+    var event = this.onPick;
+    var onPointerDown = function (evt) {
+      if (evt.button !== 0) {
+          return;
+      }
+      var pickInfo = scene.pick(scene.pointerX, scene.pointerY);
+      if (pickInfo.pickedMesh.metadata != null && pickInfo.pickedMesh.metadata.type == "wall" || pickInfo.pickedMesh.metadata.type == "region") {
 
-    // emit event when element is clicked
+          startingPoint = true;
+          let id = Number.parseInt(pickInfo.pickedMesh.id);
+
+          event.emit(<Pickable>{
+            id: id,
+            name: pickInfo.pickedMesh.name,
+            point: null,
+            event:"down",
+          });
+
+          if (startingPoint) {
+            setTimeout(function () {
+              camera.detachControl(engine.getRenderingCanvas());
+            }, 0);
+          }
+      }
+  }
+  var gameDefinition = this.gameDefinition;
+  var convertPosition3DToComponent = function (n) {
+    const result: number =
+      n * gameDefinition.luchadorSize / SharedConstants.LUCHADOR_MODEL_WIDTH; //* 17.4;
+
+    return result;
+  }
+
+  var onPointerMove = function (evt) {
+    if (startingPoint) {
+      var pick = scene.pick(scene.pointerX, scene.pointerY);
+      var vec = new BABYLON.Vector3(convertPosition3DToComponent(pick.pickedPoint.x),convertPosition3DToComponent(pick.pickedPoint.y),convertPosition3DToComponent(pick.pickedPoint.z));
+      event.emit(<Pickable>{
+        id: 0,
+        name: "",
+        point:vec,
+        event:"move",
+      });
+    }
+  }
+
+  var onPointerUp = function () {
+      if (startingPoint) {
+        camera.attachControl(engine.getRenderingCanvas(), false);
+          event.emit(<Pickable>{
+            id: 0,
+            name: "",
+            point:null,
+            event:"up",
+          });
+          startingPoint = false;
+          return;
+      }
+  }
+
+  this.engine.getRenderingCanvas().addEventListener("pointerdown", onPointerDown, false);
+  this.engine.getRenderingCanvas().addEventListener("pointerup", onPointerUp, false);
+  this.engine.getRenderingCanvas().addEventListener("pointermove", onPointerMove, false);
+
+  this.scene.onDispose = function () {
+    this.engine.getRenderingCanvas().removeEventListener("pointerdown", onPointerDown);
+    this.engine.getRenderingCanvas().removeEventListener("pointerup", onPointerUp);
+    this.engine.getRenderingCanvas().removeEventListener("pointermove", onPointerMove);
+  }
+
+    /*var start = false;
     this.scene.onPointerObservable.add(
       (info: BABYLON.PointerInfo, state: BABYLON.EventState) => {
-        if (info.type == BABYLON.PointerEventTypes.POINTERUP) {
+        if (info.type == BABYLON.PointerEventTypes.POINTERDOWN) {
           if (info.pickInfo.pickedMesh) {
+
+            let id = Number.parseInt(info.pickInfo.pickedMesh.id);
+            for (let key in this.sceneComponents) {
+              if (info.pickInfo.pickedMesh.id != null && this.sceneComponents[key].id == id) {
+                current = key;
+                break;
+              }
+            }
             this.onPick.emit(<Pickable>{
-              id: Number.parseInt(info.pickInfo.pickedMesh.id),
+              id: id,
               name: info.pickInfo.pickedMesh.name,
+              point: null,
+              event:"down",
+            });
+          }
+          start = true;
+        }
+        if (info.type == BABYLON.PointerEventTypes.POINTERMOVE) {
+          
+          if (start) {
+            var pick = this.scene.pick(this.scene.pointerX, this.scene.pointerY);
+            var vec = new BABYLON.Vector3(this.convertPosition3DToComponent(pick.pickedPoint.x),this.convertPosition3DToComponent(pick.pickedPoint.y),this.convertPosition3DToComponent(pick.pickedPoint.z));
+            this.onPick.emit(<Pickable>{
+              id: 0,
+              name: "",
+              point:vec,
+              event:"move",
             });
           }
         }
+        if (info.type == BABYLON.PointerEventTypes.POINTERUP) {
+          
+          if (info.pickInfo.pickedMesh && start == true) {
+            var vec = new BABYLON.Vector3(this.convertPosition3DToComponent(info.pickInfo.pickedPoint.x),this.convertPosition3DToComponent(info.pickInfo.pickedPoint.y),this.convertPosition3DToComponent(info.pickInfo.pickedPoint.z));
+            this.onPick.emit(<Pickable>{
+              id: 0,
+              name: "",
+              point: vec,
+              event:"up",
+            });
+            start = false;
+          }
+        }
       }
-    );
+    );*/
 
     const lightPosition = new BABYLON.Vector3(10, 10, -15);
     this.light = new BABYLON.HemisphericLight(
@@ -288,16 +402,18 @@ export class ArenaComponent
       this.render();
     });
 
+    
     this.camera = new BABYLON.FreeCamera(
       "camera1",
       this.cameraService.CAMERA_POSITION,
       this.scene
     );
+    var camera = this.camera;
 
     this.camera.rotation.x = Helper3D.angle2radian(45);
 
     if (!this.cameraFollowLuchador) {
-      this.camera.attachControl(this.canvas.nativeElement, false);
+      this.camera.attachControl(this.engine.getRenderingCanvas(), true);
       this.setCameraFromSavedState();
     }
 
@@ -307,6 +423,8 @@ export class ArenaComponent
 
     this.audio.arenaMusic(this.scene);
   }
+
+  
 
   render(): void {
     // run the render loop
@@ -633,6 +751,9 @@ export class ArenaComponent
 
     return result;
   }
+  
+
+
 
   // TODO: read this from luchador
   readonly turnSpeed: number = 180;
