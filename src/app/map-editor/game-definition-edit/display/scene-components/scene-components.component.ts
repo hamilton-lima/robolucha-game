@@ -2,6 +2,8 @@ import { Component, Input, OnInit } from "@angular/core";
 import { GameDefinitionEditMediatorService } from "src/app/map-editor/game-definition-edit/game-definition-edit-mediator.service";
 import { ModelCode, ModelSceneComponent } from "src/app/sdk";
 import { SceneComponentBuilderService } from "./scene-component-builder.service";
+import { Pickable } from "src/app/arena/arena.component";
+import { Subject } from "rxjs";
 
 @Component({
   selector: "app-scene-components",
@@ -11,6 +13,9 @@ import { SceneComponentBuilderService } from "./scene-component-builder.service"
 })
 export class SceneComponentsComponent implements OnInit {
   @Input() components: ModelSceneComponent[] = [];
+  @Input() pickElement : Subject<Pickable>;
+  current : string;
+  
 
   constructor(
     private mediator: GameDefinitionEditMediatorService,
@@ -29,6 +34,26 @@ export class SceneComponentsComponent implements OnInit {
         }
       }
     });
+
+    if (this.pickElement) {
+      this.pickElement.subscribe((target: Pickable) => {
+      if(target.event == 'down'){
+        for (let key in this.components) {
+          if (target.id != null && this.components[key].id == target.id) {
+            this.current = key;
+            break;
+          }
+        }
+      }else if(this.components[this.current] != null && target.event == 'move'){
+            this.components[this.current].x = target.point.x;
+            this.components[this.current].y = target.point.z;
+            //this.components[this.current].z = target.point.y;
+            this.mediator.onUpdateSceneComponents.next(this.components);
+      }else if(this.components[this.current] != null && target.event == 'up'){
+            this.current = null;
+      }
+      });
+    }
   }
 
   add() {

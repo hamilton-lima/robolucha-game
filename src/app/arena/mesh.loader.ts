@@ -28,6 +28,7 @@ export class MeshLoader {
 
           if (result) {
             result.isVisible = visible;
+            result.isPickable = true;
             resolve(result);
           } else {
             reject("Mesh not found: " + meshName);

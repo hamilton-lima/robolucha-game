@@ -87,6 +87,7 @@ export class SceneComponent3D extends Base3D {
     );
 
     result.id = this.id.toString();
+    result.metadata = {type: this.type};
     // make sure we can interact with the mesh
     result.isPickable = true;
     return result;
