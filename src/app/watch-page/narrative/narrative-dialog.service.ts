@@ -25,7 +25,7 @@ export class NarrativeDialogService {
   constructor(
     public dialog: MatDialog,
     private api: DefaultService,
-    private router: Router,
+    private router: Router
   ) {}
 
   onStart(narratives: ModelNarrativeDefinition[]): void {
@@ -38,6 +38,18 @@ export class NarrativeDialogService {
       NARRATIVE_EVENT_END,
       gameDefinition.nextGamedefinitionID
     );
+  }
+
+  // check if narrative definition has onEnd event narrative
+  hasOnEnd(narratives: ModelNarrativeDefinition[]) {
+    const found = narratives.find(
+      (narrative) => narrative.event == NARRATIVE_EVENT_END
+    );
+
+    if (found) {
+      return true;
+    }
+    return false;
   }
 
   show(
@@ -69,7 +81,7 @@ export class NarrativeDialogService {
     });
 
     const self = this;
-    dialogRef.afterClosed().subscribe( ()=>{
+    dialogRef.afterClosed().subscribe(() => {
       self.nextMatch(data.next);
     });
   }
@@ -77,6 +89,7 @@ export class NarrativeDialogService {
   // Find available match for the requested gamedefinition
   nextMatch(nextGamedefinitionID: number) {
     if (nextGamedefinitionID) {
+      console.log("next match", nextGamedefinitionID);
       this.api
         .privateAvailableMatchPublicGet()
         .subscribe((matches: ModelAvailableMatch[]) => {

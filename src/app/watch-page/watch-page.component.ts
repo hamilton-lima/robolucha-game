@@ -296,6 +296,17 @@ export class WatchPageComponent
     }
   }
 
+  displayMatchOver() {
+    if (
+      this.gameDefinition.type == "tutorial" &&
+      this.narrative.hasOnEnd(this.gameDefinition.narrativeDefinitions)
+    ) {
+      return false;
+    }
+
+    return true;
+  }
+
   startMatch(match: ModelMatch) {
     this.api
       .privateGameDefinitionIdIdGet(match.gameDefinitionID)
