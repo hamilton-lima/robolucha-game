@@ -151,7 +151,7 @@
 
 </div>
 
-<div class="p-3 matchover-alert" *ngIf="matchOver">
+<div class="p-3 matchover-alert" *ngIf="matchOver && displayMatchOver()">
   <mat-card>
     <mat-card-title
       ><h1>{{ matchOverTitle }}</h1></mat-card-title
