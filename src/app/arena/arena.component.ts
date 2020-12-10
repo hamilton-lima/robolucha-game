@@ -324,12 +324,6 @@ export class ArenaComponent
   this.engine.getRenderingCanvas().addEventListener("pointerup", onPointerUp, false);
   this.engine.getRenderingCanvas().addEventListener("pointermove", onPointerMove, false);
 
-  this.scene.onDispose = function () {
-    this.engine.getRenderingCanvas().removeEventListener("pointerdown", onPointerDown);
-    this.engine.getRenderingCanvas().removeEventListener("pointerup", onPointerUp);
-    this.engine.getRenderingCanvas().removeEventListener("pointermove", onPointerMove);
-  }
-
     /*var start = false;
     this.scene.onPointerObservable.add(
       (info: BABYLON.PointerInfo, state: BABYLON.EventState) => {
