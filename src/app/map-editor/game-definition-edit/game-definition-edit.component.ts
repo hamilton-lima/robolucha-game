@@ -4,6 +4,7 @@ import {
   EventEmitter,
   OnInit,
   ViewChild,
+  Output,
 } from "@angular/core";
 import { MatDrawer } from "@angular/material/sidenav";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -39,6 +40,8 @@ export class GameDefinitionEditComponent implements OnInit {
   @ViewChild("drawer") editorDrawer: MatDrawer;
   @ViewChild("arena") arena: ArenaComponent;
   matchState = new EventEmitter<MatchState>();
+  
+  @Output() onPickElement = new EventEmitter<Pickable>();
 
   currentEditor: CurrentEditorEnum;
   readonly fieldsRequireMapRefresh = ["arenaWidth", "arenaHeight"];
@@ -275,7 +278,13 @@ export class GameDefinitionEditComponent implements OnInit {
   }
 
   pick(target: Pickable) {
-    console.log("clicked on ", target);
+    this.onPickElement.emit(<Pickable>{
+      id: target.id,
+      name: target.name,
+      point:target.point,
+      event:target.event,
+    });
+
   }
 
   screenshot() {
