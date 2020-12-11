@@ -88,8 +88,8 @@ export class NarrativeDialogService {
 
   // Find available match for the requested gamedefinition
   nextMatch(nextGamedefinitionID: number) {
+
     if (nextGamedefinitionID) {
-      console.log("next match", nextGamedefinitionID);
       this.api
         .privateAvailableMatchPublicGet()
         .subscribe((matches: ModelAvailableMatch[]) => {
@@ -110,15 +110,19 @@ export class NarrativeDialogService {
                 this.router.routeReuseStrategy.shouldReuseRoute = function(){return false;};
                 this.router.navigate(["watch", match.id]);
               }, (error) => {
+                this.router.navigate(["home"]);
                 console.log('error', error);
               });
           } else {
+            this.router.navigate(["home"]);
             console.error(
               "No available match found for gamedefinition",
               nextGamedefinitionID
             );
           }
         });
+    } else {
+      this.router.navigate(["home"]);
     }
   }
 }
