@@ -45,8 +45,8 @@ export class SceneComponentsComponent implements OnInit {
           }
         }
       }else if(this.components[this.current] != null && target.event == 'move'){
-            this.components[this.current].x = target.point.x;
-            this.components[this.current].y = target.point.z;
+            this.components[this.current].x = Math.round(target.point.x);
+            this.components[this.current].y = Math.round(target.point.z);
             //this.components[this.current].z = target.point.y;
             this.mediator.onUpdateSceneComponents.next(this.components);
       }else if(this.components[this.current] != null && target.event == 'up'){

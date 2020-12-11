@@ -59,6 +59,7 @@ export class WatchMatchComponent implements OnInit, OnDestroy, AfterViewInit {
   subscription: Subscription;
   onMessage: Subscription;
   fps: Subject<number>;
+  finished = false;
 
   constructor(private service: WatchMatchService) {
     this.luchador = {};
@@ -90,7 +91,8 @@ export class WatchMatchComponent implements OnInit, OnDestroy, AfterViewInit {
         if (parsed.type == "match-state") {
           this.matchStateSubject.emit(parsed.message);
 
-          if (parsed.message.clock < 0) {
+          if (!this.finished && parsed.message.clock < 0) {
+            this.finished = true;
             this.matchFinished.emit(true);
           }
           return;

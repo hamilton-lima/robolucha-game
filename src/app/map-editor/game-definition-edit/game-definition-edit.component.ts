@@ -20,6 +20,7 @@ import { AlertService } from "src/app/shared/alert.service";
 import { EventsService } from "src/app/shared/events.service";
 import { FileUploadService } from "src/app/shared/file-upload/file-upload.service";
 import { MatchState } from "src/app/watch-match/watch-match.model";
+import { MapEditorService } from "../map-editor.service";
 import { GameDefinitionEditMediatorService } from "./game-definition-edit-mediator.service";
 import { CurrentEditorEnum } from "./game-definition-edit.model";
 import { MatchStateBuilderService } from "./match-state-builder.service";
@@ -54,7 +55,8 @@ export class GameDefinitionEditComponent implements OnInit {
     private alert: AlertService,
     private builder: MatchStateBuilderService,
     private cdRef: ChangeDetectorRef,
-    private uploader: FileUploadService
+    private uploader: FileUploadService,
+    private service: MapEditorService
   ) {}
 
   refreshEditorDrawer(nextEditor: CurrentEditorEnum) {
@@ -68,6 +70,9 @@ export class GameDefinitionEditComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    this.service.init();
+
     this.mediator.onEditBasicInfo.subscribe((current) => {
       if (current && this.editorDrawer) {
         this.refreshEditorDrawer(CurrentEditorEnum.BasicInfo);

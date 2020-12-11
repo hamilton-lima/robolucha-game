@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from "@angular/core";
-import { ModelNarrativeDefinition } from "src/app/sdk";
+import { ModelGameDefinition, ModelNarrativeDefinition } from "src/app/sdk";
 import { NarrativeDialogService } from "src/app/watch-page/narrative/narrative-dialog.service";
 import { NarrativeBuilderService } from "../../editor/narrative-builder.service";
 import { GameDefinitionEditMediatorService } from "../../game-definition-edit-mediator.service";
@@ -10,7 +10,8 @@ import { GameDefinitionEditMediatorService } from "../../game-definition-edit-me
   styleUrls: ["./narrative.component.scss"],
 })
 export class NarrativeComponent implements OnInit {
-  @Input() narratives: Array<ModelNarrativeDefinition>;
+  @Input() gameDefinition: ModelGameDefinition;
+  narratives: ModelNarrativeDefinition[];
 
   constructor(
     private mediator: GameDefinitionEditMediatorService,
@@ -23,6 +24,8 @@ export class NarrativeComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.narratives = this.gameDefinition.narrativeDefinitions;
+    
     this.mediator.onUpdateNarrative.subscribe((narrative) => {
       // search by id in the list
       for (let key in this.narratives) {
@@ -51,6 +54,6 @@ export class NarrativeComponent implements OnInit {
   }
 
   tryOnEnd() {
-    this.service.onEnd(this.narratives);
+    this.service.onEnd(this.gameDefinition);
   }
 }

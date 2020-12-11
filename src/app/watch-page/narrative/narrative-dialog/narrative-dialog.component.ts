@@ -1,10 +1,12 @@
 import { Component, Inject, OnInit } from "@angular/core";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
 import { ModelNarrativeDefinition } from "src/app/sdk";
+import { NarrativeDialogService } from "../narrative-dialog.service";
 
 export interface NarrativeDialogData {
   event: string;
   narratives: ModelNarrativeDefinition[];
+  next: number;
 }
 
 @Component({
