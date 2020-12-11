@@ -50,8 +50,7 @@ export class WatchPageComponent
     OnInit,
     CanComponentDeactivate,
     OnChanges,
-    OnDestroy,
-    AfterViewInit {
+    OnDestroy {
   @Output() cameraChangeSubject = new EventEmitter<CameraChange>();
 
   constructor(
