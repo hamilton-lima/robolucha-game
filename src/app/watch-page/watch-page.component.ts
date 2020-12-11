@@ -71,6 +71,7 @@ export class WatchPageComponent
   notReadyMessage = "";
   matchLinkInvalid = false;
   matchOver = false;
+  leftPage = false;
 
   matchNotReadyInfo: MatchReady;
 
@@ -319,17 +320,19 @@ export class WatchPageComponent
 
   endMatch() {
     this.matchOver = true;
-    if (!this.displayScore) {
+    if (!this.displayScore && !this.leftPage) {
       this.narrative.onEnd(this.gameDefinition);
     }
   }
 
   goBack() {
+    this.leftPage = true;
     this.events.click(this.page, "match-is-over-goback");
-    window.history.back();
+    this.router.navigate(["home"]);
   }
 
   goHome() {
+    this.leftPage = true;
     this.events.click(this.page, "home");
     this.router.navigate(["home"]);
   }
