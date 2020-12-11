@@ -300,7 +300,8 @@ export class WatchPageComponent
   displayMatchOver() {
     if (
       this.gameDefinition.type == "tutorial" &&
-      this.narrative.hasOnEnd(this.gameDefinition.narrativeDefinitions)
+      (this.narrative.hasOnEnd(this.gameDefinition.narrativeDefinitions) ||
+        this.gameDefinition.nextGamedefinitionID)
     ) {
       return false;
     }

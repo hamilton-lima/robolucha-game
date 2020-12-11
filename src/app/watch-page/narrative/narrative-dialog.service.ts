@@ -63,6 +63,10 @@ export class NarrativeDialogService {
 
     if (beforeList.length == 0) {
       console.log("empty narrative, nothing to do here");
+      if (nextGamedefinitionID) {
+        this.nextMatch(nextGamedefinitionID);
+      }
+      
       return;
     }
 
@@ -82,13 +86,14 @@ export class NarrativeDialogService {
 
     const self = this;
     dialogRef.afterClosed().subscribe(() => {
-      self.nextMatch(data.next);
+      if (event == NARRATIVE_EVENT_END) {
+        self.nextMatch(data.next);
+      }
     });
   }
 
   // Find available match for the requested gamedefinition
   nextMatch(nextGamedefinitionID: number) {
-
     if (nextGamedefinitionID) {
       this.api
         .privateAvailableMatchPublicGet()
@@ -103,16 +108,19 @@ export class NarrativeDialogService {
               teamID: 0,
             };
 
-            this.api
-              .privatePlayPost(playRequest)
-              .subscribe((match: ModelMatch) => {
+            this.api.privatePlayPost(playRequest).subscribe(
+              (match: ModelMatch) => {
                 // force refresh when changing only the id
-                this.router.routeReuseStrategy.shouldReuseRoute = function(){return false;};
+                this.router.routeReuseStrategy.shouldReuseRoute = function () {
+                  return false;
+                };
                 this.router.navigate(["watch", match.id]);
-              }, (error) => {
+              },
+              (error) => {
                 this.router.navigate(["home"]);
-                console.log('error', error);
-              });
+                console.log("error", error);
+              }
+            );
           } else {
             this.router.navigate(["home"]);
             console.error(
