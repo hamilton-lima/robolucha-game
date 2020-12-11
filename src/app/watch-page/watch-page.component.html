@@ -11,7 +11,7 @@
         <mat-icon svgIcon="arrow-right"></mat-icon>
       </button>
 
-      <button
+      <button id="go-watchpage"
         mat-raised-button
         [disabled]="!dirty"
         class="mr-2"
@@ -28,7 +28,7 @@
           </mat-expansion-panel>
 
           <mat-expansion-panel [expanded]="true">
-            <mat-expansion-panel-header> On Repeat </mat-expansion-panel-header>
+            <mat-expansion-panel-header id="onrepeat-watchpage"> On Repeat </mat-expansion-panel-header>
             <app-code-editor eventId="repeat"
               [code]="codes.onRepeat"
               (onChange)="updateCode('onRepeat', $event)"
