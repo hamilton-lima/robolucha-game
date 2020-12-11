@@ -106,7 +106,11 @@ export class NarrativeDialogService {
             this.api
               .privatePlayPost(playRequest)
               .subscribe((match: ModelMatch) => {
+                // force refresh when changing only the id
+                this.router.routeReuseStrategy.shouldReuseRoute = function(){return false;};
                 this.router.navigate(["watch", match.id]);
+              }, (error) => {
+                console.log('error', error);
               });
           } else {
             console.error(
