@@ -261,6 +261,7 @@ export class ArenaComponent
     var engine = this.engine;
     var startingPoint;
     var event = this.onPick;
+    var currentPickedMesh;
     var onPointerDown = function (evt) {
       if (evt.button !== 0) {
           return;
@@ -268,6 +269,8 @@ export class ArenaComponent
       var pickInfo = scene.pick(scene.pointerX, scene.pointerY);
       if (pickInfo.pickedMesh.metadata != null && pickInfo.pickedMesh.metadata.type == "wall" || pickInfo.pickedMesh.metadata.type == "region") {
 
+          pickInfo.pickedMesh.isPickable = false;
+          currentPickedMesh = pickInfo.pickedMesh;
           startingPoint = true;
           let id = Number.parseInt(pickInfo.pickedMesh.id);
 
@@ -296,7 +299,7 @@ export class ArenaComponent
   var onPointerMove = function (evt) {
     if (startingPoint) {
       var pick = scene.pick(scene.pointerX, scene.pointerY);
-      var vec = new BABYLON.Vector3(convertPosition3DToComponent(pick.pickedPoint.x),convertPosition3DToComponent(pick.pickedPoint.y),convertPosition3DToComponent(pick.pickedPoint.z));
+      var vec = new BABYLON.Vector3(convertPosition3DToComponent(pick.pickedPoint.x),0,convertPosition3DToComponent(pick.pickedPoint.z));
       event.emit(<Pickable>{
         id: 0,
         name: "",
@@ -315,6 +318,7 @@ export class ArenaComponent
             point:null,
             event:"up",
           });
+          currentPickedMesh.isPickable = true;
           startingPoint = false;
           return;
       }
