@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { FormArray, FormBuilder, FormGroup } from "@angular/forms";
 import { NavigationExtras, Router } from "@angular/router";
-import { DefaultService, ModelGameDefinition } from "../sdk";
+import { DefaultService, ModelClassroom, ModelGameDefinition } from "../sdk";
 import { MapEditorService } from "./map-editor.service";
 
 @Component({
@@ -13,6 +13,7 @@ export class MapEditorComponent implements OnInit {
   name: string;
   definitions: ModelGameDefinition[];
   table: FormGroup;
+  classrooms: ModelClassroom[];
 
   constructor(
     private api: DefaultService,
@@ -26,27 +27,34 @@ export class MapEditorComponent implements OnInit {
 
     // load all the game definitions that this user can customize
     this.api.privateMapeditorGet().subscribe((result) => {
+      this.definitions = result;
+      this.service.setGameDefinitions(result);
     
       // load the list of available matches for this user
       this.api
         .privateAvailableMatchClassroomOwnedGet()
         .subscribe((availableMatches) => {
-          this.definitions = result;
-          this.service.setGameDefinitions(result);
 
-          // create a form for each game definition found
-          result.forEach((gameDefinition) => {
-            const form = this.getForm();
+          // load the list of existing classrooms
+          this.api.dashboardClassroomGet().subscribe((response) => {
+            this.classrooms = response;
+  
+            // create a form for each game definition found
+            result.forEach((gameDefinition) => {
+              const form = this.getForm();
+  
+              form.patchValue(gameDefinition);
+              form.get("gameDefinition").setValue(gameDefinition);
+              if (gameDefinition.media && gameDefinition.media.thumbnail) {
+                form.get("thumbnail").setValue(gameDefinition.media.thumbnail);
+              }
+  
+              const rows = this.table.get("rows") as FormArray;
+              rows.push(form);
+            });
 
-            form.patchValue(gameDefinition);
-            form.get("gameDefinition").setValue(gameDefinition);
-            if (gameDefinition.media && gameDefinition.media.thumbnail) {
-              form.get("thumbnail").setValue(gameDefinition.media.thumbnail);
-            }
-
-            const rows = this.table.get("rows") as FormArray;
-            rows.push(form);
           });
+      
         });
     });
 
@@ -68,6 +76,7 @@ export class MapEditorComponent implements OnInit {
       description: [""],
       thumbnail: [""],
       gameDefinition: [""],
+      classrooms: [],
     });
   }
 

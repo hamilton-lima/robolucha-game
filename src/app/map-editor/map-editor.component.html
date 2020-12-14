@@ -33,16 +33,17 @@
       <div class="col" [formGroup]="table">
         <table class="table definition-table">
           <thead class="text-nowrap">
+            <th></th>
             <th>Name</th>
             <th>Label</th>
-            <th></th>
+            <th>Classroom available</th>
           </thead>
           <tbody>
             <ng-container
               formArrayName="rows"
               *ngFor="let group of getRows().controls; let i = index"
             >
-              <tr>
+              <tr [formGroupName]="i">
                 <td>
                   <img
                   class="thumbnail"
@@ -55,6 +56,15 @@
                 <td>
                   {{ group.get("label").value }}
                 </td>
+
+                <td>
+                  <mat-form-field>
+                    <mat-select formControlName="classrooms" multiple>
+                      <mat-option *ngFor="let classroom of classrooms" [value]="classroom.id">{{classroom.name}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </td>
+
                 <td>
                   <button mat-icon-button class="mr-2"                     (click)="edit(group.get('id').value)"
                   >
