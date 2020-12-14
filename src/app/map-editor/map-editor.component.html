@@ -31,7 +31,7 @@
     </div> -->
     <div class="row">
       <div class="col" [formGroup]="table">
-        <table class="table table-border">
+        <table class="table definition-table">
           <thead class="text-nowrap">
             <th>Name</th>
             <th>Label</th>
@@ -44,20 +44,23 @@
             >
               <tr>
                 <td>
+                  <img
+                  class="thumbnail"
+                  *ngIf="group.get('thumbnail').value"
+                  [src]="group.get('thumbnail').value"
+                />                </td>
+                <td>
                   {{ group.get("name").value }}
                 </td>
                 <td>
                   {{ group.get("label").value }}
                 </td>
                 <td>
-                  <button
-                    color="accent"
-                    class="mr-2"
-                    (click)="edit(group.get('id').value)"
-                    mat-raised-button
+                  <button mat-icon-button class="mr-2"                     (click)="edit(group.get('id').value)"
                   >
-                    EDIT
+                    <mat-icon svgIcon="pencil"></mat-icon>
                   </button>
+
                 </td>
               </tr>
             </ng-container>
