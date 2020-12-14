@@ -23,23 +23,31 @@ export class MapEditorComponent implements OnInit {
 
   ngOnInit() {
     this.definitions = [];
+
+    // load all the game definitions that this user can customize
     this.api.privateMapeditorGet().subscribe((result) => {
-      this.definitions = result;
-      this.service.setGameDefinitions(result);
+    
+      // load the list of available matches for this user
+      this.api
+        .privateAvailableMatchClassroomOwnedGet()
+        .subscribe((availableMatches) => {
+          this.definitions = result;
+          this.service.setGameDefinitions(result);
 
-      // create a form for each game definition found
-      result.forEach((gameDefinition) => {
-        const form = this.getForm();
-        
-        form.patchValue(gameDefinition);
-        form.get("gameDefinition").setValue(gameDefinition);
-        if (gameDefinition.media && gameDefinition.media.thumbnail) {
-          form.get("thumbnail").setValue(gameDefinition.media.thumbnail);
-        }
+          // create a form for each game definition found
+          result.forEach((gameDefinition) => {
+            const form = this.getForm();
 
-        const rows =  this.table.get('rows') as FormArray;
-        rows.push(form);
-      });
+            form.patchValue(gameDefinition);
+            form.get("gameDefinition").setValue(gameDefinition);
+            if (gameDefinition.media && gameDefinition.media.thumbnail) {
+              form.get("thumbnail").setValue(gameDefinition.media.thumbnail);
+            }
+
+            const rows = this.table.get("rows") as FormArray;
+            rows.push(form);
+          });
+        });
     });
 
     this.table = this.fb.group({
@@ -48,7 +56,7 @@ export class MapEditorComponent implements OnInit {
   }
 
   getRows() {
-    return this.table.get('rows') as FormArray;
+    return this.table.get("rows") as FormArray;
   }
 
   getForm(): FormGroup {
