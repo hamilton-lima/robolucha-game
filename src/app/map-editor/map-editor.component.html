@@ -6,14 +6,19 @@
 
     <div class="row pb-3">
       <div class="col-6">
-        <button color="accent" class="mr-2" (click)="create()" mat-raised-button>
+        <button
+          color="accent"
+          class="mr-2"
+          (click)="create()"
+          mat-raised-button
+        >
           ADD
         </button>
       </div>
       <div class="col-6 text-right"></div>
     </div>
 
-    <div class="row">
+    <!-- <div class="row">
       <app-game-definition-card
         class="game-definition-card col-sm-10 col-md-5 col-lg-3 mb-3"
         *ngFor="let definition of definitions"
@@ -22,6 +27,42 @@
       ></app-game-definition-card>
       <div *ngIf="definitions.length == 0">
         <h3>Click on ADD to create some awesomeness!</h3>
+      </div>
+    </div> -->
+    <div class="row">
+      <div class="col" [formGroup]="table">
+        <table class="table table-border">
+          <thead class="text-nowrap">
+            <th>Name</th>
+            <th>Label</th>
+            <th></th>
+          </thead>
+          <tbody>
+            <ng-container
+              formArrayName="rows"
+              *ngFor="let group of getRows().controls; let i = index"
+            >
+              <tr>
+                <td>
+                  {{ group.get("name").value }}
+                </td>
+                <td>
+                  {{ group.get("label").value }}
+                </td>
+                <td>
+                  <button
+                    color="accent"
+                    class="mr-2"
+                    (click)="edit(group.get('id').value)"
+                    mat-raised-button
+                  >
+                    EDIT
+                  </button>
+                </td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
