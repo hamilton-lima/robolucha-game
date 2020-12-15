@@ -32,6 +32,7 @@ import { ArenaData3D } from "./arena.data3D";
 import { FPSRecorderService, FPSInfo } from "./fps.recorder.service";
 import { AudioService } from "../shared/audio.service";
 import { Camera3DService, CameraChange } from "./camera3-d.service";
+import { ArenaMouseService } from "./arena-mouse.service";
 
 class SavedCamera {
   target: BABYLON.Vector3;
@@ -90,14 +91,15 @@ export class ArenaComponent
   cameraZoomLevel = 0;
   cameraZoomLevels = [-5, 20];
 
-  // private shadowGenerator: BABYLON.ShadowGenerator;
+  // private shadowGenerator: BABYLON.ShadowGenerator;,
 
   constructor(
     private builder: TextureBuilder,
     private api: DefaultService,
     private fpsRecorder: FPSRecorderService,
     private audio: AudioService,
-    private cameraService: Camera3DService
+    private cameraService: Camera3DService,
+    private arenaMouse: ArenaMouseService
   ) {
     this.resetState();
     this.data3D = new ArenaData3D();
@@ -257,7 +259,7 @@ export class ArenaComponent
     this.engine.loadingUIText = "Loading the arena";
 
     this.scene = new BABYLON.Scene(this.engine);
-    var scene = this.scene;
+    /*var scene = this.scene;
     var engine = this.engine;
     var startingPoint;
     var event = this.onPick;
@@ -322,17 +324,7 @@ export class ArenaComponent
           startingPoint = false;
           return;
       }
-  }
-
-  this.engine.getRenderingCanvas().addEventListener("pointerdown", onPointerDown, false);
-  this.engine.getRenderingCanvas().addEventListener("pointerup", onPointerUp, false);
-  this.engine.getRenderingCanvas().addEventListener("pointermove", onPointerMove, false);
-
-  this.scene.onDispose = function () {
-    this.engine.getRenderingCanvas().removeEventListener("pointerdown", onPointerDown);
-    this.engine.getRenderingCanvas().removeEventListener("pointerup", onPointerUp);
-    this.engine.getRenderingCanvas().removeEventListener("pointermove", onPointerMove);
-  }
+  }*/
 
     /*var start = false;
     this.scene.onPointerObservable.add(
@@ -426,6 +418,12 @@ export class ArenaComponent
     }
 
     this.audio.arenaMusic(this.scene);
+
+    
+    this.arenaMouse.setup(this.scene, this.gameDefinition, this.camera, this.engine, this.onPick);
+    this.engine.getRenderingCanvas().addEventListener("pointerdown", this.arenaMouse.getOnPointerDown(), false);
+    this.engine.getRenderingCanvas().addEventListener("pointerup", this.arenaMouse.getOnPointerUp(), false);
+    this.engine.getRenderingCanvas().addEventListener("pointermove", this.arenaMouse.getOnPointerMove(), false);
   }
 
   
