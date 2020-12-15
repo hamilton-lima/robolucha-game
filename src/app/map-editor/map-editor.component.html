@@ -6,14 +6,19 @@
 
     <div class="row pb-3">
       <div class="col-6">
-        <button color="accent" class="mr-2" (click)="create()" mat-raised-button>
+        <button
+          color="accent"
+          class="mr-2"
+          (click)="create()"
+          mat-raised-button
+        >
           ADD
         </button>
       </div>
       <div class="col-6 text-right"></div>
     </div>
 
-    <div class="row">
+    <!-- <div class="row">
       <app-game-definition-card
         class="game-definition-card col-sm-10 col-md-5 col-lg-3 mb-3"
         *ngFor="let definition of definitions"
@@ -22,6 +27,55 @@
       ></app-game-definition-card>
       <div *ngIf="definitions.length == 0">
         <h3>Click on ADD to create some awesomeness!</h3>
+      </div>
+    </div> -->
+    <div class="row">
+      <div class="col" [formGroup]="table">
+        <table class="table definition-table">
+          <thead class="text-nowrap">
+            <th></th>
+            <th>Name</th>
+            <th>Label</th>
+            <th>Classroom available</th>
+          </thead>
+          <tbody>
+            <ng-container
+              formArrayName="rows"
+              *ngFor="let group of getRows().controls; let i = index"
+            >
+              <tr [formGroupName]="i">
+                <td>
+                  <img
+                  class="thumbnail"
+                  *ngIf="group.get('thumbnail').value"
+                  [src]="group.get('thumbnail').value"
+                />                </td>
+                <td>
+                  {{ group.get("name").value }}
+                </td>
+                <td>
+                  {{ group.get("label").value }}
+                </td>
+
+                <td>
+                  <mat-form-field>
+                    <mat-select formControlName="classrooms" multiple (selectionChange)="availabilityChanged(group.get('id').value, $event)">
+                      <mat-option *ngFor="let classroom of classrooms" [value]="classroom.id">{{classroom.name}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </td>
+
+                <td>
+                  <button mat-icon-button class="mr-2"                     (click)="edit(group.get('id').value)"
+                  >
+                    <mat-icon svgIcon="pencil"></mat-icon>
+                  </button>
+
+                </td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>

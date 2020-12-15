@@ -27,6 +27,7 @@ import { ModelConfig } from '../model/modelConfig';
 import { ModelFindLuchadorWithGamedefinition } from '../model/modelFindLuchadorWithGamedefinition';
 import { ModelGameComponent } from '../model/modelGameComponent';
 import { ModelGameDefinition } from '../model/modelGameDefinition';
+import { ModelGameDefinitionClassroomAvailability } from '../model/modelGameDefinitionClassroomAvailability';
 import { ModelJoinMatch } from '../model/modelJoinMatch';
 import { ModelLevelGroup } from '../model/modelLevelGroup';
 import { ModelMatch } from '../model/modelMatch';
@@ -1202,6 +1203,48 @@ export class DefaultService {
     }
 
     /**
+     * find available matches by classroom owned by the user
+     * 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public privateAvailableMatchClassroomOwnedGet(observe?: 'body', reportProgress?: boolean): Observable<Array<ModelAvailableMatch>>;
+    public privateAvailableMatchClassroomOwnedGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<ModelAvailableMatch>>>;
+    public privateAvailableMatchClassroomOwnedGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<ModelAvailableMatch>>>;
+    public privateAvailableMatchClassroomOwnedGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // authentication (ApiKeyAuth) required
+        if (this.configuration.apiKeys["Authorization"]) {
+            headers = headers.set('Authorization', this.configuration.apiKeys["Authorization"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        let httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set("Accept", httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json'
+        ];
+
+        return this.httpClient.get<Array<ModelAvailableMatch>>(`${this.basePath}/private/available-match-classroom-owned`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * find all public available matches
      * 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -1783,6 +1826,57 @@ export class DefaultService {
         }
 
         return this.httpClient.put<Array<ModelGameDefinition>>(`${this.basePath}/private/mapeditor`,
+            request,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * update gamedefition availability by classroom
+     * 
+     * @param request availability
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public privateMapeditorUpdateClassroomMapAvailabilityPost(request: ModelGameDefinitionClassroomAvailability, observe?: 'body', reportProgress?: boolean): Observable<string>;
+    public privateMapeditorUpdateClassroomMapAvailabilityPost(request: ModelGameDefinitionClassroomAvailability, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
+    public privateMapeditorUpdateClassroomMapAvailabilityPost(request: ModelGameDefinitionClassroomAvailability, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
+    public privateMapeditorUpdateClassroomMapAvailabilityPost(request: ModelGameDefinitionClassroomAvailability, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (request === null || request === undefined) {
+            throw new Error('Required parameter request was null or undefined when calling privateMapeditorUpdateClassroomMapAvailabilityPost.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (ApiKeyAuth) required
+        if (this.configuration.apiKeys["Authorization"]) {
+            headers = headers.set('Authorization', this.configuration.apiKeys["Authorization"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        let httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set("Accept", httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+            'application/json'
+        ];
+        let httpContentTypeSelected:string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set("Content-Type", httpContentTypeSelected);
+        }
+
+        return this.httpClient.post<string>(`${this.basePath}/private/mapeditor/update-classroom-map-availability`,
             request,
             {
                 withCredentials: this.configuration.withCredentials,
