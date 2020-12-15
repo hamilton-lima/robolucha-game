@@ -59,7 +59,7 @@
 
                 <td>
                   <mat-form-field>
-                    <mat-select formControlName="classrooms" multiple>
+                    <mat-select formControlName="classrooms" multiple (selectionChange)="availabilityChanged($event)">
                       <mat-option *ngFor="let classroom of classrooms" [value]="classroom.id">{{classroom.name}}</mat-option>
                     </mat-select>
                   </mat-form-field>

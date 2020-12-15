@@ -29,32 +29,43 @@ export class MapEditorComponent implements OnInit {
     this.api.privateMapeditorGet().subscribe((result) => {
       this.definitions = result;
       this.service.setGameDefinitions(result);
-    
+
       // load the list of available matches for this user
       this.api
         .privateAvailableMatchClassroomOwnedGet()
         .subscribe((availableMatches) => {
-
           // load the list of existing classrooms
           this.api.dashboardClassroomGet().subscribe((response) => {
             this.classrooms = response;
-  
+
             // create a form for each game definition found
             result.forEach((gameDefinition) => {
               const form = this.getForm();
-  
+
               form.patchValue(gameDefinition);
               form.get("gameDefinition").setValue(gameDefinition);
+
+              // set thumbnail if exists
               if (gameDefinition.media && gameDefinition.media.thumbnail) {
                 form.get("thumbnail").setValue(gameDefinition.media.thumbnail);
               }
-  
+
+              // find the available matches for the gamedefinition
+              const filtered = availableMatches.filter((single) => {
+                return single.gameDefinition.id == gameDefinition.id;
+              });
+
+              // get the list of classrooms from the available matches
+              const classrooms = filtered.map((availableMatch) => {
+                return availableMatch.classroomID;
+              });
+
+              form.get("classrooms").setValue(classrooms);
+
               const rows = this.table.get("rows") as FormArray;
               rows.push(form);
             });
-
           });
-      
         });
     });
 
@@ -86,5 +97,9 @@ export class MapEditorComponent implements OnInit {
 
   edit(id) {
     this.router.navigate(["maps/edit", id]);
+  }
+
+  availabilityChanged(changed) {
+    console.log("changed", changed.value);
   }
 }
