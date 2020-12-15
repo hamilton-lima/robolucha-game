@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { FormArray, FormBuilder, FormGroup } from "@angular/forms";
 import { NavigationExtras, Router } from "@angular/router";
-import { DefaultService, ModelClassroom, ModelGameDefinition } from "../sdk";
+import { DefaultService, ModelClassroom, ModelGameDefinition, ModelGameDefinitionClassroomAvailability } from "../sdk";
 import { MapEditorService } from "./map-editor.service";
 
 @Component({
@@ -99,7 +99,14 @@ export class MapEditorComponent implements OnInit {
     this.router.navigate(["maps/edit", id]);
   }
 
-  availabilityChanged(changed) {
+  availabilityChanged(gameDefinitionID, changed) {
     console.log("changed", changed.value);
+    const request = <ModelGameDefinitionClassroomAvailability>{
+      classrooms: changed.value,
+      gameDefinitionID: gameDefinitionID
+    }
+    this.api.privateMapeditorUpdateClassroomMapAvailabilityPost(request).subscribe(()=>{
+      console.log('updated');
+    })
   }
 }
