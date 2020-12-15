@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
+import { MapEditorService } from "src/app/map-editor/map-editor.service";
 import { ModelGameDefinition, ModelMediaRequest } from "src/app/sdk";
 import { FileUploadService } from "src/app/shared/file-upload/file-upload.service";
 import { FormUtilsService } from "src/app/shared/form-utils.service";
@@ -15,6 +16,7 @@ export class BasicInfoEditorComponent implements OnInit {
   gameDefinition: ModelGameDefinition;
   readonly NOTFOUND_IMAGE = "assets/maps/image-not-found.png";
   preview = this.NOTFOUND_IMAGE;
+  definitions: ModelGameDefinition[];
 
   form = this.formBuilder.group({
     name: ["", Validators.required],
@@ -25,6 +27,7 @@ export class BasicInfoEditorComponent implements OnInit {
     arenaHeight: ["", { updateOn: "blur" }],
     minParticipants: [""],
     maxParticipants: [""],
+    nextGamedefinitionID: [""],
     file: [""],
   });
 
@@ -32,13 +35,19 @@ export class BasicInfoEditorComponent implements OnInit {
     private mediator: GameDefinitionEditMediatorService,
     private formBuilder: FormBuilder,
     private uploader: FileUploadService,
-    private formUtil: FormUtilsService
+    private formUtil: FormUtilsService,
+    private service: MapEditorService
   ) {}
 
   ngOnInit() {
     this.mediator.onEditBasicInfo.subscribe((gameDefinition) => {
       this.gameDefinition = gameDefinition;
       this.form.patchValue(gameDefinition);
+      
+      // all game definitions except this one
+      this.definitions = this.service
+        .getGameDefinitions()
+        .filter((definition) => definition.id != gameDefinition.id);
 
       if (gameDefinition.media) {
         this.preview = gameDefinition.media.thumbnail;

@@ -20,9 +20,11 @@ import { AlertService } from "src/app/shared/alert.service";
 import { EventsService } from "src/app/shared/events.service";
 import { FileUploadService } from "src/app/shared/file-upload/file-upload.service";
 import { MatchState } from "src/app/watch-match/watch-match.model";
+import { MapEditorService } from "../map-editor.service";
 import { GameDefinitionEditMediatorService } from "./game-definition-edit-mediator.service";
 import { CurrentEditorEnum } from "./game-definition-edit.model";
 import { MatchStateBuilderService } from "./match-state-builder.service";
+import * as moment from "moment";
 
 @Component({
   selector: "app-game-definition-edit",
@@ -39,7 +41,7 @@ export class GameDefinitionEditComponent implements OnInit {
   @ViewChild("drawer") editorDrawer: MatDrawer;
   @ViewChild("arena") arena: ArenaComponent;
   matchState = new EventEmitter<MatchState>();
-  
+
   @Output() onPickElement = new EventEmitter<Pickable>();
 
   currentEditor: CurrentEditorEnum;
@@ -54,7 +56,8 @@ export class GameDefinitionEditComponent implements OnInit {
     private alert: AlertService,
     private builder: MatchStateBuilderService,
     private cdRef: ChangeDetectorRef,
-    private uploader: FileUploadService
+    private uploader: FileUploadService,
+    private service: MapEditorService
   ) {}
 
   refreshEditorDrawer(nextEditor: CurrentEditorEnum) {
@@ -68,6 +71,8 @@ export class GameDefinitionEditComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.service.init();
+
     this.mediator.onEditBasicInfo.subscribe((current) => {
       if (current && this.editorDrawer) {
         this.refreshEditorDrawer(CurrentEditorEnum.BasicInfo);
@@ -276,10 +281,9 @@ export class GameDefinitionEditComponent implements OnInit {
     this.onPickElement.emit(<Pickable>{
       id: target.id,
       name: target.name,
-      point:target.point,
-      event:target.event,
+      point: target.point,
+      event: target.event,
     });
-
   }
 
   screenshot() {
@@ -293,7 +297,7 @@ export class GameDefinitionEditComponent implements OnInit {
       };
       this.uploader.upload(request).subscribe((media) => {
         this.gameDefinition.media = media;
-        console.log('media', media);
+        console.log("media", media);
         this.dirty = true;
       });
     });
@@ -308,4 +312,19 @@ export class GameDefinitionEditComponent implements OnInit {
     return true;
   }
 
+  download() {
+    const json = JSON.stringify(this.gameDefinition);
+    const encoded = encodeURIComponent(json);
+    const element = document.createElement("a");
+    const now = moment().format();
+    const name =
+      "gamedefinition-" + this.gameDefinition.id + "-" + now + ".json";
+
+    element.setAttribute("href", "data:text/json;charset=UTF-8," + encoded);
+    element.setAttribute("download", name);
+    element.style.display = "none";
+    document.body.appendChild(element);
+    element.click(); 
+    document.body.removeChild(element);
+  }
 }

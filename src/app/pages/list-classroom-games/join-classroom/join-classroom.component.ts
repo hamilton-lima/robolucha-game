@@ -4,39 +4,44 @@ import {
   TemplateRef,
   ViewChild,
   EventEmitter,
-  Output
+  Output,
 } from "@angular/core";
+import { MatDialogRef } from "@angular/material";
 import { DefaultService, ModelClassroom } from "src/app/sdk";
 import { AlertService } from "src/app/shared/alert.service";
 
 @Component({
   selector: "app-join-classroom",
   templateUrl: "./join-classroom.component.html",
-  styleUrls: ["./join-classroom.component.css"]
+  styleUrls: ["./join-classroom.component.css"],
 })
 export class JoinClassroomComponent implements OnInit {
-  @Output() onJoin = new EventEmitter<ModelClassroom>();
-
   code: string = "";
   classroom: ModelClassroom;
 
-  constructor(private api: DefaultService, public alert: AlertService) {}
+  constructor(
+    private api: DefaultService,
+    public alert: AlertService,
+    private dialogRef: MatDialogRef<JoinClassroomComponent>
+  ) {}
 
   ngOnInit() {}
 
   join() {
-    // // console.log("join classroom", this.code);
     this.api
       .privateJoinClassroomAccessCodePost(this.code)
       .subscribe((classroom: ModelClassroom) => {
-        // // console.log("joined", classroom);
         if (classroom == null) {
           this.alert.warning(
             "INVALID Code, please check with your teacher.",
             "CLOSE"
           );
         } else {
-          this.onJoin.emit(classroom);
+          this.alert.info(
+            "Hurray! You joinned classroom: " + classroom.name,
+            "CLOSE"
+          );
+          this.dialogRef.close();
         }
       });
   }

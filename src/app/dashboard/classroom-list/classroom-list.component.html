@@ -10,11 +10,13 @@
 
   <div class="row">
     <app-classroom-card
-      (click)="listStudents(classroom.id)"
       class="classroom-card"
       *ngFor="let classroom of classrooms"
       [classroom]="classroom"
+      (onStudents)="listStudents(classroom.id)"
+      (onAssignments)="listAssignments(classroom.id)"
     ></app-classroom-card>
+
     <div *ngIf="classrooms.length <= 0">
       <h4>There are no classrooms</h4>
     </div>

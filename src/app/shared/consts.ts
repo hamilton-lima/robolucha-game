@@ -1,0 +1,6 @@
+export const NARRATIVE_EVENT_START = "onStart";
+export const NARRATIVE_EVENT_END = "onEnd";
+export const NARRATIVE_EVENTS = [NARRATIVE_EVENT_START, NARRATIVE_EVENT_END];
+
+export const NARRATIVE_TYPE_IMAGE = "image";
+export const NARRATIVE_TYPES = [NARRATIVE_TYPE_IMAGE];

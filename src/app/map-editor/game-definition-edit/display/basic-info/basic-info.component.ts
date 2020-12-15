@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { GameDefinitionEditMediatorService } from "src/app/map-editor/game-definition-edit/game-definition-edit-mediator.service";
 import { CurrentEditorEnum } from "src/app/map-editor/game-definition-edit/game-definition-edit.model";
+import { MapEditorService } from "src/app/map-editor/map-editor.service";
 import { ModelGameDefinition } from "src/app/sdk";
 
 @Component({
@@ -8,13 +9,21 @@ import { ModelGameDefinition } from "src/app/sdk";
   templateUrl: "./basic-info.component.html",
   styleUrls: ["./basic-info.component.scss"],
 })
-export class BasicInfoComponent implements OnInit {
+export class BasicInfoComponent {
   @Input() gameDefinition: ModelGameDefinition;
 
-  constructor(private mediator: GameDefinitionEditMediatorService) {}
-  ngOnInit() {}
+  constructor(
+    private mediator: GameDefinitionEditMediatorService,
+    private service: MapEditorService
+  ) {}
 
-  edit(){
+  nextLabel(){
+    return this.service.getGameDefinitionLabel(
+      this.gameDefinition.nextGamedefinitionID
+    );
+  }
+
+  edit() {
     this.mediator.onEditBasicInfo.next(this.gameDefinition);
   }
 }

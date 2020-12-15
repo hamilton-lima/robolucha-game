@@ -12,14 +12,15 @@
     <button mat-raised-button [disabled]="!dirty" class="mr-2" (click)="save()">
       SAVE
     </button>
+    <button mat-raised-button class="mr-2" (click)="download()">
+      DOWNLOAD
+    </button>
     <hr />
 
     <mat-accordion multi="true">
       <app-basic-info [gameDefinition]="gameDefinition"></app-basic-info>
 
-      <app-narrative
-        [narratives]="gameDefinition.narrativeDefinitions"
-      ></app-narrative>
+      <app-narrative [gameDefinition]="gameDefinition"></app-narrative>
 
       <app-game-definition-code
         [gameDefinition]="gameDefinition"
@@ -72,21 +73,17 @@
     >
       <app-single-scene-component-editor></app-single-scene-component-editor>
     </div>
-   
-    <div
-      *ngIf="isNarrativeCurrent()"
-      class="mt-2 right-panel-scroll"
-    >
+
+    <div *ngIf="isNarrativeCurrent()" class="mt-2 right-panel-scroll">
       <app-narrative-editor></app-narrative-editor>
     </div>
-
   </mat-sidenav>
 
   <section>
     <button mat-icon-button class="toogle" (click)="drawer.toggle()">
       <mat-icon svgIcon="arrow-left"></mat-icon>
     </button>
-    
+
     <button mat-icon-button class="screenshot" (click)="screenshot()">
       <mat-icon svgIcon="camera"></mat-icon>
     </button>

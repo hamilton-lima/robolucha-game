@@ -3,13 +3,10 @@ import { GameDefinition } from "../watch-match/watch-match.model";
 import { Pickable } from "src/app/arena/arena.component";
 import { SharedConstants } from "./shared.constants";
 
-
-
 export class DataMouse {
   startingPoint : boolean;
   currentPickedMesh : BABYLON.AbstractMesh;
 }
-  
 
 @Injectable({
   providedIn: 'root'
@@ -71,7 +68,7 @@ export class ArenaMouseService {
 
     var convertPosition3DToComponent = function (n) {
       const result: number =
-        n * gameDefinition.luchadorSize / SharedConstants.LUCHADOR_MODEL_WIDTH; //* 17.4;
+        n * gameDefinition.luchadorSize / SharedConstants.LUCHADOR_MODEL_WIDTH;
   
       return result;
     }

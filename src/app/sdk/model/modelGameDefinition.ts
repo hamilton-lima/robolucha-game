@@ -48,6 +48,7 @@ export interface ModelGameDefinition {
     moveSpeed?: number;
     name?: string;
     narrativeDefinitions?: Array<ModelNarrativeDefinition>;
+    nextGamedefinitionID?: number;
     ownerUserID?: number;
     punchAngle?: number;
     punchCoolDown?: number;

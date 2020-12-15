@@ -35,7 +35,9 @@ import {
 } from "../watch-match/watch-match.service";
 import { MatchReady } from "./watch-page.model";
 import { CameraChange } from "../arena/camera3-d.service";
-import {CodeEditorEvent} from '../shared/code-editor/code-editor.component';
+import { CodeEditorEvent } from "../shared/code-editor/code-editor.component";
+import { NarrativeDialogService } from "./narrative/narrative-dialog.service";
+import { BlocklyConfig } from "../shared/code-blockly/code-blockly.service";
 
 @Component({
   selector: "app-watch-page",
@@ -48,9 +50,7 @@ export class WatchPageComponent
     OnInit,
     CanComponentDeactivate,
     OnChanges,
-    OnDestroy,
-    AfterViewInit {
-
+    OnDestroy {
   @Output() cameraChangeSubject = new EventEmitter<CameraChange>();
 
   constructor(
@@ -62,13 +62,15 @@ export class WatchPageComponent
     private cdRef: ChangeDetectorRef,
     private alert: AlertService,
     private router: Router,
-    private watchService: WatchMatchService
+    private watchService: WatchMatchService,
+    private narrative: NarrativeDialogService
   ) {}
 
   matchReady = false;
   notReadyMessage = "";
   matchLinkInvalid = false;
   matchOver = false;
+  leftPage = false;
 
   matchNotReadyInfo: MatchReady;
 
@@ -81,11 +83,12 @@ export class WatchPageComponent
   page: string;
   tour: Shepherd.Tour;
 
-  currentCamera : number = 0;
+  currentCamera: number = 0;
 
   matchID: number;
   luchador: ModelGameComponent;
   gameDefinition: ModelGameDefinition;
+  useOther = BlocklyConfig.DefaultWithOther;
 
   readonly matchStateSubject = new Subject<MatchState>();
   readonly messageSubject = new Subject<Message>();
@@ -104,49 +107,19 @@ export class WatchPageComponent
 
   readonly steps: ITourStep[] = [
     {
-      title: "Know your luchador",
+      title: "YOU ARE THE BOSS!",
       text:
-        '<img src="assets/help/luchador.jpg"><br>This is your luchador, you control them by writing instructions, know as CODE',
-      attachTo: { element: "#selector-luchador", on: "top" },
-    },
-    {
-      title: "Move to the green",
-      text:
-        "When in a tutorial your objective is move your character to the GREEN area",
-      attachTo: { element: "#selector-green-area", on: "top" },
-    },
-    {
-      title: "Editting some code",
-      text: "Click here to edit your luchador code",
-      attachTo: { element: "#button-edit-code", on: "top" },
-      offset: "0 20px",
-    },
-    {
-      title: "What is going on here?",
-      text:
-        "<strong>move(10)</strong> is your first instruction to your luchador,<br>" +
-        '<strong>"move"</strong> is the action that your luchador will do <strong>10</strong>' +
-        " is the intensity of the action",
-      attachTo: { element: ".ace-content", on: "left" },
-      offset: "0 20px",
+        'Try some commands here, MOVE for example<br>'+
+        '<img src="assets/help/move10.gif">',
+      attachTo: { element: "#mat-expansion-panel-header-1", on: "left" },
     },
     {
       title: "Let's see some action",
-      text: "click save to send the code to the luchador",
-      attachTo: { element: "#button-code-editor-save", on: "top" },
+      text: "Then click GO! to send the orders to your luchador robot",
+      attachTo: { element: "#go-watchpage", on: "top" },
       offset: "0 20px",
     },
   ];
-
-  ngAfterViewInit() {
-    const user = this.userService.getUser();
-
-    if (!user.settings.playedTutorial) {
-      user.settings.playedTutorial = true;
-      this.userService.updateSettings(user.settings);
-      this.tour = this.shepherd.show(this.steps);
-    }
-  }
 
   // possible states of a match
   onMatchNotReady: Subject<ModelMatch> = new Subject();
@@ -158,6 +131,7 @@ export class WatchPageComponent
     this.page = this.route.snapshot.url.join("/");
     this.luchador = this.route.snapshot.data.luchador;
     this.gameDefinition = this.route.snapshot.data.gameDefinition;
+    this.narrative.onStart(this.gameDefinition.narrativeDefinitions);
 
     this.matchID = Number.parseInt(this.route.snapshot.paramMap.get("id"));
     this.gameDefinition = null;
@@ -258,6 +232,7 @@ export class WatchPageComponent
   }
 
   tryToStartMatch() {
+
     this.api.privateMatchSingleGet(this.matchID).subscribe((match) => {
       // ready!
       if (match.status == "RUNNING") {
@@ -291,11 +266,24 @@ export class WatchPageComponent
     }
   }
 
+  displayMatchOver() {
+    if (
+      this.gameDefinition.type == "tutorial" &&
+      (this.narrative.hasOnEnd(this.gameDefinition.narrativeDefinitions) ||
+        this.gameDefinition.nextGamedefinitionID)
+    ) {
+      return false;
+    }
+
+    return true;
+  }
+
   startMatch(match: ModelMatch) {
     this.api
       .privateGameDefinitionIdIdGet(match.gameDefinitionID)
       .subscribe((gameDefinition) => {
         this.gameDefinition = gameDefinition;
+        this.showHelp();
         this.refreshEditor();
         this.defineMatchOverTitle(gameDefinition);
       });
@@ -303,37 +291,41 @@ export class WatchPageComponent
 
   endMatch() {
     this.matchOver = true;
+    if (!this.displayScore && !this.leftPage) {
+      this.narrative.onEnd(this.gameDefinition);
+    }
   }
 
   goBack() {
+    this.leftPage = true;
     this.events.click(this.page, "match-is-over-goback");
-    window.history.back();
+    this.router.navigate(["home"]);
   }
 
   goHome() {
+    this.leftPage = true;
     this.events.click(this.page, "home");
     this.router.navigate(["home"]);
   }
 
   cameras = new Map([
-    [ 0, CameraChange.Tower],
-    [ 1, CameraChange.ThirdPerson],
-    [ 2, CameraChange.FirstPerson],
-    [ 3, CameraChange.Crazy]
+    [0, CameraChange.Tower],
+    [1, CameraChange.ThirdPerson],
+    [2, CameraChange.FirstPerson],
+    [3, CameraChange.Crazy],
   ]);
 
-  changeCamera(){
+  changeCamera() {
     this.currentCamera++;
-    if(this.currentCamera > 3){
+    if (this.currentCamera > 3) {
       this.currentCamera = 0;
     }
     this.cameraChangeSubject.emit(this.cameras.get(this.currentCamera));
   }
 
-  @HostListener('window:keydown', ['$event'])
+  @HostListener("window:keydown", ["$event"])
   keyEvent(event: KeyboardEvent) {
-
-    if(event.code == "KeyC"){
+    if (event.code == "KeyC") {
       this.changeCamera();
     }
   }
@@ -362,6 +354,16 @@ export class WatchPageComponent
   ngOnChanges(changes: SimpleChanges) {
     this.refreshEditor();
     this.cdRef.detectChanges();
+  }
+
+  showHelp(){
+    const user = this.userService.getUser();
+
+    if (!user.settings.playedTutorial) {
+      user.settings.playedTutorial = true;
+      this.userService.updateSettings(user.settings);
+      this.tour = this.shepherd.show(this.steps);
+    }
   }
 
   /** Loads codes from luchador to the editor, filter by gameDefinition */
@@ -421,7 +423,7 @@ export class WatchPageComponent
   updateCode(event: string, codeEditorEvent: CodeEditorEvent) {
     this.dirty = true;
     this.codes[event].script = codeEditorEvent.code;
-    this.codes[event].blockly = codeEditorEvent.blocklyDefinition
+    this.codes[event].blockly = codeEditorEvent.blocklyDefinition;
     this.cdRef.detectChanges();
   }
 

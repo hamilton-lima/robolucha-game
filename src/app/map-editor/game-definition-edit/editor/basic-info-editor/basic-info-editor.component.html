@@ -122,8 +122,22 @@
   </div>
 
   <div class="row">
-    <div class="col"><app-file-upload 
-      formControlName="file"></app-file-upload><br>
-      <img [src]="preview"></div>
+    <div class="col">
+      <mat-form-field class="col-10 mt-3 mx-auto">
+        <mat-label>Next map</mat-label>
+        <mat-select matInput formControlName="nextGamedefinitionID">
+          <mat-option [value]="0">None</mat-option>
+            <mat-option *ngFor="let definition of definitions" 
+            [value]="definition.id">{{definition.label}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <app-file-upload formControlName="file"></app-file-upload><br />
+      <img [src]="preview" />
+    </div>
   </div>
 </div>

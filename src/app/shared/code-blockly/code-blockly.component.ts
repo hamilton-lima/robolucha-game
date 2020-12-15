@@ -8,7 +8,7 @@ import {
   ViewChild,
 } from "@angular/core";
 import { timer } from "rxjs";
-import { BlocklyService } from "./code-blockly.service";
+import { BlocklyConfig, BlocklyService } from "./code-blockly.service";
 import { CodeEditorEvent } from "../code-editor/code-editor.component";
 
 @Component({
@@ -25,7 +25,7 @@ export class CodeBlocklyComponent implements OnInit {
   id:string;
 
   @Input() blocklyDefinition: string;
-  @Input() useOther = false;
+  @Input() config: BlocklyConfig;
   @Output() codeChanged = new EventEmitter<CodeEditorEvent>();
 
   constructor(private service: BlocklyService) {
@@ -36,7 +36,7 @@ export class CodeBlocklyComponent implements OnInit {
     timer(500).subscribe((done) => {
       this.workspace = this.service.inject(
         this.id,
-        this.useOther,
+        this.config,
         this.update.bind(this)
       );
       this.service.setXML(this.blocklyDefinition, this.workspace);

@@ -28,16 +28,14 @@ export class MainDashboardComponent implements OnInit {
     this.router.navigate(["home"]);
     this.sidenav.close();
   }
-
+  
   classrooms() {
     this.events.click(this.page, "dashboard/classrooms");
     this.router.navigate(["dashboard/classrooms"]);
-    this.sidenav.close();
   }
 
   activities() {
     this.events.click(this.page, "dashboard/activities");
     this.router.navigate(["dashboard/activities"]);
-    this.sidenav.close();
   }
 }

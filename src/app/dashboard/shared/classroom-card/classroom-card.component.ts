@@ -1,6 +1,5 @@
-import { Component, OnInit, Input, Output } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 import { ModelClassroom } from "src/app/sdk";
-import { EventEmitter } from "events";
 
 @Component({
   selector: "app-classroom-card",

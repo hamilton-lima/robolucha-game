@@ -11,7 +11,7 @@
         <mat-icon svgIcon="arrow-right"></mat-icon>
       </button>
 
-      <button
+      <button id="go-watchpage"
         mat-raised-button
         [disabled]="!dirty"
         class="mr-2"
@@ -28,7 +28,7 @@
           </mat-expansion-panel>
 
           <mat-expansion-panel [expanded]="true">
-            <mat-expansion-panel-header> On Repeat </mat-expansion-panel-header>
+            <mat-expansion-panel-header id="onrepeat-watchpage"> On Repeat </mat-expansion-panel-header>
             <app-code-editor eventId="repeat"
               [code]="codes.onRepeat"
               (onChange)="updateCode('onRepeat', $event)"
@@ -59,7 +59,7 @@
           <mat-expansion-panel>
             <mat-expansion-panel-header> On Found </mat-expansion-panel-header>
             <app-code-editor eventId="found"
-              [useOther]="true"
+              [config]="useOther"
               [code]="codes.onFound"
               (onChange)="updateCode('onFound', $event)"
             >
@@ -71,6 +71,7 @@
               On Got Damage
             </mat-expansion-panel-header>
             <app-code-editor eventId="gotDamage"
+              [config]="useOther"
               [code]="codes.onGotDamage"
               (onChange)="updateCode('onGotDamage', $event)"
             >
@@ -82,7 +83,7 @@
               On Hit Other
             </mat-expansion-panel-header>
             <app-code-editor eventId="hitOther"
-              [useOther]="true"
+              [config]="useOther"
               [code]="codes.onHitOther"
               (onChange)="updateCode('onHitOther', $event)"
             >
@@ -150,7 +151,7 @@
 
 </div>
 
-<div class="p-3 matchover-alert" *ngIf="matchOver">
+<div class="p-3 matchover-alert" *ngIf="matchOver && displayMatchOver()">
   <mat-card>
     <mat-card-title
       ><h1>{{ matchOverTitle }}</h1></mat-card-title
