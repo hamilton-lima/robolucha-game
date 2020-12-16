@@ -58,7 +58,7 @@ export class ListClassroomGamesComponent implements OnInit {
     if (this.classrooms.length > 0) {
       const id = this.classrooms[0].id;
       this.api
-        .privateAvailableMatchClassroomIdGet(id)
+        .privateAvailableMatchClassroomJoinedGet()
         .subscribe((matches: Array<ModelAvailableMatch>) => {
           this.matches = matches.filter((match) =>
             this.level.showAvailableMatch(userDetails, match.gameDefinition)
