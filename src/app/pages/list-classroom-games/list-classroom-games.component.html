@@ -7,7 +7,7 @@
     <div *ngIf="classrooms.length" class="row">
       <app-game-card
         [componentId]="match.name"
-        class="col-sm-12 col-md-6 col-lg-4 mb-4"
+        class="col-sm-10 col-md-5 col-lg-3 mb-3"
         *ngFor="let match of matches"
         [match]="match"
         [userDetails]="userDetails"

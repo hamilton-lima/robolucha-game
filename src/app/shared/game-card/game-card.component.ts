@@ -19,8 +19,12 @@ export class GameCardComponent implements OnInit {
 
   ngOnInit() {}
 
-  getImageName(match: ModelAvailableMatch) {
-    return "assets/maps/" + match.name.toLowerCase() + ".png";
+  getImageName() {
+    if( this.match.gameDefinition.media && this.match.gameDefinition.media.thumbnail){
+      return this.match.gameDefinition.media.thumbnail;
+    } else {
+      return "assets/maps/image-not-found.png";
+    }
   }
 
   imageErrorHandler(event){

@@ -1,24 +1,33 @@
 <mat-card [attr.id]="componentId">
+  <mat-card-header>
+    <mat-card-title>{{ match.gameDefinition.label }}</mat-card-title>
+  </mat-card-header>
+
   <img
-    width="255" height="255"
     mat-card-image
-    src="{{ getImageName(match) }}"
-    alt="{{ match.gameDefinition.label }} description image"
+    [src]="getImageName()"
+    alt="{{ match.gameDefinition.label }}"
     (error)="imageErrorHandler($event)"
   />
   <mat-card-content>
-    <p>
-      <span id="title">{{ match.gameDefinition.label }}</span
-      ><br />
-      <span id="type">{{ match.gameDefinition.type }}</span>
-    </p>
+    <p>{{ match.gameDefinition.type }}</p>
     <p id="description">{{ match.gameDefinition.description }}</p>
   </mat-card-content>
   <mat-card-actions>
-    <app-big-button *ngIf="!canPlay()" [disabled]="true" [minWidth]="'90%'" id="play">
+    <app-big-button
+      *ngIf="!canPlay()"
+      [disabled]="true"
+      [minWidth]="'90%'"
+      id="play"
+    >
       <span><mat-icon svgIcon="lock"></mat-icon></span>
     </app-big-button>
-    <app-big-button *ngIf="canPlay()" [minWidth]="'90%'" (click)="play(match.id)" id="play">
+    <app-big-button
+      *ngIf="canPlay()"
+      [minWidth]="'90%'"
+      (click)="play(match.id)"
+      id="play"
+    >
       <span>PLAY</span>
     </app-big-button>
   </mat-card-actions>
