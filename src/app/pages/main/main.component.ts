@@ -115,6 +115,12 @@ export class MainComponent implements OnInit {
     const dialogRef = this.dialog.open(JoinClassroomComponent);
   }
 
+  classroom(){
+    this.shepherd.done(this.tour);
+    this.events.click(this.page, "classroom");
+    this.router.navigate(["classroom"]);
+  }
+
   play(matchID: number) {
     const playRequest = <ModelPlayRequest>{
       availableMatchID: matchID,
