@@ -1,11 +1,9 @@
 <app-game-background>
-  <div class="container">
-    <div class="row">
-      <app-header>PERSONALIZE</app-header>
-    </div>
+  <app-header [title]="'PERSONALIZE'" [right]="luchadorNameFormControl.value"></app-header>
 
+  <div class="container">
     <div class="row pb-3">
-      <div class="col-lg-6 col-md-6 col-sm-12">
+      <div class="col-lg-6 col-md-6 col-sm-12" id="name-editor">
         <mat-form-field id="luchadorName">
           <input matInput placeholder="Luchador name" [formControl]="luchadorNameFormControl">
         </mat-form-field>

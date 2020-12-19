@@ -1,9 +1,7 @@
 <app-game-background>
-  <div class="container">
-    <div class="row">
-      <app-header>Public arenas</app-header>
-    </div>
+  <app-header [title]="'PUBLIC ARENAS'"></app-header>
 
+  <div class="container">
     <div class="row">
       <app-game-card
         [componentId]="match.name"

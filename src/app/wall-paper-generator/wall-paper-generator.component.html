@@ -1,9 +1,7 @@
 <app-game-background>
-  <div class="container">
-    <div class="row">
-      <app-header>GENERATE WALLPAPER</app-header>
-    </div>
+  <app-header [title]="'GENERATE WALLPAPER'"></app-header>
 
+  <div class="container">
     <div class="row pb-3">
       <div class="col-2">
         <button id="random-mask" (click)="generate()" class="mr-2" mat-raised-button>GENERATE</button>

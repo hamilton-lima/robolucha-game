@@ -1,9 +1,7 @@
 <app-game-background>
-  <div class="container">
-    <div class="row">
-      <app-header>{{ title }}</app-header>
-    </div>
+  <app-header [title]="title"></app-header>
 
+  <div class="container">
     <div *ngIf="classrooms.length" class="row">
       <app-game-card
         [componentId]="match.name"
