@@ -1,9 +1,7 @@
 <app-game-background>
-  <div class="container">
-    <div class="row">
-      <app-header>Help</app-header>
-    </div>
+  <app-header [title]="'HELP'"></app-header>
 
+  <div class="container">
     <div class="row">
       <div class="col-12">
         <h1>Version {{version}}</h1>
@@ -12,7 +10,7 @@
 
     <div class="row">
       <div class="col-12">
-        <a href="http://docs.robolucha.com" target="_blank"
+        <a href="https://www.robolucha.com/play" target="_blank"
           >Online documentation</a
         >
       </div>
@@ -30,5 +28,17 @@
       </div>
       <div class="col-10"></div>
     </div>
+
+    <div class="row">
+      <div class="col-12">
+        <hr />
+        <ul>
+          <li><a id="robotech" href="https://www.dafont.com/gustavo-paz.d5244" target="_blank">Robotech font used in the page titles</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    
   </div>
 </app-game-background>

@@ -1,11 +1,4 @@
-import {
-  Component,
-  OnInit,
-  TemplateRef,
-  ViewChild,
-  EventEmitter,
-  Output,
-} from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { MatDialogRef } from "@angular/material";
 import { DefaultService, ModelClassroom } from "src/app/sdk";
 import { AlertService } from "src/app/shared/alert.service";

@@ -1,0 +1,47 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.center {
+  display: flex;
+  justify-content: space-between;
+  flex-grow: 1;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+}
+
+button.mat-icon-button {
+  line-height: 36px !important;
+}
+
+.mat-icon {
+  margin-bottom: 4px;
+}
+
+.mat-icon svg {
+  height: 36px;
+  width: 36px;
+}
+
+.toolbar-spacer {
+  flex: 1 1 auto;
+}
+
+#left-button {
+  background-color: whitesmoke;
+}
+
+#right-button {
+  background-color: whitesmoke;
+}

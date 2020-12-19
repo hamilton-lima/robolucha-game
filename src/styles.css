@@ -37,8 +37,8 @@ a.mat-menu-item > mat-icon {
 }
 
 @font-face {
-  font-family: "Baloo";
-  src: url(/assets/fonts/baloo-regular.ttf) format("truetype");
+  font-family: "Robotech";
+  src: url(/assets/fonts/robotech-gp.ttf) format("truetype");
   font-weight: 300;
 }
 

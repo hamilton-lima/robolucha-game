@@ -4,7 +4,8 @@ import {
   ModelClassroom,
   ModelUserDetails,
   ModelMatch,
-  DefaultService,ModelPlayRequest
+  DefaultService,
+  ModelPlayRequest,
 } from "src/app/sdk";
 import { MatDialog } from "@angular/material";
 import { Router } from "@angular/router";
@@ -57,7 +58,7 @@ export class ListClassroomGamesComponent implements OnInit {
     if (this.classrooms.length > 0) {
       const id = this.classrooms[0].id;
       this.api
-        .privateAvailableMatchClassroomIdGet(id)
+        .privateAvailableMatchClassroomJoinedGet()
         .subscribe((matches: Array<ModelAvailableMatch>) => {
           this.matches = matches.filter((match) =>
             this.level.showAvailableMatch(userDetails, match.gameDefinition)
@@ -70,13 +71,13 @@ export class ListClassroomGamesComponent implements OnInit {
     if (this.classrooms.length == 0) {
       this.title = "Please join a classroom";
     } else {
-      const classroom = this.classrooms[0];
-      this.title = classroom.name;
+      this.title =
+        "Maps for the classrooms: " +
+        this.classrooms.map((classroom) => classroom.name).join(",");
     }
   }
 
   play(matchID: number) {
-
     const playRequest = <ModelPlayRequest>{
       availableMatchID: matchID,
       teamID: 0,
@@ -85,6 +86,5 @@ export class ListClassroomGamesComponent implements OnInit {
     this.api.privatePlayPost(playRequest).subscribe((match: ModelMatch) => {
       this.router.navigate(["watch", match.id]);
     });
-
   }
 }

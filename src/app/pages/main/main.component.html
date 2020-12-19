@@ -1,21 +1,38 @@
 <app-game-background>
-  <div class="container">
+  <app-header
+    [title]="'HOME'"
+    [right]="luchador.name"
+    [back]="false"
+  ></app-header>
 
+  <!-- <app-box-menu [items]="menuItems"></app-box-menu> -->
+
+  <div class="container">
     <div class="row pt-4">
       <div class="col-lg-4 col-md-4 col-sm-10 pb-4">
         <div>
-          <img width="280" height="300" src="assets/pages/robolucha-play.gif" class="clickable"
-            (click)="lobby()">
+          <img
+            width="280"
+            height="300"
+            src="assets/pages/robolucha-play.gif"
+            class="clickable"
+            (click)="lobby()"
+          />
           <div class="title-main-container clickable" (click)="lobby()">
-            <span class="title-main">PLAY</span><br>
+            <span class="title-main">PLAY</span><br />
           </div>
         </div>
       </div>
 
       <div class="col-lg-4 col-md-4 col-sm-10">
         <div>
-          <img width="280" height="300" src="assets/pages/robolucha-personalize.gif" class="clickable"
-            (click)="customize()">
+          <img
+            width="280"
+            height="300"
+            src="assets/pages/robolucha-personalize.gif"
+            class="clickable"
+            (click)="customize()"
+          />
           <div class="title-main-container clickable" (click)="customize()">
             <span class="title-main">PERSONALIZE</span>
           </div>
@@ -23,7 +40,6 @@
       </div>
 
       <div class="col-lg-4 col-md-4 col-sm-10">
-
         <div class="row pt-4">
           <div class="col-12">
             <app-big-button id="forum-button" (click)="maps()">
@@ -39,7 +55,7 @@
             </app-big-button>
           </div>
         </div>
-        
+
         <div class="row pt-4">
           <div class="col-12">
             <app-big-button id="forum-button" (click)="join()">
@@ -48,9 +64,16 @@
           </div>
         </div>
 
+        <div class="row pt-4">
+          <div class="col-12">
+            <app-big-button id="forum-button" (click)="classroom()">
+              Classroom Maps
+            </app-big-button>
+          </div>
+        </div>
       </div>
     </div>
-    
+
     <div class="row">
       <div class="col-12" id="learn-title">
         <h2>Learn how to play</h2>
@@ -58,13 +81,18 @@
     </div>
 
     <div class="row">
-      <app-game-card [componentId]="match.name" class="col-sm-10 col-md-5 col-lg-3 mb-3"
-        *ngFor="let match of tutorialMatches" [match]="match" [userDetails]="userDetails" (onplay)="play($event)">
+      <app-game-card
+        [componentId]="match.name"
+        class="col-sm-10 col-md-5 col-lg-3 mb-3"
+        *ngFor="let match of tutorialMatches"
+        [match]="match"
+        [userDetails]="userDetails"
+        (onplay)="play($event)"
+      >
       </app-game-card>
       <div *ngIf="tutorialMatches.length <= 0">
         <h4>There are no matches available</h4>
       </div>
     </div>
-
   </div>
 </app-game-background>

@@ -1,11 +1,9 @@
 <app-game-background>
-  <div class="container">
-    <div class="row">
-      <app-header>PERSONALIZE</app-header>
-    </div>
+  <app-header [title]="'PERSONALIZE'" [right]="luchadorNameFormControl.value"></app-header>
 
+  <div class="container">
     <div class="row pb-3">
-      <div class="col-lg-6 col-md-6 col-sm-12">
+      <div class="col-lg-6 col-md-6 col-sm-12" id="name-editor">
         <mat-form-field id="luchadorName">
           <input matInput placeholder="Luchador name" [formControl]="luchadorNameFormControl">
         </mat-form-field>
@@ -18,10 +16,10 @@
         </div>
       </div>
       <div class="col-lg-6 col-md-6 col-sm-12">
+        <button id="random-mask" (click)="random()" class="mr-2 mb-2" mat-raised-button>RANDOM</button>
         <button color="accent" *ngIf="dirty" class="mr-2 mb-2" (click)="save()" mat-raised-button>
           SAVE
         </button>
-        <button id="random-mask" (click)="random()" class="mr-2 mb-2" mat-raised-button>RANDOM</button>
         <button id="cube-it" (click)="cubeIt()"  class="mr-2 mb-2" mat-raised-button>CUBE IT!</button>
         <button id="wallpaper" class="mb-2" (click)="wallpaper()" mat-raised-button>WALLPAPER</button>
 

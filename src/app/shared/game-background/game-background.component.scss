@@ -1,8 +1,8 @@
 @import "src/styles/game.css";
 
 #background {
-  background-image: url("/assets/pages/bg3_512x512.png");
-  background-repeat: repeat;
+  background-image: url("/assets/ui/background.png");
+  background-repeat: no-repeat;
   height: 100%;
   overflow-y: scroll;
 }

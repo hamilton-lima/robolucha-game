@@ -8,3 +8,8 @@
 .text-error{
     color: #f44336;
 }
+
+#name-editor{
+   background-color: #FFFFFF99;
+   padding: 10px;
+}

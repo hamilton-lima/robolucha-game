@@ -654,6 +654,6 @@ export class ArenaComponent
   }
 
   getScreenShot(callback: (data: string)=> void){
-    BABYLON.Tools.CreateScreenshot(this.engine, this.camera, 800, callback);
+    BABYLON.Tools.CreateScreenshot(this.engine, this.camera, {width:800, height:600}, callback);
   }
 }
