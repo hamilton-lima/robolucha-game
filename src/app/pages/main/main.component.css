@@ -23,6 +23,11 @@
 
 #learn-title{
   margin-top: 40px;
+  padding: 10px;
+  color: whitesmoke;
+  font-family: "Robotech", sans-serif;
+  text-shadow: 1px 1px black;
+  font-size: xxx-large;
 }
 
 #left-image {

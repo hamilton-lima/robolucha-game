@@ -1,0 +1,17 @@
+<div class="container">
+  <div class="left">
+    <button mat-icon-button id="left-button">
+      <mat-icon svgIcon="chevron-left"></mat-icon>
+    </button>
+  </div>
+  <div class="center">
+    <div *ngFor="let item of visible">
+      <app-box-menu-item [item]="item"></app-box-menu-item>
+    </div>
+  </div>
+  <div class="right">
+    <button mat-icon-button id="right-button">
+      <mat-icon svgIcon="chevron-right"></mat-icon>
+    </button>
+  </div>
+</div>

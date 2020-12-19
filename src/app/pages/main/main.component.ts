@@ -14,6 +14,12 @@ import Shepherd from "shepherd.js";
 import { ModelAvailableMatch } from "src/app/sdk/model/modelAvailableMatch";
 import { MatDialog } from "@angular/material";
 import { JoinClassroomComponent } from "../list-classroom-games/join-classroom/join-classroom.component";
+import {
+  BoxMenuBarType,
+  BoxMenuColor,
+  BoxMenuItem,
+  BoxMenuStartType,
+} from "src/app/shared/box-menu/box-menu.component";
 
 @Component({
   selector: "app-main",
@@ -28,6 +34,30 @@ export class MainComponent implements OnInit {
   userDetails: ModelUserDetails;
   multiplayerMatch: ModelAvailableMatch;
   tutorialMatches: ModelAvailableMatch[] = [];
+
+  menuItems: BoxMenuItem[] = [
+    {
+      backgroundURL: "assets/pages/robolucha-play.gif",
+      barType: BoxMenuBarType.Play,
+      color: BoxMenuColor.Green,
+      label: "Something 1",
+      start: BoxMenuStartType.Green,
+    },
+    {
+      backgroundURL: "assets/pages/robolucha-play.gif",
+      barType: BoxMenuBarType.Play,
+      color: BoxMenuColor.Green,
+      label: "Something 2",
+      start: BoxMenuStartType.Green,
+    },
+    {
+      backgroundURL: "assets/pages/robolucha-play.gif",
+      barType: BoxMenuBarType.Play,
+      color: BoxMenuColor.Green,
+      label: "Something 3",
+      start: BoxMenuStartType.Green,
+    },
+  ];
 
   constructor(
     private router: Router,
@@ -115,7 +145,7 @@ export class MainComponent implements OnInit {
     const dialogRef = this.dialog.open(JoinClassroomComponent);
   }
 
-  classroom(){
+  classroom() {
     this.shepherd.done(this.tour);
     this.events.click(this.page, "classroom");
     this.router.navigate(["classroom"]);
