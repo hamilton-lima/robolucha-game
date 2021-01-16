@@ -1,5 +1,10 @@
 import { Injectable } from "@angular/core";
-import { DefaultService, ModelGameDefinition } from "../sdk";
+import {
+  DefaultService,
+  ModelCode,
+  ModelGameComponent,
+  ModelGameDefinition,
+} from "../sdk";
 
 @Injectable({
   providedIn: "root",
@@ -42,4 +47,5 @@ export class MapEditorService {
     }
     return "";
   }
+
 }

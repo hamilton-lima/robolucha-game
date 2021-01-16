@@ -6,19 +6,15 @@
 
   <div class="container">
     <div class="row">
-      <div class="col-4">Map Code</div>
-      <div class="col-8 text-left">{{ showGameCode() }}</div>
-    </div>
-
-    <div class="row">
       <div class="col-4">Suggested Code</div>
-      <div class="col-8 text-left">{{ showSuggestedCode() }}</div>
+      <div class="col-8 text-left">
+        <mat-icon *ngIf="getScript()" svgIcon="code-tags"></mat-icon>
+      </div>
     </div>
 
   </div>
 
   <mat-action-row>
-    <button mat-button (click)="editGame()">EDIT</button>
     <button mat-button (click)="editSuggested()">EDIT SUGGESTED</button>
   </mat-action-row>
 </mat-expansion-panel>

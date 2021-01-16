@@ -6,30 +6,16 @@ import {
   EventEmitter,
   Input,
   ViewChild,
-  OnChanges,
-  SimpleChanges,
   AfterViewInit,
 } from "@angular/core";
 import { WatchMatchService, WatchDetails } from "./watch-match.service";
 import {
   ModelGameComponent,
   ModelGameDefinition,
-  ModelMatch,
 } from "../sdk/model/models";
-import { ActivatedRoute } from "@angular/router";
-import { SharedStateService } from "../shared-state.service";
 import { Subscription, Subject } from "rxjs";
-import { MatchState, GameDefinition, MatchEvent } from "./watch-match.model";
+import { MatchState, MatchEvent } from "./watch-match.model";
 import { Message } from "../shared/message/message.model";
-import {
-  trigger,
-  state,
-  style,
-  transition,
-  animate,
-} from "@angular/animations";
-import { CanComponentDeactivate } from "../can-deactivate-guard.service";
-import { CodeEditorPanelComponent } from "../code-editor-panel/code-editor-panel.component";
 import { ArenaComponent } from "../arena/arena.component";
 import { CameraChange } from "../arena/camera3-d.service";
 

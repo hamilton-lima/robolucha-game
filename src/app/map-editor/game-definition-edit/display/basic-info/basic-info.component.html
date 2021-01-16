@@ -31,6 +31,11 @@
     </div>
 
     <div class="row">
+      <div class="col">Type</div>
+      <div class="col">{{ gameDefinition.type }}</div>
+    </div>
+
+    <div class="row">
       <div class="col">Duration</div>
       <div class="col">{{ gameDefinition.duration }}</div>
     </div>
@@ -58,6 +63,26 @@
     <div class="row">
       <div class="col">Next map</div>
       <div class="col">{{ nextLabel() }}</div>
+    </div>
+
+    <div class="row">
+      <div class="col">Respawn X</div>
+      <div class="col">{{ gameDefinition.respawnX }}</div>
+    </div>
+
+    <div class="row">
+      <div class="col">Respawn Y</div>
+      <div class="col">{{ gameDefinition.respawnY }}</div>
+    </div>
+
+    <div class="row">
+      <div class="col">Respawn angle</div>
+      <div class="col">{{ gameDefinition.respawnAngle }}</div>
+    </div>
+
+    <div class="row">
+      <div class="col">Respawn gun angle</div>
+      <div class="col">{{ gameDefinition.respawnGunAngle }}</div>
     </div>
 
   </div>

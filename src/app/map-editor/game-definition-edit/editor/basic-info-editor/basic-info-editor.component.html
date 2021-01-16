@@ -54,6 +54,18 @@
   <div class="row">
     <div class="col">
       <mat-form-field class="col-10 mt-3 mx-auto">
+        <mat-label>Type</mat-label>
+        <mat-select matInput formControlName="type">
+          <mat-option value="tutorial">Tutorial</mat-option>
+          <mat-option value="multiplayer">Multiplayer</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <mat-form-field class="col-10 mt-3 mx-auto">
         <mat-label>Duration</mat-label>
         <input
           type="text"
@@ -130,6 +142,62 @@
             <mat-option *ngFor="let definition of definitions" 
             [value]="definition.id">{{definition.label}}</mat-option>
         </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <mat-form-field class="col-10 mt-3 mx-auto">
+        <mat-label>Respawn X</mat-label>
+        <input
+          type="text"
+          matInput
+          formControlName="respawnX"
+          placeholder="Ex. 100"
+        />
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <mat-form-field class="col-10 mt-3 mx-auto">
+        <mat-label>Respawn Y</mat-label>
+        <input
+          type="text"
+          matInput
+          formControlName="respawnY"
+          placeholder="Ex. 100"
+        />
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <mat-form-field class="col-10 mt-3 mx-auto">
+        <mat-label>Respawn angle</mat-label>
+        <input
+          type="text"
+          matInput
+          formControlName="respawnAngle"
+          placeholder="Ex. 45"
+        />
+      </mat-form-field>
+    </div>
+  </div>  
+  
+  <div class="row">
+    <div class="col">
+      <mat-form-field class="col-10 mt-3 mx-auto">
+        <mat-label>Respawn gun angle</mat-label>
+        <input
+          type="text"
+          matInput
+          formControlName="respawnGunAngle"
+          placeholder="Ex. 45"
+        />
       </mat-form-field>
     </div>
   </div>

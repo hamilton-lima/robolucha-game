@@ -79,12 +79,6 @@ export class GameDefinitionEditComponent implements OnInit {
       }
     });
 
-    this.mediator.onEditGameDefinitionCode.subscribe((current) => {
-      if (current && this.editorDrawer) {
-        this.refreshEditorDrawer(CurrentEditorEnum.Codes);
-      }
-    });
-
     this.mediator.onEditSceneComponent.subscribe((current) => {
       if (current && this.editorDrawer) {
         this.refreshEditorDrawer(CurrentEditorEnum.SingleSceneComponent);
@@ -222,7 +216,7 @@ export class GameDefinitionEditComponent implements OnInit {
     const body = this.removeTemporaryIDs();
 
     this.api.privateMapeditorPut(body).subscribe((result) => {
-      this.alert.infoTop("Map updated", "DISMISS");
+      this.alert.infoTop("Map updated", "CLOSE");
       this.dirty = false;
     });
   }

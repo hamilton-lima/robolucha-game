@@ -1,4 +1,9 @@
 import { Injectable, Renderer2, RendererFactory2 } from "@angular/core";
+import { OnFoundDefinition } from "./definition/code-blockly.onfound";
+import { OnGotDamageDefinition } from "./definition/code-blockly.ongotdamage";
+import { OnHitOtherDefinition } from "./definition/code-blockly.onhitother";
+import { OnHitWallDefinition } from "./definition/code-blockly.onhitwall";
+import { OnRepeatDefinition } from "./definition/code-blockly.onrepeat";
 
 declare var Blockly: any;
 
@@ -9,23 +14,25 @@ export enum BlocklyConfig {
   SceneComponentWithOther,
 }
 
+export interface BlocklyDefinition {
+  getTypeName();
+  getBlockConfig();
+  getLuaGenerator();
+}
+
 @Injectable({ providedIn: "root" })
 export class BlocklyService {
   private renderer: Renderer2;
 
   private configResolution;
-  
+
   constructor(private factory: RendererFactory2) {
     this.configResolution = new Map([
       [BlocklyConfig.Default, this.getToolboxDefault()],
       [BlocklyConfig.DefaultWithOther, this.getToolboxDefault()],
       [BlocklyConfig.SceneComponent, this.getToolboxSceneComponent()],
-      [
-        BlocklyConfig.SceneComponentWithOther,
-        this.getToolboxSceneComponentWithOther(),
-      ],
     ]);
-  
+
     // Renderer2 needs to be created manually as there is no provider by default
     this.renderer = factory.createRenderer(null, null);
     this.setup();
@@ -54,6 +61,7 @@ export class BlocklyService {
     const toolbox = this.configResolution.get(editorConfig);
 
     const blocklyDiv = document.getElementById(id);
+    blocklyDiv.innerHTML = "";
     const workspace = Blockly.inject(blocklyDiv, { toolbox: toolbox });
 
     if (onChange) {
@@ -95,6 +103,23 @@ export class BlocklyService {
       <block type="debug" />
       <block type="math_number" />
       <block type="math_arithmetic" />
+  </category>
+  `;
+
+  readonly events = `
+  <category name="Events" colour="%{BKY_PROCEDURES_HUE}">
+    <block type="onfound" />
+    <block type="onrepeat" />
+    <block type="onhitwall" />
+    <block type="ongotdamage" />
+    <block type="onhitother" />
+  </category>
+  `;  
+  
+  readonly eventsSceneComponent = `
+  <category name="Events" colour="%{BKY_PROCEDURES_HUE}">
+    <block type="onrepeat" />
+    <block type="onhitother" />
   </category>
   `;
 
@@ -166,55 +191,54 @@ export class BlocklyService {
     <block type="logic_boolean"/>
     <block type="logic_negate"/>
   </category>
+  `;  
+  
+  readonly text = `
+  <category name="Text" colour="%{BKY_TEXT_HUE}">
+    <block type="text"/>
+    <block type="text_join"/>
+    <block type="text_append"/>
+    <block type="text_indexOf"/>
+    <block type="text_charAt"/>
+    <block type="text_changeCase"/>
+  </category>
+  `;
+
+  readonly functions = `
+  <category name="Functions" colour="#995ba5" custom="PROCEDURE">
+  </category>
   `;
 
   readonly toolboxDefault = [
     this.commands,
-    this.luchador,
-    this.separator,
-    this.variables,
-    this.math,
-    this.control,
-    this.logic,
-  ];
-
-  readonly toolboxWithOther = [
-    this.commands,
+    this.events,
     this.luchadorWithOther,
     this.separator,
     this.variables,
     this.math,
+    this.text,
     this.control,
     this.logic,
+    this.functions,
   ];
 
   readonly toolboxSceneComponent = [
     this.commandsSceneComponent,
-    this.separator,
-    this.variables,
-    this.math,
-    this.control,
-    this.logic,
-  ];
-
-  readonly toolboxSceneComponentWithOther = [
-    this.commandsSceneComponent,
+    this.eventsSceneComponent,
     this.sceneOther,
     this.separator,
     this.variables,
     this.math,
+    this.text,
     this.control,
     this.logic,
+    this.functions,
   ];
 
   getToolboxXML(data: string[]) {
     const xml = data.join("\n");
     const result = `<xml id="toolbox" style="display: none">${xml}</xml>`;
     return result;
-  }
-
-  getToolboxWithOption() {
-    return this.getToolboxXML(this.toolboxWithOther);
   }
 
   getToolboxDefault() {
@@ -225,11 +249,20 @@ export class BlocklyService {
     return this.getToolboxXML(this.toolboxSceneComponent);
   }
 
-  getToolboxSceneComponentWithOther() {
-    return this.getToolboxXML(this.toolboxSceneComponentWithOther);
-  }
+  readonly definitions: Array<BlocklyDefinition> = [
+    new OnFoundDefinition(),
+    new OnRepeatDefinition(),
+    new OnHitWallDefinition(),
+    new OnHitOtherDefinition(),
+    new OnGotDamageDefinition(),
+  ];
 
   setup() {
+    this.definitions.forEach((definition) => {
+      Blockly.defineBlocksWithJsonArray([definition.getBlockConfig()]);
+      Blockly.Lua[definition.getTypeName()] = definition.getLuaGenerator();
+    });
+
     // debug	message	string
     Blockly.defineBlocksWithJsonArray([
       {
@@ -282,7 +315,7 @@ export class BlocklyService {
         // debug	message	string
         type: "debug",
         message0: "debug %1",
-        args0: [{ type: "input_value", name: "DEBUG_VALUE", check: "String" }],
+        args0: [{ type: "input_value", name: "DEBUG_VALUE" }],
         previousStatement: null,
         nextStatement: null,
         colour: 355,

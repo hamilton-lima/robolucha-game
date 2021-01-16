@@ -2,9 +2,11 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnChanges,
   OnDestroy,
   OnInit,
   Output,
+  SimpleChanges,
   ViewChild,
 } from "@angular/core";
 import { timer } from "rxjs";
@@ -16,7 +18,7 @@ import { CodeEditorEvent } from "../code-editor/code-editor.component";
   templateUrl: "./code-blockly.component.html",
   styleUrls: ["./code-blockly.component.scss"],
 })
-export class CodeBlocklyComponent implements OnInit {
+export class CodeBlocklyComponent implements OnChanges {
   workspace: any;
   code: string;
 
@@ -32,7 +34,11 @@ export class CodeBlocklyComponent implements OnInit {
     this.id = `blockly-${CodeBlocklyComponent.nextId++}`;
   }
 
-  ngAfterViewInit(): void {
+  ngOnChanges(changes: SimpleChanges): void {
+    this.init();
+  }
+
+  init(){
     timer(500).subscribe((done) => {
       this.workspace = this.service.inject(
         this.id,
@@ -43,7 +49,9 @@ export class CodeBlocklyComponent implements OnInit {
     });
   }
 
-  ngOnInit() {}
+  ngAfterViewInit(): void {
+    this.init();
+  }
 
   update(): void {
     this.code = this.service.getCode(this.workspace);

@@ -75,12 +75,10 @@
 
   <div class="row">
     <div class="col">
-      <app-code-accordion
-        [codes]="codes"
-        [helpFile]="helpFile"
-        [editors]="editors"
-        (update)="updateCode($event)"
-      ></app-code-accordion>
+      <app-code-editor
+        [code]="code"
+        (onChange)="updateCode($event)"
+      ></app-code-editor>
     </div>
   </div>
 </div>

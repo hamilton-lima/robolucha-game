@@ -1,12 +1,10 @@
 import {
   Component,
   OnInit,
-  ViewChild,
   OnChanges,
   SimpleChanges,
   ChangeDetectorRef,
   OnDestroy,
-  AfterViewInit,
   EventEmitter,
   Output,
   HostListener,
@@ -23,7 +21,6 @@ import { CanComponentDeactivate } from "../can-deactivate-guard.service";
 import { Subject, Subscription } from "rxjs";
 import { MatchState, Score } from "../watch-match/watch-match.model";
 import { Message } from "../shared/message/message.model";
-import { CodeEditorPanelComponent } from "../code-editor-panel/code-editor-panel.component";
 import { ShepherdNewService, ITourStep } from "../shepherd-new.service";
 import { EventsService } from "../shared/events.service";
 import { UserService } from "../shared/user.service";
@@ -38,6 +35,10 @@ import { CameraChange } from "../arena/camera3-d.service";
 import { CodeEditorEvent } from "../shared/code-editor/code-editor.component";
 import { NarrativeDialogService } from "./narrative/narrative-dialog.service";
 import { BlocklyConfig } from "../shared/code-blockly/code-blockly.service";
+import {
+  CodeEditorService,
+  ALL,
+} from "../shared/code-editor/code-editor.service";
 
 @Component({
   selector: "app-watch-page",
@@ -46,11 +47,7 @@ import { BlocklyConfig } from "../shared/code-blockly/code-blockly.service";
   providers: [WatchMatchService],
 })
 export class WatchPageComponent
-  implements
-    OnInit,
-    CanComponentDeactivate,
-    OnChanges,
-    OnDestroy {
+  implements OnInit, CanComponentDeactivate, OnChanges, OnDestroy {
   @Output() cameraChangeSubject = new EventEmitter<CameraChange>();
 
   constructor(
@@ -63,7 +60,8 @@ export class WatchPageComponent
     private alert: AlertService,
     private router: Router,
     private watchService: WatchMatchService,
-    private narrative: NarrativeDialogService
+    private narrative: NarrativeDialogService,
+    private service: CodeEditorService
   ) {}
 
   matchReady = false;
@@ -94,22 +92,14 @@ export class WatchPageComponent
   readonly messageSubject = new Subject<Message>();
   scores: Score[] = [];
 
-  codes = {
-    onStart: <ModelCode>{ event: "onStart" },
-    onRepeat: <ModelCode>{ event: "onRepeat" },
-    onGotDamage: <ModelCode>{ event: "onGotDamage" },
-    onFound: <ModelCode>{ event: "onFound" },
-    onHitOther: <ModelCode>{ event: "onHitOther" },
-    onHitWall: <ModelCode>{ event: "onHitWall" },
-  };
-
-  @ViewChild(CodeEditorPanelComponent) codeEditor: CodeEditorPanelComponent;
+  code: ModelCode;
+  script: string;
 
   readonly steps: ITourStep[] = [
     {
       title: "YOU ARE THE BOSS!",
       text:
-        'Try some commands here, MOVE for example<br>'+
+        "Try some commands here, MOVE for example<br>" +
         '<img src="assets/help/move10.gif">',
       attachTo: { element: "#mat-expansion-panel-header-1", on: "left" },
     },
@@ -232,7 +222,6 @@ export class WatchPageComponent
   }
 
   tryToStartMatch() {
-
     this.api.privateMatchSingleGet(this.matchID).subscribe((match) => {
       // ready!
       if (match.status == "RUNNING") {
@@ -356,7 +345,7 @@ export class WatchPageComponent
     this.cdRef.detectChanges();
   }
 
-  showHelp(){
+  showHelp() {
     const user = this.userService.getUser();
 
     if (!user.settings.playedTutorial) {
@@ -372,83 +361,65 @@ export class WatchPageComponent
       return;
     }
 
-    let loadedCodes = 0;
+    console.log("gamedefinition on refresh editor", this.gameDefinition.id);
     this.dirty = false;
-    for (var event in this.codes) {
-      // get codes from luchador for event + gamedefinition
-      let code = this.luchador.codes.find((code: ModelCode) => {
-        return (
-          code.event == event && code.gameDefinition == this.gameDefinition.id
-        );
-      });
+    // get the luchador code for a single gamedefinition
+    const codes = this.luchador.codes.filter((code: ModelCode) => {
+      return code.gameDefinition == this.gameDefinition.id;
+    });
 
-      // if exists updates working codes
-      if (code) {
-        loadedCodes++;
-        this.codes[event] = code;
-      }
-    }
+    // only event==all
+    const code = this.service.getCode(codes, this.gameDefinition.id);
 
-    // no code found for current gamedefinition
-    // apply suggested codes
-    if (loadedCodes == 0) {
-      for (var key in this.codes) {
-        let suggestedCode = this.getCodeFromGameDefinition(key);
-        this.codes[key] = suggestedCode;
-      }
+    // if exists updates code
+    if (code.id) {
+      this.code = code;
+      this.script = this.code.script;
 
+    } else {
+      // no code found for current gamedefinition
+      // apply suggested codes
+      const suggestedCode = this.service.getCode(
+        this.gameDefinition.suggestedCodes
+      );
+      suggestedCode.gameDefinition = this.gameDefinition.id;
+      this.code = suggestedCode;
+      this.script = this.code.script;
       this.dirty = true;
     }
   }
 
-  // return suggested code from the current gamedefinition
-  // if event not present in the list returns empy code
-  getCodeFromGameDefinition(event: string): ModelCode {
-    let result: ModelCode = this.gameDefinition.suggestedCodes.find(
-      (element) => {
-        return element.event == event;
-      }
-    );
-
-    if (!result) {
-      result = <ModelCode>{ event: event };
-    }
-
-    result.id = null;
-    result.gameDefinition = this.gameDefinition.id;
-    return result;
-  }
-
-  // update the internal list of codes from the editor
-  updateCode(event: string, codeEditorEvent: CodeEditorEvent) {
+  updateCode(event: CodeEditorEvent) {
     this.dirty = true;
-    this.codes[event].script = codeEditorEvent.code;
-    this.codes[event].blockly = codeEditorEvent.blocklyDefinition;
+    this.code.blockly = event.blocklyDefinition;
+    this.code.script = event.code;
+    this.script = this.code.script;
     this.cdRef.detectChanges();
   }
 
-  save() {
-    for (var event in this.codes) {
-      // get codes from luchador for event + gamedefinition
-      let code = this.luchador.codes.find((code: ModelCode) => {
-        return (
-          code.event == event &&
-          code.gameDefinition == this.codes[event].gameDefinition
-        );
-      });
-      // if exists updates the luchador with working code
+  save(event) {
+    console.log("event ", event, typeof event )
+    event.stopPropagation();
+    // get codes from luchador + gamedefinition
+    let code = this.luchador.codes.find((code: ModelCode) => {
+      return (
+        code.event == ALL && code.gameDefinition == this.code.gameDefinition
+      );
+    });
 
-      if (code) {
-        code.script = this.codes[event].script;
-      } else {
-        this.luchador.codes.push(this.codes[event]);
-      }
+    // if exists updates the luchador with working code
+    if (code) {
+      code.script = this.code.script;
+      code.blockly = this.code.blockly;
+    } else {
+      this.luchador.codes.push(this.code);
     }
 
     this.api.privateLuchadorPut(this.luchador).subscribe((response) => {
-      this.alert.infoTop("Luchador updated", "DISMISS");
+      this.alert.infoTop("Luchador updated", "CLOSE");
       this.dirty = false;
       this.cdRef.detectChanges();
     });
   }
+
 }

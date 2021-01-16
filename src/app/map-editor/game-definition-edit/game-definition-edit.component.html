@@ -52,26 +52,28 @@
       <app-basic-info-editor></app-basic-info-editor>
     </div>
 
-    <div *ngIf="isGameDefinitionCodeCurrent()" class="mt-2 right-panel-scroll">
-      <app-game-definition-code-editor></app-game-definition-code-editor>
-    </div>
-
     <div
       *ngIf="isGameDefinitionSuggestedCodeCurrent()"
       class="mt-2 right-panel-scroll"
     >
-      <app-game-definition-suggested-code-editor></app-game-definition-suggested-code-editor>
+      <app-game-definition-suggested-code-editor
+      [gameDefinitionID]="gameDefinitionID"
+      ></app-game-definition-suggested-code-editor>
     </div>
 
     <div *ngIf="isGameComponentCurrent()" class="mt-2 right-panel-scroll">
-      <app-game-component-editor></app-game-component-editor>
+      <app-game-component-editor
+      [gameDefinitionID]="gameDefinitionID"
+      ></app-game-component-editor>
     </div>
 
     <div
       *ngIf="isSingleSceneComponentCurrent()"
       class="mt-2 right-panel-scroll"
     >
-      <app-single-scene-component-editor></app-single-scene-component-editor>
+      <app-single-scene-component-editor
+        [gameDefinitionID]="gameDefinitionID"
+      ></app-single-scene-component-editor>
     </div>
 
     <div *ngIf="isNarrativeCurrent()" class="mt-2 right-panel-scroll">

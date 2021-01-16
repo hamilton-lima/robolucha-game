@@ -132,3 +132,13 @@
   width: 100%;
   overflow-y: scroll;
 }
+
+.code-output {
+  background-color: #FFFBE5;
+  border-style: none;
+  padding: 10px;
+  font-family: Monaco, Menlo, "Ubuntu Mono", Consolas, source-code-pro,
+  monospace;
+  font-size: large;
+  overflow-y: scroll;
+}
