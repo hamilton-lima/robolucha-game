@@ -22,12 +22,17 @@ export class BasicInfoEditorComponent implements OnInit {
     name: ["", Validators.required],
     label: ["", Validators.required],
     description: [""],
+    type: [""],
     duration: [""],
     arenaWidth: ["", { updateOn: "blur" }],
     arenaHeight: ["", { updateOn: "blur" }],
     minParticipants: [""],
     maxParticipants: [""],
     nextGamedefinitionID: [""],
+    respawnX: [""],
+    respawnY: [""],
+    respawnAngle: [""],
+    respawnGunAngle: [""],
     file: [""],
   });
 
@@ -43,7 +48,7 @@ export class BasicInfoEditorComponent implements OnInit {
     this.mediator.onEditBasicInfo.subscribe((gameDefinition) => {
       this.gameDefinition = gameDefinition;
       this.form.patchValue(gameDefinition);
-      
+
       // all game definitions except this one
       this.definitions = this.service
         .getGameDefinitions()

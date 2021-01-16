@@ -1,8 +1,10 @@
-<div>
-  <app-code-blockly
+<mat-card>
+  <mat-card-content>
+    <app-code-blockly
     [config]="config"
-    [blocklyDefinition]="code.blockly"
+    [blocklyDefinition]="blockly"
     (codeChanged)="onEditorChange($event)"
   >
   </app-code-blockly>
-</div>
+  </mat-card-content>
+</mat-card>

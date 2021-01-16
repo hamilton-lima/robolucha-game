@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { GameDefinitionEditMediatorService } from "src/app/map-editor/game-definition-edit/game-definition-edit-mediator.service";
 import { ModelCode, ModelGameDefinition } from "src/app/sdk";
+import { CodeEditorService } from "src/app/shared/code-editor/code-editor.service";
 
 @Component({
   selector: "app-game-definition-code",
@@ -10,12 +11,11 @@ import { ModelCode, ModelGameDefinition } from "src/app/sdk";
 export class GameDefinitionCodeComponent implements OnInit {
   @Input() gameDefinition: ModelGameDefinition;
 
-  constructor(private mediator: GameDefinitionEditMediatorService) {}
+  constructor(
+    private mediator: GameDefinitionEditMediatorService,
+    private service: CodeEditorService
+  ) {}
   ngOnInit() {}
-
-  editGame() {
-    this.mediator.onEditGameDefinitionCode.next(this.gameDefinition.codes);
-  }
 
   editSuggested() {
     this.mediator.onEditGameDefinitionSuggestedCode.next(
@@ -23,21 +23,8 @@ export class GameDefinitionCodeComponent implements OnInit {
     );
   }
 
-  showGameCode() {
-    return this.formatCodes(this.gameDefinition.codes);
-  }
-
-  showSuggestedCode() {
-    return this.formatCodes(this.gameDefinition.suggestedCodes);
-  }
-
-  formatCodes(codes: ModelCode[]) {
-    let result = [];
-    codes.forEach((code) => {
-      if (code && code.script) {
-        result.push(code.event);
-      }
-    });
-    return result;
+  getScript() {
+    const code = this.service.getCode(this.gameDefinition.suggestedCodes);
+    return code.script;
   }
 }

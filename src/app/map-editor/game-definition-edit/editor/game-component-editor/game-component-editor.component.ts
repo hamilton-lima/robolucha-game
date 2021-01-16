@@ -1,6 +1,8 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
 import { ModelCode, ModelGameComponent } from "src/app/sdk";
+import { CodeEditorEvent } from "src/app/shared/code-editor/code-editor.component";
+import { CodeEditorService } from "src/app/shared/code-editor/code-editor.service";
 import { GameDefinitionEditMediatorService } from "../../game-definition-edit-mediator.service";
 
 @Component({
@@ -9,6 +11,8 @@ import { GameDefinitionEditMediatorService } from "../../game-definition-edit-me
   styleUrls: ["./game-component-editor.component.scss"],
 })
 export class GameComponentEditorComponent implements OnInit {
+  @Input() gameDefinitionID;
+  
   id: number;
   component: ModelGameComponent;
 
@@ -21,21 +25,12 @@ export class GameComponentEditorComponent implements OnInit {
     y: ["", [Validators.required, Validators.pattern("^[0-9]*$")]],
   });
 
-  helpFile: string = "help/server_code_editor_help";
-  editors: { event: string; label: string }[] = [
-    { event: "onRepeat", label: "On repeat" },
-    { event: "onStart", label: "On start" },
-    { event: "onHitWall", label: "On hit wall" },
-    { event: "onFound", label: "On found" },
-    { event: "onGotDamage", label: "On got damage" },
-    { event: "onHitOther", label: "On hit other" },
-  ];
-
-  codes: ModelCode[];
+  code: ModelCode;
 
   constructor(
     private mediator: GameDefinitionEditMediatorService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private service: CodeEditorService,
   ) {}
 
   ngOnInit() {
@@ -43,7 +38,7 @@ export class GameComponentEditorComponent implements OnInit {
       (component: ModelGameComponent) => {
         this.id = component.id;
         this.component = component;
-        this.codes = this.component.codes;
+        this.code = this.service.getCode(this.component.codes, this.gameDefinitionID);
         this.form.patchValue(this.component);
       }
     );
@@ -63,15 +58,16 @@ export class GameComponentEditorComponent implements OnInit {
         gunAngle: Number.parseInt(this.form.get("gunAngle").value),
         x: Number.parseInt(this.form.get("x").value),
         y: Number.parseInt(this.form.get("y").value),
-        codes: this.codes,
+        codes: [this.code],
       };
 
       this.mediator.onUpdateGameComponent.next(component);
     }
   }
 
-  updateCode(codes: ModelCode[]) {
-    this.codes = codes;
+  updateCode(event: CodeEditorEvent) {
+    this.code.blockly = event.blocklyDefinition;
+    this.code.script = event.code;
     this.save();
   }
 }

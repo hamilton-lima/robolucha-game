@@ -11,93 +11,41 @@
         <mat-icon svgIcon="arrow-right"></mat-icon>
       </button>
 
-      <button id="go-watchpage"
+      <button
+        id="go-watchpage"
         mat-raised-button
         [disabled]="!dirty"
         class="mr-2"
-        (click)="save()"
+        (click)="save($event)"
       >
-        GO!
+        SAVE
       </button>
 
       <div class="mt-2 right-panel-scroll">
         <mat-accordion>
-          <mat-expansion-panel>
-            <mat-expansion-panel-header> Help </mat-expansion-panel-header>
-            <app-mark-down [fileName]="'help/code_editor_help'"></app-mark-down>
-          </mat-expansion-panel>
-
           <mat-expansion-panel [expanded]="true">
-            <mat-expansion-panel-header id="onrepeat-watchpage"> On Repeat </mat-expansion-panel-header>
-            <app-code-editor eventId="repeat"
-              [code]="codes.onRepeat"
-              (onChange)="updateCode('onRepeat', $event)"
-            >
-            </app-code-editor>
+            <mat-expansion-panel-header> Code </mat-expansion-panel-header>
+            <app-code-editor
+              [code]="code"
+              (onChange)="updateCode($event)"
+            ></app-code-editor>
           </mat-expansion-panel>
 
           <mat-expansion-panel>
-            <mat-expansion-panel-header> On Start </mat-expansion-panel-header>
-            <app-code-editor eventId="start"
-              [code]="codes.onStart"
-              (onChange)="updateCode('onStart', $event)"
-            >
-            </app-code-editor>
-          </mat-expansion-panel>
-
-          <mat-expansion-panel>
-            <mat-expansion-panel-header>
-              On Hit Wall
-            </mat-expansion-panel-header>
-            <app-code-editor eventId="hitWall"
-              [code]="codes.onHitWall"
-              (onChange)="updateCode('onHitWall', $event)"
-            >
-            </app-code-editor>
-          </mat-expansion-panel>
-
-          <mat-expansion-panel>
-            <mat-expansion-panel-header> On Found </mat-expansion-panel-header>
-            <app-code-editor eventId="found"
-              [config]="useOther"
-              [code]="codes.onFound"
-              (onChange)="updateCode('onFound', $event)"
-            >
-            </app-code-editor>
-          </mat-expansion-panel>
-
-          <mat-expansion-panel>
-            <mat-expansion-panel-header>
-              On Got Damage
-            </mat-expansion-panel-header>
-            <app-code-editor eventId="gotDamage"
-              [config]="useOther"
-              [code]="codes.onGotDamage"
-              (onChange)="updateCode('onGotDamage', $event)"
-            >
-            </app-code-editor>
-          </mat-expansion-panel>
-
-          <mat-expansion-panel>
-            <mat-expansion-panel-header>
-              On Hit Other
-            </mat-expansion-panel-header>
-            <app-code-editor eventId="hitOther"
-              [config]="useOther"
-              [code]="codes.onHitOther"
-              (onChange)="updateCode('onHitOther', $event)"
-            >
-            </app-code-editor>
-          </mat-expansion-panel>
-
-          <mat-expansion-panel>
-            <mat-expansion-panel-header>
-              Code messages
-            </mat-expansion-panel-header>
+            <mat-expansion-panel-header> Output </mat-expansion-panel-header>
             <app-message
               class="message-panel"
               [messageSubject]="messageSubject"
             ></app-message>
+          </mat-expansion-panel>
+
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              Behind the scenes
+            </mat-expansion-panel-header>
+            <div class="code-output">
+              <pre>{{ script }}</pre>
+            </div>
           </mat-expansion-panel>
         </mat-accordion>
       </div>
@@ -126,8 +74,12 @@
   <div class="navigation no-gutters">
     <div class="row">
       <div class="col-2">
-        <button mat-icon-button class="navigation-button mr-1" (click)="goHome()">
-          <mat-icon svgIcon="menu"></mat-icon>
+        <button
+          mat-icon-button
+          class="navigation-button mr-1"
+          (click)="goHome()"
+        >
+          <mat-icon svgIcon="home"></mat-icon>
         </button>
         <br />
         <button
@@ -135,20 +87,22 @@
           class="navigation-button mt-2"
           (click)="changeCamera()"
         >
-          <mat-icon svgIcon="camera-switch"></mat-icon>
+          <mat-icon svgIcon="camera-retake"></mat-icon>
         </button>
       </div>
-      <div class="col ml-3" >
+      <div class="col ml-3">
         <div class="mb-1">
-          <app-clock class="clock" [matchStateSubject]="matchStateSubject"></app-clock>
+          <app-clock
+            class="clock"
+            [matchStateSubject]="matchStateSubject"
+          ></app-clock>
         </div>
         <div *ngIf="displayScore">
-          <app-score  [scores]="scores"></app-score>
+          <app-score [scores]="scores"></app-score>
         </div>
       </div>
     </div>
   </div>
-
 </div>
 
 <div class="p-3 matchover-alert" *ngIf="matchOver && displayMatchOver()">
@@ -185,7 +139,11 @@
 
 <div class="p-3 matchover-link-invalid" *ngIf="matchLinkInvalid">
   <mat-card>
-    <mat-card-title><h1>This link is not valid anymore, this match is over</h1></mat-card-title>
+    <mat-card-title
+      ><h1>
+        This link is not valid anymore, this match is over
+      </h1></mat-card-title
+    >
     <mat-card-content></mat-card-content>
     <mat-card-actions>
       <button mat-raised-button class="mb-2" (click)="goBack()">

@@ -19,8 +19,18 @@
     <div class="col">
       <mat-form-field class="col-10 mt-3 mx-auto">
         <mat-label>Color</mat-label>
-        <input type="text" matInput formControlName="color" [value]="form.get('color').value"/>
-        <input type="color" matInput formControlName="color" [value]="form.get('color').value"/>
+        <input
+          type="text"
+          matInput
+          formControlName="color"
+          [value]="form.get('color').value"
+        />
+        <input
+          type="color"
+          matInput
+          formControlName="color"
+          [value]="form.get('color').value"
+        />
       </mat-form-field>
     </div>
   </div>
@@ -42,7 +52,7 @@
       </mat-form-field>
     </div>
   </div>
-  
+
   <div class="row">
     <div class="col">
       <mat-form-field class="col-10 mt-3 mx-auto">
@@ -69,7 +79,7 @@
       </mat-form-field>
     </div>
   </div>
-  
+
   <div class="row">
     <div class="col">
       <mat-form-field class="col-10 mt-3 mx-auto">
@@ -138,7 +148,7 @@
       </mat-form-field>
     </div>
   </div>
-  
+
   <div class="row">
     <div class="col">
       <mat-form-field class="col mt-3 mx-auto">
@@ -150,12 +160,11 @@
 
   <div class="row">
     <div class="col">
-      <app-code-accordion
-        [codes]="codes"
-        [helpFile]="helpFile"
-        [editors]="editors"
-        (update)="updateCode($event)"
-      ></app-code-accordion>
+      <app-code-editor
+        [code]="code"
+        (onChange)="updateCode($event)"
+        [config]="config"
+      ></app-code-editor>
     </div>
   </div>
 </div>

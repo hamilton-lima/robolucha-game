@@ -37,7 +37,6 @@
     "jquery": "3.3.1",
     "jspdf": "1.5.3",
     "moment": "^2.24.0",
-    "ngx-spinner": "7.1.4",
     "rxjs": "6.0.0",
     "rxjs-compat": "6.3.3",
     "shepherd.js": "6.0.2",

@@ -1,7 +1,8 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
 import { ModelCode } from "src/app/sdk";
-import { CodeAcordionEventEditor } from "src/app/shared/code-accordion/code-accordion.component";
 import { BlocklyConfig } from "src/app/shared/code-blockly/code-blockly.service";
+import { CodeEditorEvent } from "src/app/shared/code-editor/code-editor.component";
+import { CodeEditorService } from "src/app/shared/code-editor/code-editor.service";
 import { GameDefinitionEditMediatorService } from "../../game-definition-edit-mediator.service";
 
 @Component({
@@ -10,30 +11,26 @@ import { GameDefinitionEditMediatorService } from "../../game-definition-edit-me
   styleUrls: ["./game-definition-suggested-code-editor.component.scss"],
 })
 export class GameDefinitionSuggestedCodeEditorComponent implements OnInit {
-  codes: ModelCode[];
-  helpFile: string;
-  editors: CodeAcordionEventEditor[];
-  foo: BlocklyConfig
+  @Input() gameDefinitionID;
+  
+  code: ModelCode;
+  config = BlocklyConfig.DefaultWithOther;
 
-  constructor(private mediator: GameDefinitionEditMediatorService) {}
+  constructor(
+    private mediator: GameDefinitionEditMediatorService,
+    private service: CodeEditorService
+  ) {}
 
   ngOnInit() {
-    this.helpFile = "help/server_code_editor_help";
-    this.editors = [
-      { event: "onRepeat", label: "On repeat", config: BlocklyConfig.Default },
-      { event: "onStart", label: "On start", config: BlocklyConfig.Default },
-      { event: "onHitWall", label: "On hit wall", config: BlocklyConfig.Default },
-      { event: "onFound", label: "On found", config: BlocklyConfig.DefaultWithOther },
-      { event: "onGotDamage", label: "On got damage", config: BlocklyConfig.DefaultWithOther },
-      { event: "onHitOther", label: "On hit other", config: BlocklyConfig.DefaultWithOther },
-    ];
-
     this.mediator.onEditGameDefinitionSuggestedCode.subscribe((codes) => {
-      this.codes = codes;
+      this.code = this.service.getCode(codes, this.gameDefinitionID);
     });
   }
 
-  updateCode(codes: ModelCode[]) {
-    this.mediator.onUpdateSuggestedCode.next(this.codes);
+  updateCode(event: CodeEditorEvent) {
+    this.code.blockly = event.blocklyDefinition;
+    this.code.script = event.code;
+    this.mediator.onUpdateSuggestedCode.next([this.code]);
   }
+
 }

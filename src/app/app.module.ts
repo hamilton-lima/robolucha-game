@@ -11,7 +11,6 @@ import {
 } from "./login.activate.service";
 import { NotFoundComponent } from "./not-found/not-found.component";
 import { AuthService } from "./auth.service";
-import { LuchadorComponent } from "./luchador/luchador.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { ApiModule } from "./sdk/api.module";
 import { environment } from "src/environments/environment";
@@ -25,9 +24,7 @@ import { PlayComponent } from "./play/play.component";
 import { CanDeactivateGuard } from "./can-deactivate-guard.service";
 import { ScoreComponent } from "./score/score.component";
 import { ClockComponent } from "./clock/clock.component";
-import { CodeEditorPanelComponent } from "./code-editor-panel/code-editor-panel.component";
 import { WatchPageComponent } from "./watch-page/watch-page.component";
-import { NgxSpinnerModule } from "ngx-spinner";
 import { MatchCardComponent } from "./play/match-card/match-card.component";
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { HttpConfigInterceptor } from "./interceptor/httpconfig.interceptor";
@@ -56,7 +53,6 @@ import { GameDefinitionCardComponent } from "./map-editor/game-definition-card/g
 import { SharedModule } from "./shared/shared.module";
 import { SingleSceneComponentEditorComponent } from "./map-editor/game-definition-edit/editor/single-scene-component-editor/single-scene-component-editor.component";
 import { BasicInfoEditorComponent } from "./map-editor/game-definition-edit/editor/basic-info-editor/basic-info-editor.component";
-import { GameDefinitionCodeEditorComponent } from "./map-editor/game-definition-edit/editor/game-definition-code-editor/game-definition-code-editor.component";
 import { BasicInfoComponent } from "./map-editor/game-definition-edit/display/basic-info/basic-info.component";
 import { GameDefinitionCodeComponent } from "./map-editor/game-definition-edit/display/game-definition-code/game-definition-code.component";
 import { SceneComponentsComponent } from "./map-editor/game-definition-edit/display/scene-components/scene-components.component";
@@ -72,13 +68,6 @@ import { JoinClassroomComponent } from "./pages/list-classroom-games/join-classr
 
 const ROUTES: Routes = [
   { path: "", redirectTo: "/home", pathMatch: "full" },
-  {
-    path: "edit",
-    component: LuchadorComponent,
-    canActivate: [LoginActivate],
-    canDeactivate: [CanDeactivateGuard],
-    resolve: { luchador: LuchadorResolverService },
-  },
   {
     path: "mask",
     component: MaskEditorComponent,
@@ -204,14 +193,12 @@ export function apiConfigFactory(): Configuration {
     AppComponent,
     BodyComponent,
     NotFoundComponent,
-    LuchadorComponent,
     WatchMatchComponent,
     ArenaComponent,
     PlaygroundComponent,
     PlayComponent,
     ScoreComponent,
     ClockComponent,
-    CodeEditorPanelComponent,
     WatchPageComponent,
     MatchCardComponent,
     AuthModalMessageComponent,
@@ -224,7 +211,6 @@ export function apiConfigFactory(): Configuration {
     MapEditorComponent,
     SingleSceneComponentEditorComponent,
     BasicInfoEditorComponent,
-    GameDefinitionCodeEditorComponent,
     BasicInfoComponent,
     GameDefinitionCodeComponent,
     SceneComponentsComponent,
@@ -245,7 +231,6 @@ export function apiConfigFactory(): Configuration {
     RouterModule.forRoot(ROUTES, { useHash: true }),
     NgbModule,
     BrowserAnimationsModule,
-    NgxSpinnerModule,
     PagesModule,
     DashboardModule,
     MaterialAllComponentsModule,

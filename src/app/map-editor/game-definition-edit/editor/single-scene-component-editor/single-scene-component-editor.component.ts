@@ -1,16 +1,20 @@
-import { Component, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
 import { ModelCode, ModelSceneComponent } from "src/app/sdk";
-import { CodeAcordionEventEditor } from "src/app/shared/code-accordion/code-accordion.component";
 import { BlocklyConfig } from "src/app/shared/code-blockly/code-blockly.service";
+import { CodeEditorEvent } from "src/app/shared/code-editor/code-editor.component";
+import { CodeEditorService } from "src/app/shared/code-editor/code-editor.service";
 import { GameDefinitionEditMediatorService } from "../../game-definition-edit-mediator.service";
 
 @Component({
   selector: "app-single-scene-component-editor",
   templateUrl: "./single-scene-component-editor.component.html",
   styleUrls: ["./single-scene-component-editor.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SingleSceneComponentEditorComponent implements OnInit {
+  @Input() gameDefinitionID;
+
   id: number;
   component: ModelSceneComponent;
 
@@ -32,35 +36,14 @@ export class SingleSceneComponentEditorComponent implements OnInit {
     showInRadar: [false],
   });
 
-  helpFile: string = "help/code_editor_help";
-  editors: CodeAcordionEventEditor[] = [
-    {
-      event: "onRepeat",
-      label: "On repeat",
-      config: BlocklyConfig.SceneComponent,
-    },
-    {
-      event: "onStart",
-      label: "On start",
-      config: BlocklyConfig.SceneComponent,
-    },
-    {
-      event: "onGotDamage",
-      label: "On got damage",
-      config: BlocklyConfig.SceneComponentWithOther,
-    },
-    {
-      event: "onHitOther",
-      label: "On hit other",
-      config: BlocklyConfig.SceneComponentWithOther,
-    },
-  ];
-
-  codes: ModelCode[];
+  code: ModelCode;
+  config = BlocklyConfig.SceneComponent;
 
   constructor(
     private mediator: GameDefinitionEditMediatorService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private service: CodeEditorService,
+    private changeRef: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -68,8 +51,9 @@ export class SingleSceneComponentEditorComponent implements OnInit {
       (component: ModelSceneComponent) => {
         this.id = component.id;
         this.component = component;
-        this.codes = this.component.codes;
+        this.code = this.service.getCode(this.component.codes, this.gameDefinitionID);
         this.form.patchValue(this.component);
+        this.changeRef.markForCheck();
       }
     );
 
@@ -97,15 +81,16 @@ export class SingleSceneComponentEditorComponent implements OnInit {
         rotation: Number.parseInt(this.form.get("rotation").value),
         respawn: this.form.get("respawn").value,
         showInRadar: this.form.get("showInRadar").value,
-        codes: this.codes,
+        codes: [this.code],
       };
 
       this.mediator.onUpdateSceneComponent.next(component);
     }
   }
 
-  updateCode(codes: ModelCode[]) {
-    this.codes = codes;
+  updateCode(event: CodeEditorEvent) {
+    this.code.blockly = event.blocklyDefinition;
+    this.code.script = event.code;
     this.save();
   }
 }

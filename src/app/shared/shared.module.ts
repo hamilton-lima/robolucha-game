@@ -8,7 +8,6 @@ import { HeaderComponent } from "./header/header.component";
 import { GameCardComponent } from "./game-card/game-card.component";
 import { BigButtonComponent } from "./big-button/big-button.component";
 import { MaterialAllComponentsModule } from "../material-all-components-module";
-import { CodeAccordionComponent } from "./code-accordion/code-accordion.component";
 import { MarkDownComponent } from "./mark-down/mark-down.component";
 import { CodeBlocklyComponent } from "./code-blockly/code-blockly.component";
 import { CodeEditorComponent } from "./code-editor/code-editor.component";
@@ -27,7 +26,6 @@ import { BoxMenuItemComponent } from "./box-menu-item/box-menu-item.component";
     HomeButtonComponent,
     RoleGuardComponent,
     RoundButtonComponent,
-    CodeAccordionComponent,
     MarkDownComponent,
     CodeBlocklyComponent,
     CodeEditorComponent,
@@ -44,7 +42,6 @@ import { BoxMenuItemComponent } from "./box-menu-item/box-menu-item.component";
     HomeButtonComponent,
     RoleGuardComponent,
     RoundButtonComponent,
-    CodeAccordionComponent,
     MarkDownComponent,
     CodeBlocklyComponent,
     CodeEditorComponent,
